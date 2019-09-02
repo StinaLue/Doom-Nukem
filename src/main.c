@@ -42,9 +42,10 @@ int	initSDL(SDL_Window **win, SDL_Surface **surf)
 
 void	initWolf(t_wolf *wolf)
 {
-	wolf->sdlcomp.win = NULL;
-	wolf->sdlcomp.surf = NULL;
-	wolf->sdlcomp.img = NULL;
+	wolf->sdl.win = NULL;
+	wolf->sdl.surf = NULL;
+	wolf->sdl.img = NULL;
+	wolf->quit = 0;
 }
 
 int main()
@@ -53,19 +54,26 @@ int main()
 	char *path_bmp = "/Users/afonck/Desktop/Wolf3D/src/test.bmp";
 
 	initWolf(&wolf);
-	if (initSDL(&(wolf.sdlcomp.win), &(wolf.sdlcomp.surf)) != EXIT_SUCCESS)
+	if (initSDL(&(wolf.sdl.win), &(wolf.sdl.surf)) != EXIT_SUCCESS)
 	{
-		freeSDL(&(wolf.sdlcomp.win), &(wolf.sdlcomp.surf));
+		freeSDL(&(wolf.sdl.win), &(wolf.sdl.surf));
 		return (EXIT_FAILURE);
 	}
-	if (loadMedia(&(wolf.sdlcomp.img), path_bmp) != EXIT_SUCCESS)
+	if (loadMedia(&(wolf.sdl.img), path_bmp) != EXIT_SUCCESS)
 	{
-		freeSDL(&(wolf.sdlcomp.win), &(wolf.sdlcomp.surf));
+		freeSDL(&(wolf.sdl.win), &(wolf.sdl.surf));
 		return (EXIT_FAILURE);
 	}
-	SDL_BlitSurface(wolf.sdlcomp.img, NULL, wolf.sdlcomp.surf, NULL );
-	SDL_UpdateWindowSurface(wolf.sdlcomp.win);
-	SDL_Delay(1000);
-	freeSDL(&(wolf.sdlcomp.win), &(wolf.sdlcomp.surf));
+	while (!wolf.quit)
+	{
+		while (SDL_PollEvent(&(wolf.sdl.event)) != 0)
+		{
+			if (wolf.sdl.event.type == SDL_QUIT)
+				wolf.quit = 1;
+		}
+		SDL_BlitSurface(wolf.sdl.img, NULL, wolf.sdl.surf, NULL );
+		SDL_UpdateWindowSurface(wolf.sdl.win);
+	}
+	freeSDL(&(wolf.sdl.win), &(wolf.sdl.surf));
 	return (EXIT_SUCCESS);
 }

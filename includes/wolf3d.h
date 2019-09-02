@@ -8,16 +8,18 @@
 # define WIN_HEIGHT 800
 
 
-typedef struct			s_sdlcomp
+typedef struct			s_sdl
 {
 	SDL_Window		*win;
 	SDL_Surface		*surf;
 	SDL_Surface		*img;
-}				t_sdlcomp;
+	SDL_Event		event;
+}				t_sdl;
 
 typedef struct			s_wolf
 {
-	t_sdlcomp		sdlcomp;
+	t_sdl			sdl;
+	int			quit;
 }				t_wolf;
 
 #endif
