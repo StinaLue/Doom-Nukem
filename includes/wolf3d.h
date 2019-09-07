@@ -16,10 +16,16 @@ typedef struct			s_sdl
 	SDL_Event		event;
 }				t_sdl;
 
+typedef struct			s_data
+{
+	int			quit;
+	int			pixels[WIN_WIDTH * WIN_HEIGHT];
+}				t_data;
+
 typedef struct			s_wolf
 {
 	t_sdl			sdl;
-	int			quit;
+	t_data			data;
 }				t_wolf;
 
 #endif

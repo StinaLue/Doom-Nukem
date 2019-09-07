@@ -49,43 +49,55 @@ void	initWolf(t_wolf *wolf)
 	wolf->sdl.win = NULL;
 	wolf->sdl.ren = NULL;
 	wolf->sdl.tex = NULL;
-	wolf->quit = 0;
+	wolf->data.quit = 0;
+	ft_memset(wolf->data.pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
+}
+
+void	fillPix(int *pixels, int x, int y, int color)
+{
+	if (x < WIN_WIDTH && y < WIN_HEIGHT && x > 0 && y > 0)
+		pixels[x + y * WIN_WIDTH] = color;
+}
+
+void mainLoop(t_sdl *sdl, t_data *data)
+{
+	int	leftMouseButtonDown = 0;
+	
+	while (!data->quit)
+	{
+		SDL_UpdateTexture(sdl->tex, NULL, data->pixels, WIN_WIDTH * sizeof(int));
+		while (SDL_PollEvent(&(sdl->event)) != 0)
+		{
+			if (sdl->event.type == SDL_QUIT || sdl->event.key.keysym.sym == SDLK_ESCAPE)
+				data->quit = 1;
+			if (sdl->event.type == SDL_MOUSEBUTTONUP)
+				if (sdl->event.button.button == SDL_BUTTON_LEFT)
+					leftMouseButtonDown = 0;
+			if (sdl->event.type == SDL_MOUSEBUTTONDOWN)
+				if (sdl->event.button.button == SDL_BUTTON_LEFT)
+					leftMouseButtonDown = 1;
+			if (sdl->event.type == SDL_MOUSEMOTION)
+				if (leftMouseButtonDown)
+					fillPix(data->pixels, sdl->event.motion.x, sdl->event.motion.y, 0);
+					//data->pixels[sdl->event.motion.y * WIN_WIDTH + sdl->event.motion.x] = 0;
+			SDL_RenderClear(sdl->ren);
+			SDL_RenderCopy(sdl->ren, sdl->tex, NULL, NULL);
+			SDL_RenderPresent(sdl->ren);
+		}
+	}
 }
 
 int main()
 {
 	t_wolf	wolf;
-	int	leftMouseButtonDown = 0;
-	int	pixels[WIN_WIDTH * WIN_HEIGHT];
 
 	initWolf(&wolf);
-	ft_memset(pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 	if (initSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex)) != EXIT_SUCCESS)
 	{
 		freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
 		return (EXIT_FAILURE);
 	}
-	while (!wolf.quit)
-	{
-		SDL_UpdateTexture(wolf.sdl.tex, NULL, pixels, WIN_WIDTH * sizeof(int));
-		while (SDL_PollEvent(&(wolf.sdl.event)) != 0)
-		{
-			if (wolf.sdl.event.type == SDL_QUIT)
-				wolf.quit = 1;
-			if (wolf.sdl.event.type == SDL_MOUSEBUTTONUP)
-				if (wolf.sdl.event.button.button == SDL_BUTTON_LEFT)
-					leftMouseButtonDown = 0;
-			if (wolf.sdl.event.type == SDL_MOUSEBUTTONDOWN)
-				if (wolf.sdl.event.button.button == SDL_BUTTON_LEFT)
-					leftMouseButtonDown = 1;
-			if (wolf.sdl.event.type == SDL_MOUSEMOTION)
-				if (leftMouseButtonDown)
-					pixels[wolf.sdl.event.motion.y * WIN_WIDTH + wolf.sdl.event.motion.x] = 0;
-		SDL_RenderClear(wolf.sdl.ren);
-        	SDL_RenderCopy(wolf.sdl.ren, wolf.sdl.tex, NULL, NULL);
-        	SDL_RenderPresent(wolf.sdl.ren);
-		}
-	}
+	mainLoop(&wolf.sdl, &wolf.data);
 	freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
 	return (EXIT_SUCCESS);
 }
