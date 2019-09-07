@@ -11,8 +11,8 @@
 typedef struct			s_sdl
 {
 	SDL_Window		*win;
-	SDL_Renderer		*ren;
-	SDL_Texture		*tex;
+	SDL_Surface		*surf;
+	SDL_Surface		*img;
 	SDL_Event		event;
 }				t_sdl;
 

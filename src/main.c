@@ -2,10 +2,12 @@
 
 #include "wolf3d.h"
 
-void	freeSDL(SDL_Window **win, SDL_Surface **surf)
+void	freeSDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 {
-	SDL_FreeSurface(*surf);
-	*surf = NULL;
+	SDL_DestroyTexture(*tex);
+	*tex = NULL;
+	SDL_DestroyRenderer(*ren);
+	*ren = NULL;
 	SDL_DestroyWindow(*win);
 	*win = NULL;
 	SDL_Quit();
@@ -22,7 +24,7 @@ int	loadMedia(SDL_Surface **img, char *path)
 	return (EXIT_SUCCESS);
 }
 
-int	initSDL(SDL_Window **win, SDL_Surface **surf)
+int	initSDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
@@ -36,44 +38,54 @@ int	initSDL(SDL_Window **win, SDL_Surface **surf)
 		ft_dprintf(2, "SDL_CreateWindow Error: %{r}s\n", SDL_GetError());
 		return (EXIT_FAILURE);
 	}
-	*surf = SDL_GetWindowSurface(*win);
+	*ren = SDL_CreateRenderer(*win, -1, 0);
+	*tex = SDL_CreateTexture(*ren, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC,
+			WIN_WIDTH, WIN_HEIGHT);
 	return (EXIT_SUCCESS);
 }
 
 void	initWolf(t_wolf *wolf)
 {
 	wolf->sdl.win = NULL;
-	wolf->sdl.surf = NULL;
-	wolf->sdl.img = NULL;
+	wolf->sdl.ren = NULL;
+	wolf->sdl.tex = NULL;
 	wolf->quit = 0;
 }
 
 int main()
 {
 	t_wolf	wolf;
-	char *path_bmp = "/Users/afonck/Desktop/Wolf3D/src/test.bmp";
+	int	leftMouseButtonDown = 0;
+	int	pixels[WIN_WIDTH * WIN_HEIGHT];
 
 	initWolf(&wolf);
-	if (initSDL(&(wolf.sdl.win), &(wolf.sdl.surf)) != EXIT_SUCCESS)
+	ft_memset(pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
+	if (initSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex)) != EXIT_SUCCESS)
 	{
-		freeSDL(&(wolf.sdl.win), &(wolf.sdl.surf));
-		return (EXIT_FAILURE);
-	}
-	if (loadMedia(&(wolf.sdl.img), path_bmp) != EXIT_SUCCESS)
-	{
-		freeSDL(&(wolf.sdl.win), &(wolf.sdl.surf));
+		freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
 		return (EXIT_FAILURE);
 	}
 	while (!wolf.quit)
 	{
+		SDL_UpdateTexture(wolf.sdl.tex, NULL, pixels, WIN_WIDTH * sizeof(int));
 		while (SDL_PollEvent(&(wolf.sdl.event)) != 0)
 		{
 			if (wolf.sdl.event.type == SDL_QUIT)
 				wolf.quit = 1;
+			if (wolf.sdl.event.type == SDL_MOUSEBUTTONUP)
+				if (wolf.sdl.event.button.button == SDL_BUTTON_LEFT)
+					leftMouseButtonDown = 0;
+			if (wolf.sdl.event.type == SDL_MOUSEBUTTONDOWN)
+				if (wolf.sdl.event.button.button == SDL_BUTTON_LEFT)
+					leftMouseButtonDown = 1;
+			if (wolf.sdl.event.type == SDL_MOUSEMOTION)
+				if (leftMouseButtonDown)
+					pixels[wolf.sdl.event.motion.y * WIN_WIDTH + wolf.sdl.event.motion.x] = 0;
+		SDL_RenderClear(wolf.sdl.ren);
+        	SDL_RenderCopy(wolf.sdl.ren, wolf.sdl.tex, NULL, NULL);
+        	SDL_RenderPresent(wolf.sdl.ren);
 		}
-		SDL_BlitSurface(wolf.sdl.img, NULL, wolf.sdl.surf, NULL );
-		SDL_UpdateWindowSurface(wolf.sdl.win);
 	}
-	freeSDL(&(wolf.sdl.win), &(wolf.sdl.surf));
+	freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
 	return (EXIT_SUCCESS);
 }
