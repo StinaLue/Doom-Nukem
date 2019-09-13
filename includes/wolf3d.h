@@ -22,10 +22,21 @@ typedef struct			s_data
 	int			pixels[WIN_WIDTH * WIN_HEIGHT];
 }				t_data;
 
+typedef struct 			s_player
+{
+	double			posX;
+	double			posY;
+	double			dirX;
+	double			dirY;
+	double			planeX;
+	double			planeY;
+}				t_player;
+
 typedef struct			s_wolf
 {
 	t_sdl			sdl;
 	t_data			data;
+	t_player		player;
 }				t_wolf;
 
 #endif

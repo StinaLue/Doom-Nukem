@@ -2,6 +2,37 @@
 
 #include "wolf3d.h"
 
+#define mapWidth 24
+#define mapHeight 24
+
+int worldMap[mapWidth][mapHeight]=
+{
+  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
+  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
+  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+};
+
 void	freeSDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 {
 	SDL_DestroyTexture(*tex);
@@ -44,13 +75,34 @@ int	initSDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 	return (EXIT_SUCCESS);
 }
 
+void	initSdlStruct(t_sdl *sdl)
+{
+	sdl->win = NULL;
+	sdl->ren = NULL;
+	sdl->tex = NULL;
+}
+
+void	initDataStruct(t_data *data)
+{
+	data->quit = 0;
+	ft_memset(data->pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
+}
+
+void	initPlayerStruct(t_player *player)
+{
+	player->posX = 22;
+	player->posY = 12;
+	player->dirX = -1;
+	player->dirY = 0;
+	player->planeX = 0;
+	player->planeY = 0.66;
+}
+
 void	initWolf(t_wolf *wolf)
 {
-	wolf->sdl.win = NULL;
-	wolf->sdl.ren = NULL;
-	wolf->sdl.tex = NULL;
-	wolf->data.quit = 0;
-	ft_memset(wolf->data.pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
+	initSdlStruct(&(wolf->sdl));
+	initDataStruct(&(wolf->data));
+	initPlayerStruct(&(wolf->player));
 }
 
 void	fillPix(int *pixels, int x, int y, int color)
