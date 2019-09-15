@@ -7,6 +7,7 @@
 # define WIN_WIDTH 800
 # define WIN_HEIGHT 800
 
+void				draw_line();
 
 typedef struct			s_sdl
 {
