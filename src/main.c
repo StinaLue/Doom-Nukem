@@ -127,82 +127,77 @@ void	drawVertical(int *pixels, int x, int y1, int y2, int color)
 	}
 }
 
-void	raycast(t_player *player, t_raycast *raycast, int *pixels)
+void	rayInit(t_raycast *raycast, t_dda *dda, t_player const *player, int x)
 {
-	int	mapX = player->posX;
-	int	mapY = player->posY;
+	raycast->camX = 2 * x / (double)WIN_WIDTH - 1;
+	raycast->rayDirX = player->dirX + player->planeX * raycast->camX;
+	raycast->rayDirY = player->dirY + player->planeY * raycast->camX;
+	raycast->mapX = player->posX;
+	raycast->mapY = player->posY;
 
-	double sideDistX;
-	double sideDistY;
-	double deltaDistX;
-	double deltaDistY;
-	double perpWallDist;
+	dda->deltaDistX = ft_absfloat(1 / raycast->rayDirX);
+	dda->deltaDistY = ft_absfloat(1 / raycast->rayDirY);
+}
 
-	int	stepX;
-	int	stepY;
-
+void	raycast(t_player const *player, t_raycast *raycast, t_dda *dda, int *pixels)
+{
 	int	hit = 0;
-	int	side;
+	int	side = 0;
 
-	int	lineHeight;
+	int	lineHeight = 0;
 
-	int	drawStart;
-	int	drawEnd;
-	int	color;
+	int	drawStart = 0;
+	int	drawEnd = 0;
+	int	color = 0;
 
 	int	x;
 
 	x = 0;
 	while (x < WIN_WIDTH)
 	{
-		raycast->cameraX = 2 * x / (double)WIN_WIDTH - 1;
-		raycast->rayDirX = player->dirX + player->planeX * raycast->cameraX;
-		raycast->rayDirY = player->dirY + player->planeY * raycast->cameraX;
-
-		deltaDistX = ft_absolute(1 / rayDirX);
-		deltaDistY = ft_absolute(1 / rayDirY);
-		if (rayDirX < 0)
+		rayInit(raycast, dda, player, x);
+		if (raycast->rayDirX < 0)
 		{
-			stepX = -1;
-			sideDistX = (player->posX - mapX) * deltaDistX;
+			dda->stepX = -1;
+			dda->sideDistX = (player->posX - raycast->mapX) * dda->deltaDistX;
 		}
 		else
 		{
-			stepX = 1;
-			sideDistX = (mapX + 1.0 - player->posX) * deltaDistX;
+			dda->stepX = 1;
+			dda->sideDistX = (raycast->mapX + 1.0 - player->posX) * dda->deltaDistX;
 		}
-		if (rayDirY < 0)
+		if (raycast->rayDirY < 0)
 		{
-			stepY = -1;
-			sideDistY = (player->posY - mapY) * deltaDistY;
+			dda->stepY = -1;
+			dda->sideDistY = (player->posY - raycast->mapY) * dda->deltaDistY;
 		}
 		else
 		{
-			stepY = 1;
-			sideDistY = (mapX + 1.0 - player->posY) * deltaDistY;
+			dda->stepY = 1;
+			dda->sideDistY = (raycast->mapX + 1.0 - player->posY) * dda->deltaDistY;
 		}
 		while (hit == 0)
 		{
-			if (sideDistX < sideDistY)
+			if (dda->sideDistX < dda->sideDistY)
 			{
-				sideDistX += deltaDistX;
-				mapX += stepX;
+				dda->sideDistX += dda->deltaDistX;
+				raycast->mapX += dda->stepX;
 				side = 0;
 			}
 			else
 			{
-				sideDistY += deltaDistY;
-				mapY += stepY;
+				dda->sideDistY += dda->deltaDistY;
+				raycast->mapY += dda->stepY;
 				side = 1;
 			}
-			if (worldMap[mapX][mapY] > 0)
+			if (worldMap[raycast->mapX][raycast->mapY] > 0)
 				hit = 1;
 		}
 		if (side == 0)
-			perpWallDist = (mapX - player->posX + (1 - stepX) / 2) / rayDirX;
+			dda->perpWallDist = (raycast->mapX - player->posX + (1 - dda->stepX) / 2) / raycast->rayDirX;
 		else
-			perpWallDist = (mapY - player->posY + (1 - stepY) / 2) / rayDirY;
-		lineHeight = (int)(WIN_HEIGHT / perpWallDist);
+			dda->perpWallDist = (raycast->mapY - player->posY + (1 - dda->stepY) / 2) / raycast->rayDirY;
+		lineHeight = (int)(WIN_HEIGHT / dda->perpWallDist);
 
 		drawStart = -lineHeight / 2 + WIN_HEIGHT / 2;
 		if (drawStart < 0)
@@ -211,25 +206,22 @@ void	raycast(t_player *player, t_raycast *raycast, int *pixels)
 		if (drawEnd >= drawStart)
 			drawEnd = WIN_HEIGHT - 1;
 
-		/*
-		switch(worldMap[mapX][mapY])
-		{
-			case 1:  color = 16711680;  break; //red
-			case 2:  color = 65280;  break; //green
-			case 3:  color = 255;   break; //blue
-			case 4:  color = 16777215;  break; //white
-			default: color = 16776960; break; //yellow
-		}*/
-		if (worldMap[mapX][mapY] != 0)
+		
+		//switch(worldMap[mapX][mapY])
+		//{
+		//	case 1:  color = 16711680;  break; //red
+		//	case 2:  color = 65280;  break; //green
+		//	case 3:  color = 255;   break; //blue
+		//	case 4:  color = 16777215;  break; //white
+		//	default: color = 16776960; break; //yellow
+		//}
+		if (worldMap[raycast->mapX][raycast->mapY] != 0)
 			color = 0;
 		if (side == 1)
 			//color = color / 2;
 			color = 0;
 		//HEEEEEEEEEEEEERE
-		ft_printf("before vertical drawing\n");
 		drawVertical(pixels, x, drawStart, drawEnd, color);
-		//fillPix(pixels, x, drawStart, color);
-		ft_printf("after vertical drawing\n");
 		//SDL_Delay(10000);
 		x++;
 	}
@@ -278,7 +270,7 @@ void mainLoop(t_sdl *sdl, t_data *data, t_player *player)
 		SDL_UpdateTexture(sdl->tex, NULL, data->pixels, WIN_WIDTH * sizeof(int));
 		while (SDL_PollEvent(&(sdl->event)) != 0)
 		{
-			raycast(player, data->pixels);//&(data->pixels));
+	//		raycast(player, data->pixels);//&(data->pixels));
 		/*	
 			   if (sdl->event.type == SDL_QUIT || sdl->event.key.keysym.sym == SDLK_ESCAPE)
 			   data->quit = 1;

@@ -35,6 +35,8 @@ typedef struct 			s_player
 
 typedef struct			s_raycast
 {
+	int			mapX;
+	int			mapY;
 	double			camX;
 	double			rayPosX;
 	double			rayPosY;
@@ -42,12 +44,24 @@ typedef struct			s_raycast
 	double			rayDirY;
 }				t_raycast;
 
+typedef struct			s_dda
+{
+	double			sideDistX;
+	double			sideDistY;
+	double			deltaDistX;
+	double			deltaDistY;
+	double			perpWallDist;
+	int			stepX;
+	int			stepY;
+}				t_dda;
+
 typedef struct			s_wolf
 {
 	t_sdl			sdl;
 	t_data			data;
 	t_player		player;
 	t_raycast		raycast;
+	t_dda			dda;
 }				t_wolf;
 
 #endif
