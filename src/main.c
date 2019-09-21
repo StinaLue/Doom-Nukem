@@ -98,11 +98,18 @@ void	initPlayerStruct(t_player *player)
 	player->planeY = 0.66;
 }
 
+void	initRaycastStruct(t_raycast *raycast, double posX, double posY)
+{
+	raycast->rayPosX = posX;
+	raycast->rayPosY = posY;
+}
+
 void	initWolf(t_wolf *wolf)
 {
 	initSdlStruct(&(wolf->sdl));
 	initDataStruct(&(wolf->data));
 	initPlayerStruct(&(wolf->player));
+	initRaycastStruct(&(wolf->raycast), wolf->player.posX, wolf->player.posY);
 }
 
 void	fillPix(int *pixels, int x, int y, int color)
@@ -120,12 +127,8 @@ void	drawVertical(int *pixels, int x, int y1, int y2, int color)
 	}
 }
 
-void	raycast(t_player *player, int *pixels)
+void	raycast(t_player *player, t_raycast *raycast, int *pixels)
 {
-	double cameraX;
-	double rayDirX;
-	double rayDirY;
-
 	int	mapX = player->posX;
 	int	mapY = player->posY;
 
@@ -152,9 +155,9 @@ void	raycast(t_player *player, int *pixels)
 	x = 0;
 	while (x < WIN_WIDTH)
 	{
-		cameraX = 2 * x / WIN_WIDTH - 1;
-		rayDirX = player->dirX + player->planeX * cameraX;
-		rayDirY = player->dirY + player->planeY * cameraX;
+		raycast->cameraX = 2 * x / (double)WIN_WIDTH - 1;
+		raycast->rayDirX = player->dirX + player->planeX * raycast->cameraX;
+		raycast->rayDirY = player->dirY + player->planeY * raycast->cameraX;
 
 		deltaDistX = ft_absolute(1 / rayDirX);
 		deltaDistY = ft_absolute(1 / rayDirY);

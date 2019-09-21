@@ -33,11 +33,21 @@ typedef struct 			s_player
 	double			planeY;
 }				t_player;
 
+typedef struct			s_raycast
+{
+	double			camX;
+	double			rayPosX;
+	double			rayPosY;
+	double			rayDirX;
+	double			rayDirY;
+}				t_raycast;
+
 typedef struct			s_wolf
 {
 	t_sdl			sdl;
 	t_data			data;
 	t_player		player;
+	t_raycast		raycast;
 }				t_wolf;
 
 #endif
