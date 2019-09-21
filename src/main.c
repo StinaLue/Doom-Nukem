@@ -139,7 +139,7 @@ void	rayInit(t_raycast *raycast, t_dda *dda, t_player const *player, int x)
 	dda->deltaDistY = ft_absfloat(1 / raycast->rayDirY);
 }
 
-void	raycast(t_player const *player, t_raycast *raycast, t_dda *dda, int *pixels)
+void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pixels)
 {
 	int	hit = 0;
 	int	side = 0;
@@ -153,6 +153,7 @@ void	raycast(t_player const *player, t_raycast *raycast, t_dda *dda, int *pixels
 	int	x;
 
 	x = 0;
+	printf("player posX = %f, player posY = %f\n", player->posX, player->posY);
 	while (x < WIN_WIDTH)
 	{
 		rayInit(raycast, dda, player, x);
@@ -207,19 +208,19 @@ void	raycast(t_player const *player, t_raycast *raycast, t_dda *dda, int *pixels
 			drawEnd = WIN_HEIGHT - 1;
 
 		
-		//switch(worldMap[mapX][mapY])
-		//{
-		//	case 1:  color = 16711680;  break; //red
-		//	case 2:  color = 65280;  break; //green
-		//	case 3:  color = 255;   break; //blue
-		//	case 4:  color = 16777215;  break; //white
-		//	default: color = 16776960; break; //yellow
-		//}
-		if (worldMap[raycast->mapX][raycast->mapY] != 0)
-			color = 0;
+		switch(worldMap[raycast->mapX][raycast->mapY])
+		{
+			case 1:  color = 16711680;  break; //red
+			case 2:  color = 65280;  break; //green
+			case 3:  color = 255;   break; //blue
+			case 4:  color = 16777215;  break; //white
+			default: color = 16776960; break; //yellow
+		}
+		//if (worldMap[raycast->mapX][raycast->mapY] != 0)
+		//	color = 0;
 		if (side == 1)
-			//color = color / 2;
-			color = 0;
+			color = color / 2;
+			//color = 0;
 		//HEEEEEEEEEEEEERE
 		drawVertical(pixels, x, drawStart, drawEnd, color);
 		//SDL_Delay(10000);
@@ -261,7 +262,7 @@ void	speed(t_player *player, t_sdl *sdl)
 	}
 }
 
-void mainLoop(t_sdl *sdl, t_data *data, t_player *player)
+void mainLoop(t_sdl *sdl, t_data *data, t_raycast *raycast, t_dda *dda, t_player *player)
 {
 	//int	leftMouseButtonDown = 0;
 
@@ -270,7 +271,7 @@ void mainLoop(t_sdl *sdl, t_data *data, t_player *player)
 		SDL_UpdateTexture(sdl->tex, NULL, data->pixels, WIN_WIDTH * sizeof(int));
 		while (SDL_PollEvent(&(sdl->event)) != 0)
 		{
-	//		raycast(player, data->pixels);//&(data->pixels));
+			raycasting(player, raycast, dda, data->pixels);
 		/*	
 			   if (sdl->event.type == SDL_QUIT || sdl->event.key.keysym.sym == SDLK_ESCAPE)
 			   data->quit = 1;
@@ -304,7 +305,7 @@ int main()
 		freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
 		return (EXIT_FAILURE);
 	}
-	mainLoop(&wolf.sdl, &wolf.data, &wolf.player);
+	mainLoop(&wolf.sdl, &wolf.data, &wolf.raycast, &wolf.dda, &wolf.player);
 	freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
 	return (EXIT_SUCCESS);
 }
