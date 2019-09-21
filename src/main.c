@@ -1,11 +1,23 @@
 #include "libft.h"
-
+#include <math.h>
 #include "wolf3d.h"
 
-#define mapWidth 24
-#define mapHeight 24
+//#define mapWidth 24
+//#define mapHeight 24
+#define mapWidth 6
+#define mapHeight 6
 
 int worldMap[mapWidth][mapHeight]=
+{
+	{1,1,1,1,1,1},
+	{1,0,0,0,0,1},
+	{1,0,0,0,0,1},
+	{1,0,0,0,0,1},
+	{1,0,0,0,0,1},
+	{1,1,1,1,1,1}
+};
+
+/*int worldMap[mapWidth][mapHeight]=
 {
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -31,7 +43,7 @@ int worldMap[mapWidth][mapHeight]=
 	{1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-};
+};*/
 
 void	freeSDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 {
@@ -90,8 +102,8 @@ void	initDataStruct(t_data *data)
 
 void	initPlayerStruct(t_player *player)
 {
-	player->posX = 22;
-	player->posY = 12;
+	player->posX = 4;
+	player->posY = 4;
 	player->dirX = -1;
 	player->dirY = 0;
 	player->planeX = 0;
@@ -153,7 +165,6 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pix
 	int	x;
 
 	x = 0;
-	printf("player posX = %f, player posY = %f\n", player->posX, player->posY);
 	while (x < WIN_WIDTH)
 	{
 		rayInit(raycast, dda, player, x);
@@ -175,7 +186,7 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pix
 		else
 		{
 			dda->stepY = 1;
-			dda->sideDistY = (raycast->mapX + 1.0 - player->posY) * dda->deltaDistY;
+			dda->sideDistY = (raycast->mapY + 1.0 - player->posY) * dda->deltaDistY;
 		}
 		while (hit == 0)
 		{
@@ -192,8 +203,12 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pix
 				side = 1;
 			}
 			if (worldMap[raycast->mapX][raycast->mapY] > 0)
+			{
 				hit = 1;
+			}
 		}
+		x++;
+	
 		if (side == 0)
 			dda->perpWallDist = (raycast->mapX - player->posX + (1 - dda->stepX) / 2) / raycast->rayDirX;
 		else
@@ -224,7 +239,7 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pix
 		//HEEEEEEEEEEEEERE
 		drawVertical(pixels, x, drawStart, drawEnd, color);
 		//SDL_Delay(10000);
-		x++;
+		//x++;
 	}
 }
 
@@ -248,18 +263,23 @@ void	speed(t_player *player, t_sdl *sdl)
 	}
 	if (sdl->event.key.keysym.sym == SDLK_d)
 	{
-		player->dirY = player->dirX + player->dirY;//* sin(-speed) + player
-		player->dirX = player->dirX - player->dirY;//* cos(-speed) - player->dirY * sin(-speed);
-		player->planeY = player->planeX - player->planeY;
-		player->planeX = player->planeX + player->planeY;
+		double saveDirY = player->dirY;
+		double savePlaneY = player->dirY;
+		player->dirY = player->dirX * sin(-speed) + player->dirY * cos(-speed);
+		player->dirX = player->dirX * cos(-speed) - saveDirY * sin(-speed);
+		player->planeY = player->planeX * sin(-speed) + player->planeY * cos(-speed);
+		player->planeX = player->planeX * cos(-speed) - savePlaneY * sin(-speed);
 	}
 	if (sdl->event.key.keysym.sym == SDLK_a)
 	{
-		player->dirY = player->dirX + player->dirY;//* sin(-speed) + player
-		player->dirX = player->dirX - player->dirY;//* cos(-speed) - player->dirY * sin(-speed);
-		player->planeY = player->planeX - player->planeY;
-		player->planeX = player->planeX + player->planeY;
+		double saveDirY = player->dirY;
+		double savePlaneY = player->dirY;
+		player->dirY = player->dirX * sin(speed) + player->dirY * cos(speed);
+		player->dirX = player->dirX * cos(speed) - saveDirY * sin(speed);
+		player->planeY = player->planeX * sin(speed) + player->planeY * cos(speed);
+		player->planeX = player->planeX * cos(speed) - savePlaneY * sin(speed);
 	}
+	printf("player->dirY: %f, player->dirX: %f\n", player->dirY, player->dirX);
 }
 
 void mainLoop(t_sdl *sdl, t_data *data, t_raycast *raycast, t_dda *dda, t_player *player)
@@ -272,10 +292,10 @@ void mainLoop(t_sdl *sdl, t_data *data, t_raycast *raycast, t_dda *dda, t_player
 		while (SDL_PollEvent(&(sdl->event)) != 0)
 		{
 			raycasting(player, raycast, dda, data->pixels);
-		/*	
+			
 			   if (sdl->event.type == SDL_QUIT || sdl->event.key.keysym.sym == SDLK_ESCAPE)
-			   data->quit = 1;
-			   if (sdl->event.type == SDL_MOUSEBUTTONUP)
+			   	data->quit = 1;
+			   /*if (sdl->event.type == SDL_MOUSEBUTTONUP)
 			   if (sdl->event.button.button == SDL_BUTTON_LEFT)
 			   leftMouseButtonDown = 0;
 			   if (sdl->event.type == SDL_MOUSEBUTTONDOWN)
