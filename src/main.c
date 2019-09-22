@@ -1,5 +1,5 @@
 #include "libft.h"
-
+#include <math.h>
 #include "wolf3d.h"
 
 //#define mapWidth 24
@@ -17,8 +17,7 @@ int worldMap[mapWidth][mapHeight]=
 	{1,1,1,1,1}
 };
 
-/*
-int worldMap[mapWidth][mapHeight]=
+/*int worldMap[mapWidth][mapHeight]=
 {
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -213,8 +212,12 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pix
 				side = 1;
 			}
 			if (worldMap[raycast->mapX][raycast->mapY] > 0)
+			{
 				hit = 1;
+			}
 		}
+		x++;
+	
 		if (side == 0)
 			dda->perpWallDist = (raycast->mapX - raycast->rayPosX + (1 - dda->stepX) / 2) / raycast->rayDirX;
 		else
@@ -272,18 +275,23 @@ void	speed(t_player *player, t_sdl *sdl)
 	}
 	if (sdl->event.key.keysym.sym == SDLK_d)
 	{
-		player->dirY = player->dirX + player->dirY;//* sin(-speed) + player
-		player->dirX = player->dirX - player->dirY;//* cos(-speed) - player->dirY * sin(-speed);
-		player->planeY = player->planeX - player->planeY;
-		player->planeX = player->planeX + player->planeY;
+		double saveDirY = player->dirY;
+		double savePlaneY = player->dirY;
+		player->dirY = player->dirX * sin(-speed) + player->dirY * cos(-speed);
+		player->dirX = player->dirX * cos(-speed) - saveDirY * sin(-speed);
+		player->planeY = player->planeX * sin(-speed) + player->planeY * cos(-speed);
+		player->planeX = player->planeX * cos(-speed) - savePlaneY * sin(-speed);
 	}
 	if (sdl->event.key.keysym.sym == SDLK_a)
 	{
-		player->dirY = player->dirX + player->dirY;//* sin(-speed) + player
-		player->dirX = player->dirX - player->dirY;//* cos(-speed) - player->dirY * sin(-speed);
-		player->planeY = player->planeX - player->planeY;
-		player->planeX = player->planeX + player->planeY;
+		double saveDirY = player->dirY;
+		double savePlaneY = player->dirY;
+		player->dirY = player->dirX * sin(speed) + player->dirY * cos(speed);
+		player->dirX = player->dirX * cos(speed) - saveDirY * sin(speed);
+		player->planeY = player->planeX * sin(speed) + player->planeY * cos(speed);
+		player->planeX = player->planeX * cos(speed) - savePlaneY * sin(speed);
 	}
+	printf("player->dirY: %f, player->dirX: %f\n", player->dirY, player->dirX);
 }
 
 void mainLoop(t_sdl *sdl, t_data *data, t_raycast *raycast, t_dda *dda, t_player *player)
