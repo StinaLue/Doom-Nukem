@@ -2,9 +2,22 @@
 
 #include "wolf3d.h"
 
-#define mapWidth 24
-#define mapHeight 24
+//#define mapWidth 24
+//#define mapHeight 24
 
+#define mapWidth 5
+#define mapHeight 5
+
+int worldMap[mapWidth][mapHeight]=
+{
+	{1,1,1,1,1},
+	{1,0,0,0,1},
+	{1,0,2,0,1},
+	{1,0,0,0,1},
+	{1,1,1,1,1}
+};
+
+/*
 int worldMap[mapWidth][mapHeight]=
 {
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -32,6 +45,7 @@ int worldMap[mapWidth][mapHeight]=
 	{1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
+*/
 
 void	freeSDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 {
@@ -90,8 +104,8 @@ void	initDataStruct(t_data *data)
 
 void	initPlayerStruct(t_player *player)
 {
-	player->posX = 22;
-	player->posY = 12;
+	player->posX = 1;
+	player->posY = 3;
 	player->dirX = -1;
 	player->dirY = 0;
 	player->planeX = 0;
@@ -132,11 +146,15 @@ void	rayInit(t_raycast *raycast, t_dda *dda, t_player const *player, int x)
 	raycast->camX = 2 * x / (double)WIN_WIDTH - 1;
 	raycast->rayDirX = player->dirX + player->planeX * raycast->camX;
 	raycast->rayDirY = player->dirY + player->planeY * raycast->camX;
-	raycast->mapX = player->posX;
-	raycast->mapY = player->posY;
+	//raycast->mapX = player->posX;
+	//raycast->mapY = player->posY;
+	raycast->mapX = (int)raycast->rayPosX;
+	raycast->mapY = (int)raycast->rayPosY;
 
-	dda->deltaDistX = ft_absfloat(1 / raycast->rayDirX);
-	dda->deltaDistY = ft_absfloat(1 / raycast->rayDirY);
+	//dda->deltaDistX = ft_absfloat(1 / raycast->rayDirX);
+	//dda->deltaDistY = ft_absfloat(1 / raycast->rayDirY);
+	dda->deltaDistX = sqrt(1 + (raycast->rayDirY * raycast->rayDirY) / (raycast->rayDirX * raycast->rayDirX));
+	dda->deltaDistY = sqrt(1 + (raycast->rayDirX * raycast->rayDirX) / (raycast->rayDirY * raycast->rayDirY));
 }
 
 void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pixels)
@@ -153,30 +171,33 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pix
 	int	x;
 
 	x = 0;
-	printf("player posX = %f, player posY = %f\n", player->posX, player->posY);
+	//printf("player posX = %f, player posY = %f\n", player->posX, player->posY);
 	while (x < WIN_WIDTH)
 	{
 		rayInit(raycast, dda, player, x);
+		//printf("dda deltaDistX = %f, deltaDistY = %f\n", dda->deltaDistX, dda->deltaDistY);
+		//printf("rayDirX = %f, rayDirY = %f\n", raycast->rayDirX, raycast->rayDirY);
 		if (raycast->rayDirX < 0)
 		{
 			dda->stepX = -1;
-			dda->sideDistX = (player->posX - raycast->mapX) * dda->deltaDistX;
+			dda->sideDistX = (raycast->rayPosX - raycast->mapX) * dda->deltaDistX;
 		}
 		else
 		{
 			dda->stepX = 1;
-			dda->sideDistX = (raycast->mapX + 1.0 - player->posX) * dda->deltaDistX;
+			dda->sideDistX = (raycast->mapX + 1.0 - raycast->rayPosX) * dda->deltaDistX;
 		}
 		if (raycast->rayDirY < 0)
 		{
 			dda->stepY = -1;
-			dda->sideDistY = (player->posY - raycast->mapY) * dda->deltaDistY;
+			dda->sideDistY = (raycast->rayPosY - raycast->mapY) * dda->deltaDistY;
 		}
 		else
 		{
 			dda->stepY = 1;
-			dda->sideDistY = (raycast->mapX + 1.0 - player->posY) * dda->deltaDistY;
+			dda->sideDistY = (raycast->mapY + 1.0 - raycast->rayPosY) * dda->deltaDistY;
 		}
+		//printf("dda stepx = %d stepy = %d\n", dda->stepX, dda->stepY);
 		while (hit == 0)
 		{
 			if (dda->sideDistX < dda->sideDistY)
@@ -195,19 +216,21 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pix
 				hit = 1;
 		}
 		if (side == 0)
-			dda->perpWallDist = (raycast->mapX - player->posX + (1 - dda->stepX) / 2) / raycast->rayDirX;
+			dda->perpWallDist = (raycast->mapX - raycast->rayPosX + (1 - dda->stepX) / 2) / raycast->rayDirX;
 		else
-			dda->perpWallDist = (raycast->mapY - player->posY + (1 - dda->stepY) / 2) / raycast->rayDirY;
+			dda->perpWallDist = (raycast->mapY - raycast->rayPosX + (1 - dda->stepY) / 2) / raycast->rayDirY;
 		lineHeight = (int)(WIN_HEIGHT / dda->perpWallDist);
 
+		//printf("worldMap[%d][%d] hit = %d, lineHeight = %d\n", raycast->mapX, raycast->mapY, hit, lineHeight);
 		drawStart = -lineHeight / 2 + WIN_HEIGHT / 2;
 		if (drawStart < 0)
 			drawStart = 0;
 		drawEnd = lineHeight / 2 + WIN_HEIGHT / 2;
-		if (drawEnd >= drawStart)
+		if (drawEnd >= WIN_HEIGHT)
 			drawEnd = WIN_HEIGHT - 1;
+		//printf("drawStart = %d, drawEnd = %d\n", drawStart, drawEnd);
 
-		
+		/*
 		switch(worldMap[raycast->mapX][raycast->mapY])
 		{
 			case 1:  color = 16711680;  break; //red
@@ -216,16 +239,17 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pix
 			case 4:  color = 16777215;  break; //white
 			default: color = 16776960; break; //yellow
 		}
-		//if (worldMap[raycast->mapX][raycast->mapY] != 0)
-		//	color = 0;
+		*/
+		if (worldMap[raycast->mapX][raycast->mapY] != 0)
+			color = 0;
 		if (side == 1)
-			color = color / 2;
-			//color = 0;
+			//color = color / 2;
+			color = 0;
 		//HEEEEEEEEEEEEERE
 		drawVertical(pixels, x, drawStart, drawEnd, color);
-		//SDL_Delay(10000);
 		x++;
 	}
+	//SDL_Delay(10000);
 }
 
 void	speed(t_player *player, t_sdl *sdl)
@@ -272,9 +296,10 @@ void mainLoop(t_sdl *sdl, t_data *data, t_raycast *raycast, t_dda *dda, t_player
 		while (SDL_PollEvent(&(sdl->event)) != 0)
 		{
 			raycasting(player, raycast, dda, data->pixels);
-		/*	
+			
 			   if (sdl->event.type == SDL_QUIT || sdl->event.key.keysym.sym == SDLK_ESCAPE)
-			   data->quit = 1;
+			   	data->quit = 1;
+			   /*
 			   if (sdl->event.type == SDL_MOUSEBUTTONUP)
 			   if (sdl->event.button.button == SDL_BUTTON_LEFT)
 			   leftMouseButtonDown = 0;
