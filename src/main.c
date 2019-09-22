@@ -143,6 +143,10 @@ void	drawVertical(int *pixels, int x, int y1, int y2, int color)
 void	rayInit(t_raycast *raycast, t_dda *dda, t_player const *player, int x)
 {
 	raycast->camX = 2 * x / (double)WIN_WIDTH - 1;
+
+	raycast->rayPosX = player->posX;
+	raycast->rayPosY = player->posY;
+
 	raycast->rayDirX = player->dirX + player->planeX * raycast->camX;
 	raycast->rayDirY = player->dirY + player->planeY * raycast->camX;
 	//raycast->mapX = player->posX;
@@ -158,14 +162,14 @@ void	rayInit(t_raycast *raycast, t_dda *dda, t_player const *player, int x)
 
 void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pixels)
 {
-	int	hit = 0;
-	int	side = 0;
+	int	hit;
+	int	side;
 
-	int	lineHeight = 0;
+	int	lineHeight;
 
-	int	drawStart = 0;
-	int	drawEnd = 0;
-	int	color = 0;
+	int	drawStart;
+	int	drawEnd;
+	int	color;
 
 	int	x;
 
@@ -173,7 +177,16 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pix
 	//printf("player posX = %f, player posY = %f\n", player->posX, player->posY);
 	while (x < WIN_WIDTH)
 	{
+		hit = 0;
+		side = 0;
+		lineHeight = 0;
+		drawStart = 0;
+		drawEnd = 0;
+		color = 0;
+
+
 		rayInit(raycast, dda, player, x);
+		//printf("mapX = %d and mapY = %d\n", raycast->mapX, raycast->mapY);
 		//printf("dda deltaDistX = %f, deltaDistY = %f\n", dda->deltaDistX, dda->deltaDistY);
 		//printf("rayDirX = %f, rayDirY = %f\n", raycast->rayDirX, raycast->rayDirY);
 		if (raycast->rayDirX < 0)
@@ -221,9 +234,11 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pix
 		if (side == 0)
 			dda->perpWallDist = (raycast->mapX - raycast->rayPosX + (1 - dda->stepX) / 2) / raycast->rayDirX;
 		else
-			dda->perpWallDist = (raycast->mapY - raycast->rayPosX + (1 - dda->stepY) / 2) / raycast->rayDirY;
+			dda->perpWallDist = (raycast->mapY - raycast->rayPosY + (1 - dda->stepY) / 2) / raycast->rayDirY;
 		lineHeight = (int)(WIN_HEIGHT / dda->perpWallDist);
 
+		printf("perpwalldist = %f for side = %d | mapx %d | mapy %d| rayposx %f | rayposy %f | stepx %d | stepy %d | raydirx %f | raydirY %f\n\n", dda->perpWallDist, side, raycast->mapX, raycast->mapY, raycast->rayPosX, raycast->rayPosY, dda->stepX, dda->stepY, raycast->rayDirX, raycast->rayDirY);
+		//printf("lineheight = %d\n", lineHeight);
 		//printf("worldMap[%d][%d] hit = %d, lineHeight = %d\n", raycast->mapX, raycast->mapY, hit, lineHeight);
 		drawStart = -lineHeight / 2 + WIN_HEIGHT / 2;
 		if (drawStart < 0)
@@ -249,7 +264,9 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pix
 			//color = color / 2;
 			color = 0;
 		//HEEEEEEEEEEEEERE
+		//printf("draw start = %d, drawend = %d\n", drawStart, drawEnd);
 		drawVertical(pixels, x, drawStart, drawEnd, color);
+		//drawVertical(pixels, x, 700, 800, color);
 		x++;
 	}
 	//SDL_Delay(10000);
