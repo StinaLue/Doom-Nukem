@@ -2,22 +2,25 @@
 #include <math.h>
 #include "wolf3d.h"
 
-//#define mapWidth 24
-//#define mapHeight 24
-
-#define mapWidth 5
-#define mapHeight 5
+#define mapWidth 24
+#define mapHeight 24
+/*
+#define mapWidth 9
+#define mapHeight 9
 
 int worldMap[mapWidth][mapHeight]=
 {
 	{1,1,1,1,1},
 	{1,0,0,0,1},
+	{1,0,0,0,1},
+	{1,0,0,0,1},
+	{1,3,0,0,1},
 	{1,0,2,0,1},
 	{1,0,0,0,1},
 	{1,1,1,1,1}
-};
+};*/
 
-/*int worldMap[mapWidth][mapHeight]=
+int worldMap[mapWidth][mapHeight]=
 {
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -44,7 +47,7 @@ int worldMap[mapWidth][mapHeight]=
 	{1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
-*/
+
 
 void	freeSDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 {
@@ -103,7 +106,7 @@ void	initDataStruct(t_data *data)
 
 void	initPlayerStruct(t_player *player)
 {
-	player->posX = 1;
+	player->posX = 2;
 	player->posY = 3;
 	player->dirX = -1;
 	player->dirY = 0;
@@ -149,6 +152,7 @@ void	rayInit(t_raycast *raycast, t_dda *dda, t_player const *player, int x)
 
 	raycast->rayDirX = player->dirX + player->planeX * raycast->camX;
 	raycast->rayDirY = player->dirY + player->planeY * raycast->camX;
+	//printf("real rayDirX: %f, rayDirY: %f\n", raycast->rayDirX, raycast->rayDirY);
 	//raycast->mapX = player->posX;
 	//raycast->mapY = player->posY;
 	raycast->mapX = (int)raycast->rayPosX;
@@ -189,38 +193,49 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pix
 		//printf("mapX = %d and mapY = %d\n", raycast->mapX, raycast->mapY);
 		//printf("dda deltaDistX = %f, deltaDistY = %f\n", dda->deltaDistX, dda->deltaDistY);
 		//printf("rayDirX = %f, rayDirY = %f\n", raycast->rayDirX, raycast->rayDirY);
+	//printf("1: mapX: %d, mapY: %d\n", raycast->mapX, raycast->mapY);
 		if (raycast->rayDirX < 0)
 		{
 			dda->stepX = -1;
 			dda->sideDistX = (raycast->rayPosX - raycast->mapX) * dda->deltaDistX;
+			//printf("DistX: %f = PosX %f - mapXY %d * DistX %f\n", dda->sideDistX, raycast->rayPosX, raycast->mapX, dda->deltaDistX);
+			//printf("we go here: rayDirX < 0\n");
 		}
 		else
 		{
 			dda->stepX = 1;
 			dda->sideDistX = (raycast->mapX + 1.0 - raycast->rayPosX) * dda->deltaDistX;
+			//printf("we go here: rayDirX > 0\n");
 		}
 		if (raycast->rayDirY < 0)
 		{
 			dda->stepY = -1;
 			dda->sideDistY = (raycast->rayPosY - raycast->mapY) * dda->deltaDistY;
+			//printf("we go here: rayDirY < 0\n");
 		}
 		else
 		{
 			dda->stepY = 1;
 			dda->sideDistY = (raycast->mapY + 1.0 - raycast->rayPosY) * dda->deltaDistY;
+			//printf("we go here: rayDirY > 0\n");
+			//printf("DistY: %f = mapY %d + 1.0 - rayPosY %f * DistY %f\n", dda->sideDistY, raycast->mapY, raycast->rayPosY, dda->deltaDistY);
 		}
-		//printf("dda stepx = %d stepy = %d\n", dda->stepX, dda->stepY);
+		//printf("sideDistX: %f, sideDistY: %f\ndeltaDistX: %f, deltaDistY: %f\n\n", dda->sideDistX, dda->sideDistY, dda->deltaDistX, dda->deltaDistY);
+	//printf("2: mapX: %d, mapY: %d\n", raycast->mapX, raycast->mapY);
 		while (hit == 0)
 		{
 			if (dda->sideDistX < dda->sideDistY)
 			{
 				dda->sideDistX += dda->deltaDistX;
+		//printf("1: raycast->mapX %d += stepx %d\n", raycast->mapX, dda->stepX);
 				raycast->mapX += dda->stepX;
+		//printf("2: raycast->mapX %d += stepx %d\n\n", raycast->mapX, dda->stepX);
 				side = 0;
 			}
 			else
 			{
 				dda->sideDistY += dda->deltaDistY;
+		//printf("we go here");
 				raycast->mapY += dda->stepY;
 				side = 1;
 			}
@@ -229,16 +244,17 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pix
 				hit = 1;
 			}
 		}
-		x++;
+	//printf("3: mapX: %d, mapY: %d, hit???: %d\n\n", raycast->mapX, raycast->mapY, hit);
 	
 		if (side == 0)
-			dda->perpWallDist = (raycast->mapX - raycast->rayPosX + (1 - dda->stepX) / 2) / raycast->rayDirX;
+			dda->perpWallDist = ft_absfloat((raycast->mapX - raycast->rayPosX + (1 - dda->stepX) / 2) / raycast->rayDirX);
 		else
-			dda->perpWallDist = (raycast->mapY - raycast->rayPosY + (1 - dda->stepY) / 2) / raycast->rayDirY;
-		lineHeight = (int)(WIN_HEIGHT / dda->perpWallDist);
-
-		printf("perpwalldist = %f for side = %d | mapx %d | mapy %d| rayposx %f | rayposy %f | stepx %d | stepy %d | raydirx %f | raydirY %f\n\n", dda->perpWallDist, side, raycast->mapX, raycast->mapY, raycast->rayPosX, raycast->rayPosY, dda->stepX, dda->stepY, raycast->rayDirX, raycast->rayDirY);
-		//printf("lineheight = %d\n", lineHeight);
+			dda->perpWallDist = ft_absfloat((raycast->mapY - raycast->rayPosY + (1 - dda->stepY) / 2) / raycast->rayDirY);
+		//printf("perpwalldist = %f for side = %d | mapx %d | mapy %d| rayposx %f | rayposy %f | stepx %d | stepy %d | raydirx %f | raydirY %f\n\n", dda->perpWallDist, side, raycast->mapX, raycast->mapY, raycast->rayPosX, raycast->rayPosY, dda->stepX, dda->stepY, raycast->rayDirX, raycast->rayDirY);
+		//printf("perpWall: %f\n", dda->perpWallDist);
+		lineHeight = ft_absolute((int)(WIN_HEIGHT / dda->perpWallDist));
+		//printf("lineHeight: %d = WIN_H %d/ perpWall %f\n", lineHeight, WIN_HEIGHT, dda->perpWallDist);
+	//	printf("lineheight = %ld\n", lineHeight);
 		//printf("worldMap[%d][%d] hit = %d, lineHeight = %d\n", raycast->mapX, raycast->mapY, hit, lineHeight);
 		drawStart = -lineHeight / 2 + WIN_HEIGHT / 2;
 		if (drawStart < 0)
@@ -248,7 +264,6 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pix
 			drawEnd = WIN_HEIGHT - 1;
 		//printf("drawStart = %d, drawEnd = %d\n", drawStart, drawEnd);
 
-		/*
 		switch(worldMap[raycast->mapX][raycast->mapY])
 		{
 			case 1:  color = 16711680;  break; //red
@@ -257,7 +272,6 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pix
 			case 4:  color = 16777215;  break; //white
 			default: color = 16776960; break; //yellow
 		}
-		*/
 		if (worldMap[raycast->mapX][raycast->mapY] != 0)
 			color = 0;
 		if (side == 1)
@@ -292,6 +306,25 @@ void	speed(t_player *player, t_sdl *sdl)
 	}
 	if (sdl->event.key.keysym.sym == SDLK_d)
 	{
+	double saveDirX = player->dirX;
+	player->dirX = player->dirX * cos(-speed) - player->dirY * sin(-speed);
+	player->dirY = saveDirX * sin(-speed) + player->dirY * cos(-speed);
+	double savePlaneX = player->planeX;
+	player->planeX = player->planeX * cos(-speed) - player->planeY * sin(-speed);
+	player->planeY = savePlaneX * sin(-speed) + player->planeY * cos(-speed);
+	}
+	if (sdl->event.key.keysym.sym == SDLK_a)
+	{
+	double oldDirX = player->dirX;
+	player->dirX = player->dirX * cos(speed) - player->dirY * sin(speed);
+	player->dirY = oldDirX * sin(speed) + player->dirY * cos(speed);
+	double savePlaneX = player->planeX;
+	player->planeX = player->planeX * cos(speed) - player->planeY * sin(speed);
+	player->planeY = savePlaneX * sin(speed) + player->planeY * cos(speed);
+	}
+	/*
+	if (sdl->event.key.keysym.sym == SDLK_d)
+	{
 		double saveDirY = player->dirY;
 		double savePlaneY = player->dirY;
 		player->dirY = player->dirX * sin(-speed) + player->dirY * cos(-speed);
@@ -307,8 +340,8 @@ void	speed(t_player *player, t_sdl *sdl)
 		player->dirX = player->dirX * cos(speed) - saveDirY * sin(speed);
 		player->planeY = player->planeX * sin(speed) + player->planeY * cos(speed);
 		player->planeX = player->planeX * cos(speed) - savePlaneY * sin(speed);
-	}
-	printf("player->dirY: %f, player->dirX: %f\n", player->dirY, player->dirX);
+	}*/
+	//printf("player->dirY: %f, player->dirX: %f\n", player->dirY, player->dirX);
 }
 
 void mainLoop(t_sdl *sdl, t_data *data, t_raycast *raycast, t_dda *dda, t_player *player)
@@ -317,9 +350,10 @@ void mainLoop(t_sdl *sdl, t_data *data, t_raycast *raycast, t_dda *dda, t_player
 
 	while (!data->quit)
 	{
-		SDL_UpdateTexture(sdl->tex, NULL, data->pixels, WIN_WIDTH * sizeof(int));
+		//SDL_UpdateTexture(sdl->tex, NULL, data->pixels, WIN_WIDTH * sizeof(int));
 		while (SDL_PollEvent(&(sdl->event)) != 0)
 		{
+			ft_memset(data->pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 			raycasting(player, raycast, dda, data->pixels);
 			
 			   if (sdl->event.type == SDL_QUIT || sdl->event.key.keysym.sym == SDLK_ESCAPE)
@@ -338,6 +372,8 @@ void mainLoop(t_sdl *sdl, t_data *data, t_raycast *raycast, t_dda *dda, t_player
 			//data->pixels[sdl->event.motion.y * WIN_WIDTH + sdl->event.motion.x] = 0;
 			*/ 
 			speed(player, sdl);
+			//SDL_SetRenderDrawColor(sdl->ren, 255, 255, 255, 255);
+			SDL_UpdateTexture(sdl->tex, NULL, data->pixels, WIN_WIDTH * sizeof(int));
 			SDL_RenderClear(sdl->ren);
 			SDL_RenderCopy(sdl->ren, sdl->tex, NULL, NULL);
 			SDL_RenderPresent(sdl->ren);
