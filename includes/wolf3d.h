@@ -7,6 +7,8 @@
 # define WIN_WIDTH 800
 # define WIN_HEIGHT 800
 
+# define MAX_MAP 100
+
 void				draw_line();
 
 typedef struct			s_sdl
@@ -21,6 +23,9 @@ typedef struct			s_data
 {
 	int			quit;
 	int			pixels[WIN_WIDTH * WIN_HEIGHT];
+	int			map[MAX_MAP][MAX_MAP];
+	int			widthMap;
+	int			heightMap;
 }				t_data;
 
 typedef struct 			s_player

@@ -7,7 +7,7 @@
 
 #define mapWidth 9
 #define mapHeight 9
-
+/*
 int worldMap[mapWidth][mapHeight]=
 {
 	{1,1,1,1,1},
@@ -19,35 +19,36 @@ int worldMap[mapWidth][mapHeight]=
 	{1,0,0,0,1},
 	{1,1,1,1,1}
 };
-/*
-int worldMap[mapWidth][mapHeight]=
-{
-	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-	{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
-	{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-};
 */
+/*
+   int worldMap[mapWidth][mapHeight]=
+   {
+   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+   {1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
+   {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
+   {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
+   {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
+   {1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
+   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+   {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+   {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+   {1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+   {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+   {1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+   {1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+   {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+   };
+ */
 
 void	freeSDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 {
@@ -65,24 +66,107 @@ int	loadMedia(SDL_Surface **img, char *path)
 	*img = SDL_LoadBMP(path);
 	if (*img == NULL)
 	{
-		ft_dprintf(2, "Unable to load image %s! SDL Error: %s\n", path, SDL_GetError());
+		ft_dprintf(STDERR_FILENO, "Unable to load image %s! SDL Error: %s\n", path, SDL_GetError());
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
+}
+
+char	checkLine(char *line)
+{
+	while (*line != '\0')
+	{
+		if (*line != '0' && *line != '1')
+			return (*line);
+		line++;
+	}
+	return ('0');
+}
+
+void	copyLine(char charline[MAX_MAP], char *line, int width)
+{
+	int i;
+
+	i = 0;
+	while (i < width)
+	{
+		charline[i] = line[i];
+		i++;
+	}
+}
+
+void	fillChartab(char chartab[MAX_MAP][MAX_MAP], char *title, int *widthMap, int *heightMap)
+{
+	char	*line;
+	int	ret;
+	int	fd;
+
+	*heightMap = 0;
+	ret = 0;
+	if ((fd = open(title, O_RDONLY | O_NOFOLLOW)) == -1)
+	{
+		ft_dprintf(STDERR_FILENO, "%{r}s could not be opened\n", title);
+		exit(EXIT_FAILURE);
+	}
+	while ((ret = get_next_line(fd, &line)) > 0 && *heightMap < MAX_MAP)
+	{
+		if (checkLine(line) != '0')
+		{
+			ft_dprintf(STDERR_FILENO, "invalid character %{r}c in map\n", checkLine(line));
+			close(fd);
+			exit(EXIT_FAILURE);
+		}
+		*widthMap = ft_strlen(line);
+		if (*widthMap > MAX_MAP)
+		{
+			ft_dprintf(STDERR_FILENO, "%{r}s is too big, please modify MAP_MAX to %{b}d\n", title, *widthMap);
+			close(fd);
+			exit(EXIT_FAILURE);
+		}
+		copyLine(chartab[*heightMap], line, *widthMap);
+		//chartab[lineHeight] = ft_strdup(line);
+		(*heightMap)++;
+	}
+	if (*heightMap >= MAX_MAP)
+	{
+			ft_dprintf(STDERR_FILENO, "%{r}s is too big, please modify MAP_MAX to %{b}d\n", title, *heightMap);
+			close(fd);
+			exit(EXIT_FAILURE);
+	}
+}
+
+void	fillMap(int map[MAX_MAP][MAX_MAP], char *title, int *widthMap, int *heightMap)
+{
+	char 	chartab[MAX_MAP][MAX_MAP];
+	int	i;
+	int	j;
+
+	i = 0;
+	fillChartab(chartab, title, widthMap, heightMap);
+	while (i < *heightMap)
+	{
+		j = 0;
+		while (j < *widthMap)
+		{
+			map[i][j] = chartab[i][j] - '0';
+			j++;
+		}
+		i++;
+	}
 }
 
 int	initSDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
-		ft_dprintf(2, "SDL_Init Error: %{r}s\n", SDL_GetError());
+		ft_dprintf(STDERR_FILENO, "SDL_Init Error: %{r}s\n", SDL_GetError());
 		return (EXIT_FAILURE);
 	}
 	*win = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, \
 			SDL_WINDOWPOS_UNDEFINED, WIN_WIDTH, WIN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (*win == NULL)
 	{
-		ft_dprintf(2, "SDL_CreateWindow Error: %{r}s\n", SDL_GetError());
+		ft_dprintf(STDERR_FILENO, "SDL_CreateWindow Error: %{r}s\n", SDL_GetError());
 		return (EXIT_FAILURE);
 	}
 	*ren = SDL_CreateRenderer(*win, -1, 0);
@@ -98,17 +182,45 @@ void	initSdlStruct(t_sdl *sdl)
 	sdl->tex = NULL;
 }
 
-void	initDataStruct(t_data *data)
+void	initDataStruct(t_data *data, char *title)
 {
 	data->quit = 0;
 	ft_memset(data->pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
+	fillMap(data->map, title, &(data->widthMap), &(data->heightMap));
 }
 
-void	initPlayerStruct(t_player *player)
+void	findPlayerPos(double *posX, double *posY, int map[MAX_MAP][MAX_MAP], int widthMap, int heightMap)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	*posX = 0;
+	*posY = 0;
+	while (i < heightMap)
+	{
+		j = 0;
+		while (j < widthMap)
+		{
+			if (map[i][j] == 0)
+			{
+				*posX = j + 0.5;
+				*posY = i + 0.5;
+				return;
+			}
+			j++;
+		}
+		i++;
+	}
+	ft_dprintf(STDERR_FILENO, "no suitable starting position found for player, exiting...\n");
+}
+
+void	initPlayerStruct(t_player *player, int map[MAX_MAP][MAX_MAP], int widthMap, int heightMap)
 {
 	//player->posX and posY could be marked with a special number on the grid and then searched by looping through the worldMap tab
-	player->posX = 4;
-	player->posY = 2;
+	findPlayerPos(&player->posX, &player->posY, map, widthMap, heightMap);
+	//player->posX = 4;
+	//player->posY = 2;
 	player->dirX = -1;
 	player->dirY = 0;
 	player->planeX = 0;
@@ -117,16 +229,16 @@ void	initPlayerStruct(t_player *player)
 
 void	initRaycastStruct(t_raycast *raycast, double posX, double posY)
 {
-//can't we just put that into initPlayerStruct? Or at least call it from there
+	//can't we just put that into initPlayerStruct? Or at least call it from there
 	raycast->rayPosX = posX;
 	raycast->rayPosY = posY;
 }
 
-void	initWolf(t_wolf *wolf)
+void	initWolf(t_wolf *wolf, char *title)
 {
 	initSdlStruct(&(wolf->sdl));
-	initDataStruct(&(wolf->data));
-	initPlayerStruct(&(wolf->player));
+	initDataStruct(&(wolf->data), title);
+	initPlayerStruct(&(wolf->player), wolf->data.map, wolf->data.widthMap, wolf->data.heightMap);
 	initRaycastStruct(&(wolf->raycast), wolf->player.posX, wolf->player.posY);
 }
 
@@ -160,15 +272,15 @@ void	rayInit(t_raycast *raycast, t_dda *dda, t_player const *player, int x)
 	raycast->mapY = (int)raycast->rayPosY;
 
 	/*
-	SEEMS LIKE BOTH OF THE FOLLOWING METHODS WORK
-	*/
+	   SEEMS LIKE BOTH OF THE FOLLOWING METHODS WORK
+	 */
 	//dda->deltaDistX = ft_absfloat(1 / raycast->rayDirX);
 	//dda->deltaDistY = ft_absfloat(1 / raycast->rayDirY);
 	dda->deltaDistX = sqrt(1 + (raycast->rayDirY * raycast->rayDirY) / (raycast->rayDirX * raycast->rayDirX));
 	dda->deltaDistY = sqrt(1 + (raycast->rayDirX * raycast->rayDirX) / (raycast->rayDirY * raycast->rayDirY));
 }
 
-void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pixels)
+void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *data)
 {
 	int	hit;
 	int	side;
@@ -227,10 +339,8 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pix
 				raycast->mapY += dda->stepY;
 				side = 1;
 			}
-			if (worldMap[raycast->mapX][raycast->mapY] > 0)
-			{
+			if (data->map[raycast->mapX][raycast->mapY] > 0)
 				hit = 1;
-			}
 		}
 		if (side == 0)
 			dda->perpWallDist = ft_absfloat((raycast->mapX - raycast->rayPosX + (1 - dda->stepX) / 2) / raycast->rayDirX);
@@ -244,7 +354,7 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pix
 		if (drawEnd >= WIN_HEIGHT)
 			drawEnd = WIN_HEIGHT - 1;
 
-		switch(worldMap[raycast->mapX][raycast->mapY])
+		switch(data->map[raycast->mapX][raycast->mapY])
 		{
 			case 1:  color = 16711680;  break; //red
 			case 2:  color = 65280;  break; //green
@@ -256,48 +366,73 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, int *pix
 		//	color = 0;
 		if (side == 1)
 			color = color / 2;
-		drawVertical(pixels, x, drawStart, drawEnd, color);
+		drawVertical(data->pixels, x, drawStart, drawEnd, color);
 		x++;
 	}
-//	SDL_Delay(10000);
+	//	SDL_Delay(10000);
 }
 
-void	speed(t_player *player, t_sdl *sdl)
+void	speed(t_player *player, t_sdl *sdl, t_data *data)
 {
 	double speed = 0.08;
 	double rotspeed = 0.04;
 
 	if (sdl->event.key.keysym.sym == SDLK_w)
 	{
-		if(worldMap[(int)(player->posX + player->dirX * speed)][(int)player->posY] == 0)
+		if(data->map[(int)(player->posX + player->dirX * speed)][(int)player->posY] == 0)
 			player->posX += player->dirX * speed;
-		if(worldMap[(int)player->posX][(int)(player->posY + player->dirY * speed)] == 0)
+		if(data->map[(int)player->posX][(int)(player->posY + player->dirY * speed)] == 0)
 			player->posY += player->dirY * speed;
 	}
 	if (sdl->event.key.keysym.sym == SDLK_s)
 	{
-		if(worldMap[(int)(player->posX - player->dirX * speed)][(int)player->posY] == 0)
+		if(data->map[(int)(player->posX - player->dirX * speed)][(int)player->posY] == 0)
 			player->posX -= player->dirX * speed;
-		if(worldMap[(int)player->posX][(int)(player->posY - player->dirY * speed)] == 0)
+		if(data->map[(int)player->posX][(int)(player->posY - player->dirY * speed)] == 0)
 			player->posY -= player->dirY * speed;
+	}
+
+	if (sdl->event.type == SDL_MOUSEMOTION)
+	{
+		SDL_SetRelativeMouseMode(SDL_TRUE);
+		//SDL_WarpMouseInWindow(sdl->win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
+		//printf("x event = %d, y event = %d\n", sdl->event.motion.xrel, sdl->event.motion.yrel);
+		if (sdl->event.motion.xrel > 0)
+		{
+			double saveDirX = player->dirX;
+			player->dirX = player->dirX * cos(-rotspeed) - player->dirY * sin(-rotspeed);
+			player->dirY = saveDirX * sin(-rotspeed) + player->dirY * cos(-rotspeed);
+			double savePlaneX = player->planeX;
+			player->planeX = player->planeX * cos(-rotspeed) - player->planeY * sin(-rotspeed);
+			player->planeY = savePlaneX * sin(-rotspeed) + player->planeY * cos(-rotspeed);
+		}
+		else
+		{
+			double oldDirX = player->dirX;
+			player->dirX = player->dirX * cos(rotspeed) - player->dirY * sin(rotspeed);
+			player->dirY = oldDirX * sin(rotspeed) + player->dirY * cos(rotspeed);
+			double savePlaneX = player->planeX;
+			player->planeX = player->planeX * cos(rotspeed) - player->planeY * sin(rotspeed);
+			player->planeY = savePlaneX * sin(rotspeed) + player->planeY * cos(rotspeed);
+		}
 	}
 	if (sdl->event.key.keysym.sym == SDLK_d)
 	{
-	double saveDirX = player->dirX;
-	player->dirX = player->dirX * cos(-rotspeed) - player->dirY * sin(-rotspeed);
-	player->dirY = saveDirX * sin(-rotspeed) + player->dirY * cos(-rotspeed);
-	double savePlaneX = player->planeX;
-	player->planeX = player->planeX * cos(-rotspeed) - player->planeY * sin(-rotspeed);
-	player->planeY = savePlaneX * sin(-rotspeed) + player->planeY * cos(-rotspeed);
+		double saveDirX = player->dirX;
+		player->dirX = player->dirX * cos(-rotspeed) - player->dirY * sin(-rotspeed);
+		player->dirY = saveDirX * sin(-rotspeed) + player->dirY * cos(-rotspeed);
+		double savePlaneX = player->planeX;
+		player->planeX = player->planeX * cos(-rotspeed) - player->planeY * sin(-rotspeed);
+		player->planeY = savePlaneX * sin(-rotspeed) + player->planeY * cos(-rotspeed);
 	}
 	if (sdl->event.key.keysym.sym == SDLK_a)
 	{
-	double oldDirX = player->dirX;
-	player->dirX = player->dirX * cos(rotspeed) - player->dirY * sin(rotspeed);
-	player->dirY = oldDirX * sin(rotspeed) + player->dirY * cos(rotspeed);
-	double savePlaneX = player->planeX;
-	player->planeX = player->planeX * cos(rotspeed) - player->planeY * sin(rotspeed);
-	player->planeY = savePlaneX * sin(rotspeed) + player->planeY * cos(rotspeed);
+		double oldDirX = player->dirX;
+		player->dirX = player->dirX * cos(rotspeed) - player->dirY * sin(rotspeed);
+		player->dirY = oldDirX * sin(rotspeed) + player->dirY * cos(rotspeed);
+		double savePlaneX = player->planeX;
+		player->planeX = player->planeX * cos(rotspeed) - player->planeY * sin(rotspeed);
+		player->planeY = savePlaneX * sin(rotspeed) + player->planeY * cos(rotspeed);
 	}
 }
 
@@ -311,11 +446,11 @@ void mainLoop(t_sdl *sdl, t_data *data, t_raycast *raycast, t_dda *dda, t_player
 		while (SDL_PollEvent(&(sdl->event)) != 0)
 		{
 			ft_memset(data->pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
-			raycasting(player, raycast, dda, data->pixels);
-			
-			   if (sdl->event.type == SDL_QUIT || sdl->event.key.keysym.sym == SDLK_ESCAPE)
-			   	data->quit = 1;
-			   /*
+			raycasting(player, raycast, dda, data);
+
+			if (sdl->event.type == SDL_QUIT || sdl->event.key.keysym.sym == SDLK_ESCAPE)
+				data->quit = 1;
+			/*
 			   if (sdl->event.type == SDL_MOUSEBUTTONUP)
 			   if (sdl->event.button.button == SDL_BUTTON_LEFT)
 			   leftMouseButtonDown = 0;
@@ -324,11 +459,11 @@ void mainLoop(t_sdl *sdl, t_data *data, t_raycast *raycast, t_dda *dda, t_player
 			   leftMouseButtonDown = 1;
 			   if (sdl->event.type == SDL_MOUSEMOTION)
 			   if (leftMouseButtonDown)
-				drawVertical(data->pixels, sdl->event.motion.x, sdl->event.motion.y - 100, sdl->event.motion.y + 100, 0);
-			   //fillPix(data->pixels, sdl->event.motion.x, sdl->event.motion.y, 0);
+			   drawVertical(data->pixels, sdl->event.motion.x, sdl->event.motion.y - 100, sdl->event.motion.y + 100, 0);
+			//fillPix(data->pixels, sdl->event.motion.x, sdl->event.motion.y, 0);
 			//data->pixels[sdl->event.motion.y * WIN_WIDTH + sdl->event.motion.x] = 0;
-			*/ 
-			speed(player, sdl);
+			 */ 
+			speed(player, sdl, data);
 			//SDL_SetRenderDrawColor(sdl->ren, 255, 255, 255, 255);
 			SDL_UpdateTexture(sdl->tex, NULL, data->pixels, WIN_WIDTH * sizeof(int));
 			SDL_RenderClear(sdl->ren);
@@ -338,11 +473,16 @@ void mainLoop(t_sdl *sdl, t_data *data, t_raycast *raycast, t_dda *dda, t_player
 	}
 }
 
-int main()
+int main(int argc, char *argv[])
 {
 	t_wolf	wolf;
 
-	initWolf(&wolf);
+	if (argc != 2)
+	{
+		ft_dprintf(STDERR_FILENO, "usage: ./wolf3d %{g}s\n", "[valid .w3d map]");
+		return (EXIT_FAILURE);
+	}
+	initWolf(&wolf, argv[1]);
 	if (initSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex)) != EXIT_SUCCESS)
 	{
 		freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
