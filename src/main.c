@@ -76,7 +76,7 @@ char	checkLine(char *line)
 {
 	while (*line != '\0')
 	{
-		if (*line != '0' && *line != '1')
+		if (*line != '0' && *line != '1' && *line != 'X')
 			return (*line);
 		line++;
 	}
@@ -148,7 +148,10 @@ void	fillMap(int map[MAX_MAP][MAX_MAP], char *title, int *widthMap, int *heightM
 		j = 0;
 		while (j < *widthMap)
 		{
-			map[i][j] = chartab[i][j] - '0';
+			if (chartab[i][j] == 'X')
+				map[i][j] = 88;
+			else
+				map[i][j] = chartab[i][j] - '0';
 			j++;
 		}
 		i++;
@@ -202,10 +205,12 @@ void	findPlayerPos(double *posX, double *posY, int map[MAX_MAP][MAX_MAP], int wi
 		j = 0;
 		while (j < widthMap)
 		{
-			if (map[i][j] == 0)
+			if (map[i][j] == 88)
 			{
-				*posX = j + 0.5;
-				*posY = i + 0.5;
+				*posX = j;// + 0.5;
+				*posY = i;// + 0.5;
+				printf("posX: %f, posY: %f", *posX, *posY);
+				map[i][j] = 0;
 				return;
 			}
 			j++;
@@ -217,10 +222,7 @@ void	findPlayerPos(double *posX, double *posY, int map[MAX_MAP][MAX_MAP], int wi
 
 void	initPlayerStruct(t_player *player, int map[MAX_MAP][MAX_MAP], int widthMap, int heightMap)
 {
-	//player->posX and posY could be marked with a special number on the grid and then searched by looping through the worldMap tab
 	findPlayerPos(&player->posX, &player->posY, map, widthMap, heightMap);
-	//player->posX = 4;
-	//player->posY = 2;
 	player->dirX = -1;
 	player->dirY = 0;
 	player->planeX = 0;
@@ -229,7 +231,6 @@ void	initPlayerStruct(t_player *player, int map[MAX_MAP][MAX_MAP], int widthMap,
 
 void	initRaycastStruct(t_raycast *raycast, double posX, double posY)
 {
-	//can't we just put that into initPlayerStruct? Or at least call it from there
 	raycast->rayPosX = posX;
 	raycast->rayPosY = posY;
 }
@@ -266,8 +267,6 @@ void	rayInit(t_raycast *raycast, t_dda *dda, t_player const *player, int x)
 
 	raycast->rayDirX = player->dirX + player->planeX * raycast->camX;
 	raycast->rayDirY = player->dirY + player->planeY * raycast->camX;
-	//raycast->mapX = player->posX;
-	//raycast->mapY = player->posY;
 	raycast->mapX = (int)raycast->rayPosX;
 	raycast->mapY = (int)raycast->rayPosY;
 
@@ -278,6 +277,26 @@ void	rayInit(t_raycast *raycast, t_dda *dda, t_player const *player, int x)
 	//dda->deltaDistY = ft_absfloat(1 / raycast->rayDirY);
 	dda->deltaDistX = sqrt(1 + (raycast->rayDirY * raycast->rayDirY) / (raycast->rayDirX * raycast->rayDirX));
 	dda->deltaDistY = sqrt(1 + (raycast->rayDirX * raycast->rayDirX) / (raycast->rayDirY * raycast->rayDirY));
+}
+
+void	printMap(int map[MAX_MAP][MAX_MAP], int width, int height)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i < height)
+	{
+		j = 0;
+		while (j < width)
+		{
+			ft_printf("%d ", map[i][j]);
+			j++;
+		}
+		write(1, "\n", 1);
+		i++;
+	}
+	write(1, "\n", 1);
 }
 
 void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *data)
@@ -294,7 +313,9 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *
 	int	x;
 
 	x = 0;
-	while (x < WIN_WIDTH) // maybe also <=
+	ft_printf("posx = %f posy = %f\n", player->posX, player->posY);
+	//printMap(data->map, data->widthMap, data->heightMap);
+	while (x < WIN_WIDTH)
 	{
 		hit = 0;
 		side = 0;
@@ -325,8 +346,11 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *
 			dda->stepY = 1;
 			dda->sideDistY = (raycast->mapY + 1.0 - raycast->rayPosY) * dda->deltaDistY;
 		}
-		while (hit == 0)
+		while (hit == 0 && raycast->mapX < data->widthMap && raycast->mapY < data->heightMap && raycast->mapX > 0 && raycast->mapY > 0)
 		{
+	//printMap(data->map, data->widthMap, data->heightMap);
+		//ft_printf("mapx = %d mapy = %d, currentposvalue = %d\n", raycast->mapX, raycast->mapY, data->map[raycast->mapX][raycast->mapY]);
+		//ft_printf("currentposvalue = %d\n", data->map[raycast->mapY][raycast->mapX]);
 			if (dda->sideDistX < dda->sideDistY)
 			{
 				dda->sideDistX += dda->deltaDistX;
@@ -339,7 +363,8 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *
 				raycast->mapY += dda->stepY;
 				side = 1;
 			}
-			if (data->map[raycast->mapX][raycast->mapY] > 0)
+			//if (data->map[raycast->mapX][raycast->mapY] > 0)
+			if (data->map[raycast->mapY][raycast->mapX] == 1)
 				hit = 1;
 		}
 		if (side == 0)
@@ -354,16 +379,16 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *
 		if (drawEnd >= WIN_HEIGHT)
 			drawEnd = WIN_HEIGHT - 1;
 
-		switch(data->map[raycast->mapX][raycast->mapY])
+		/*switch(data->map[raycast->mapX][raycast->mapY])
 		{
 			case 1:  color = 16711680;  break; //red
 			case 2:  color = 65280;  break; //green
 			case 3:  color = 255;   break; //blue
 			case 4:  color = 16777215;  break; //white
 			default: color = 16776960; break; //yellow
-		}
-		//if (worldMap[raycast->mapX][raycast->mapY] != 0)
-		//	color = 0;
+		}*/
+		if (data->map[raycast->mapY][raycast->mapX] == 1)
+			color = 255;
 		if (side == 1)
 			color = color / 2;
 		drawVertical(data->pixels, x, drawStart, drawEnd, color);
@@ -379,17 +404,17 @@ void	speed(t_player *player, t_sdl *sdl, t_data *data)
 
 	if (sdl->event.key.keysym.sym == SDLK_w)
 	{
-		if(data->map[(int)(player->posX + player->dirX * speed)][(int)player->posY] == 0)
-			player->posX += player->dirX * speed;
-		if(data->map[(int)player->posX][(int)(player->posY + player->dirY * speed)] == 0)
+		if(data->map[(int)(player->posY + player->dirY * speed)][(int)player->posX] == 0)
 			player->posY += player->dirY * speed;
+		if(data->map[(int)player->posY][(int)(player->posX + player->dirX * speed)] == 0)
+			player->posX += player->dirX * speed;
 	}
 	if (sdl->event.key.keysym.sym == SDLK_s)
 	{
-		if(data->map[(int)(player->posX - player->dirX * speed)][(int)player->posY] == 0)
-			player->posX -= player->dirX * speed;
-		if(data->map[(int)player->posX][(int)(player->posY - player->dirY * speed)] == 0)
+		if(data->map[(int)(player->posY - player->dirY * speed)][(int)player->posX] == 0)
 			player->posY -= player->dirY * speed;
+		if(data->map[(int)player->posY][(int)(player->posX - player->dirX * speed)] == 0)
+			player->posX -= player->dirX * speed;
 	}
 
 	if (sdl->event.type == SDL_MOUSEMOTION)
