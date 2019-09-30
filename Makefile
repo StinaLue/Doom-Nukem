@@ -77,6 +77,11 @@ $(OBJECTS_DIRECTORY)%.o : $(SOURCES_DIRECTORY)%.c $(HEADERS)
 	@echo "$(GREEN).$(RESET)\c"
 
 $(OBJECTS_DIRECTORY_DEBUG)%.o : $(SOURCES_DIRECTORY)%.c $(HEADERS)
+ifeq ($(HARD_DBG), 1)
+	@$(eval DEBUGFLAGS += -fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined)
+	@$(eval DEBUGLIBRARIES += -fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined)
+endif
+
 	@$(CC) $(DEBUGFLAGS) -c $(INCLUDES) $< -o $@
 	@echo "$(GREEN).$(RESET)\c"
 
@@ -110,11 +115,6 @@ re:
 debug: $(DEBUG_NAME)
 
 $(DEBUG_NAME): $(LIBFT) $(OBJECTS_DIRECTORY_DEBUG) $(OBJECTS_DEBUG)
-ifeq ($(HARD_DBG), 1)
-	@$(eval DEBUGFLAGS += -fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined)
-	@$(eval DEBUGLIBRARIES += -fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined)
-endif
-
 	@$(CC) $(DEBUGLIBRARIES) $(INCLUDES) $(OBJECTS_DEBUG) -o $(DEBUG_NAME)
 	@echo "\n$(DEBUG_NAME): $(GREEN)object debug files were created$(RESET)"
 	@echo "$(DEBUG_NAME): $(GREEN)$(DEBUG_NAME) was created$(RESET)"
