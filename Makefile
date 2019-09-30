@@ -19,7 +19,10 @@ FLAGS = -Wall -Werror -Wextra -D_THREAD_SAFE -O3
 DEBUGFLAGS = -Wall -Werror -Wextra -D_THREAD_SAFE -g
 
 LIBRARIES = -lft -lSDL2-2.0.0 -L$(LIBFT_DIRECTORY) -L$(SDL2_LIB_DIRECTORY)
+DEBUGLIBRARIES = -lft -lSDL2-2.0.0 -L$(LIBFT_DIRECTORY) -L$(SDL2_LIB_DIRECTORY)
 INCLUDES = -I$(HEADERS_DIRECTORY) -I$(LIBFT_HEADER) -I$(SDL2_HEADERS_DIRECTORY)
+
+HARD_DBG ?= 1
 
 LIBFT = $(LIBFT_DIRECTORY)libft.a
 LIBFT_DIRECTORY = ./libft/
@@ -57,7 +60,6 @@ RESET = \033[0m
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJECTS_DIRECTORY) $(OBJECTS) #$(SDL2)
-	#@$(CC) $(FLAGS) $(LIBRARIES) $(INCLUDES) $(OBJECTS) -o $(NAME)
 	@$(CC) $(LIBRARIES) $(INCLUDES) $(OBJECTS) -o $(NAME)
 	@echo "\n$(NAME): $(GREEN)object files were created$(RESET)"
 	@echo "$(NAME): $(GREEN)$(NAME) was created$(RESET)"
@@ -108,14 +110,18 @@ re:
 debug: $(DEBUG_NAME)
 
 $(DEBUG_NAME): $(LIBFT) $(OBJECTS_DIRECTORY_DEBUG) $(OBJECTS_DEBUG)
-	#@$(CC) $(DEBUGFLAGS) $(LIBRARIES) $(INCLUDES) $(OBJECTS_DEBUG) -o $(DEBUG_NAME)
-	@$(CC) $(LIBRARIES) $(INCLUDES) $(OBJECTS_DEBUG) -o $(DEBUG_NAME)
+ifeq ($(HARD_DBG), 1)
+	@$(eval DEBUGFLAGS += -fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined)
+	@$(eval DEBUGLIBRARIES += -fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined)
+endif
+
+	@$(CC) $(DEBUGLIBRARIES) $(INCLUDES) $(OBJECTS_DEBUG) -o $(DEBUG_NAME)
 	@echo "\n$(DEBUG_NAME): $(GREEN)object debug files were created$(RESET)"
 	@echo "$(DEBUG_NAME): $(GREEN)$(DEBUG_NAME) was created$(RESET)"
 
 debugclean:
 	@rm -rf $(OBJECTS_DIRECTORY_DEBUG)
-	@echo "$(DEBUG_NAME)$(OBJECTS_DIRECTORY_DEBUG) was deleted$(RESET)"
+	@echo "$(DEBUG_NAME): $(RED)$(OBJECTS_DIRECTORY_DEBUG) was deleted$(RESET)"
 	@echo "$(DEBUG_NAME): $(RED)debug objects files were deleted$(RESET)"
 
 debugfclean: debugclean
