@@ -209,7 +209,6 @@ void	findPlayerPos(double *posX, double *posY, int map[MAX_MAP][MAX_MAP], int wi
 			{
 				*posX = j;// + 0.5;
 				*posY = i;// + 0.5;
-				printf("posX: %f, posY: %f", *posX, *posY);
 				map[i][j] = 0;
 				return;
 			}
@@ -313,7 +312,6 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *
 	int	x;
 
 	x = 0;
-	ft_printf("posx = %f posy = %f\n", player->posX, player->posY);
 	//printMap(data->map, data->widthMap, data->heightMap);
 	while (x < WIN_WIDTH)
 	{
