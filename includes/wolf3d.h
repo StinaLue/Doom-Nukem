@@ -4,8 +4,12 @@
 # include "SDL.h"
 
 # define TITLE "TEST"
-# define WIN_WIDTH 800
-# define WIN_HEIGHT 800
+//# define WIN_WIDTH 800
+//# define WIN_HEIGHT 800
+# define WIN_WIDTH 1680
+# define WIN_HEIGHT 1050
+
+# define NB_THREADS 6
 
 # define MAX_MAP 100
 
@@ -22,10 +26,13 @@ typedef struct			s_sdl
 typedef struct			s_data
 {
 	int			quit;
-	int			pixels[WIN_WIDTH * WIN_HEIGHT];
+//	int			pixels[WIN_WIDTH * WIN_HEIGHT];
+	int			*img_ptr;
 	int			map[MAX_MAP][MAX_MAP];
 	int			widthMap;
 	int			heightMap;
+	int			xStart;
+	int			xEnd;
 }				t_data;
 
 typedef struct 			s_player

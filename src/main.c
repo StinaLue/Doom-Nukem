@@ -2,6 +2,8 @@
 #include <math.h>
 #include "wolf3d.h"
 
+#include <pthread.h>
+
 //#define mapWidth 24
 //#define mapHeight 24
 
@@ -188,7 +190,8 @@ void	initSdlStruct(t_sdl *sdl)
 void	initDataStruct(t_data *data, char *title)
 {
 	data->quit = 0;
-	ft_memset(data->pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
+	//ft_memset(data->pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
+	data->img_ptr = NULL;
 	fillMap(data->map, title, &(data->widthMap), &(data->heightMap));
 }
 
@@ -368,44 +371,82 @@ void	wallHeightCalc(t_raycast *raycast, t_dda *dda)
 		raycast->drawEnd = WIN_HEIGHT - 1;
 }
 
-void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *data)
+void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *data, int x)
 {
 	int	color;
-	int	x;
+	color = 0;
 
-	x = 0;
-	//printMap(data->map, data->widthMap, data->heightMap);
-	while (x < WIN_WIDTH)
+	rayInit(raycast, dda, player, x);
+	ddaInit(raycast, dda);
+	ddaLoop(raycast, dda, data);
+	wallHeightCalc(raycast, dda);
+
+	/*switch(data->map[raycast->mapX][raycast->mapY])
+	  {
+	  case 1:  color = 16711680;  break; //red
+	  case 2:  color = 65280;  break; //green
+	  case 3:  color = 255;   break; //blue
+	  case 4:  color = 16777215;  break; //white
+	  default: color = 16776960; break; //yellow
+	  }*/
+	if (data->map[raycast->mapY][raycast->mapX] == 1)
+		color = 255;
+	if (dda->side == 1)
+		color = color / 2;
+	drawVertical(data->img_ptr, x, raycast->drawStart, raycast->drawEnd, color);
+}
+
+void	*iterateRaycast(void *param)
+{
+	t_wolf *wolf;
+	int x;
+
+	wolf = (t_wolf *)param;
+	x = wolf->data.xStart;
+	while (x < wolf->data.xEnd)
 	{
-		color = 0;
-
-		rayInit(raycast, dda, player, x);
-		ddaInit(raycast, dda);
-		ddaLoop(raycast, dda, data);
-		wallHeightCalc(raycast, dda);
-
-		/*switch(data->map[raycast->mapX][raycast->mapY])
-		  {
-		  case 1:  color = 16711680;  break; //red
-		  case 2:  color = 65280;  break; //green
-		  case 3:  color = 255;   break; //blue
-		  case 4:  color = 16777215;  break; //white
-		  default: color = 16776960; break; //yellow
-		  }*/
-		if (data->map[raycast->mapY][raycast->mapX] == 1)
-			color = 255;
-		if (dda->side == 1)
-			color = color / 2;
-		drawVertical(data->pixels, x, raycast->drawStart, raycast->drawEnd, color);
+		raycasting(&(wolf->player), &(wolf->raycast), &(wolf->dda), &(wolf->data), x);
 		x++;
 	}
-	//	SDL_Delay(10000);
+	return (NULL);
+}
+
+void	multithread(t_wolf *wolf)
+{
+	//int		startClock;
+	//int		deltaClock;
+	//int		currentFPS;
+
+	t_wolf		params[NB_THREADS];
+	pthread_t	threads[NB_THREADS];
+	int		i;
+
+	i = 0;
+	//startClock = SDL_GetTicks();
+	while (i < NB_THREADS)
+	{
+		ft_memcpy((void *)&params[i], (void *)wolf, sizeof(t_wolf));
+		params[i].data.xStart = (WIN_WIDTH / NB_THREADS) * i;
+		params[i].data.xEnd = (WIN_WIDTH / NB_THREADS) * (i + 1);
+		pthread_create(&threads[i], NULL, iterateRaycast, &params[i]);
+		i++;
+	}
+	while (i--)
+		pthread_join(threads[i], NULL);
+	//deltaClock = SDL_GetTicks() - startClock;
+	//if (deltaClock != 0)
+	//{
+	//	currentFPS = 1000 / deltaClock;
+	//	ft_printf("%d\n", currentFPS);
+	//}
 }
 
 void	speed(t_player *player, t_sdl *sdl, t_data *data)
 {
-	double speed = 0.08;
-	double rotspeed = 0.04;
+	//double speed = 0.08;
+	//double rotspeed = 0.04;
+	double speed = 0.1;
+	double rotspeed = 0.06;
 
 	if (sdl->event.key.keysym.sym == SDLK_w)
 	{
@@ -466,20 +507,22 @@ void	speed(t_player *player, t_sdl *sdl, t_data *data)
 	}
 }
 
-void mainLoop(t_sdl *sdl, t_data *data, t_raycast *raycast, t_dda *dda, t_player *player)
+void mainLoop(t_wolf *wolf)
 {
+	int pixels[WIN_WIDTH * WIN_HEIGHT];
+	wolf->data.img_ptr = &pixels[0];
 	//int	leftMouseButtonDown = 0;
 
-	while (!data->quit)
+	while (!wolf->data.quit)
 	{
 		//SDL_UpdateTexture(sdl->tex, NULL, data->pixels, WIN_WIDTH * sizeof(int));
-		while (SDL_PollEvent(&(sdl->event)) != 0)
+		while (SDL_PollEvent(&(wolf->sdl.event)) != 0)
 		{
-			ft_memset(data->pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
-			raycasting(player, raycast, dda, data);
-
-			if (sdl->event.type == SDL_QUIT || sdl->event.key.keysym.sym == SDLK_ESCAPE)
-				data->quit = 1;
+			ft_memset(pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
+			//raycasting(player, raycast, dda, data);
+			multithread(wolf);
+			if (wolf->sdl.event.type == SDL_QUIT || wolf->sdl.event.key.keysym.sym == SDLK_ESCAPE)
+				wolf->data.quit = 1;
 			/*
 			   if (sdl->event.type == SDL_MOUSEBUTTONUP)
 			   if (sdl->event.button.button == SDL_BUTTON_LEFT)
@@ -493,12 +536,12 @@ void mainLoop(t_sdl *sdl, t_data *data, t_raycast *raycast, t_dda *dda, t_player
 			//fillPix(data->pixels, sdl->event.motion.x, sdl->event.motion.y, 0);
 			//data->pixels[sdl->event.motion.y * WIN_WIDTH + sdl->event.motion.x] = 0;
 			 */ 
-			speed(player, sdl, data);
+			speed(&(wolf->player), &(wolf->sdl), &(wolf->data));
 			//SDL_SetRenderDrawColor(sdl->ren, 255, 255, 255, 255);
-			SDL_UpdateTexture(sdl->tex, NULL, data->pixels, WIN_WIDTH * sizeof(int));
-			SDL_RenderClear(sdl->ren);
-			SDL_RenderCopy(sdl->ren, sdl->tex, NULL, NULL);
-			SDL_RenderPresent(sdl->ren);
+			SDL_UpdateTexture(wolf->sdl.tex, NULL, pixels, WIN_WIDTH * sizeof(int));
+			SDL_RenderClear(wolf->sdl.ren);
+			SDL_RenderCopy(wolf->sdl.ren, wolf->sdl.tex, NULL, NULL);
+			SDL_RenderPresent(wolf->sdl.ren);
 		}
 	}
 }
@@ -518,7 +561,7 @@ int main(int argc, char *argv[])
 		freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
 		return (EXIT_FAILURE);
 	}
-	mainLoop(&wolf.sdl, &wolf.data, &wolf.raycast, &wolf.dda, &wolf.player);
+	mainLoop(&wolf);
 	freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
 	return (EXIT_SUCCESS);
 }
