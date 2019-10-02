@@ -279,10 +279,16 @@ void	rayInit(t_raycast *raycast, t_dda *dda, t_player const *player, int x)
 	/*
 	   SEEMS LIKE BOTH OF THE FOLLOWING METHODS WORK
 	 */
-	//dda->deltaDistX = ft_absfloat(1 / raycast->rayDirX);
-	//dda->deltaDistY = ft_absfloat(1 / raycast->rayDirY);
-	dda->deltaDistX = sqrt(1 + (raycast->rayDirY * raycast->rayDirY) / (raycast->rayDirX * raycast->rayDirX));
-	dda->deltaDistY = sqrt(1 + (raycast->rayDirX * raycast->rayDirX) / (raycast->rayDirY * raycast->rayDirY));
+	if (raycast->rayDirX != 0)
+		dda->deltaDistX = ft_absfloat(1 / raycast->rayDirX);
+	else
+		dda->deltaDistX = 0;
+	if (raycast->rayDirY != 0)
+		dda->deltaDistY = ft_absfloat(1 / raycast->rayDirY);
+	else
+		dda->deltaDistY = 0;
+	//dda->deltaDistX = sqrt(1 + (raycast->rayDirY * raycast->rayDirY) / (raycast->rayDirX * raycast->rayDirX));
+	//dda->deltaDistY = sqrt(1 + (raycast->rayDirX * raycast->rayDirX) / (raycast->rayDirY * raycast->rayDirY));
 	dda->hit = 0;
 	dda->side = 0;
 }
@@ -357,12 +363,15 @@ void	ddaLoop(t_raycast *raycast, t_dda *dda, t_data const *data)
 void	wallHeightCalc(t_raycast *raycast, t_dda *dda)
 {
 	if (dda->side == 0)
-		dda->perpWallDist = ft_absfloat((raycast->mapX - raycast->rayPosX
-					+ (1 - dda->stepX) / 2) / raycast->rayDirX);
+		dda->perpWallDist = (raycast->rayDirX == 0) ? 0 : ft_absfloat((raycast->mapX -
+					raycast->rayPosX + (1 - dda->stepX) / 2) / raycast->rayDirX);
 	else
-		dda->perpWallDist = ft_absfloat((raycast->mapY - raycast->rayPosY
-					+ (1 - dda->stepY) / 2) / raycast->rayDirY);
-	raycast->lineHeight = ft_absolute((int)(WIN_HEIGHT / dda->perpWallDist));
+		dda->perpWallDist = (raycast->rayDirY == 0) ? 0 : ft_absfloat((raycast->mapY -
+					raycast->rayPosY + (1 - dda->stepY) / 2) / raycast->rayDirY);
+	if (dda->perpWallDist != 0)
+		raycast->lineHeight = ft_absolute((int)(WIN_HEIGHT / dda->perpWallDist));
+	else
+		raycast->lineHeight = 0;
 	raycast->drawStart = -raycast->lineHeight / 2 + WIN_HEIGHT / 2;
 	if (raycast->drawStart < 0)
 		raycast->drawStart = 0;
