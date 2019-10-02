@@ -8,18 +8,18 @@
 #define mapWidth 9
 #define mapHeight 9
 /*
-int worldMap[mapWidth][mapHeight]=
-{
-	{1,1,1,1,1},
-	{1,0,0,0,1},
-	{1,0,0,0,1},
-	{1,0,0,0,1},
-	{1,3,0,0,1},
-	{1,0,2,0,1},
-	{1,0,0,0,1},
-	{1,1,1,1,1}
-};
-*/
+   int worldMap[mapWidth][mapHeight]=
+   {
+   {1,1,1,1,1},
+   {1,0,0,0,1},
+   {1,0,0,0,1},
+   {1,0,0,0,1},
+   {1,3,0,0,1},
+   {1,0,2,0,1},
+   {1,0,0,0,1},
+   {1,1,1,1,1}
+   };
+ */
 /*
    int worldMap[mapWidth][mapHeight]=
    {
@@ -129,9 +129,9 @@ void	fillChartab(char chartab[MAX_MAP][MAX_MAP], char *title, int *widthMap, int
 	}
 	if (*heightMap >= MAX_MAP)
 	{
-			ft_dprintf(STDERR_FILENO, "%{r}s is too big, please modify MAP_MAX to %{b}d\n", title, *heightMap);
-			close(fd);
-			exit(EXIT_FAILURE);
+		ft_dprintf(STDERR_FILENO, "%{r}s is too big, please modify MAP_MAX to %{b}d\n", title, *heightMap);
+		close(fd);
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -269,6 +269,10 @@ void	rayInit(t_raycast *raycast, t_dda *dda, t_player const *player, int x)
 	raycast->mapX = (int)raycast->rayPosX;
 	raycast->mapY = (int)raycast->rayPosY;
 
+	raycast->lineHeight = 0;
+	raycast->drawStart = 0;
+	raycast->drawEnd = 0;
+
 	/*
 	   SEEMS LIKE BOTH OF THE FOLLOWING METHODS WORK
 	 */
@@ -276,6 +280,8 @@ void	rayInit(t_raycast *raycast, t_dda *dda, t_player const *player, int x)
 	//dda->deltaDistY = ft_absfloat(1 / raycast->rayDirY);
 	dda->deltaDistX = sqrt(1 + (raycast->rayDirY * raycast->rayDirY) / (raycast->rayDirX * raycast->rayDirX));
 	dda->deltaDistY = sqrt(1 + (raycast->rayDirX * raycast->rayDirX) / (raycast->rayDirY * raycast->rayDirY));
+	dda->hit = 0;
+	dda->side = 0;
 }
 
 void	printMap(int map[MAX_MAP][MAX_MAP], int width, int height)
@@ -298,98 +304,99 @@ void	printMap(int map[MAX_MAP][MAX_MAP], int width, int height)
 	write(1, "\n", 1);
 }
 
+void	ddaInit(t_raycast const *raycast, t_dda *dda)
+{
+	if (raycast->rayDirX < 0)
+	{
+		dda->stepX = -1;
+		dda->sideDistX = (raycast->rayPosX - raycast->mapX) * dda->deltaDistX;
+	}
+	else
+	{
+		dda->stepX = 1;
+		dda->sideDistX = (raycast->mapX + 1.0 - raycast->rayPosX) * dda->deltaDistX;
+	}
+	if (raycast->rayDirY < 0)
+	{
+		dda->stepY = -1;
+		dda->sideDistY = (raycast->rayPosY - raycast->mapY) * dda->deltaDistY;
+	}
+	else
+	{
+		dda->stepY = 1;
+		dda->sideDistY = (raycast->mapY + 1.0 - raycast->rayPosY) * dda->deltaDistY;
+	}
+}
+
+void	ddaLoop(t_raycast *raycast, t_dda *dda, t_data const *data)
+{
+	while (dda->hit == 0 && raycast->mapX < data->widthMap && \
+			raycast->mapY < data->heightMap && raycast->mapX > 0 && raycast->mapY > 0)
+	{
+		if (dda->sideDistX < dda->sideDistY)
+		{
+			dda->sideDistX += dda->deltaDistX;
+			raycast->mapX += dda->stepX;
+			dda->side = 0;
+		}
+		else
+		{
+			dda->sideDistY += dda->deltaDistY;
+			raycast->mapY += dda->stepY;
+			dda->side = 1;
+		}
+		//if (data->map[raycast->mapX][raycast->mapY] > 0)
+		if (data->map[raycast->mapY][raycast->mapX] == 1)
+			dda->hit = 1;
+	}
+}
+
+void	wallHeightCalc(t_raycast *raycast, t_dda *dda)
+{
+	if (dda->side == 0)
+		dda->perpWallDist = ft_absfloat((raycast->mapX - raycast->rayPosX
+					+ (1 - dda->stepX) / 2) / raycast->rayDirX);
+	else
+		dda->perpWallDist = ft_absfloat((raycast->mapY - raycast->rayPosY
+					+ (1 - dda->stepY) / 2) / raycast->rayDirY);
+	raycast->lineHeight = ft_absolute((int)(WIN_HEIGHT / dda->perpWallDist));
+	raycast->drawStart = -raycast->lineHeight / 2 + WIN_HEIGHT / 2;
+	if (raycast->drawStart < 0)
+		raycast->drawStart = 0;
+	raycast->drawEnd = raycast->lineHeight / 2 + WIN_HEIGHT / 2;
+	if (raycast->drawEnd >= WIN_HEIGHT)
+		raycast->drawEnd = WIN_HEIGHT - 1;
+}
+
 void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *data)
 {
-	int	hit;
-	int	side;
-
-	int	lineHeight;
-
-	int	drawStart;
-	int	drawEnd;
 	int	color;
-
 	int	x;
 
 	x = 0;
 	//printMap(data->map, data->widthMap, data->heightMap);
 	while (x < WIN_WIDTH)
 	{
-		hit = 0;
-		side = 0;
-		lineHeight = 0;
-		drawStart = 0;
-		drawEnd = 0;
 		color = 0;
 
-
 		rayInit(raycast, dda, player, x);
-		if (raycast->rayDirX < 0)
-		{
-			dda->stepX = -1;
-			dda->sideDistX = (raycast->rayPosX - raycast->mapX) * dda->deltaDistX;
-		}
-		else
-		{
-			dda->stepX = 1;
-			dda->sideDistX = (raycast->mapX + 1.0 - raycast->rayPosX) * dda->deltaDistX;
-		}
-		if (raycast->rayDirY < 0)
-		{
-			dda->stepY = -1;
-			dda->sideDistY = (raycast->rayPosY - raycast->mapY) * dda->deltaDistY;
-		}
-		else
-		{
-			dda->stepY = 1;
-			dda->sideDistY = (raycast->mapY + 1.0 - raycast->rayPosY) * dda->deltaDistY;
-		}
-		while (hit == 0 && raycast->mapX < data->widthMap && raycast->mapY < data->heightMap && raycast->mapX > 0 && raycast->mapY > 0)
-		{
-	//printMap(data->map, data->widthMap, data->heightMap);
-		//ft_printf("mapx = %d mapy = %d, currentposvalue = %d\n", raycast->mapX, raycast->mapY, data->map[raycast->mapX][raycast->mapY]);
-		//ft_printf("currentposvalue = %d\n", data->map[raycast->mapY][raycast->mapX]);
-			if (dda->sideDistX < dda->sideDistY)
-			{
-				dda->sideDistX += dda->deltaDistX;
-				raycast->mapX += dda->stepX;
-				side = 0;
-			}
-			else
-			{
-				dda->sideDistY += dda->deltaDistY;
-				raycast->mapY += dda->stepY;
-				side = 1;
-			}
-			//if (data->map[raycast->mapX][raycast->mapY] > 0)
-			if (data->map[raycast->mapY][raycast->mapX] == 1)
-				hit = 1;
-		}
-		if (side == 0)
-			dda->perpWallDist = ft_absfloat((raycast->mapX - raycast->rayPosX + (1 - dda->stepX) / 2) / raycast->rayDirX);
-		else
-			dda->perpWallDist = ft_absfloat((raycast->mapY - raycast->rayPosY + (1 - dda->stepY) / 2) / raycast->rayDirY);
-		lineHeight = ft_absolute((int)(WIN_HEIGHT / dda->perpWallDist));
-		drawStart = -lineHeight / 2 + WIN_HEIGHT / 2;
-		if (drawStart < 0)
-			drawStart = 0;
-		drawEnd = lineHeight / 2 + WIN_HEIGHT / 2;
-		if (drawEnd >= WIN_HEIGHT)
-			drawEnd = WIN_HEIGHT - 1;
+		ddaInit(raycast, dda);
+		ddaLoop(raycast, dda, data);
+		wallHeightCalc(raycast, dda);
 
 		/*switch(data->map[raycast->mapX][raycast->mapY])
-		{
-			case 1:  color = 16711680;  break; //red
-			case 2:  color = 65280;  break; //green
-			case 3:  color = 255;   break; //blue
-			case 4:  color = 16777215;  break; //white
-			default: color = 16776960; break; //yellow
-		}*/
+		  {
+		  case 1:  color = 16711680;  break; //red
+		  case 2:  color = 65280;  break; //green
+		  case 3:  color = 255;   break; //blue
+		  case 4:  color = 16777215;  break; //white
+		  default: color = 16776960; break; //yellow
+		  }*/
 		if (data->map[raycast->mapY][raycast->mapX] == 1)
 			color = 255;
-		if (side == 1)
+		if (dda->side == 1)
 			color = color / 2;
-		drawVertical(data->pixels, x, drawStart, drawEnd, color);
+		drawVertical(data->pixels, x, raycast->drawStart, raycast->drawEnd, color);
 		x++;
 	}
 	//	SDL_Delay(10000);

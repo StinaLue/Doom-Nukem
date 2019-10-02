@@ -47,6 +47,9 @@ typedef struct			s_raycast
 	double			rayPosY;
 	double			rayDirX;
 	double			rayDirY;
+	int			lineHeight;
+	int			drawStart;
+	int			drawEnd;
 }				t_raycast;
 
 typedef struct			s_dda
@@ -58,6 +61,8 @@ typedef struct			s_dda
 	double			perpWallDist;
 	int			stepX;
 	int			stepY;
+	int			hit;
+	int			side;
 }				t_dda;
 
 typedef struct			s_wolf
