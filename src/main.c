@@ -137,7 +137,7 @@ void	fillChartab(char chartab[MAX_MAP][MAX_MAP], char *title, int *widthMap, int
 	}
 }
 
-void	fillMap(int map[MAX_MAP][MAX_MAP], char *title, int *widthMap, int *heightMap)
+void	fillMap(int (*map)[MAX_MAP][MAX_MAP], char *title, int *widthMap, int *heightMap)
 {
 	char 	chartab[MAX_MAP][MAX_MAP];
 	int	i;
@@ -151,9 +151,9 @@ void	fillMap(int map[MAX_MAP][MAX_MAP], char *title, int *widthMap, int *heightM
 		while (j < *widthMap)
 		{
 			if (chartab[i][j] == 'X')
-				map[i][j] = 88;
+				(*map)[i][j] = 'X';//88;
 			else
-				map[i][j] = chartab[i][j] - '0';
+				(*map)[i][j] = chartab[i][j] - '0';
 			j++;
 		}
 		i++;
@@ -192,7 +192,7 @@ void	initDataStruct(t_data *data, char *title)
 	data->quit = 0;
 	//ft_memset(data->pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 	data->img_ptr = NULL;
-	fillMap(data->map, title, &(data->widthMap), &(data->heightMap));
+	fillMap(data->map_ptr, title, &(data->widthMap), &(data->heightMap));
 }
 
 void	findPlayerPos(double *posX, double *posY, int map[MAX_MAP][MAX_MAP], int widthMap, int heightMap)
@@ -208,7 +208,7 @@ void	findPlayerPos(double *posX, double *posY, int map[MAX_MAP][MAX_MAP], int wi
 		j = 0;
 		while (j < widthMap)
 		{
-			if (map[i][j] == 88)
+			if (map[i][j] == 'X')//88)
 			{
 				*posX = j;// + 0.5;
 				*posY = i;// + 0.5;
@@ -241,7 +241,7 @@ void	initWolf(t_wolf *wolf, char *title)
 {
 	initSdlStruct(&(wolf->sdl));
 	initDataStruct(&(wolf->data), title);
-	initPlayerStruct(&(wolf->player), wolf->data.map, wolf->data.widthMap, wolf->data.heightMap);
+	initPlayerStruct(&(wolf->player), *(wolf->data.map_ptr), wolf->data.widthMap, wolf->data.heightMap);
 	initRaycastStruct(&(wolf->raycast), wolf->player.posX, wolf->player.posY);
 }
 
@@ -349,7 +349,7 @@ void	ddaLoop(t_raycast *raycast, t_dda *dda, t_data const *data)
 			dda->side = 1;
 		}
 		//if (data->map[raycast->mapX][raycast->mapY] > 0)
-		if (data->map[raycast->mapY][raycast->mapX] == 1)
+		if ((*data->map_ptr)[raycast->mapY][raycast->mapX] == 1)
 			dda->hit = 1;
 	}
 }
@@ -389,7 +389,7 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *
 	  case 4:  color = 16777215;  break; //white
 	  default: color = 16776960; break; //yellow
 	  }*/
-	if (data->map[raycast->mapY][raycast->mapX] == 1)
+	if ((*data->map_ptr)[raycast->mapY][raycast->mapX] == 1)
 		color = 255;
 	if (dda->side == 1)
 		color = color / 2;
@@ -450,16 +450,16 @@ void	speed(t_player *player, t_sdl *sdl, t_data *data)
 
 	if (sdl->event.key.keysym.sym == SDLK_w)
 	{
-		if(data->map[(int)(player->posY + player->dirY * speed)][(int)player->posX] == 0)
+		if((*data->map_ptr)[(int)(player->posY + player->dirY * speed)][(int)player->posX] == 0)
 			player->posY += player->dirY * speed;
-		if(data->map[(int)player->posY][(int)(player->posX + player->dirX * speed)] == 0)
+		if((*data->map_ptr)[(int)player->posY][(int)(player->posX + player->dirX * speed)] == 0)
 			player->posX += player->dirX * speed;
 	}
 	if (sdl->event.key.keysym.sym == SDLK_s)
 	{
-		if(data->map[(int)(player->posY - player->dirY * speed)][(int)player->posX] == 0)
+		if((*data->map_ptr)[(int)(player->posY - player->dirY * speed)][(int)player->posX] == 0)
 			player->posY -= player->dirY * speed;
-		if(data->map[(int)player->posY][(int)(player->posX - player->dirX * speed)] == 0)
+		if((*data->map_ptr)[(int)player->posY][(int)(player->posX - player->dirX * speed)] == 0)
 			player->posX -= player->dirX * speed;
 	}
 
@@ -549,7 +549,9 @@ void mainLoop(t_wolf *wolf)
 int main(int argc, char *argv[])
 {
 	t_wolf	wolf;
+	int	map[MAX_MAP][MAX_MAP];
 
+	wolf.data.map_ptr = &map;
 	if (argc != 2)
 	{
 		ft_dprintf(STDERR_FILENO, "usage: ./wolf3d %{g}s\n", "[valid .w3d map]");

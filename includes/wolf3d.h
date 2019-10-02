@@ -28,7 +28,8 @@ typedef struct			s_data
 	int			quit;
 //	int			pixels[WIN_WIDTH * WIN_HEIGHT];
 	int			*img_ptr;
-	int			map[MAX_MAP][MAX_MAP];
+//	int			map[MAX_MAP][MAX_MAP];
+	int			(*map_ptr)[MAX_MAP][MAX_MAP];
 	int			widthMap;
 	int			heightMap;
 	int			xStart;
