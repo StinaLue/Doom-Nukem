@@ -282,11 +282,11 @@ void	rayInit(t_raycast *raycast, t_dda *dda, t_player const *player, int x)
 	if (raycast->rayDirX != 0)
 		dda->deltaDistX = ft_absfloat(1 / raycast->rayDirX);
 	else
-		dda->deltaDistX = 0;
+		dda->deltaDistX = ft_absfloat(1 / 0.00001); // MAYBE A BUG, WORKS FOR NOW THO?
 	if (raycast->rayDirY != 0)
 		dda->deltaDistY = ft_absfloat(1 / raycast->rayDirY);
 	else
-		dda->deltaDistY = 0;
+		dda->deltaDistY = ft_absfloat(1 / 0.00001);
 	//dda->deltaDistX = sqrt(1 + (raycast->rayDirY * raycast->rayDirY) / (raycast->rayDirX * raycast->rayDirX));
 	//dda->deltaDistY = sqrt(1 + (raycast->rayDirX * raycast->rayDirX) / (raycast->rayDirY * raycast->rayDirY));
 	dda->hit = 0;
@@ -323,7 +323,7 @@ void	ddaInit(t_raycast const *raycast, t_dda *dda)
 	else
 	{
 		dda->stepX = 1;
-		dda->sideDistX = (raycast->mapX + 1.0 - raycast->rayPosX) * dda->deltaDistX;
+		dda->sideDistX = (raycast->mapX + 1 - raycast->rayPosX) * dda->deltaDistX;
 	}
 	if (raycast->rayDirY < 0)
 	{
@@ -333,7 +333,7 @@ void	ddaInit(t_raycast const *raycast, t_dda *dda)
 	else
 	{
 		dda->stepY = 1;
-		dda->sideDistY = (raycast->mapY + 1.0 - raycast->rayPosY) * dda->deltaDistY;
+		dda->sideDistY = (raycast->mapY + 1 - raycast->rayPosY) * dda->deltaDistY;
 	}
 }
 
@@ -363,15 +363,15 @@ void	ddaLoop(t_raycast *raycast, t_dda *dda, t_data const *data)
 void	wallHeightCalc(t_raycast *raycast, t_dda *dda)
 {
 	if (dda->side == 0)
-		dda->perpWallDist = (raycast->rayDirX == 0) ? 0 : ft_absfloat((raycast->mapX -
+		dda->perpWallDist = /*(raycast->rayDirX == 0.0) ? 0 : */ft_absfloat((raycast->mapX -
 					raycast->rayPosX + (1 - dda->stepX) / 2) / raycast->rayDirX);
 	else
-		dda->perpWallDist = (raycast->rayDirY == 0) ? 0 : ft_absfloat((raycast->mapY -
+		dda->perpWallDist = /*(raycast->rayDirY == 0.0) ? 0 :*/ft_absfloat((raycast->mapY -
 					raycast->rayPosY + (1 - dda->stepY) / 2) / raycast->rayDirY);
-	if (dda->perpWallDist != 0)
+	//if (dda->perpWallDist != 0)
 		raycast->lineHeight = ft_absolute((int)(WIN_HEIGHT / dda->perpWallDist));
-	else
-		raycast->lineHeight = 0;
+//	else
+//		raycast->lineHeight = 0;
 	raycast->drawStart = -raycast->lineHeight / 2 + WIN_HEIGHT / 2;
 	if (raycast->drawStart < 0)
 		raycast->drawStart = 0;
@@ -399,10 +399,15 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *
 	  default: color = 16776960; break; //yellow
 	  }*/
 	if ((*data->map_ptr)[raycast->mapY][raycast->mapX] == 1)
-		color = 255;
+		color = 230;
 	if (dda->side == 1)
 		color = color / 2;
 	drawVertical(data->img_ptr, x, raycast->drawStart, raycast->drawEnd, color);
+	if (x == 450 || x == 451)
+	{
+		ft_printf("camX %f color is: %d drawStart: %d, drawEnd: %d and x: %d\n", raycast->camX, color, raycast->drawStart, raycast->drawEnd, x);
+		ft_printf("AND lineheight = %d\n", raycast->lineHeight);
+	}
 }
 
 void	*iterateRaycast(void *param)
@@ -516,10 +521,23 @@ void	speed(t_player *player, t_sdl *sdl, t_data *data)
 	}
 }
 
+int	*createPixelTab()
+{
+	int *ptr;
+
+	ptr = NULL;
+	if ((ptr = (int *)malloc(sizeof(int) * WIN_WIDTH * WIN_HEIGHT)) == NULL)
+		return (NULL);
+	ft_memset(ptr, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
+	return (ptr);
+}
+
 void mainLoop(t_wolf *wolf)
 {
-	int pixels[WIN_WIDTH * WIN_HEIGHT];
-	wolf->data.img_ptr = &pixels[0];
+	//int pixels[WIN_WIDTH * WIN_HEIGHT];
+	//wolf->data.img_ptr = &pixels[0];
+	if ((wolf->data.img_ptr = createPixelTab()) == NULL)
+		return; //NOT OKAY YETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 	//int	leftMouseButtonDown = 0;
 
 	while (!wolf->data.quit)
@@ -527,7 +545,8 @@ void mainLoop(t_wolf *wolf)
 		//SDL_UpdateTexture(sdl->tex, NULL, data->pixels, WIN_WIDTH * sizeof(int));
 		while (SDL_PollEvent(&(wolf->sdl.event)) != 0)
 		{
-			ft_memset(pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
+			//ft_memset(pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
+			ft_memset(wolf->data.img_ptr, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 			//raycasting(player, raycast, dda, data);
 			multithread(wolf);
 			if (wolf->sdl.event.type == SDL_QUIT || wolf->sdl.event.key.keysym.sym == SDLK_ESCAPE)
@@ -547,7 +566,8 @@ void mainLoop(t_wolf *wolf)
 			 */ 
 			speed(&(wolf->player), &(wolf->sdl), &(wolf->data));
 			//SDL_SetRenderDrawColor(sdl->ren, 255, 255, 255, 255);
-			SDL_UpdateTexture(wolf->sdl.tex, NULL, pixels, WIN_WIDTH * sizeof(int));
+			//SDL_UpdateTexture(wolf->sdl.tex, NULL, pixels, WIN_WIDTH * sizeof(int));
+			SDL_UpdateTexture(wolf->sdl.tex, NULL, wolf->data.img_ptr, WIN_WIDTH * sizeof(int));
 			SDL_RenderClear(wolf->sdl.ren);
 			SDL_RenderCopy(wolf->sdl.ren, wolf->sdl.tex, NULL, NULL);
 			SDL_RenderPresent(wolf->sdl.ren);
@@ -573,6 +593,7 @@ int main(int argc, char *argv[])
 		return (EXIT_FAILURE);
 	}
 	mainLoop(&wolf);
+	ft_memdel((void *)&wolf.data.img_ptr);
 	freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
 	return (EXIT_SUCCESS);
 }
