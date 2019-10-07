@@ -180,11 +180,31 @@ int	initSDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 	return (EXIT_SUCCESS);
 }
 
+int	initTTF(SDL_Font **font)
+{
+	if (TTF_Init() != 0)
+	{
+		ft_dprintf(STDERR_FILENO, "TTF_Init Error: %{r}s\n", TTF_GetError());
+		return (EXIT_FAILURE);
+	}
+	*font = TTF_OpenFont("Arial.ttf", 24); //this opens a font style and sets a size
+	if (*font == NULL)
+	{
+		ft_dprintf(STDERR_FILENO, "TTF_OpenFont Error: %{r}s\n", TTF_GetError());
+		return (EXIT_FAILURE);
+	}
+}
+
 void	initSdlStruct(t_sdl *sdl)
 {
 	sdl->win = NULL;
 	sdl->ren = NULL;
 	sdl->tex = NULL;
+}
+
+void	initTtfStruct(t_ttf *ttf)
+{
+	ttf->font = NULL;
 }
 
 void	initDataStruct(t_data *data, char *title)
@@ -240,6 +260,7 @@ void	initRaycastStruct(t_raycast *raycast, double posX, double posY)
 void	initWolf(t_wolf *wolf, char *title)
 {
 	initSdlStruct(&(wolf->sdl));
+	initTtfStruct(&(wolf->ttf));
 	initDataStruct(&(wolf->data), title);
 	initPlayerStruct(&(wolf->player), *(wolf->data.map_ptr), wolf->data.widthMap, wolf->data.heightMap);
 	initRaycastStruct(&(wolf->raycast), wolf->player.posX, wolf->player.posY);
@@ -427,16 +448,16 @@ void	*iterateRaycast(void *param)
 
 void	multithread(t_wolf *wolf)
 {
-	//int		startClock;
-	//int		deltaClock;
-	//int		currentFPS;
+	int		startClock;
+	int		deltaClock;
+	int		currentFPS;
 
 	t_wolf		params[NB_THREADS];
 	pthread_t	threads[NB_THREADS];
 	int		i;
 
 	i = 0;
-	//startClock = SDL_GetTicks();
+	startClock = SDL_GetTicks();
 	while (i < NB_THREADS)
 	{
 		ft_memcpy((void *)&params[i], (void *)wolf, sizeof(t_wolf));
@@ -447,12 +468,12 @@ void	multithread(t_wolf *wolf)
 	}
 	while (i--)
 		pthread_join(threads[i], NULL);
-	//deltaClock = SDL_GetTicks() - startClock;
-	//if (deltaClock != 0)
-	//{
-	//	currentFPS = 1000 / deltaClock;
-	//	ft_printf("%d\n", currentFPS);
-	//}
+	deltaClock = SDL_GetTicks() - startClock;
+	if (deltaClock != 0)
+	{
+		currentFPS = 1000 / deltaClock;
+		ft_printf("%d\n", currentFPS);
+	}
 }
 
 void	speed(t_player *player, t_sdl *sdl, t_data *data)
@@ -538,6 +559,28 @@ void mainLoop(t_wolf *wolf)
 	//wolf->data.img_ptr = &pixels[0];
 	if ((wolf->data.img_ptr = createPixelTab()) == NULL)
 		return; //NOT OKAY YETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+	TTF_Font* Sans = TTF_OpenFont("/Library/Fonts/Arial.ttf", 24); //this opens a font style and sets a size
+	if (!Sans)
+		ft_printf("%s\n", TTF_GetError());
+
+	ft_printf("sans = %p\n", Sans);
+SDL_Color White = {255, 255, 255, 255};  // this is the color in rgb format, maxing out all would give you the color white, and it will be your text's color
+
+SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, "put your text here", White); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
+
+SDL_Texture* Message = SDL_CreateTextureFromSurface(wolf->sdl.ren, surfaceMessage); //now you can convert it into a texture
+
+SDL_Rect Message_rect;//create a rect
+Message_rect.x = 0;  //controls the rect's x coordinate
+Message_rect.y = 0; // controls the rect's y coordinte
+Message_rect.w = 100; // controls the width of the rect
+Message_rect.h = 100; // controls the height of the rect
+
+//Mind you that (0,0) is on the top left of the window/screen, think a rect as the text's box, that way it would be very simple to understance
+
+//Now since it's a texture, you have to put RenderCopy in your game loop area, the area where the whole code executes
+
+
 	//int	leftMouseButtonDown = 0;
 
 	while (!wolf->data.quit)
@@ -548,7 +591,7 @@ void mainLoop(t_wolf *wolf)
 			//ft_memset(pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 			ft_memset(wolf->data.img_ptr, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 			//raycasting(player, raycast, dda, data);
-			multithread(wolf);
+			//multithread(wolf);
 			if (wolf->sdl.event.type == SDL_QUIT || wolf->sdl.event.key.keysym.sym == SDLK_ESCAPE)
 				wolf->data.quit = 1;
 			/*
@@ -564,12 +607,12 @@ void mainLoop(t_wolf *wolf)
 			//fillPix(data->pixels, sdl->event.motion.x, sdl->event.motion.y, 0);
 			//data->pixels[sdl->event.motion.y * WIN_WIDTH + sdl->event.motion.x] = 0;
 			 */ 
-			speed(&(wolf->player), &(wolf->sdl), &(wolf->data));
+			//speed(&(wolf->player), &(wolf->sdl), &(wolf->data));
 			//SDL_SetRenderDrawColor(sdl->ren, 255, 255, 255, 255);
-			//SDL_UpdateTexture(wolf->sdl.tex, NULL, pixels, WIN_WIDTH * sizeof(int));
 			SDL_UpdateTexture(wolf->sdl.tex, NULL, wolf->data.img_ptr, WIN_WIDTH * sizeof(int));
 			SDL_RenderClear(wolf->sdl.ren);
-			SDL_RenderCopy(wolf->sdl.ren, wolf->sdl.tex, NULL, NULL);
+			SDL_RenderCopy(wolf->sdl.ren, Message, NULL, &Message_rect); //you put the renderer's name first, the Message, the crop size(you can ignore this if you don't want to dabble with cropping), and the rect which is the size and coordinate of your texture
+			//SDL_RenderCopy(wolf->sdl.ren, wolf->sdl.tex, NULL, NULL);
 			SDL_RenderPresent(wolf->sdl.ren);
 		}
 	}
@@ -592,6 +635,12 @@ int main(int argc, char *argv[])
 		freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
 		return (EXIT_FAILURE);
 	}
+	if (initTTF(&(wolf.ttf)) != EXIT_SUCCESS)
+	{
+		freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
+		return (EXIT_FAILURE);
+	}
+	//TTF_Init();
 	mainLoop(&wolf);
 	ft_memdel((void *)&wolf.data.img_ptr);
 	freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));

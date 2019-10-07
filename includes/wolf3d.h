@@ -2,6 +2,7 @@
 # define WOLF_3D
 
 # include "SDL.h"
+# include "SDL_ttf.h"
 
 # define TITLE "TEST"
 //# define WIN_WIDTH 800
@@ -9,7 +10,7 @@
 # define WIN_WIDTH 1680
 # define WIN_HEIGHT 1050
 
-# define NB_THREADS 6
+# define NB_THREADS 60
 
 # define MAX_MAP 100
 
@@ -22,6 +23,11 @@ typedef struct			s_sdl
 	SDL_Texture		*tex;
 	SDL_Event		event;
 }				t_sdl;
+
+typedef struct			s_ttf
+{
+	TTF_Font		*font;
+}				t_ttf;
 
 typedef struct			s_data
 {
@@ -76,6 +82,7 @@ typedef struct			s_dda
 typedef struct			s_wolf
 {
 	t_sdl			sdl;
+	t_ttf			ttf;
 	t_data			data;
 	t_player		player;
 	t_raycast		raycast;
