@@ -64,18 +64,18 @@ RESET = \033[0m
 all: $(NAME)
 
 SDL2:
-	@mkdir -p $(SDL2_LIB_DIRECTORY)/build
-	@cd $(SDL2_LIB_DIRECTORY)/build;
-	./SDL/configure --prefix $(CURRENT_DIR)/sdl2_lib#/$(SDL2_LIB_DIRECTORY);
-	make -j;
-	make install;
+	@mkdir -p $(SDL2_LIB_DIRECTORY)/build && \
+	cd $(SDL2_LIB_DIRECTORY)build && \
+	$(CURRENT_DIR)/SDL/configure --prefix $(CURRENT_DIR)/$(SDL2_LIB_DIRECTORY) && \
+	make && \
+	make install
 
 SDL2TTF:
-	@mkdir -p $(SDL2TTF_LIB_DIRECTORY)/build
-	@cd $(SDL2TTF_LIB_DIRECTORY)/build;
-	./SDL_ttf/configure --prefix $(CURRENT_DIR)/sdl2_ttf_lib#/$(SDL2TTF_LIB_DIRECTORY);
-	make -j;
-	make install;
+	@mkdir -p $(SDL2TTF_LIB_DIRECTORY)/build && \
+	cd $(SDL2TTF_LIB_DIRECTORY)build && \
+	$(CURRENT_DIR)/SDL_ttf/configure --prefix $(CURRENT_DIR)/$(SDL2TTF_LIB_DIRECTORY) && \
+	make && \
+	make install
 
 $(NAME): SDL2 SDL2TTF $(LIBFT) $(OBJECTS_DIRECTORY) $(OBJECTS) #$(SDL2)
 	@$(CC) $(LIBRARIES) $(INCLUDES) $(OBJECTS) -o $(NAME)
