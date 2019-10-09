@@ -6,7 +6,7 @@
 #    By: afonck <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2019/03/29 11:07:15 by sluetzen         ###   ########.fr        #
+#    Updated: 2019/10/09 12:07:10 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,18 +20,21 @@ DEBUGFLAGS = -Wall -Werror -Wextra -D_THREAD_SAFE -g
 
 LIBRARIES = -lft -lSDL2-2.0.0 -lSDL2_ttf-2.0.0 -L$(LIBFT_DIRECTORY) -L$(SDL2_LIB_DIRECTORY) -L$(SDL2TTF_LIB_DIRECTORY)
 DEBUGLIBRARIES = -lft -lSDL2-2.0.0 -lSDL2_ttf-2.0.0 -L$(LIBFT_DIRECTORY) -L$(SDL2_LIB_DIRECTORY) -L$(SDL2TTF_LIB_DIRECTORY)
-INCLUDES = -I$(HEADERS_DIRECTORY) -I$(LIBFT_HEADER) -I$(SDL2_HEADERS_DIRECTORY)
+INCLUDES = -I$(HEADERS_DIRECTORY) -I$(LIBFT_HEADER) -I$(SDL2_HEADERS_DIRECTORY) -I$(SDL2TTF_HEADERS_DIRECTORY)
 
 HARD_DBG ?= 1
 
-LIBFT = $(LIBFT_DIRECTORY)libft.a
+CURRENT_DIR = $(shell pwd)
+
+#LIBFT = $(LIBFT_DIRECTORY)libft.a
 LIBFT_DIRECTORY = ./libft/
 LIBFT_HEADER = $(LIBFT_DIRECTORY)
 
-SDL2 = $(SDL2_LIB_DIRECTORY)libSDL2.a
+#SDL2 = $(SDL2_LIB_DIRECTORY)libSDL2.dylib
 SDL2_LIB_DIRECTORY = ./sdl2_lib/
-SDL2TTF_LIB_DIRECTORY = ./sdl2_lib/
-SDL2_HEADERS_DIRECTORY = ./sdl2_lib/SDL2_HEADERS/
+SDL2TTF_LIB_DIRECTORY = ./sdl2_ttf_lib/
+SDL2_HEADERS_DIRECTORY = ./SDL/include/
+SDL2TTF_HEADERS_DIRECTORY = ./SDL_TTF/
 
 HEADERS_LIST = wolf3d.h
 
@@ -60,7 +63,21 @@ RESET = \033[0m
 
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(OBJECTS_DIRECTORY) $(OBJECTS) #$(SDL2)
+SDL2:
+	@mkdir -p $(SDL2_LIB_DIRECTORY)/build
+	@cd $(SDL2_LIB_DIRECTORY)/build;
+	./SDL/configure --prefix $(CURRENT_DIR)/sdl2_lib#/$(SDL2_LIB_DIRECTORY);
+	make -j;
+	make install;
+
+SDL2TTF:
+	@mkdir -p $(SDL2TTF_LIB_DIRECTORY)/build
+	@cd $(SDL2TTF_LIB_DIRECTORY)/build;
+	./SDL_ttf/configure --prefix $(CURRENT_DIR)/sdl2_ttf_lib#/$(SDL2TTF_LIB_DIRECTORY);
+	make -j;
+	make install;
+
+$(NAME): SDL2 SDL2TTF $(LIBFT) $(OBJECTS_DIRECTORY) $(OBJECTS) #$(SDL2)
 	@$(CC) $(LIBRARIES) $(INCLUDES) $(OBJECTS) -o $(NAME)
 	@echo "\n$(NAME): $(GREEN)object files were created$(RESET)"
 	@echo "$(NAME): $(GREEN)$(NAME) was created$(RESET)"
