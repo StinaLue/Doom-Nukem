@@ -451,16 +451,11 @@ void	*iterateRaycast(void *param)
 
 void	multithread(t_wolf *wolf)
 {
-	int		startClock;
-	int		deltaClock;
-	int		currentFPS;
-
 	t_wolf		params[NB_THREADS];
 	pthread_t	threads[NB_THREADS];
 	int		i;
 
 	i = 0;
-	startClock = SDL_GetTicks();
 	while (i < NB_THREADS)
 	{
 		ft_memcpy((void *)&params[i], (void *)wolf, sizeof(t_wolf));
@@ -471,12 +466,6 @@ void	multithread(t_wolf *wolf)
 	}
 	while (i--)
 		pthread_join(threads[i], NULL);
-	deltaClock = SDL_GetTicks() - startClock;
-	if (deltaClock != 0)
-	{
-		currentFPS = 1000 / deltaClock;
-		//ft_printf("%d\n", currentFPS);
-	}
 }
 
 void	speed(t_player *player, t_sdl *sdl, t_data *data)
@@ -558,6 +547,10 @@ int	*createPixelTab()
 
 void mainLoop(t_wolf *wolf)
 {
+	int		startClock;
+	int		deltaClock;
+	int		currentFPS = 0;
+
 	//int pixels[WIN_WIDTH * WIN_HEIGHT];
 	//wolf->data.img_ptr = &pixels[0];
 	if ((wolf->data.img_ptr = createPixelTab()) == NULL)
@@ -590,13 +583,11 @@ Message_rect.h = 100; // controls the height of the rect
 		//SDL_UpdateTexture(sdl->tex, NULL, data->pixels, WIN_WIDTH * sizeof(int));
 		while (SDL_PollEvent(&(wolf->sdl.event)) != 0)
 		{
-			char *posx = ft_itoa(wolf->player.posX);
-			char *posy = ft_itoa(wolf->player.posY);
-			SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, ft_strcat(posx, posy), Black); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
-			free(posx);
-			free(posy);
-			posx = NULL;
-			posy = NULL;
+			startClock = SDL_GetTicks();
+			char *fps = ft_itoa(currentFPS);
+			SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, fps, Black); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
+			free(fps);
+			fps = NULL;
 			SDL_Texture* Message = SDL_CreateTextureFromSurface(wolf->sdl.ren, surfaceMessage); //now you can convert it into a texture
 			//ft_memset(pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 			ft_memset(wolf->data.img_ptr, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
@@ -624,6 +615,9 @@ Message_rect.h = 100; // controls the height of the rect
 			SDL_RenderCopy(wolf->sdl.ren, wolf->sdl.tex, NULL, NULL);
 			SDL_RenderCopy(wolf->sdl.ren, Message, NULL, &Message_rect); //you put the renderer's name first, the Message, the crop size(you can ignore this if you don't want to dabble with cropping), and the rect which is the size and coordinate of your texture
 			SDL_RenderPresent(wolf->sdl.ren);
+			deltaClock = SDL_GetTicks() - startClock;
+			if (deltaClock != 0)
+				currentFPS = 1000 / deltaClock;
 		}
 	}
 }
