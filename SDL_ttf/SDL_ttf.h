@@ -109,9 +109,6 @@ extern DECLSPEC TTF_Font * SDLCALL TTF_OpenFontIndex(const char *file, int ptsiz
 extern DECLSPEC TTF_Font * SDLCALL TTF_OpenFontRW(SDL_RWops *src, int freesrc, int ptsize);
 extern DECLSPEC TTF_Font * SDLCALL TTF_OpenFontIndexRW(SDL_RWops *src, int freesrc, int ptsize, long index);
 
-/* Set font size dynamically */
-extern DECLSPEC int SDLCALL TTF_SetFontSize(TTF_Font *font, int ptsize);
-
 /* Set and retrieve the font style */
 #define TTF_STYLE_NORMAL        0x00
 #define TTF_STYLE_BOLD          0x01
@@ -124,11 +121,10 @@ extern DECLSPEC int SDLCALL TTF_GetFontOutline(const TTF_Font *font);
 extern DECLSPEC void SDLCALL TTF_SetFontOutline(TTF_Font *font, int outline);
 
 /* Set and retrieve FreeType hinter settings */
-#define TTF_HINTING_NORMAL          0
-#define TTF_HINTING_LIGHT           1
-#define TTF_HINTING_MONO            2
-#define TTF_HINTING_NONE            3
-#define TTF_HINTING_LIGHT_SUBPIXEL  4
+#define TTF_HINTING_NORMAL    0
+#define TTF_HINTING_LIGHT     1
+#define TTF_HINTING_MONO      2
+#define TTF_HINTING_NONE      3
 extern DECLSPEC int SDLCALL TTF_GetFontHinting(const TTF_Font *font);
 extern DECLSPEC void SDLCALL TTF_SetFontHinting(TTF_Font *font, int hinting);
 
@@ -161,8 +157,7 @@ extern DECLSPEC char * SDLCALL TTF_FontFaceFamilyName(const TTF_Font *font);
 extern DECLSPEC char * SDLCALL TTF_FontFaceStyleName(const TTF_Font *font);
 
 /* Check wether a glyph is provided by the font or not */
-extern DECLSPEC int SDLCALL TTF_GlyphIsProvided(TTF_Font *font, Uint16 ch);
-extern DECLSPEC int SDLCALL TTF_GlyphIsProvided32(TTF_Font *font, Uint32 ch);
+extern DECLSPEC int SDLCALL TTF_GlyphIsProvided(const TTF_Font *font, Uint16 ch);
 
 /* Get the metrics (dimensions) of a glyph
    To understand what these metrics mean, here is a useful link:
@@ -170,28 +165,12 @@ extern DECLSPEC int SDLCALL TTF_GlyphIsProvided32(TTF_Font *font, Uint32 ch);
  */
 extern DECLSPEC int SDLCALL TTF_GlyphMetrics(TTF_Font *font, Uint16 ch,
                      int *minx, int *maxx,
-                     int *miny, int *maxy, int *advance);
-extern DECLSPEC int SDLCALL TTF_GlyphMetrics32(TTF_Font *font, Uint32 ch,
-                     int *minx, int *maxx,
-                     int *miny, int *maxy, int *advance);
+                                     int *miny, int *maxy, int *advance);
 
 /* Get the dimensions of a rendered string of text */
 extern DECLSPEC int SDLCALL TTF_SizeText(TTF_Font *font, const char *text, int *w, int *h);
 extern DECLSPEC int SDLCALL TTF_SizeUTF8(TTF_Font *font, const char *text, int *w, int *h);
 extern DECLSPEC int SDLCALL TTF_SizeUNICODE(TTF_Font *font, const Uint16 *text, int *w, int *h);
-
-/* Get the measurement string of text without rendering
-   e.g. the number of characters that can be rendered before reaching 'measure_width'
-
-   in:
-   measure_width - in pixels to measure this text
-   out:
-   count  - number of characters that can be rendered
-   extent - latest calculated width
-*/
-extern DECLSPEC int SDLCALL TTF_MeasureText(TTF_Font *font, const char *text, int measure_width, int *extent, int *count);
-extern DECLSPEC int SDLCALL TTF_MeasureUTF8(TTF_Font *font, const char *text, int measure_width, int *extent, int *count);
-extern DECLSPEC int SDLCALL TTF_MeasureUNICODE(TTF_Font *font, const Uint16 *text, int measure_width, int *extent, int *count);
 
 /* Create an 8-bit palettized surface and render the given text at
    fast quality with the given font and color.  The 0 pixel is the
@@ -205,21 +184,6 @@ extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderUTF8_Solid(TTF_Font *font,
                 const char *text, SDL_Color fg);
 extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderUNICODE_Solid(TTF_Font *font,
                 const Uint16 *text, SDL_Color fg);
-
-/* Create an 8-bit palettized surface and render the given text at
-   fast quality with the given font and color.  The 0 pixel is the
-   colorkey, giving a transparent background, and the 1 pixel is set
-   to the text color.
-   Text is wrapped to multiple lines on line endings and on word boundaries
-   if it extends beyond wrapLength in pixels.
-   This function returns the new surface, or NULL if there was an error.
-*/
-extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderText_Solid_Wrapped(TTF_Font *font,
-                const char *text, SDL_Color fg, Uint32 wrapLength);
-extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderUTF8_Solid_Wrapped(TTF_Font *font,
-                const char *text, SDL_Color fg, Uint32 wrapLength);
-extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderUNICODE_Solid_Wrapped(TTF_Font *font,
-                const Uint16 *text, SDL_Color fg, Uint32 wrapLength);
 
 /* Create an 8-bit palettized surface and render the given glyph at
    fast quality with the given font and color.  The 0 pixel is the
@@ -242,20 +206,6 @@ extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderUTF8_Shaded(TTF_Font *font,
                 const char *text, SDL_Color fg, SDL_Color bg);
 extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderUNICODE_Shaded(TTF_Font *font,
                 const Uint16 *text, SDL_Color fg, SDL_Color bg);
-
-/* Create an 8-bit palettized surface and render the given text at
-   high quality with the given font and colors.  The 0 pixel is background,
-   while other pixels have varying degrees of the foreground color.
-   Text is wrapped to multiple lines on line endings and on word boundaries
-   if it extends beyond wrapLength in pixels.
-   This function returns the new surface, or NULL if there was an error.
-*/
-extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderText_Shaded_Wrapped(TTF_Font *font,
-                const char *text, SDL_Color fg, SDL_Color bg, Uint32 wrapLength);
-extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderUTF8_Shaded_Wrapped(TTF_Font *font,
-                const char *text, SDL_Color fg, SDL_Color bg, Uint32 wrapLength);
-extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderUNICODE_Shaded_Wrapped(TTF_Font *font,
-                const Uint16 *text, SDL_Color fg, SDL_Color bg, Uint32 wrapLength);
 
 /* Create an 8-bit palettized surface and render the given glyph at
    high quality with the given font and colors.  The 0 pixel is background,
@@ -308,15 +258,6 @@ extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderGlyph_Blended(TTF_Font *font,
     TTF_RenderUTF8_Shaded(font, text, fg, bg)
 #define TTF_RenderUNICODE(font, text, fg, bg)   \
     TTF_RenderUNICODE_Shaded(font, text, fg, bg)
-
-/* Set Direction and Script to be used for text shaping.
-   - direction is of type hb_direction_t
-   - script is of type hb_script_t
-
-   This functions returns always 0, or -1 if SDL_ttf is not compiled with HarfBuzz
-*/
-extern DECLSPEC int SDLCALL TTF_SetDirection(int direction); /* hb_direction_t */
-extern DECLSPEC int SDLCALL TTF_SetScript(int script); /* hb_script_t */
 
 /* Close an opened font file */
 extern DECLSPEC void SDLCALL TTF_CloseFont(TTF_Font *font);

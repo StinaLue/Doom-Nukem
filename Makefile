@@ -13,9 +13,9 @@
 NAME = wolf3d
 DEBUG_NAME = wolf3d_debug
 
-CC = gcc
+CC = clang
 
-FLAGS = -Wall -Werror -Wextra -D_THREAD_SAFE -O3
+CFLAGS = -Wall -Werror -Wextra -D_THREAD_SAFE -O3
 DEBUGFLAGS = -Wall -Werror -Wextra -D_THREAD_SAFE -g
 
 LIBRARIES = -lft -lSDL2-2.0.0 -lSDL2_ttf-2.0.0 -L$(LIBFT_DIRECTORY) -L$(SDL2_LIB_DIRECTORY)lib -L$(SDL2TTF_LIB_DIRECTORY)lib
@@ -26,7 +26,7 @@ HARD_DBG ?= 1
 
 CURRENT_DIR = $(shell pwd)
 
-#LIBFT = $(LIBFT_DIRECTORY)libft.a
+LIBFT = $(LIBFT_DIRECTORY)libft.a
 LIBFT_DIRECTORY = ./libft/
 LIBFT_HEADER = $(LIBFT_DIRECTORY)
 
