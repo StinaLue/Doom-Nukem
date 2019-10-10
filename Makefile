@@ -6,7 +6,7 @@
 #    By: afonck <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2019/10/10 16:27:21 by afonck           ###   ########.fr        #
+#    Updated: 2019/10/10 18:20:39 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,8 @@ CURRENT_DIR = $(shell pwd)
 LIBFT_DIRECTORY = ./libft/
 LIBFT_HEADER = $(LIBFT_DIRECTORY)
 
-#SDL2 = $(SDL2_LIB_DIRECTORY)libSDL2.dylib
+SDL2 = $(SDL2_LIB_DIRECTORY)lib/libSDL2.dylib
+SDL2TTF = $(SDL2TTF_LIB_DIRECTORY)lib/libSDL2_ttf.dylib
 SDL2_LIB_DIRECTORY = ./sdl2_lib/
 SDL2TTF_LIB_DIRECTORY = ./sdl2_ttf_lib/
 SDL2_HEADERS_DIRECTORY = ./SDL/include/
@@ -63,14 +64,14 @@ RESET = \033[0m
 
 all: $(NAME)
 
-SDL2:
+$(SDL2):
 	@mkdir -p $(SDL2_LIB_DIRECTORY)/build && \
 	cd $(SDL2_LIB_DIRECTORY)build && \
 	$(CURRENT_DIR)/SDL/configure --prefix $(CURRENT_DIR)/$(SDL2_LIB_DIRECTORY) && \
 	make && \
 	make install
 
-SDL2TTF:
+$(SDL2TTF):
 	@export PATH=$(PATH):$(CURRENT_DIR)/$(SDL2_LIB_DIRECTORY)bin && \
 	mkdir -p $(SDL2TTF_LIB_DIRECTORY)/build && \
 	cd $(SDL2TTF_LIB_DIRECTORY)build && \
@@ -78,7 +79,7 @@ SDL2TTF:
 	make && \
 	make install
 
-$(NAME): SDL2 SDL2TTF $(LIBFT) $(OBJECTS_DIRECTORY) $(OBJECTS) #$(SDL2)
+$(NAME): $(SDL2) $(SDL2TTF) $(LIBFT) $(OBJECTS_DIRECTORY) $(OBJECTS) #$(SDL2)
 	@$(CC) $(LIBRARIES) $(INCLUDES) $(OBJECTS) -o $(NAME)
 	@echo "\n$(NAME): $(GREEN)object files were created$(RESET)"
 	@echo "$(NAME): $(GREEN)$(NAME) was created$(RESET)"
@@ -133,7 +134,7 @@ re:
 
 debug: $(DEBUG_NAME)
 
-$(DEBUG_NAME): SDL2 SDL2TTF $(LIBFT) $(OBJECTS_DIRECTORY_DEBUG) $(OBJECTS_DEBUG)
+$(DEBUG_NAME): $(SDL2) $(SDL2TTF) $(LIBFT) $(OBJECTS_DIRECTORY_DEBUG) $(OBJECTS_DEBUG)
 	@$(CC) $(DEBUGLIBRARIES) $(INCLUDES) $(OBJECTS_DEBUG) -o $(DEBUG_NAME)
 	@echo "\n$(DEBUG_NAME): $(GREEN)object debug files were created$(RESET)"
 	@echo "$(DEBUG_NAME): $(GREEN)$(DEBUG_NAME) was created$(RESET)"

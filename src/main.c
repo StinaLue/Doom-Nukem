@@ -180,19 +180,20 @@ int	initSDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 	return (EXIT_SUCCESS);
 }
 
-int	initTTF(SDL_Font **font)
+int	initTTF(TTF_Font **font)
 {
 	if (TTF_Init() != 0)
 	{
 		ft_dprintf(STDERR_FILENO, "TTF_Init Error: %{r}s\n", TTF_GetError());
 		return (EXIT_FAILURE);
 	}
-	*font = TTF_OpenFont("Arial.ttf", 24); //this opens a font style and sets a size
+	*font = TTF_OpenFont("/Library/Fonts/Arial.ttf", 24); //this opens a font style and sets a size
 	if (*font == NULL)
 	{
 		ft_dprintf(STDERR_FILENO, "TTF_OpenFont Error: %{r}s\n", TTF_GetError());
 		return (EXIT_FAILURE);
 	}
+	return (EXIT_SUCCESS);
 }
 
 void	initSdlStruct(t_sdl *sdl)
@@ -566,9 +567,9 @@ void mainLoop(t_wolf *wolf)
 	ft_printf("sans = %p\n", Sans);
 SDL_Color White = {255, 255, 255, 255};  // this is the color in rgb format, maxing out all would give you the color white, and it will be your text's color
 
-SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, "put your text here", White); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
+//SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, "put your text here", White); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
 
-SDL_Texture* Message = SDL_CreateTextureFromSurface(wolf->sdl.ren, surfaceMessage); //now you can convert it into a texture
+//SDL_Texture* Message = SDL_CreateTextureFromSurface(wolf->sdl.ren, surfaceMessage); //now you can convert it into a texture
 
 SDL_Rect Message_rect;//create a rect
 Message_rect.x = 0;  //controls the rect's x coordinate
@@ -588,6 +589,8 @@ Message_rect.h = 100; // controls the height of the rect
 		//SDL_UpdateTexture(sdl->tex, NULL, data->pixels, WIN_WIDTH * sizeof(int));
 		while (SDL_PollEvent(&(wolf->sdl.event)) != 0)
 		{
+			SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, ft_itoa(wolf->player.posX), White); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
+			SDL_Texture* Message = SDL_CreateTextureFromSurface(wolf->sdl.ren, surfaceMessage); //now you can convert it into a texture
 			//ft_memset(pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 			ft_memset(wolf->data.img_ptr, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 			//raycasting(player, raycast, dda, data);
@@ -607,7 +610,7 @@ Message_rect.h = 100; // controls the height of the rect
 			//fillPix(data->pixels, sdl->event.motion.x, sdl->event.motion.y, 0);
 			//data->pixels[sdl->event.motion.y * WIN_WIDTH + sdl->event.motion.x] = 0;
 			 */ 
-			//speed(&(wolf->player), &(wolf->sdl), &(wolf->data));
+			speed(&(wolf->player), &(wolf->sdl), &(wolf->data));
 			//SDL_SetRenderDrawColor(sdl->ren, 255, 255, 255, 255);
 			SDL_UpdateTexture(wolf->sdl.tex, NULL, wolf->data.img_ptr, WIN_WIDTH * sizeof(int));
 			SDL_RenderClear(wolf->sdl.ren);
@@ -635,7 +638,7 @@ int main(int argc, char *argv[])
 		freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
 		return (EXIT_FAILURE);
 	}
-	if (initTTF(&(wolf.ttf)) != EXIT_SUCCESS)
+	if (initTTF(&(wolf.ttf.font)) != EXIT_SUCCESS)
 	{
 		freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
 		return (EXIT_FAILURE);
