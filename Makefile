@@ -6,7 +6,7 @@
 #    By: afonck <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2019/10/09 12:07:10 by afonck           ###   ########.fr        #
+#    Updated: 2019/10/10 16:27:21 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,8 @@ CC = gcc
 FLAGS = -Wall -Werror -Wextra -D_THREAD_SAFE -O3
 DEBUGFLAGS = -Wall -Werror -Wextra -D_THREAD_SAFE -g
 
-LIBRARIES = -lft -lSDL2-2.0.0 -lSDL2_ttf-2.0.0 -L$(LIBFT_DIRECTORY) -L$(SDL2_LIB_DIRECTORY) -L$(SDL2TTF_LIB_DIRECTORY)
-DEBUGLIBRARIES = -lft -lSDL2-2.0.0 -lSDL2_ttf-2.0.0 -L$(LIBFT_DIRECTORY) -L$(SDL2_LIB_DIRECTORY) -L$(SDL2TTF_LIB_DIRECTORY)
+LIBRARIES = -lft -lSDL2-2.0.0 -lSDL2_ttf-2.0.0 -L$(LIBFT_DIRECTORY) -L$(SDL2_LIB_DIRECTORY)lib -L$(SDL2TTF_LIB_DIRECTORY)lib
+DEBUGLIBRARIES = -lft -lSDL2-2.0.0 -lSDL2_ttf-2.0.0 -L$(LIBFT_DIRECTORY) -L$(SDL2_LIB_DIRECTORY)lib -L$(SDL2TTF_LIB_DIRECTORY)lib
 INCLUDES = -I$(HEADERS_DIRECTORY) -I$(LIBFT_HEADER) -I$(SDL2_HEADERS_DIRECTORY) -I$(SDL2TTF_HEADERS_DIRECTORY)
 
 HARD_DBG ?= 1
@@ -71,7 +71,8 @@ SDL2:
 	make install
 
 SDL2TTF:
-	@mkdir -p $(SDL2TTF_LIB_DIRECTORY)/build && \
+	@export PATH=$(PATH):$(CURRENT_DIR)/$(SDL2_LIB_DIRECTORY)bin && \
+	mkdir -p $(SDL2TTF_LIB_DIRECTORY)/build && \
 	cd $(SDL2TTF_LIB_DIRECTORY)build && \
 	$(CURRENT_DIR)/SDL_ttf/configure --prefix $(CURRENT_DIR)/$(SDL2TTF_LIB_DIRECTORY) && \
 	make && \
@@ -132,7 +133,7 @@ re:
 
 debug: $(DEBUG_NAME)
 
-$(DEBUG_NAME): $(LIBFT) $(OBJECTS_DIRECTORY_DEBUG) $(OBJECTS_DEBUG)
+$(DEBUG_NAME): SDL2 SDL2TTF $(LIBFT) $(OBJECTS_DIRECTORY_DEBUG) $(OBJECTS_DEBUG)
 	@$(CC) $(DEBUGLIBRARIES) $(INCLUDES) $(OBJECTS_DEBUG) -o $(DEBUG_NAME)
 	@echo "\n$(DEBUG_NAME): $(GREEN)object debug files were created$(RESET)"
 	@echo "$(DEBUG_NAME): $(GREEN)$(DEBUG_NAME) was created$(RESET)"
