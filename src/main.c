@@ -425,11 +425,13 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *
 	if (dda->side == 1)
 		color = color / 2;
 	drawVertical(data->img_ptr, x, raycast->drawStart, raycast->drawEnd, color);
+	/*
 	if (x == 450 || x == 451)
 	{
 		ft_printf("camX %f color is: %d drawStart: %d, drawEnd: %d and x: %d\n", raycast->camX, color, raycast->drawStart, raycast->drawEnd, x);
 		ft_printf("AND lineheight = %d\n", raycast->lineHeight);
 	}
+	*/
 }
 
 void	*iterateRaycast(void *param)
@@ -473,7 +475,7 @@ void	multithread(t_wolf *wolf)
 	if (deltaClock != 0)
 	{
 		currentFPS = 1000 / deltaClock;
-		ft_printf("%d\n", currentFPS);
+		//ft_printf("%d\n", currentFPS);
 	}
 }
 
@@ -564,10 +566,10 @@ void mainLoop(t_wolf *wolf)
 	if (!Sans)
 		ft_printf("%s\n", TTF_GetError());
 
-	ft_printf("sans = %p\n", Sans);
-SDL_Color White = {255, 255, 255, 255};  // this is the color in rgb format, maxing out all would give you the color white, and it will be your text's color
+	//ft_printf("sans = %p\n", Sans);
+SDL_Color Black = {0, 0, 0, 255};  // this is the color in rgb format, maxing out all would give you the color white, and it will be your text's color
 
-//SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, "put your text here", White); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
+//SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, "put your text here", Black); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
 
 //SDL_Texture* Message = SDL_CreateTextureFromSurface(wolf->sdl.ren, surfaceMessage); //now you can convert it into a texture
 
@@ -581,7 +583,6 @@ Message_rect.h = 100; // controls the height of the rect
 
 //Now since it's a texture, you have to put RenderCopy in your game loop area, the area where the whole code executes
 
-
 	//int	leftMouseButtonDown = 0;
 
 	while (!wolf->data.quit)
@@ -589,12 +590,18 @@ Message_rect.h = 100; // controls the height of the rect
 		//SDL_UpdateTexture(sdl->tex, NULL, data->pixels, WIN_WIDTH * sizeof(int));
 		while (SDL_PollEvent(&(wolf->sdl.event)) != 0)
 		{
-			SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, ft_itoa(wolf->player.posX), White); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
+			char *posx = ft_itoa(wolf->player.posX);
+			char *posy = ft_itoa(wolf->player.posY);
+			SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, ft_strcat(posx, posy), Black); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
+			free(posx);
+			free(posy);
+			posx = NULL;
+			posy = NULL;
 			SDL_Texture* Message = SDL_CreateTextureFromSurface(wolf->sdl.ren, surfaceMessage); //now you can convert it into a texture
 			//ft_memset(pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 			ft_memset(wolf->data.img_ptr, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 			//raycasting(player, raycast, dda, data);
-			//multithread(wolf);
+			multithread(wolf);
 			if (wolf->sdl.event.type == SDL_QUIT || wolf->sdl.event.key.keysym.sym == SDLK_ESCAPE)
 				wolf->data.quit = 1;
 			/*
@@ -614,8 +621,8 @@ Message_rect.h = 100; // controls the height of the rect
 			//SDL_SetRenderDrawColor(sdl->ren, 255, 255, 255, 255);
 			SDL_UpdateTexture(wolf->sdl.tex, NULL, wolf->data.img_ptr, WIN_WIDTH * sizeof(int));
 			SDL_RenderClear(wolf->sdl.ren);
+			SDL_RenderCopy(wolf->sdl.ren, wolf->sdl.tex, NULL, NULL);
 			SDL_RenderCopy(wolf->sdl.ren, Message, NULL, &Message_rect); //you put the renderer's name first, the Message, the crop size(you can ignore this if you don't want to dabble with cropping), and the rect which is the size and coordinate of your texture
-			//SDL_RenderCopy(wolf->sdl.ren, wolf->sdl.tex, NULL, NULL);
 			SDL_RenderPresent(wolf->sdl.ren);
 		}
 	}
