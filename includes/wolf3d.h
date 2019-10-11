@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/11 14:53:49 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/11 17:42:09 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ typedef struct			s_data
 
 typedef struct			s_player
 {
-	double			x;
+	double			x; // same value as raycast->pos_x
 	double			y;
 	double			x_dir;
 	double			y_dir;
@@ -61,8 +61,8 @@ typedef struct			s_player
 
 typedef struct			s_raycast
 {
-	int				x;
-	int				y;
+	int				map_x; // map_x an pos_x have the same values (only the type is different)
+	int				map_y;
 	double			cam_x;
 	double			pos_x;
 	double			pos_y;

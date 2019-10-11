@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/11 16:19:01 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/11 18:25:53 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,8 +257,8 @@ void	ray_init(t_raycast *raycast, t_dda *dda, t_player const *player, int x)
 
 	raycast->dir_x = player->x_dir + player->x_camera_vector * raycast->cam_x;
 	raycast->dir_y = player->y_dir + player->y_camera_vector * raycast->cam_x;
-	raycast->x = (int)raycast->pos_x;
-	raycast->y = (int)raycast->pos_y;
+	raycast->map_x = (int)raycast->pos_x;
+	raycast->map_y = (int)raycast->pos_y;
 
 	raycast->height = 0;
 	raycast->start_line = 0;
@@ -300,50 +300,64 @@ void	print_map(int map[MAX_MAP][MAX_MAP], int width, int height)
 	}
 	write(1, "\n", 1);
 }
-
+/*
 void	dda_init(t_raycast const *raycast, t_dda *dda)
 {
 	if (raycast->dir_x < 0)
 	{
 		dda->x_wall_hit = -1;
-		dda->distance_x_side = (raycast->pos_x - raycast->x) * dda->distance_x;
+		dda->distance_x_side =  dda->distance_x * (raycast->pos_x - raycast->map_x);
 	}
 	else
 	{
 		dda->x_wall_hit = 1;
-		dda->distance_x_side = (raycast->x + 1 - raycast->pos_x) * dda->distance_x;
+		dda->distance_x_side = dda->distance_x * (raycast->map_x + 1 - raycast->pos_x);
 	}
 	if (raycast->dir_y < 0)
 	{
 		dda->y_wall_hit = -1;
-		dda->distance_y_side = (raycast->pos_y - raycast->y) * dda->distance_y;
+		dda->distance_y_side = dda->distance_y * (raycast->pos_y - raycast->map_y);
 	}
 	else
 	{
 		dda->y_wall_hit = 1;
-		dda->distance_y_side = (raycast->y + 1 - raycast->pos_y) * dda->distance_y;
+		dda->distance_y_side = dda->distance_y * (raycast->map_y + 1 - raycast->pos_y);
 	}
+}*/
+
+void	dda_init(t_raycast const *raycast, t_dda *dda)
+{
+	dda->x_wall_hit = (raycast->dir_x < 0 ? -1 : 1);
+	dda->y_wall_hit = (raycast->dir_y < 0 ? -1 : 1);
+	if (raycast->dir_x < 0)
+		dda->distance_x_side = dda->distance_x * (raycast->pos_x - raycast->map_x);
+	else
+		dda->distance_x_side = dda->distance_x * (raycast->map_x + 1 - raycast->pos_x);
+	if (raycast->dir_y < 0)
+		dda->distance_y_side = dda->distance_y * (raycast->pos_y - raycast->map_y);
+	else
+		dda->distance_y_side = dda->distance_y * (raycast->map_y + 1 - raycast->pos_y);
 }
 
 void	dda_calculation(t_raycast *raycast, t_dda *dda, t_data const *data)
 {
-	while (dda->hit == 0 && raycast->x < data->map_width && \
-			raycast->y < data->map_height && raycast->x > 0 && raycast->y > 0)
+	while (dda->hit == 0 && raycast->map_x < data->map_width && \
+			raycast->map_y < data->map_height && raycast->map_x > 0 && raycast->map_y > 0)
 	{
 		if (dda->distance_x_side < dda->distance_y_side)
 		{
 			dda->distance_x_side += dda->distance_x;
-			raycast->x += dda->x_wall_hit;
+			raycast->map_x += dda->x_wall_hit;
 			dda->side = 0;
 		}
 		else
 		{
 			dda->distance_y_side += dda->distance_y;
-			raycast->y += dda->y_wall_hit;
+			raycast->map_y += dda->y_wall_hit;
 			dda->side = 1;
 		}
-		//if (data->map[raycast->x][raycast->y] > 0)
-		if ((*data->map_ptr)[raycast->y][raycast->x] == 1)
+		//if (data->map[raycast->map_x][raycast->map_y] > 0)
+		if ((*data->map_ptr)[raycast->map_y][raycast->map_x] == 1)
 			dda->hit = 1;
 	}
 }
@@ -351,19 +365,19 @@ void	dda_calculation(t_raycast *raycast, t_dda *dda, t_data const *data)
 void	height_calculation(t_raycast *raycast, t_dda *dda)
 {
 	if (dda->side == 0)
-		dda->distance_wall = /*(raycast->dir_x == 0.0) ? 0 : */ft_absfloat((raycast->x -
+		dda->distance_wall = /*(raycast->dir_x == 0.0) ? 0 : */ft_absfloat((raycast->map_x -
 					raycast->pos_x + (1 - dda->x_wall_hit) / 2) / raycast->dir_x);
 	else
-		dda->distance_wall = /*(raycast->dir_y == 0.0) ? 0 :*/ft_absfloat((raycast->y -
+		dda->distance_wall = /*(raycast->dir_y == 0.0) ? 0 :*/ft_absfloat((raycast->map_y -
 					raycast->pos_y + (1 - dda->y_wall_hit) / 2) / raycast->dir_y);
 	//if (dda->distance_wall != 0)
 		raycast->height = ft_absolute((int)(WIN_HEIGHT / dda->distance_wall));
 //	else
 //		raycast->height = 0;
 	raycast->start_line = -raycast->height / 2 + WIN_HEIGHT / 2;
+	raycast->end_line = raycast->height / 2 + WIN_HEIGHT / 2;
 	if (raycast->start_line < 0)
 		raycast->start_line = 0;
-	raycast->end_line = raycast->height / 2 + WIN_HEIGHT / 2;
 	if (raycast->end_line >= WIN_HEIGHT)
 		raycast->end_line = WIN_HEIGHT - 1;
 }
@@ -377,7 +391,7 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *
 	dda_init(raycast, dda);
 	dda_calculation(raycast, dda, data);
 	height_calculation(raycast, dda);
-	/*switch(data->map[raycast->x][raycast->y])
+	/*switch(data->map[raycast->map_x][raycast->map_y])
 	  {
 	  case 1:  color = 16711680;  break; //red
 	  case 2:  color = 65280;  break; //green
@@ -385,7 +399,7 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *
 	  case 4:  color = 16777215;  break; //white
 	  default: color = 16776960; break; //yellow
 	  }*/
-	if ((*data->map_ptr)[raycast->y][raycast->x] == 1)
+	if ((*data->map_ptr)[raycast->map_y][raycast->map_x] == 1)
 		color = 230;
 	if (dda->side == 1)
 		color = color / 2;
@@ -433,7 +447,7 @@ void	multithread(t_wolf *wolf)
 		pthread_join(threads[i], NULL);
 }
 
-void	speed(t_player *player, t_sdl *sdl, t_data *data)
+void	movement(t_player *player, t_sdl *sdl, t_data *data)
 {
 	double speed;
 	double rotspeed;
@@ -554,7 +568,7 @@ Message_rect.h = 100; // controls the height of the rect
 			//fill_pix(data->pixels, sdl->event.motion.x, sdl->event.motion.y, 0);
 			//data->pixels[sdl->event.motion.y * WIN_WIDTH + sdl->event.motion.x] = 0;
 			*/
-			speed(&(wolf->player), &(wolf->sdl), &(wolf->data));
+			movement(&(wolf->player), &(wolf->sdl), &(wolf->data));
 			//SDL_SetRenderDrawColor(sdl->ren, 255, 255, 255, 255);
 			SDL_UpdateTexture(wolf->sdl.tex, NULL, wolf->data.img_ptr, WIN_WIDTH * sizeof(int));
 			SDL_RenderClear(wolf->sdl.ren);
