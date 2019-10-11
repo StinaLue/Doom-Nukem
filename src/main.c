@@ -63,6 +63,13 @@ void	freeSDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 	SDL_Quit();
 }
 
+void	freeTTF(TTF_Font **font)
+{
+	TTF_CloseFont(*font);
+	*font = NULL;
+	TTF_Quit();
+}
+
 int	loadMedia(SDL_Surface **img, char *path)
 {
 	*img = SDL_LoadBMP(path);
@@ -210,8 +217,7 @@ int	initTTF(TTF_Font **font)
 		ft_dprintf(STDERR_FILENO, "TTF_Init Error: %{r}s\n", TTF_GetError());
 		return (EXIT_FAILURE);
 	}
-	*font = TTF_OpenFont("/Library/Fonts/Arial.ttf", 24); //this opens a font style and sets a size
-	if (*font == NULL)
+	if ((*font = TTF_OpenFont("/Library/Fonts/Arial.ttf", 24)) == NULL) //this opens a font style and sets a size
 	{
 		ft_dprintf(STDERR_FILENO, "TTF_OpenFont Error: %{r}s\n", TTF_GetError());
 		return (EXIT_FAILURE);
@@ -585,7 +591,10 @@ void mainLoop(t_wolf *wolf)
 	//int pixels[WIN_WIDTH * WIN_HEIGHT];
 	//wolf->data.img_ptr = &pixels[0];
 	if ((wolf->data.img_ptr = createPixelTab()) == NULL)
+	{
+		ft_memdel((void **)&wolf->data.img_ptr);
 		return; //NOT OKAY YETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+	}
 	TTF_Font* Sans = TTF_OpenFont("/Library/Fonts/Arial.ttf", 24); //this opens a font style and sets a size
 	if (!Sans)
 		ft_printf("%s\n", TTF_GetError());
@@ -677,11 +686,13 @@ int main(int argc, char *argv[])
 	if (initTTF(&(wolf.ttf.font)) != EXIT_SUCCESS)
 	{
 		freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
+		freeTTF(&(wolf.ttf.font));
 		return (EXIT_FAILURE);
 	}
 	//TTF_Init();
 	mainLoop(&wolf);
 	ft_memdel((void *)&wolf.data.img_ptr);
 	freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
+	freeTTF(&(wolf.ttf.font));
 	return (EXIT_SUCCESS);
 }
