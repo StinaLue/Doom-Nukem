@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/11 16:00:26 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/11 16:19:01 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -461,32 +461,17 @@ void	speed(t_player *player, t_sdl *sdl, t_data *data)
 	if (sdl->event.type == SDL_MOUSEMOTION)
 	{
 		SDL_SetRelativeMouseMode(SDL_TRUE);
-		//SDL_WarpMouseInWindow(sdl->win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
-		//printf("x event = %d, y event = %d\n", sdl->event.motion.xrel, sdl->event.motion.yrel);
 		if (sdl->event.motion.xrel > 0)
-		{
-			player->x_dir = player->x_dir * cos(-rotspeed) - player->y_dir * sin(-rotspeed);
-			player->y_dir = save_x_dir * sin(-rotspeed) + player->y_dir * cos(-rotspeed);
-			player->x_camera_vector = player->x_camera_vector * cos(-rotspeed) - player->y_camera_vector * sin(-rotspeed);
-			player->y_camera_vector = save_x_camera_vector * sin(-rotspeed) + player->y_camera_vector * cos(-rotspeed);
-		}
-		else
-		{
-			player->x_dir = player->x_dir * cos(rotspeed) - player->y_dir * sin(rotspeed);
-			player->y_dir = save_x_dir * sin(rotspeed) + player->y_dir * cos(rotspeed);
-			player->x_camera_vector = player->x_camera_vector * cos(rotspeed) - player->y_camera_vector * sin(rotspeed);
-			player->y_camera_vector = save_x_camera_vector * sin(rotspeed) + player->y_camera_vector * cos(rotspeed);
-		}
+			rotspeed = -rotspeed;
+		player->x_dir = player->x_dir * cos(rotspeed) - player->y_dir * sin(rotspeed);
+		player->y_dir = save_x_dir * sin(rotspeed) + player->y_dir * cos(rotspeed);
+		player->x_camera_vector = player->x_camera_vector * cos(rotspeed) - player->y_camera_vector * sin(rotspeed);
+		player->y_camera_vector = save_x_camera_vector * sin(rotspeed) + player->y_camera_vector * cos(rotspeed);
 	}
-	if (sdl->event.key.keysym.sym == SDLK_d)
+	if (sdl->event.key.keysym.sym == SDLK_a || sdl->event.key.keysym.sym == SDLK_d)
 	{
-		player->x_dir = player->x_dir * cos(-rotspeed) - player->y_dir * sin(-rotspeed);
-		player->y_dir = save_x_dir * sin(-rotspeed) + player->y_dir * cos(-rotspeed);
-		player->x_camera_vector = player->x_camera_vector * cos(-rotspeed) - player->y_camera_vector * sin(-rotspeed);
-		player->y_camera_vector = save_x_camera_vector * sin(-rotspeed) + player->y_camera_vector * cos(-rotspeed);
-	}
-	if (sdl->event.key.keysym.sym == SDLK_a)
-	{
+		if (sdl->event.key.keysym.sym == SDLK_d)
+			rotspeed = -rotspeed;
 		player->x_dir = player->x_dir * cos(rotspeed) - player->y_dir * sin(rotspeed);
 		player->y_dir = save_x_dir * sin(rotspeed) + player->y_dir * cos(rotspeed);
 		player->x_camera_vector = player->x_camera_vector * cos(rotspeed) - player->y_camera_vector * sin(rotspeed);
