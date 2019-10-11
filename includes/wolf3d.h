@@ -27,6 +27,11 @@ typedef struct			s_sdl
 typedef struct			s_ttf
 {
 	TTF_Font		*font;
+	SDL_Surface		*surf_message;
+	SDL_Texture		*message;
+	char			*fps;
+	SDL_Color		color;
+	SDL_Rect		rect;
 }				t_ttf;
 
 typedef struct			s_data

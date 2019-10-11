@@ -63,10 +63,15 @@ void	freeSDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 	SDL_Quit();
 }
 
-void	freeTTF(TTF_Font **font)
+void	freeTTF(t_ttf *ttf)
 {
-	TTF_CloseFont(*font);
-	*font = NULL;
+	TTF_CloseFont(ttf->font);
+	ttf->font = NULL;
+	SDL_FreeSurface(ttf->surf_message);
+	ttf->surf_message = NULL;
+	SDL_DestroyTexture(ttf->message);
+	ttf->message = NULL;
+	ft_memdel((void **)&ttf->fps);
 	TTF_Quit();
 }
 
@@ -210,18 +215,26 @@ int	initSDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 	return (EXIT_SUCCESS);
 }
 
-int	initTTF(TTF_Font **font)
+int	initTTF(t_ttf *ttf)
 {
 	if (TTF_Init() != 0)
 	{
 		ft_dprintf(STDERR_FILENO, "TTF_Init Error: %{r}s\n", TTF_GetError());
 		return (EXIT_FAILURE);
 	}
-	if ((*font = TTF_OpenFont("/Library/Fonts/Arial.ttf", 24)) == NULL) //this opens a font style and sets a size
+	if ((ttf->font = TTF_OpenFont("/Library/Fonts/Arial.ttf", 24)) == NULL) //this opens a font style and sets a size
 	{
 		ft_dprintf(STDERR_FILENO, "TTF_OpenFont Error: %{r}s\n", TTF_GetError());
 		return (EXIT_FAILURE);
 	}
+	ttf->color.r = 0;
+	ttf->color.g = 0;
+	ttf->color.b = 0;
+	ttf->color.a = 100;
+	ttf->rect.x = 0;
+	ttf->rect.y = 0;
+	ttf->rect.w = 100;
+	ttf->rect.h = 100;
 	return (EXIT_SUCCESS);
 }
 
@@ -586,28 +599,8 @@ void mainLoop(t_wolf *wolf)
 	if ((wolf->data.img_ptr = createPixelTab()) == NULL)
 	{
 		ft_memdel((void **)&wolf->data.img_ptr);
-		return; //NOT OKAY YETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+		return ;
 	}
-	TTF_Font* Sans = TTF_OpenFont("/Library/Fonts/Arial.ttf", 24); //this opens a font style and sets a size
-	if (!Sans)
-		ft_printf("%s\n", TTF_GetError());
-
-	//ft_printf("sans = %p\n", Sans);
-SDL_Color Black = {0, 0, 0, 255};  // this is the color in rgb format, maxing out all would give you the color white, and it will be your text's color
-
-//SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, "put your text here", Black); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
-
-//SDL_Texture* Message = SDL_CreateTextureFromSurface(wolf->sdl.ren, surfaceMessage); //now you can convert it into a texture
-
-SDL_Rect Message_rect;//create a rect
-Message_rect.x = 0;  //controls the rect's x coordinate
-Message_rect.y = 0; // controls the rect's y coordinte
-Message_rect.w = 100; // controls the width of the rect
-Message_rect.h = 100; // controls the height of the rect
-
-//Mind you that (0,0) is on the top left of the window/screen, think a rect as the text's box, that way it would be very simple to understance
-
-//Now since it's a texture, you have to put RenderCopy in your game loop area, the area where the whole code executes
 
 	//int	leftMouseButtonDown = 0;
 
@@ -617,36 +610,31 @@ Message_rect.h = 100; // controls the height of the rect
 		while (SDL_PollEvent(&(wolf->sdl.event)) != 0)
 		{
 			startClock = SDL_GetTicks();
-			char *fps = ft_itoa(currentFPS);
-			SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, fps, Black); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
-			free(fps);
-			fps = NULL;
-			SDL_Texture* Message = SDL_CreateTextureFromSurface(wolf->sdl.ren, surfaceMessage); //now you can convert it into a texture
+			wolf->ttf.fps = ft_itoa(currentFPS);
+			
+			if ((wolf->ttf.surf_message = TTF_RenderText_Solid(wolf->ttf.font, wolf->ttf.fps, wolf->ttf.color)) == NULL)
+			{
+				ft_dprintf(STDERR_FILENO, "TTF_RenderText_Solid error = %{r}s\n", TTF_GetError());
+				return ;
+			}
+			ft_memdel((void **)&wolf->ttf.fps);
+			if ((wolf->ttf.message = SDL_CreateTextureFromSurface(wolf->sdl.ren, wolf->ttf.surf_message)) == NULL)
+			{
+				ft_dprintf(STDERR_FILENO, "SDL_CreateTextureFromSurface error = %{r}s\n", SDL_GetError());
+				return ;
+			}
 			//ft_memset(pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 			ft_memset(wolf->data.img_ptr, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 			//raycasting(player, raycast, dda, data);
 			multithread(wolf);
 			if (wolf->sdl.event.type == SDL_QUIT || wolf->sdl.event.key.keysym.sym == SDLK_ESCAPE)
 				wolf->data.quit = 1;
-			/*
-			   if (sdl->event.type == SDL_MOUSEBUTTONUP)
-			   if (sdl->event.button.button == SDL_BUTTON_LEFT)
-			   leftMouseButtonDown = 0;
-			   if (sdl->event.type == SDL_MOUSEBUTTONDOWN)
-			   if (sdl->event.button.button == SDL_BUTTON_LEFT)
-			   leftMouseButtonDown = 1;
-			   if (sdl->event.type == SDL_MOUSEMOTION)
-			   if (leftMouseButtonDown)
-			   drawVertical(data->pixels, sdl->event.motion.x, sdl->event.motion.y - 100, sdl->event.motion.y + 100, 0);
-			//fillPix(data->pixels, sdl->event.motion.x, sdl->event.motion.y, 0);
-			//data->pixels[sdl->event.motion.y * WIN_WIDTH + sdl->event.motion.x] = 0;
-			 */ 
 			speed(&(wolf->player), &(wolf->sdl), &(wolf->data));
 			//SDL_SetRenderDrawColor(sdl->ren, 255, 255, 255, 255);
 			SDL_UpdateTexture(wolf->sdl.tex, NULL, wolf->data.img_ptr, WIN_WIDTH * sizeof(int));
 			SDL_RenderClear(wolf->sdl.ren);
 			SDL_RenderCopy(wolf->sdl.ren, wolf->sdl.tex, NULL, NULL);
-			SDL_RenderCopy(wolf->sdl.ren, Message, NULL, &Message_rect); //you put the renderer's name first, the Message, the crop size(you can ignore this if you don't want to dabble with cropping), and the rect which is the size and coordinate of your texture
+			SDL_RenderCopy(wolf->sdl.ren, wolf->ttf.message, NULL, &wolf->ttf.rect); //you put the renderer's name first, the Message, the crop size(you can ignore this if you don't want to dabble with cropping), and the rect which is the size and coordinate of your texture
 			SDL_RenderPresent(wolf->sdl.ren);
 			deltaClock = SDL_GetTicks() - startClock;
 			if (deltaClock != 0)
@@ -677,16 +665,15 @@ int main(int argc, char *argv[])
 		freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
 		return (EXIT_FAILURE);
 	}
-	if (initTTF(&(wolf.ttf.font)) != EXIT_SUCCESS)
+	if (initTTF(&(wolf.ttf)) != EXIT_SUCCESS)
 	{
 		freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
-		freeTTF(&(wolf.ttf.font));
+		freeTTF(&(wolf.ttf));
 		return (EXIT_FAILURE);
 	}
-	//TTF_Init();
 	mainLoop(&wolf);
 	ft_memdel((void *)&wolf.data.img_ptr);
 	freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
-	freeTTF(&(wolf.ttf.font));
+	freeTTF(&(wolf.ttf));
 	return (EXIT_SUCCESS);
 }
