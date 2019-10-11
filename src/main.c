@@ -63,6 +63,13 @@ void	freeSDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 	SDL_Quit();
 }
 
+void	freeTTF(TTF_Font **font)
+{
+	TTF_CloseFont(*font);
+	*font = NULL;
+	TTF_Quit();
+}
+
 int	loadMedia(SDL_Surface **img, char *path)
 {
 	*img = SDL_LoadBMP(path);
@@ -76,6 +83,8 @@ int	loadMedia(SDL_Surface **img, char *path)
 
 char	checkLine(char *line)
 {
+	if (*line == '\0')
+		return ('\0');
 	while (*line != '\0')
 	{
 		if (*line != '0' && *line != '1' && *line != 'X')
@@ -85,7 +94,7 @@ char	checkLine(char *line)
 	return ('0');
 }
 
-void	copyLine(char charline[MAX_MAP], char *line, int width)
+void	copyLine(char *charline, char *line, int width)
 {
 	int i;
 
@@ -102,9 +111,11 @@ void	fillChartab(char chartab[MAX_MAP][MAX_MAP], char *title, int *widthMap, int
 	char	*line;
 	int	ret;
 	int	fd;
+	int	w;
 
 	*heightMap = 0;
 	ret = 0;
+	w = 0;
 	if ((fd = open(title, O_RDONLY | O_NOFOLLOW)) == -1)
 	{
 		ft_dprintf(STDERR_FILENO, "%{r}s could not be opened\n", title);
@@ -115,24 +126,36 @@ void	fillChartab(char chartab[MAX_MAP][MAX_MAP], char *title, int *widthMap, int
 		if (checkLine(line) != '0')
 		{
 			ft_dprintf(STDERR_FILENO, "invalid character %{r}c in map\n", checkLine(line));
+			ft_memdel((void **)&line);
 			close(fd);
 			exit(EXIT_FAILURE);
 		}
+		if (*heightMap == 0)
+			w = ft_strlen(line);
 		*widthMap = ft_strlen(line);
+		if (*widthMap != w)
+		{
+			ft_dprintf(STDERR_FILENO, "%{r}s is an uneven map, only rectangles or squares are allowed\n", title);
+			ft_memdel((void **)&line);
+			close(fd);
+			exit(EXIT_FAILURE);
+		}
 		if (*widthMap > MAX_MAP)
 		{
 			ft_dprintf(STDERR_FILENO, "%{r}s is too big, please modify MAP_MAX to %{b}d\n", title, *widthMap);
+			ft_memdel((void **)&line);
 			close(fd);
 			exit(EXIT_FAILURE);
 		}
 		copyLine(chartab[*heightMap], line, *widthMap);
-		//chartab[lineHeight] = ft_strdup(line);
+		ft_memdel((void **)&line);
 		(*heightMap)++;
 	}
+	ft_memdel((void **)&line);
+	close(fd);
 	if (*heightMap >= MAX_MAP)
 	{
 		ft_dprintf(STDERR_FILENO, "%{r}s is too big, please modify MAP_MAX to %{b}d\n", title, *heightMap);
-		close(fd);
 		exit(EXIT_FAILURE);
 	}
 }
@@ -167,16 +190,23 @@ int	initSDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 		ft_dprintf(STDERR_FILENO, "SDL_Init Error: %{r}s\n", SDL_GetError());
 		return (EXIT_FAILURE);
 	}
-	*win = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, \
-			SDL_WINDOWPOS_UNDEFINED, WIN_WIDTH, WIN_HEIGHT, SDL_WINDOW_SHOWN);
-	if (*win == NULL)
+	if ((*win = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, \
+			SDL_WINDOWPOS_UNDEFINED, WIN_WIDTH, WIN_HEIGHT, SDL_WINDOW_SHOWN)) == NULL)
 	{
 		ft_dprintf(STDERR_FILENO, "SDL_CreateWindow Error: %{r}s\n", SDL_GetError());
 		return (EXIT_FAILURE);
 	}
-	*ren = SDL_CreateRenderer(*win, -1, 0);
-	*tex = SDL_CreateTexture(*ren, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC,
-			WIN_WIDTH, WIN_HEIGHT);
+	if ((*ren = SDL_CreateRenderer(*win, -1, 0)) == NULL)
+	{
+		ft_dprintf(STDERR_FILENO, "SDL_CreateRenderer Error: %{r}s\n", SDL_GetError());
+		return (EXIT_FAILURE);
+	}
+	if ((*tex = SDL_CreateTexture(*ren, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC,
+			WIN_WIDTH, WIN_HEIGHT)) == NULL)
+	{
+		ft_dprintf(STDERR_FILENO, "SDL_CreateTexture Error: %{r}s\n", SDL_GetError());
+		return (EXIT_FAILURE);
+	}
 	return (EXIT_SUCCESS);
 }
 
@@ -187,8 +217,7 @@ int	initTTF(TTF_Font **font)
 		ft_dprintf(STDERR_FILENO, "TTF_Init Error: %{r}s\n", TTF_GetError());
 		return (EXIT_FAILURE);
 	}
-	*font = TTF_OpenFont("/Library/Fonts/Arial.ttf", 24); //this opens a font style and sets a size
-	if (*font == NULL)
+	if ((*font = TTF_OpenFont("/Library/Fonts/Arial.ttf", 24)) == NULL) //this opens a font style and sets a size
 	{
 		ft_dprintf(STDERR_FILENO, "TTF_OpenFont Error: %{r}s\n", TTF_GetError());
 		return (EXIT_FAILURE);
@@ -241,6 +270,7 @@ void	findPlayerPos(double *posX, double *posY, int map[MAX_MAP][MAX_MAP], int wi
 		i++;
 	}
 	ft_dprintf(STDERR_FILENO, "no suitable starting position found for player, exiting...\n");
+	exit (EXIT_FAILURE);
 }
 
 void	initPlayerStruct(t_player *player, int map[MAX_MAP][MAX_MAP], int widthMap, int heightMap)
@@ -554,7 +584,10 @@ void mainLoop(t_wolf *wolf)
 	//int pixels[WIN_WIDTH * WIN_HEIGHT];
 	//wolf->data.img_ptr = &pixels[0];
 	if ((wolf->data.img_ptr = createPixelTab()) == NULL)
+	{
+		ft_memdel((void **)&wolf->data.img_ptr);
 		return; //NOT OKAY YETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+	}
 	TTF_Font* Sans = TTF_OpenFont("/Library/Fonts/Arial.ttf", 24); //this opens a font style and sets a size
 	if (!Sans)
 		ft_printf("%s\n", TTF_GetError());
@@ -633,6 +666,11 @@ int main(int argc, char *argv[])
 		ft_dprintf(STDERR_FILENO, "usage: ./wolf3d %{g}s\n", "[valid .w3d map]");
 		return (EXIT_FAILURE);
 	}
+	if (MAX_MAP > 100 || WIN_WIDTH > 1920 || WIN_HEIGHT > 1080 || MAX_MAP < 1 || WIN_WIDTH < 1 || WIN_HEIGHT < 1)
+	{
+		ft_dprintf(STDERR_FILENO, "max size of map = %{b}s, you chose %{r}lld / max screen size = %{b}s, you chose %{r}lld x %{r}lld\n", "100", MAX_MAP, "1920 x 1080", WIN_WIDTH, WIN_HEIGHT);
+		return (EXIT_FAILURE);
+	}
 	initWolf(&wolf, argv[1]);
 	if (initSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex)) != EXIT_SUCCESS)
 	{
@@ -642,11 +680,13 @@ int main(int argc, char *argv[])
 	if (initTTF(&(wolf.ttf.font)) != EXIT_SUCCESS)
 	{
 		freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
+		freeTTF(&(wolf.ttf.font));
 		return (EXIT_FAILURE);
 	}
 	//TTF_Init();
 	mainLoop(&wolf);
 	ft_memdel((void *)&wolf.data.img_ptr);
 	freeSDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
+	freeTTF(&(wolf.ttf.font));
 	return (EXIT_SUCCESS);
 }
