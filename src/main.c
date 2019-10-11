@@ -615,6 +615,7 @@ void mainLoop(t_wolf *wolf)
 			if ((wolf->ttf.surf_message = TTF_RenderText_Solid(wolf->ttf.font, wolf->ttf.fps, wolf->ttf.color)) == NULL)
 			{
 				ft_dprintf(STDERR_FILENO, "TTF_RenderText_Solid error = %{r}s\n", TTF_GetError());
+				ft_memdel((void **)&wolf->ttf.fps);
 				return ;
 			}
 			ft_memdel((void **)&wolf->ttf.fps);
@@ -623,6 +624,8 @@ void mainLoop(t_wolf *wolf)
 				ft_dprintf(STDERR_FILENO, "SDL_CreateTextureFromSurface error = %{r}s\n", SDL_GetError());
 				return ;
 			}
+			SDL_FreeSurface(wolf->ttf.surf_message);
+			wolf->ttf.surf_message = NULL;
 			//ft_memset(pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 			ft_memset(wolf->data.img_ptr, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 			//raycasting(player, raycast, dda, data);
@@ -639,6 +642,8 @@ void mainLoop(t_wolf *wolf)
 			deltaClock = SDL_GetTicks() - startClock;
 			if (deltaClock != 0)
 				currentFPS = 1000 / deltaClock;
+			SDL_DestroyTexture(wolf->ttf.message);
+			wolf->ttf.message = NULL;
 		}
 	}
 }
