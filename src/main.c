@@ -557,10 +557,7 @@ void	main_loop(t_wolf *wolf)
 	//int pixels[WIN_WIDTH * WIN_HEIGHT];
 	//wolf->data.img_ptr = &pixels[0];
 	if ((wolf->data.img_ptr = create_pixel_tab()) == NULL)
-	{
-		ft_memdel((void **)&wolf->data.img_ptr);
 		return ;
-	}
 
 	//int	leftMouseButtonDown = 0;
 
