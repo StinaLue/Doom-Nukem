@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/11 20:02:21 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/12 20:57:27 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,6 +259,7 @@ void	init_player_struct(t_player *player, int map[MAX_MAP][MAX_MAP], int map_wid
 	player->y_dir = 0;
 	player->cam_vector_x = 0;
 	player->cam_vector_y = 0.66;
+	player->up_and_down = 0;
 }
 
 void	init_raycast_struct(t_raycast *raycast, double x, double y)
@@ -405,7 +406,7 @@ void	dda_calculation(t_raycast *raycast, t_dda *dda, t_data const *data)
 	}
 }
 
-void	height_calculation(t_raycast *raycast, t_dda *dda)
+void	height_calculation(t_raycast *raycast, t_dda *dda, int updown)
 {
 	if (dda->side == 0)
 		dda->distance_wall = /*(raycast->dir_x == 0.0) ? 0 : */ft_absfloat((raycast->map_x -
@@ -417,8 +418,8 @@ void	height_calculation(t_raycast *raycast, t_dda *dda)
 		raycast->height = ft_absolute((int)(WIN_HEIGHT / dda->distance_wall));
 //	else
 //		raycast->height = 0;
-	raycast->start_line = -raycast->height / 2 + WIN_HEIGHT / 2;
-	raycast->end_line = raycast->height / 2 + WIN_HEIGHT / 2;
+	raycast->start_line = -raycast->height / 2 + WIN_HEIGHT / 2 + updown;
+	raycast->end_line = raycast->height / 2 + WIN_HEIGHT / 2 + updown;
 	if (raycast->start_line < 0)
 		raycast->start_line = 0;
 	if (raycast->end_line >= WIN_HEIGHT)
@@ -433,7 +434,7 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *
 	ray_init(raycast, dda, player, x);
 	dda_init(raycast, dda);
 	dda_calculation(raycast, dda, data);
-	height_calculation(raycast, dda);
+	height_calculation(raycast, dda, player->up_and_down);
 	/*switch(data->map[raycast->map_x][raycast->map_y])
 	  {
 	  case 1:  color = 16711680;  break; //red
@@ -490,50 +491,76 @@ void	multithread(t_wolf *wolf)
 		pthread_join(threads[i], NULL);
 }
 
-void	movement(t_player *player, t_sdl *sdl, t_data *data)
+void	movement(t_player *player, t_sdl *sdl, t_data *data, const Uint8 *keyboard_state_array)
 {
 	double speed;
 	double rotspeed;
 	double save_x_dir;
 	double save_cam_vector_x;
+	int x = 0;
+	int y = 0;
+	SDL_SetRelativeMouseMode(SDL_TRUE);
+	SDL_GetRelativeMouseState(&x, &y);
 
 	speed = 0.1;
 	rotspeed = 0.06;
 	save_x_dir = player->x_dir;
 	save_cam_vector_x = player->cam_vector_x;
-	if (sdl->event.key.keysym.sym == SDLK_w)
-	{
+if (sdl->event.type == SDL_KEYDOWN || sdl->event.type == SDL_KEYUP || sdl->event.type == SDL_TEXTINPUT || x != 0 || y != 0)
+{
+    // Move centerpoint of rotation for one of the trees:
+    if (keyboard_state_array[SDL_SCANCODE_UP] || keyboard_state_array[SDL_SCANCODE_W])
+    {
 		if ((*data->map_ptr)[(int)(player->y + player->y_dir * speed)][(int)player->x] == 0)
 			player->y += player->y_dir * speed;
 		if ((*data->map_ptr)[(int)player->y][(int)(player->x + player->x_dir * speed)] == 0)
 			player->x += player->x_dir * speed;
-	}
-	if (sdl->event.key.keysym.sym == SDLK_s)
-	{
+    }
+    if (keyboard_state_array[SDL_SCANCODE_DOWN] || keyboard_state_array[SDL_SCANCODE_S])
+    {
 		if ((*data->map_ptr)[(int)(player->y - player->y_dir * speed)][(int)player->x] == 0)
 			player->y -= player->y_dir * speed;
 		if ((*data->map_ptr)[(int)player->y][(int)(player->x - player->x_dir * speed)] == 0)
 			player->x -= player->x_dir * speed;
+    }
+    if (keyboard_state_array[SDL_SCANCODE_D])
+    {
+		if ((*data->map_ptr)[(int)(player->y + player->cam_vector_y * speed)][(int)player->x] == 0)
+			player->y += player->cam_vector_y * speed;
+		if ((*data->map_ptr)[(int)player->y][(int)(player->x + player->cam_vector_x * speed)] == 0)
+			player->x += player->cam_vector_x * speed;
 	}
-	if (sdl->event.type == SDL_MOUSEMOTION)
+    if (keyboard_state_array[SDL_SCANCODE_A])
+    {
+		if ((*data->map_ptr)[(int)(player->y - player->cam_vector_y * speed)][(int)player->x] == 0)
+			player->y -= player->cam_vector_y * speed;
+		if ((*data->map_ptr)[(int)player->y][(int)(player->x - player->cam_vector_x * speed)] == 0)
+			player->x -= player->cam_vector_x * speed;
+    }
+	if (y > 0 && player->up_and_down > MAX_LOOK_DOWN)
 	{
-		SDL_SetRelativeMouseMode(SDL_TRUE);
-		if (sdl->event.motion.xrel > 0)
-			rotspeed = -rotspeed;
+		player->up_and_down -= 20;
+	}
+	if (y < 0 && player->up_and_down < MAX_LOOK_UP)
+	{
+		player->up_and_down += 20;
+	}
+    if (keyboard_state_array[SDL_SCANCODE_RIGHT] || keyboard_state_array[SDL_SCANCODE_E] || x > 0)
+    {
+		rotspeed = -rotspeed;
 		player->x_dir = player->x_dir * cos(rotspeed) - player->y_dir * sin(rotspeed);
 		player->y_dir = save_x_dir * sin(rotspeed) + player->y_dir * cos(rotspeed);
 		player->cam_vector_x = player->cam_vector_x * cos(rotspeed) - player->cam_vector_y * sin(rotspeed);
 		player->cam_vector_y = save_cam_vector_x * sin(rotspeed) + player->cam_vector_y * cos(rotspeed);
-	}
-	if (sdl->event.key.keysym.sym == SDLK_a || sdl->event.key.keysym.sym == SDLK_d)
-	{
-		if (sdl->event.key.keysym.sym == SDLK_d)
-			rotspeed = -rotspeed;
+    }
+    if (keyboard_state_array[SDL_SCANCODE_LEFT] || keyboard_state_array[SDL_SCANCODE_Q] || x < 0)
+    {
 		player->x_dir = player->x_dir * cos(rotspeed) - player->y_dir * sin(rotspeed);
 		player->y_dir = save_x_dir * sin(rotspeed) + player->y_dir * cos(rotspeed);
 		player->cam_vector_x = player->cam_vector_x * cos(rotspeed) - player->cam_vector_y * sin(rotspeed);
 		player->cam_vector_y = save_cam_vector_x * sin(rotspeed) + player->cam_vector_y * cos(rotspeed);
-	}
+    }
+}
 }
 
 int	*create_pixel_tab(void)
@@ -566,6 +593,9 @@ void	main_loop(t_wolf *wolf)
 		//SDL_UpdateTexture(sdl->tex, NULL, data->pixels, WIN_WIDTH * sizeof(int));
 		while (SDL_PollEvent(&(wolf->sdl.event)) != 0)
 		{
+			if (wolf->sdl.event.type == SDL_QUIT || wolf->sdl.event.key.keysym.sym == SDLK_ESCAPE)
+				wolf->data.quit = 1;
+		}
 			start_clock = SDL_GetTicks();
 			wolf->ttf.fps = ft_itoa(current_FPS);
 			
@@ -581,27 +611,25 @@ void	main_loop(t_wolf *wolf)
 				ft_dprintf(STDERR_FILENO, "SDL_CreateTextureFromSurface error = %{r}s\n", SDL_GetError());
 				return ;
 			}
-			SDL_FreeSurface(wolf->ttf.surf_message);
-			wolf->ttf.surf_message = NULL;
-			//ft_memset(pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
-			ft_memset(wolf->data.img_ptr, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
-			//raycasting(player, raycast, dda, data);
-			multithread(wolf);
-			if (wolf->sdl.event.type == SDL_QUIT || wolf->sdl.event.key.keysym.sym == SDLK_ESCAPE)
-				wolf->data.quit = 1;
-			movement(&(wolf->player), &(wolf->sdl), &(wolf->data));
-			//SDL_SetRenderDrawColor(sdl->ren, 255, 255, 255, 255);
-			SDL_UpdateTexture(wolf->sdl.tex, NULL, wolf->data.img_ptr, WIN_WIDTH * sizeof(int));
-			SDL_RenderClear(wolf->sdl.ren);
-			SDL_RenderCopy(wolf->sdl.ren, wolf->sdl.tex, NULL, NULL);
-			SDL_RenderCopy(wolf->sdl.ren, wolf->ttf.message, NULL, &wolf->ttf.rect); //you put the renderer's name first, the Message, the crop size(you can ignore this if you don't want to dabble with cropping), and the rect which is the size and coordinate of your texture
-			SDL_RenderPresent(wolf->sdl.ren);
-			delta_clock = SDL_GetTicks() - start_clock;
-			if (delta_clock != 0)
-				current_FPS = 1000 / delta_clock;
-			SDL_DestroyTexture(wolf->ttf.message);
-			wolf->ttf.message = NULL;
-		}
+		SDL_FreeSurface(wolf->ttf.surf_message);
+		wolf->ttf.surf_message = NULL;
+		//ft_memset(pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
+		ft_memset(wolf->data.img_ptr, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
+		//raycasting(player, raycast, dda, data);
+		multithread(wolf);
+		const Uint8 *keyboard_state_array = SDL_GetKeyboardState(NULL);
+		movement(&(wolf->player), &(wolf->sdl), &(wolf->data), keyboard_state_array);
+		//SDL_SetRenderDrawColor(sdl->ren, 255, 255, 255, 255);
+		SDL_UpdateTexture(wolf->sdl.tex, NULL, wolf->data.img_ptr, WIN_WIDTH * sizeof(int));
+		SDL_RenderClear(wolf->sdl.ren);
+		SDL_RenderCopy(wolf->sdl.ren, wolf->sdl.tex, NULL, NULL);
+		SDL_RenderCopy(wolf->sdl.ren, wolf->ttf.message, NULL, &wolf->ttf.rect); //you put the renderer's name first, the Message, the crop size(you can ignore this if you don't want to dabble with cropping), and the rect which is the size and coordinate of your texture
+		SDL_RenderPresent(wolf->sdl.ren);
+		delta_clock = SDL_GetTicks() - start_clock;
+		if (delta_clock != 0)
+			current_FPS = 1000 / delta_clock;
+		SDL_DestroyTexture(wolf->ttf.message);
+		wolf->ttf.message = NULL;
 	}
 }
 
@@ -619,6 +647,11 @@ int	main(int argc, char *argv[])
 	if (MAX_MAP > 100 || WIN_WIDTH > 1920 || WIN_HEIGHT > 1080 || MAX_MAP < 1 || WIN_WIDTH < 1 || WIN_HEIGHT < 1)
 	{
 		ft_dprintf(STDERR_FILENO, "max size of map = %{b}s, you chose %{r}lld / max screen size = %{b}s, you chose %{r}lld x %{r}lld\n", "100", MAX_MAP, "1920 x 1080", WIN_WIDTH, WIN_HEIGHT);
+		return (EXIT_FAILURE);
+	}
+	if (NB_THREADS > 50 || NB_THREADS < 1)
+	{
+		ft_dprintf(STDERR_FILENO, "max nb of threads = %{r}s, you chose %{r}lld\n", "50", NB_THREADS);
 		return (EXIT_FAILURE);
 	}
 	init_wolf(&wolf, argv[1]);
