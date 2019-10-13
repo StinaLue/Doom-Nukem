@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/13 15:11:37 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/13 16:02:58 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -522,9 +522,6 @@ void	movement(t_player *player, t_sdl *sdl, t_data *data, const Uint8 *keyboard_
 	rotspeed = 0.06;
 	save_x_dir = player->x_dir;
 	save_cam_vector_x = player->cam_vector_x;
-if (sdl->event.type == SDL_KEYDOWN || sdl->event.type == SDL_KEYUP || sdl->event.type == SDL_TEXTINPUT || x != 0 || y != 0)
-{
-    // Move centerpoint of rotation for one of the trees:
     if (keyboard_state_array[SDL_SCANCODE_UP] || keyboard_state_array[SDL_SCANCODE_W])
     {
 		if ((*data->map_ptr)[(int)(player->y + player->y_dir * speed)][(int)player->x] == 0)
@@ -585,7 +582,6 @@ if (sdl->event.type == SDL_KEYDOWN || sdl->event.type == SDL_KEYUP || sdl->event
 		player->cam_vector_x = player->cam_vector_x * cos(rotspeed) - player->cam_vector_y * sin(rotspeed);
 		player->cam_vector_y = save_cam_vector_x * sin(rotspeed) + player->cam_vector_y * cos(rotspeed);
     }
-}
 }
 
 int	*create_pixel_tab(void)
