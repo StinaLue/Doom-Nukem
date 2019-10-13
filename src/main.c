@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/13 14:24:48 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/13 14:38:08 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,8 +199,10 @@ int	init_TTF(t_ttf *ttf)
 	ttf->color.a = 100;
 	ttf->rect.x = 0;
 	ttf->rect.y = 0;
-	ttf->rect.w = 100;
-	ttf->rect.h = 100;
+	//ttf->rect.w = 100;
+	//ttf->rect.h = 100;
+	ttf->rect.w = WIN_WIDTH / 8;
+	ttf->rect.h = WIN_HEIGHT / 8;
 	return (EXIT_SUCCESS);
 }
 
@@ -606,7 +608,7 @@ void	main_loop(t_wolf *wolf)
 		//SDL_UpdateTexture(sdl->tex, NULL, data->pixels, WIN_WIDTH * sizeof(int));
 		while (SDL_PollEvent(&(wolf->sdl.event)) != 0)
 		{
-			if (wolf->sdl.event.type == SDL_QUIT || wolf->sdl.event.key.keysym.sym == SDLK_ESCAPE)
+			if (wolf->sdl.event.type == SDL_QUIT || (wolf->sdl.event.type == SDL_KEYDOWN && wolf->sdl.event.key.keysym.sym == SDLK_ESCAPE))
 				wolf->data.quit = 1;
 		}
 			start_clock = SDL_GetTicks();
@@ -658,9 +660,9 @@ int	main(int argc, char *argv[])
 		ft_dprintf(STDERR_FILENO, "usage: ./wolf3d %{g}s\n", "[valid .w3d map]");
 		return (EXIT_FAILURE);
 	}
-	if (MAX_MAP > 100 || WIN_WIDTH > 1920 || WIN_HEIGHT > 1080 || MAX_MAP < 1 || WIN_WIDTH < 1 || WIN_HEIGHT < 1)
+	if (MAX_MAP > 100 || WIN_WIDTH > 1920 || WIN_HEIGHT > 1080 || MAX_MAP < 10 || WIN_WIDTH < 100 || WIN_HEIGHT < 100)
 	{
-		ft_dprintf(STDERR_FILENO, "max size of map = %{b}s, you chose %{r}d / max screen size = %{b}s, you chose %{r}d x %{r}d\n", "100", MAX_MAP, "1920 x 1080", WIN_WIDTH, WIN_HEIGHT);
+		ft_dprintf(STDERR_FILENO, "max/min size of map = %{b}s, you chose %{r}d / max/min screen size = %{b}s, you chose %{r}d x %{r}d\n", "100/10", MAX_MAP, "1920 x 1080/100 x 100", WIN_WIDTH, WIN_HEIGHT);
 		return (EXIT_FAILURE);
 	}
 	if (NB_THREADS > 50 || NB_THREADS < 1)
