@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/13 14:12:50 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/13 14:24:48 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ int	init_SDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 		ft_dprintf(STDERR_FILENO, "SDL_CreateWindow Error: %{r}s\n", SDL_GetError());
 		return (EXIT_FAILURE);
 	}
-	if ((*ren = SDL_CreateRenderer(*win, -1, 0)) == NULL)
+	if ((*ren = SDL_CreateRenderer(*win, -1, 0/* SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC*/)) == NULL)
 	{
 		ft_dprintf(STDERR_FILENO, "SDL_CreateRenderer Error: %{r}s\n", SDL_GetError());
 		return (EXIT_FAILURE);
@@ -451,8 +451,15 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *
 	  }*/
 	if ((*data->map_ptr)[raycast->map_y][raycast->map_x] == 1)
 		color = 230;
+	if (dda->side == 0 && player->x < raycast->map_x)
+		color = 16711680;
 	if (dda->side == 1)
-		color = color / 2;
+	{
+		if (player->y < raycast->map_y)
+			color = color / 2;
+		else
+			color = color / 5;
+	}
 	draw_vertical(data->img_ptr, x, raycast->start_line, raycast->end_line, color);
 	/*
 	**	if (x == 450 || x == 451)
