@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/13 15:08:47 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/13 15:11:37 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,8 +199,10 @@ int	init_TTF(t_ttf *ttf)
 	ttf->color.a = 100;
 	ttf->rect.x = 0;
 	ttf->rect.y = 0;
-	ttf->rect.w = 100;
-	ttf->rect.h = 100;
+	//ttf->rect.w = 100;
+	//ttf->rect.h = 100;
+	ttf->rect.w = WIN_WIDTH / 8;
+	ttf->rect.h = WIN_HEIGHT / 8;
 	return (EXIT_SUCCESS);
 }
 
@@ -224,7 +226,7 @@ void	init_data_struct(t_data *data, char *title)
 	fill_map(data->map_ptr, title, &(data->map_width), &(data->map_height));
 }
 
-void	find_player_pos(double *x, double *y, int map[MAX_MAP][MAX_MAP], int map_width, int map_height)
+int		find_player_pos(double *x, double *y, int map[MAX_MAP][MAX_MAP], int map_width, int map_height)
 {
 	int	i;
 	int	j;
@@ -242,25 +244,27 @@ void	find_player_pos(double *x, double *y, int map[MAX_MAP][MAX_MAP], int map_wi
 				*x = j;
 				*y = i;
 				map[i][j] = 0;
-				return ;
+				return (EXIT_SUCCESS);
 			}
 			j++;
 		}
 		i++;
 	}
 	ft_dprintf(STDERR_FILENO, "no suitable starting position found for player, exiting...\n");
-	exit (EXIT_FAILURE);
+	return (EXIT_FAILURE);
 }
 
-void	init_player_struct(t_player *player, int map[MAX_MAP][MAX_MAP], int map_width, int map_height)
+int		init_player_struct(t_player *player, int map[MAX_MAP][MAX_MAP], int map_width, int map_height)
 {
-	find_player_pos(&player->x, &player->y, map, map_width, map_height);
+	if ((find_player_pos(&player->x, &player->y, map, map_width, map_height)) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	player->x_dir = -1;
 	player->y_dir = 0;
 	player->cam_vector_x = 0;
 	player->cam_vector_y = 0.66;
 	player->up_and_down = 0;
 	player->crouch		= 0;
+	return (EXIT_SUCCESS);
 }
 
 void	init_raycast_struct(t_raycast *raycast, double x, double y)
@@ -274,7 +278,11 @@ void	init_wolf(t_wolf *wolf, char *title)
 	init_sdl_struct(&(wolf->sdl));
 	init_ttf_struct(&(wolf->ttf));
 	init_data_struct(&(wolf->data), title);
-	init_player_struct(&(wolf->player), *(wolf->data.map_ptr), wolf->data.map_width, wolf->data.map_height);
+	if ((init_player_struct(&(wolf->player), *(wolf->data.map_ptr), wolf->data.map_width, wolf->data.map_height)) == EXIT_FAILURE)
+	{
+		ft_memdel((void **)&wolf->data.img_ptr);
+		exit(EXIT_FAILURE);
+	}
 	init_raycast_struct(&(wolf->raycast), wolf->player.x, wolf->player.y);
 }
 
@@ -610,7 +618,7 @@ void	main_loop(t_wolf *wolf)
 		//SDL_UpdateTexture(sdl->tex, NULL, data->pixels, WIN_WIDTH * sizeof(int));
 		while (SDL_PollEvent(&(wolf->sdl.event)) != 0)
 		{
-			if (wolf->sdl.event.type == SDL_QUIT || wolf->sdl.event.key.keysym.sym == SDLK_ESCAPE)
+			if (wolf->sdl.event.type == SDL_QUIT || (wolf->sdl.event.type == SDL_KEYDOWN && wolf->sdl.event.key.keysym.sym == SDLK_ESCAPE))
 				wolf->data.quit = 1;
 		}
 			start_clock = SDL_GetTicks();
@@ -646,6 +654,7 @@ void	main_loop(t_wolf *wolf)
 		if (delta_clock != 0)
 			current_FPS = 1000 / delta_clock;
 		SDL_DestroyTexture(wolf->ttf.message);
+		//printf("%s\n", SDL_GetError());
 		wolf->ttf.message = NULL;
 	}
 }
@@ -661,14 +670,14 @@ int	main(int argc, char *argv[])
 		ft_dprintf(STDERR_FILENO, "usage: ./wolf3d %{g}s\n", "[valid .w3d map]");
 		return (EXIT_FAILURE);
 	}
-	if (MAX_MAP > 100 || WIN_WIDTH > 1920 || WIN_HEIGHT > 1080 || MAX_MAP < 1 || WIN_WIDTH < 1 || WIN_HEIGHT < 1)
+	if (MAX_MAP > 100 || WIN_WIDTH > 1920 || WIN_HEIGHT > 1080 || MAX_MAP < 10 || WIN_WIDTH < 100 || WIN_HEIGHT < 100)
 	{
-		ft_dprintf(STDERR_FILENO, "max size of map = %{b}s, you chose %{r}lld / max screen size = %{b}s, you chose %{r}lld x %{r}lld\n", "100", MAX_MAP, "1920 x 1080", WIN_WIDTH, WIN_HEIGHT);
+		ft_dprintf(STDERR_FILENO, "max/min size of map = %{b}s, you chose %{r}d / max/min screen size = %{b}s, you chose %{r}d x %{r}d\n", "100/10", MAX_MAP, "1920 x 1080/100 x 100", WIN_WIDTH, WIN_HEIGHT);
 		return (EXIT_FAILURE);
 	}
 	if (NB_THREADS > 50 || NB_THREADS < 1)
 	{
-		ft_dprintf(STDERR_FILENO, "max nb of threads = %{r}s, you chose %{r}lld\n", "50", NB_THREADS);
+		ft_printf("max nb of threads = %{r}s, you chose %{r}d\n", "50", NB_THREADS);
 		return (EXIT_FAILURE);
 	}
 	init_wolf(&wolf, argv[1]);

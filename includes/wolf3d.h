@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/13 15:10:03 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/13 15:11:07 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 # include "SDL.h"
 # include "SDL_ttf.h"
 # define TITLE "TEST"
-# define WIN_WIDTH 1680
-# define WIN_HEIGHT 1050
-# define NB_THREADS 40
+# define WIN_WIDTH 1920
+# define WIN_HEIGHT 1080
+# define NB_THREADS 6
 # define MAX_MAP 100
 # define MAX_LOOK_DOWN -400
 # define MAX_LOOK_UP 400
