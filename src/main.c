@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/12 21:24:30 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/13 15:08:47 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,6 +260,7 @@ void	init_player_struct(t_player *player, int map[MAX_MAP][MAX_MAP], int map_wid
 	player->cam_vector_x = 0;
 	player->cam_vector_y = 0.66;
 	player->up_and_down = 0;
+	player->crouch		= 0;
 }
 
 void	init_raycast_struct(t_raycast *raycast, double x, double y)
@@ -406,7 +407,7 @@ void	dda_calculation(t_raycast *raycast, t_dda *dda, t_data const *data)
 	}
 }
 
-void	height_calculation(t_raycast *raycast, t_dda *dda, int updown)
+void	height_calculation(t_raycast *raycast, t_dda *dda, int updown, double crouch)
 {
 	if (dda->side == 0)
 		dda->distance_wall = /*(raycast->dir_x == 0.0) ? 0 : */ft_absfloat((raycast->map_x -
@@ -418,8 +419,8 @@ void	height_calculation(t_raycast *raycast, t_dda *dda, int updown)
 		raycast->height = ft_absolute((int)(WIN_HEIGHT / dda->distance_wall));
 //	else
 //		raycast->height = 0;
-	raycast->start_line = -raycast->height / 2 + WIN_HEIGHT / 2 + updown;
-	raycast->end_line = raycast->height / 2 + WIN_HEIGHT / 2 + updown;
+	raycast->start_line = -raycast->height / 2 + WIN_HEIGHT / 2 + updown - crouch * 1.2;
+	raycast->end_line = raycast->height / 2 + WIN_HEIGHT / 2 + updown - crouch;
 	if (raycast->start_line < 0)
 		raycast->start_line = 0;
 	if (raycast->end_line >= WIN_HEIGHT)
@@ -434,7 +435,7 @@ void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *
 	ray_init(raycast, dda, player, x);
 	dda_init(raycast, dda);
 	dda_calculation(raycast, dda, data);
-	height_calculation(raycast, dda, player->up_and_down);
+	height_calculation(raycast, dda, player->up_and_down, player->crouch);
 	/*switch(data->map[raycast->map_x][raycast->map_y])
 	  {
 	  case 1:  color = 16711680;  break; //red
@@ -544,6 +545,15 @@ if (sdl->event.type == SDL_KEYDOWN || sdl->event.type == SDL_KEYUP || sdl->event
 		if ((*data->map_ptr)[(int)player->y][(int)(player->x - player->cam_vector_x * speed)] == 0)
 			player->x -= player->cam_vector_x * speed;
     }
+	if (keyboard_state_array[SDL_SCANCODE_LCTRL])
+	{
+		if  (player->crouch < 20)
+			player->crouch = player->crouch + 4;
+	}
+	if (!keyboard_state_array[SDL_SCANCODE_LCTRL] && player->crouch > 0)
+	{
+			player->crouch = player->crouch - 4;
+	}
 	if (y > 0 && player->up_and_down > MAX_LOOK_DOWN)
 	{
 		player->up_and_down -= 20;

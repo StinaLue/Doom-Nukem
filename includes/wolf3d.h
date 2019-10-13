@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wolf3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/12 20:25:15 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/13 15:10:03 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # define TITLE "TEST"
 # define WIN_WIDTH 1680
 # define WIN_HEIGHT 1050
-# define NB_THREADS 60
+# define NB_THREADS 40
 # define MAX_MAP 100
 # define MAX_LOOK_DOWN -400
 # define MAX_LOOK_UP 400
@@ -64,6 +64,7 @@ typedef struct			s_player
 	double			y_dir;
 	double			cam_vector_x;
 	double			cam_vector_y;
+	double				crouch;
 	int				up_and_down;
 }						t_player;
 
