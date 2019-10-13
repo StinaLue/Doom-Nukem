@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/13 15:11:37 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/13 17:29:43 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -518,7 +518,7 @@ void	movement(t_player *player, t_sdl *sdl, t_data *data, const Uint8 *keyboard_
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	SDL_GetRelativeMouseState(&x, &y);
 
-	speed = 0.1;
+	speed = 0.05;
 	rotspeed = 0.06;
 	save_x_dir = player->x_dir;
 	save_cam_vector_x = player->cam_vector_x;
@@ -527,6 +527,8 @@ if (sdl->event.type == SDL_KEYDOWN || sdl->event.type == SDL_KEYUP || sdl->event
     // Move centerpoint of rotation for one of the trees:
     if (keyboard_state_array[SDL_SCANCODE_UP] || keyboard_state_array[SDL_SCANCODE_W])
     {
+		if (keyboard_state_array[SDL_SCANCODE_LSHIFT])
+			speed = 0.08;
 		if ((*data->map_ptr)[(int)(player->y + player->y_dir * speed)][(int)player->x] == 0)
 			player->y += player->y_dir * speed;
 		if ((*data->map_ptr)[(int)player->y][(int)(player->x + player->x_dir * speed)] == 0)
@@ -534,6 +536,8 @@ if (sdl->event.type == SDL_KEYDOWN || sdl->event.type == SDL_KEYUP || sdl->event
     }
     if (keyboard_state_array[SDL_SCANCODE_DOWN] || keyboard_state_array[SDL_SCANCODE_S])
     {
+		if (keyboard_state_array[SDL_SCANCODE_LSHIFT])
+			speed = 0.08;
 		if ((*data->map_ptr)[(int)(player->y - player->y_dir * speed)][(int)player->x] == 0)
 			player->y -= player->y_dir * speed;
 		if ((*data->map_ptr)[(int)player->y][(int)(player->x - player->x_dir * speed)] == 0)
