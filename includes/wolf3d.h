@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/13 15:11:07 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/14 17:28:31 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,5 +104,37 @@ typedef struct			s_wolf
 	t_raycast		raycast;
 	t_dda			dda;
 }						t_wolf;
+
+void				init_sdl_struct(t_sdl *sdl);
+void	init_ttf_struct(t_ttf *ttf);
+void	init_data_struct(t_data *data, char *title);
+int		init_player_struct(t_player *player, int map[MAX_MAP][MAX_MAP], int map_width, int map_height);
+void	init_raycast_struct(t_raycast *raycast, double x, double y);
+
+void	fill_map(int (*map)[MAX_MAP][MAX_MAP], char *title, int *map_width, int *map_height);
+int		find_player_pos(double *x, double *y, int map[MAX_MAP][MAX_MAP], int map_width, int map_height);
+
+void	free_SDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex);
+void	free_TTF(t_ttf *ttf);
+
+void	ray_init(t_raycast *raycast, t_dda *dda, t_player const *player, int x);
+void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *data, int x);
+void	*iterate_raycast(void *param);
+
+void	dda_init(t_raycast const *raycast, t_dda *dda);
+void	dda_calculation(t_raycast *raycast, t_dda *dda, t_data const *data);
+
+void	height_calculation(t_raycast *raycast, t_dda *dda, int updown, double crouch);
+void	draw_vertical(int *pixels, int x, int y1, int y2, int color);
+
+void	movement(t_player *player, t_data *data, const Uint8 *keyboard_state_array);
+
+int	init_SDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex);
+int	init_TTF(t_ttf *ttf);
+
+void	multithread(t_wolf *wolf);
+
+void	fill_pix(int *pixels, int x, int y, int color);
+void	draw_vertical(int *pixels, int x, int y1, int y2, int color);
 
 #endif
