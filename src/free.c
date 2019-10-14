@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <math.h>
 #include "wolf3d.h"
 
 void	free_SDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)

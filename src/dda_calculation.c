@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "wolf3d.h"
 
 void	dda_init(t_raycast const *raycast, t_dda *dda)

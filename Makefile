@@ -43,7 +43,14 @@ HEADERS_DIRECTORY = ./includes/
 HEADERS = $(addprefix $(HEADERS_DIRECTORY), $(HEADERS_LIST))
 
 SOURCES_DIRECTORY = ./src/
-SOURCES_LIST = main.c 
+SOURCES_LIST = main.c \
+	       dda_calculation.c \
+	       free.c \
+	       init_structs.c \
+	       init.c \
+	       movement.c \
+	       multithreading.c \
+	       raycasting.c
 
 SOURCES = $(addprefix $(SOURCES_DIRECTORY), $(SOURCES_LIST))
 

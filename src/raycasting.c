@@ -11,30 +11,7 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <math.h>
 #include "wolf3d.h"
-
-#include <pthread.h>
-
-void	height_calculation(t_raycast *raycast, t_dda *dda, int updown, double crouch)
-{
-	if (dda->side == 0)
-		dda->distance_wall = /*(raycast->dir_x == 0.0) ? 0 : */ft_absfloat((raycast->map_x -
-					raycast->pos_x + (1 - dda->dir_step_x) / 2) / raycast->dir_x);
-	else
-		dda->distance_wall = /*(raycast->dir_y == 0.0) ? 0 :*/ft_absfloat((raycast->map_y -
-					raycast->pos_y + (1 - dda->dir_step_y) / 2) / raycast->dir_y);
-	//if (dda->distance_wall != 0)
-		raycast->height = ft_absolute((int)(WIN_HEIGHT / dda->distance_wall));
-//	else
-//		raycast->height = 0;
-	raycast->start_line = -raycast->height / 2 + WIN_HEIGHT / 2 + updown - crouch * 1.2;
-	raycast->end_line = raycast->height / 2 + WIN_HEIGHT / 2 + updown - crouch;
-	if (raycast->start_line < 0)
-		raycast->start_line = 0;
-	if (raycast->end_line >= WIN_HEIGHT)
-		raycast->end_line = WIN_HEIGHT - 1;
-}
 
 void	ray_init(t_raycast *raycast, t_dda *dda, t_player const *player, int x)
 {
@@ -69,42 +46,64 @@ void	ray_init(t_raycast *raycast, t_dda *dda, t_player const *player, int x)
 	dda->side = 0;
 }
 
-void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *data, int x)
+void	height_calculation(t_raycast *raycast, t_dda *dda, int updown, double crouch)
 {
-	int	color;
+	if (dda->side == 0)
+		dda->distance_wall = /*(raycast->dir_x == 0.0) ? 0 : */ft_absfloat((raycast->map_x -
+					raycast->pos_x + (1 - dda->dir_step_x) / 2) / raycast->dir_x);
+	else
+		dda->distance_wall = /*(raycast->dir_y == 0.0) ? 0 :*/ft_absfloat((raycast->map_y -
+					raycast->pos_y + (1 - dda->dir_step_y) / 2) / raycast->dir_y);
+	//if (dda->distance_wall != 0)
+		raycast->height = ft_absolute((int)(WIN_HEIGHT / dda->distance_wall));
+//	else
+//		raycast->height = 0;
+	raycast->start_line = -raycast->height / 2 + WIN_HEIGHT / 2 + updown - crouch * 1.2;
+	raycast->end_line = raycast->height / 2 + WIN_HEIGHT / 2 + updown - crouch;
+	if (raycast->start_line < 0)
+		raycast->start_line = 0;
+	if (raycast->end_line >= WIN_HEIGHT)
+		raycast->end_line = WIN_HEIGHT - 1;
+}
 
-	color = 0;
-	ray_init(raycast, dda, player, x);
-	dda_init(raycast, dda);
-	dda_calculation(raycast, dda, data);
-	height_calculation(raycast, dda, player->up_and_down, player->crouch);
-	/*switch(data->map[raycast->map_x][raycast->map_y])
-	  {
-	  case 1:  color = 16711680;  break; //red
-	  case 2:  color = 65280;  break; //green
-	  case 3:  color = 255;   break; //blue
-	  case 4:  color = 16777215;  break; //white
-	  default: color = 16776960; break; //yellow
-	  }*/
-	if ((*data->map_ptr)[raycast->map_y][raycast->map_x] == 1)
-		color = 230;
-	if (dda->side == 0 && player->x < raycast->map_x)
-		color = 16711680;
-	if (dda->side == 1)
-	{
-		if (player->y < raycast->map_y)
-			color = color / 2;
-		else
-			color = color / 5;
-	}
-	draw_vertical(data->img_ptr, x, raycast->start_line, raycast->end_line, color);
-	/*
-	**	if (x == 450 || x == 451)
-	**	{
-	**	ft_printf("cam_x %f color is: %d start_line: %d, end_line: %d and x: %d\n", raycast->cam_x, color, raycast->start_line, raycast->end_line, x);
-	**	ft_printf("AND height = %d\n", raycast->height);
-	**	}
-	*/
+void    raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *data, int x)
+{
+        int     color;
+
+        color = 0;
+        ray_init(raycast, dda, player, x);
+        dda_init(raycast, dda);
+        dda_calculation(raycast, dda, data);
+        height_calculation(raycast, dda, player->up_and_down, player->crouch);
+        /*switch(data->map[raycast->map_x][raycast->map_y])
+          {
+          case 1:  color = 16711680;  break; //red
+          case 2:  color = 65280;  break; //green
+          case 3:  color = 255;   break; //blue
+          case 4:  color = 16777215;  break; //white
+          default: color = 16776960; break; //yellow
+          }*/
+        if ((*data->map_ptr)[raycast->map_y][raycast->map_x] == 1)
+                color = 230;
+        if (dda->side == 0 && player->x < raycast->map_x)
+                color = 16711680;
+        if (dda->side == 1)
+        {
+                if (player->y < raycast->map_y)
+                        color = color / 2;
+                else
+                        color = color / 5;
+        }
+        draw_vertical(data->img_ptr, x, raycast->start_line, raycast->end_line, color);
+        draw_vertical(data->img_ptr, x, raycast->end_line, WIN_HEIGHT, 0x808080);
+        draw_vertical(data->img_ptr, x, 0, raycast->start_line, 0xC8C8C8);
+        /*
+        **      if (x == 450 || x == 451)
+        **      {
+        **      ft_printf("cam_x %f color is: %d start_line: %d, end_line: %d and x: %d\n", raycast->cam_x, color, raycast->start_line, raycast->end_line, x);
+        **      ft_printf("AND height = %d\n", raycast->height);
+        **      }
+        */
 }
 
 void	*iterate_raycast(void *param)

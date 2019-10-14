@@ -15,15 +15,13 @@
 
 # include "SDL.h"
 # include "SDL_ttf.h"
-# define TITLE "TEST"
+# define TITLE "WOLF3D"
 # define WIN_WIDTH 1920
 # define WIN_HEIGHT 1080
 # define NB_THREADS 6
 # define MAX_MAP 100
 # define MAX_LOOK_DOWN -400
 # define MAX_LOOK_UP 400
-
-void				draw_line();
 
 typedef struct			s_sdl
 {
@@ -46,9 +44,7 @@ typedef struct			s_ttf
 typedef struct			s_data
 {
 	int				quit;
-//	int				pixels[WIN_WIDTH * WIN_HEIGHT];
 	int				*img_ptr;
-//	int				map[MAX_MAP][MAX_MAP];
 	int				(*map_ptr)[MAX_MAP][MAX_MAP];
 	int				map_width;
 	int				map_height;
@@ -105,6 +101,8 @@ typedef struct			s_wolf
 	t_dda			dda;
 }						t_wolf;
 
+void    init_wolf(t_wolf *wolf, char *title);
+
 void				init_sdl_struct(t_sdl *sdl);
 void	init_ttf_struct(t_ttf *ttf);
 void	init_data_struct(t_data *data, char *title);
@@ -113,6 +111,7 @@ void	init_raycast_struct(t_raycast *raycast, double x, double y);
 
 void	fill_map(int (*map)[MAX_MAP][MAX_MAP], char *title, int *map_width, int *map_height);
 void		find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP], int map_width, int map_height);
+void    verify_bordermap(int const (*map)[MAX_MAP][MAX_MAP], char *title, int map_width, int map_height);
 
 void	free_SDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex);
 void	free_TTF(t_ttf *ttf);
