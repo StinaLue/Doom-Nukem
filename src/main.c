@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/14 17:41:42 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/14 18:03:46 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -526,7 +526,7 @@ void	multithread(t_wolf *wolf)
 		pthread_join(threads[i], NULL);
 }
 
-void	movement(t_player *player, t_sdl *sdl, t_data *data, const Uint8 *keyboard_state_array)
+void	movement(t_player *player, t_data *data, const Uint8 *keyboard_state_array)
 {
 	double speed;
 	double rotspeed;
@@ -662,7 +662,7 @@ void	main_loop(t_wolf *wolf)
 		//ft_memset(pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 		ft_memset(wolf->data.img_ptr, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 		//raycasting(player, raycast, dda, data);
-		movement(&(wolf->player), &(wolf->sdl), &(wolf->data), keyboard_state_array);
+		movement(&(wolf->player), &(wolf->data), keyboard_state_array);
 		multithread(wolf);
 		//const Uint8 *keyboard_state_array = SDL_GetKeyboardState(NULL);
 		//movement(&(wolf->player), &(wolf->sdl), &(wolf->data), keyboard_state_array);
