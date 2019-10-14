@@ -6,12 +6,12 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/14 16:20:00 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/14 17:41:42 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <math.h>
+//#include <math.h>
 #include "wolf3d.h"
 
 #include <pthread.h>
@@ -216,15 +216,42 @@ void	init_ttf_struct(t_ttf *ttf)
 	ttf->font = NULL;
 }
 
+void	verify_bordermap(int const (*map)[MAX_MAP][MAX_MAP], char *title, int map_width, int map_height)
+{
+	int i;
+	int j;
+	int k;
+	int l;
+	
+	i = 0;
+	j = 0;
+	k = 0;
+	l = 0;
+	while ((*map)[0][i] == 1 && i < map_width)
+		i++;
+	while ((*map)[map_height - 1][j] == 1 && j < map_width)
+		j++;
+	while ((*map)[k][0] == 1 && k < map_height)
+		k++;
+	while ((*map)[l][map_width - 1] == 1 && l < map_height)
+		l++;
+	if (i != map_width || j != map_width || k != map_height || l != map_height)
+	{
+		ft_dprintf(STDERR_FILENO, "map %{r}s is not surrounded by walls (1), exiting...\n", title);
+		exit (EXIT_FAILURE);
+	}
+}
+
 void	init_data_struct(t_data *data, char *title)
 {
 	data->quit = 0;
 	//ft_memset(data->pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 	data->img_ptr = NULL;
 	fill_map(data->map_ptr, title, &(data->map_width), &(data->map_height));
+	verify_bordermap(data->map_ptr, title, data->map_width, data->map_height);
 }
 
-int		find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP], int map_width, int map_height)
+void	find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP], int map_width, int map_height)
 {
 	int	i;
 	int	j;
@@ -242,27 +269,25 @@ int		find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP], int map_width,
 				player->x = j;
 				player->y = i;
 				map[i][j] = 0;
-				return (EXIT_SUCCESS);
+				return ;
 			}
 			j++;
 		}
 		i++;
 	}
 	ft_dprintf(STDERR_FILENO, "no suitable starting position found for player, exiting...\n");
-	return (EXIT_FAILURE);
+	exit (EXIT_FAILURE);
 }
 
-int		init_player_struct(t_player *player, int map[MAX_MAP][MAX_MAP], int map_width, int map_height)
+void	init_player_struct(t_player *player, int map[MAX_MAP][MAX_MAP], int map_width, int map_height)
 {
-	if ((find_player_pos(player, map, map_width, map_height)) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
+	find_player_pos(player, map, map_width, map_height);
 	player->x_dir = -1;
 	player->y_dir = 0;
 	player->cam_vector_x = 0;
 	player->cam_vector_y = 0.66;
 	player->up_and_down = 0;
 	player->crouch		= 0;
-	return (EXIT_SUCCESS);
 }
 
 void	init_raycast_struct(t_raycast *raycast, double x, double y)
@@ -276,11 +301,7 @@ void	init_wolf(t_wolf *wolf, char *title)
 	init_sdl_struct(&(wolf->sdl));
 	init_ttf_struct(&(wolf->ttf));
 	init_data_struct(&(wolf->data), title);
-	if ((init_player_struct(&(wolf->player), *(wolf->data.map_ptr), wolf->data.map_width, wolf->data.map_height)) == EXIT_FAILURE)
-	{
-		ft_memdel((void **)&wolf->data.img_ptr);
-		exit(EXIT_FAILURE);
-	}
+	init_player_struct(&(wolf->player), *(wolf->data.map_ptr), wolf->data.map_width, wolf->data.map_height);
 	init_raycast_struct(&(wolf->raycast), wolf->player.x, wolf->player.y);
 }
 
@@ -612,6 +633,7 @@ void	main_loop(t_wolf *wolf)
 
 	//int	leftMouseButtonDown = 0;
 
+	const Uint8 *keyboard_state_array = SDL_GetKeyboardState(NULL);
 	while (!wolf->data.quit)
 	{
 		//SDL_UpdateTexture(sdl->tex, NULL, data->pixels, WIN_WIDTH * sizeof(int));
@@ -640,9 +662,10 @@ void	main_loop(t_wolf *wolf)
 		//ft_memset(pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 		ft_memset(wolf->data.img_ptr, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 		//raycasting(player, raycast, dda, data);
-		multithread(wolf);
-		const Uint8 *keyboard_state_array = SDL_GetKeyboardState(NULL);
 		movement(&(wolf->player), &(wolf->sdl), &(wolf->data), keyboard_state_array);
+		multithread(wolf);
+		//const Uint8 *keyboard_state_array = SDL_GetKeyboardState(NULL);
+		//movement(&(wolf->player), &(wolf->sdl), &(wolf->data), keyboard_state_array);
 		//SDL_SetRenderDrawColor(sdl->ren, 255, 255, 255, 255);
 		SDL_UpdateTexture(wolf->sdl.tex, NULL, wolf->data.img_ptr, WIN_WIDTH * sizeof(int));
 		SDL_RenderClear(wolf->sdl.ren);

@@ -6,7 +6,7 @@
 #    By: afonck <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2019/10/10 18:20:39 by afonck           ###   ########.fr        #
+#    Updated: 2019/10/14 17:44:44 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -79,7 +79,7 @@ $(SDL2TTF):
 	make && \
 	make install
 
-$(NAME): $(SDL2) $(SDL2TTF) $(LIBFT) $(OBJECTS_DIRECTORY) $(OBJECTS) #$(SDL2)
+$(NAME): $(SDL2) $(SDL2TTF) $(LIBFT) $(OBJECTS_DIRECTORY) $(OBJECTS)
 	@$(CC) $(LIBRARIES) $(INCLUDES) $(OBJECTS) -o $(NAME)
 	@echo "\n$(NAME): $(GREEN)object files were created$(RESET)"
 	@echo "$(NAME): $(GREEN)$(NAME) was created$(RESET)"
@@ -93,7 +93,7 @@ $(OBJECTS_DIRECTORY_DEBUG):
 	@echo "$(DEBUG_NAME): $(GREEN)$(OBJECTS_DIRECTORY_DEBUG) was created$(RESET)"
 
 $(OBJECTS_DIRECTORY)%.o : $(SOURCES_DIRECTORY)%.c $(HEADERS)
-	@$(CC) $(FLAGS) -c $(INCLUDES) $< -o $@
+	@$(CC) $(CFLAGS) -c $(INCLUDES) $< -o $@
 	@echo "$(GREEN).$(RESET)\c"
 
 $(OBJECTS_DIRECTORY_DEBUG)%.o : $(SOURCES_DIRECTORY)%.c $(HEADERS)
@@ -109,20 +109,13 @@ $(LIBFT):
 	@echo "$(NAME): $(GREEN)Creating $(LIBFT)...$(RESET)"
 	@$(MAKE) -sC $(LIBFT_DIRECTORY)
 
-#$(SDL2):
-#	@echo "$(NAME): $(GREEN)Creating $(SDL2)...$(RESET)"
-#	@$(MAKE) -sC $(SDL2_LIB_DIRECTORY)
-
 clean:
 	@$(MAKE) -sC $(LIBFT_DIRECTORY) clean
-	#@$(MAKE) -sC $(SDL2_LIB_DIRECTORY) clean
 	@rm -rf $(OBJECTS_DIRECTORY)
 	@echo "$(NAME): $(RED)$(OBJECTS_DIRECTORY) was deleted$(RESET)"
 	@echo "$(NAME): $(RED)object files were deleted$(RESET)"
 
 fclean: clean
-	#@rm -f $(SDL2)
-	#@echo "$(NAME): $(RED)$(SDL2) was deleted$(RESET)"
 	@rm -f $(LIBFT)
 	@echo "$(NAME): $(RED)$(LIBFT) was deleted$(RESET)"
 	@rm -f $(NAME)
