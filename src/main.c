@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2019/10/13 17:29:43 by sluetzen         ###   ########.fr       */
-=======
-/*   Updated: 2019/10/13 16:02:58 by afonck           ###   ########.fr       */
->>>>>>> 5e1e8850eb0e1a54e5d6ce1eb17ee4a8de695723
+/*   Updated: 2019/10/14 16:20:00 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +15,6 @@
 #include "wolf3d.h"
 
 #include <pthread.h>
-#define MAP_WIDTH 9
-#define MAP_HEIGHT 9
 
 void	free_SDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 {
@@ -171,7 +165,7 @@ int	init_SDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 		ft_dprintf(STDERR_FILENO, "SDL_CreateWindow Error: %{r}s\n", SDL_GetError());
 		return (EXIT_FAILURE);
 	}
-	if ((*ren = SDL_CreateRenderer(*win, -1, 0/* SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC*/)) == NULL)
+	if ((*ren = SDL_CreateRenderer(*win, -1, SDL_RENDERER_SOFTWARE)) == NULL)//0 SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)) == NULL)
 	{
 		ft_dprintf(STDERR_FILENO, "SDL_CreateRenderer Error: %{r}s\n", SDL_GetError());
 		return (EXIT_FAILURE);
@@ -230,14 +224,14 @@ void	init_data_struct(t_data *data, char *title)
 	fill_map(data->map_ptr, title, &(data->map_width), &(data->map_height));
 }
 
-int		find_player_pos(double *x, double *y, int map[MAX_MAP][MAX_MAP], int map_width, int map_height)
+int		find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP], int map_width, int map_height)
 {
 	int	i;
 	int	j;
 
 	i = 0;
-	*x = 0;
-	*y = 0;
+	player->x = 0;
+	player->y = 0;
 	while (i < map_height)
 	{
 		j = 0;
@@ -245,8 +239,8 @@ int		find_player_pos(double *x, double *y, int map[MAX_MAP][MAX_MAP], int map_wi
 		{
 			if (map[i][j] == 'X')
 			{
-				*x = j;
-				*y = i;
+				player->x = j;
+				player->y = i;
 				map[i][j] = 0;
 				return (EXIT_SUCCESS);
 			}
@@ -260,7 +254,7 @@ int		find_player_pos(double *x, double *y, int map[MAX_MAP][MAX_MAP], int map_wi
 
 int		init_player_struct(t_player *player, int map[MAX_MAP][MAX_MAP], int map_width, int map_height)
 {
-	if ((find_player_pos(&player->x, &player->y, map, map_width, map_height)) == EXIT_FAILURE)
+	if ((find_player_pos(player, map, map_width, map_height)) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	player->x_dir = -1;
 	player->y_dir = 0;
@@ -522,14 +516,15 @@ void	movement(t_player *player, t_sdl *sdl, t_data *data, const Uint8 *keyboard_
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	SDL_GetRelativeMouseState(&x, &y);
 
-	speed = 0.05;
+	speed = (player->crouch > 0 ? 0.02 : 0.05);
 	rotspeed = 0.06;
 	save_x_dir = player->x_dir;
 	save_cam_vector_x = player->cam_vector_x;
     if (keyboard_state_array[SDL_SCANCODE_UP] || keyboard_state_array[SDL_SCANCODE_W])
     {
 		if (keyboard_state_array[SDL_SCANCODE_LSHIFT])
-			speed = 0.08;
+			//speed = 0.08;
+			speed += 0.03;
 		if ((*data->map_ptr)[(int)(player->y + player->y_dir * speed)][(int)player->x] == 0)
 			player->y += player->y_dir * speed;
 		if ((*data->map_ptr)[(int)player->y][(int)(player->x + player->x_dir * speed)] == 0)
