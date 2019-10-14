@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/14 17:28:31 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/14 18:42:18 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,11 +108,11 @@ typedef struct			s_wolf
 void				init_sdl_struct(t_sdl *sdl);
 void	init_ttf_struct(t_ttf *ttf);
 void	init_data_struct(t_data *data, char *title);
-int		init_player_struct(t_player *player, int map[MAX_MAP][MAX_MAP], int map_width, int map_height);
+void		init_player_struct(t_player *player, int map[MAX_MAP][MAX_MAP], int map_width, int map_height);
 void	init_raycast_struct(t_raycast *raycast, double x, double y);
 
 void	fill_map(int (*map)[MAX_MAP][MAX_MAP], char *title, int *map_width, int *map_height);
-int		find_player_pos(double *x, double *y, int map[MAX_MAP][MAX_MAP], int map_width, int map_height);
+void		find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP], int map_width, int map_height);
 
 void	free_SDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex);
 void	free_TTF(t_ttf *ttf);
