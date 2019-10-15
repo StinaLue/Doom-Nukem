@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wolf3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/15 16:58:12 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/16 01:01:54 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void	find_wall_calculation(t_raycast *raycast, t_wall_finding *find_wall, t_data
 void	height_calculation(t_raycast *raycast, t_wall_finding *find_wall, int updown, double crouch);
 void	draw_vertical(int *pixels, int x, int y1, int y2, int color);
 
-void	movement(t_player *player, t_data *data, const Uint8 *keyboard_state_array);
+void	movement(t_player *player, t_data *data, const Uint8 *keyboard_state);
 
 int	init_SDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex);
 int	init_TTF(t_ttf *ttf);

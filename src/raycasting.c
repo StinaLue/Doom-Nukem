@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:35:15 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/15 17:13:10 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/16 00:58:40 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,32 +45,25 @@ void	fill_tex(int texture[4][TEX_W * TEX_H])
 void	ray_init(t_raycast *raycast, t_wall_finding *find_wall, t_player const *player, int x)
 {
 	raycast->cam_x = 2 * x / (double)WIN_WIDTH - 1;
-
 	raycast->pos_x = player->x;
 	raycast->pos_y = player->y;
-
 	raycast->dir_x = player->x_dir + player->cam_vector_x * raycast->cam_x;
 	raycast->dir_y = player->y_dir + player->cam_vector_y * raycast->cam_x;
 	raycast->map_x = (int)raycast->pos_x;
 	raycast->map_y = (int)raycast->pos_y;
-
 	raycast->height = 0;
 	raycast->start_line = 0;
 	raycast->end_line = 0;
-
-	/*
-	** SEEMS LIKE BOTH OF THE FOLLOWING METHODS WORK
-	*/
-	if (raycast->dir_x != 0)
-		find_wall->dist_x_to_x = ft_absfloat(1 / raycast->dir_x);
-	else
-		find_wall->dist_x_to_x = ft_absfloat(1 / 0.00001); // MAYBE A BUG, WORKS FOR NOW THO?
-	if (raycast->dir_y != 0)
-		find_wall->dist_y_to_y = ft_absfloat(1 / raycast->dir_y);
-	else
-		find_wall->dist_y_to_y = ft_absfloat(1 / 0.00001);
-	//find_wall->dist_x_to_x = sqrt(1 + (raycast->dir_y * raycast->dir_y) / (raycast->dir_x * raycast->dir_x));
-	//find_wall->dist_y_to_y = sqrt(1 + (raycast->dir_x * raycast->dir_x) / (raycast->dir_y * raycast->dir_y));
+	find_wall->dist_x_to_x = ft_absfloat(1 / (raycast->dir_x != 0 ? raycast->dir_x : 0.00001));
+	find_wall->dist_y_to_y = ft_absfloat(1 / (raycast->dir_y != 0 ? raycast->dir_y : 0.00001));
+	//if (raycast->dir_x != 0)
+	//	find_wall->dist_x_to_x = ft_absfloat(1 / raycast->dir_x);
+	//else
+	//	find_wall->dist_x_to_x = ft_absfloat(1 / 0.00001); // MAYBE A BUG, WORKS FOR NOW THO?
+	//if (raycast->dir_y != 0)
+	//	find_wall->dist_y_to_y = ft_absfloat(1 / raycast->dir_y);
+	//else
+	//	find_wall->dist_y_to_y = ft_absfloat(1 / 0.00001);
 	find_wall->hit = 0;
 	find_wall->side = 0;
 }
@@ -100,9 +93,10 @@ void    raycasting(t_player const *player, t_raycast *raycast, t_wall_finding *f
         int     color;
 		double	wallx;
 		int		tex_x;
-		int		tex_num = 0;
+		int		tex_num;
 
         color = 0;
+		tex_num = 0;
         ray_init(raycast, find_wall, player, x);
         find_wall_init(raycast, find_wall);
         find_wall_calculation(raycast, find_wall, data);
@@ -111,13 +105,7 @@ void    raycasting(t_player const *player, t_raycast *raycast, t_wall_finding *f
         if (find_wall->side == 0 && player->x < raycast->map_x)
 			tex_num = 1;
         if (find_wall->side == 1)
-        {
-            if (player->y < raycast->map_y)
-				tex_num = 2;
-			else
-				tex_num = 3;
-		}
-			
+			tex_num = (player->y < raycast->map_y ? 2 : 3);
         height_calculation(raycast, find_wall, player->up_and_down, player->crouch);
 		if (find_wall->side == 0)
 			wallx = player->y + find_wall->distance_wall * raycast->dir_y;
@@ -129,27 +117,24 @@ void    raycasting(t_player const *player, t_raycast *raycast, t_wall_finding *f
 			tex_x = TEX_W - tex_x - 1;
 		if (find_wall->side == 1 && raycast->dir_y < 0)
 			tex_x = TEX_W - tex_x - 1;
-		for(int y = raycast->start_line; y < raycast->end_line; y++)
-      {
-        int d = y * 256 - WIN_HEIGHT * 128 + raycast->height * 128 - (player->up_and_down - player->crouch) * 256;  //256 and 128 factors to avoid floats
-        // TODO: avoid the division to speed this up
-        int texY = ((d * TEX_H) / raycast->height) / 256;
-        Uint32 color = data->texture[tex_num][TEX_H * texY + tex_x];
-        //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
-        if(find_wall->side == 1) color = (color >> 1) & 8355711;
-        fill_pix(data->img_ptr, x, y, color);
-      }
-		
+		//for(int y = raycast->start_line; y < raycast->end_line; y++)
+		int y;
+
+		y = raycast->start_line;
+		while (y < raycast->end_line)
+		{
+        	int d = y * 256 - WIN_HEIGHT * 128 + raycast->height * 128 - (player->up_and_down - player->crouch) * 256;  //256 and 128 factors to avoid floats
+        	// TODO: avoid the division to speed this up
+        	int texY = ((d * TEX_H) / raycast->height) / 256;
+        	Uint32 color = data->texture[tex_num][TEX_H * texY + tex_x];
+        	//make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
+        	if(find_wall->side == 1) color = (color >> 1) & 8355711;
+        		fill_pix(data->img_ptr, x, y, color);
+			y++;
+    	}
         //draw_vertical(data->img_ptr, x, raycast->start_line, raycast->end_line, color);
         draw_vertical(data->img_ptr, x, raycast->end_line, WIN_HEIGHT, 0x808080);
-        draw_vertical(data->img_ptr, x, 0, raycast->start_line, 0xC8C8C8);
-        /*
-        **      if (x == 450 || x == 451)
-        **      {
-        **      ft_printf("cam_x %f color is: %d start_line: %d, end_line: %d and x: %d\n", raycast->cam_x, color, raycast->start_line, raycast->end_line, x);
-        **      ft_printf("AND height = %d\n", raycast->height);
-        **      }
-        */
+        draw_vertical(data->img_ptr, x, 0, raycast->start_line, 0x87CEFA);
 }
 
 void	*iterate_raycast(void *param)
@@ -166,3 +151,7 @@ void	*iterate_raycast(void *param)
 	}
 	return (NULL);
 }
+
+/*
+**	Do the raycasting for all the threads
+*/

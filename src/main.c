@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/15 17:18:31 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/15 22:56:26 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ char	check_line(char *line)
 	}
 	return ('0');
 }
+
+/*
+**	Checks which values the map has.
+**	1 = wall, 0 = walkable space, X = position of player
+*/
 
 void	copy_line(char *charline, char *line, int width)
 {
@@ -93,6 +98,10 @@ void	fill_chartab(char chartab[MAX_MAP][MAX_MAP], char *title, int *map_width, i
 	}
 }
 
+/*
+**	Parsing the input file
+*/
+
 void	fill_map(int (*map)[MAX_MAP][MAX_MAP], char *title, int *map_width, int *map_height)
 {
 	char	chartab[MAX_MAP][MAX_MAP];
@@ -142,6 +151,10 @@ void	verify_bordermap(int const (*map)[MAX_MAP][MAX_MAP], char *title, int map_w
 	}
 }
 
+/*
+**	Verify that the map is surrounded by walls (1)
+*/
+
 void	find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP], int map_width, int map_height)
 {
 	int	i;
@@ -169,6 +182,10 @@ void	find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP], int map_width,
 	ft_dprintf(STDERR_FILENO, "no suitable starting position found for player, exiting...\n");
 	exit (EXIT_FAILURE);
 }
+
+/*
+**	Function that searches for the player (X) in the map.
+*/
 
 void	fill_pix(int *pixels, int x, int y, int color)
 {
@@ -234,7 +251,7 @@ void	main_loop(t_wolf *wolf)
 
 	//int	leftMouseButtonDown = 0;
 
-	const Uint8 *keyboard_state_array = SDL_GetKeyboardState(NULL);
+	const Uint8 *keyboard_state = SDL_GetKeyboardState(NULL);
 	SDL_WarpMouseInWindow(wolf->sdl.win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
 	while (!wolf->data.quit)
 	{
@@ -263,10 +280,10 @@ void	main_loop(t_wolf *wolf)
 		wolf->ttf.surf_message = NULL;
 		//ft_memset(pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 		ft_memset(wolf->data.img_ptr, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
-		movement(&(wolf->player), &(wolf->data), keyboard_state_array);
+		movement(&(wolf->player), &(wolf->data), keyboard_state);
 		multithread(wolf);
-		//const Uint8 *keyboard_state_array = SDL_GetKeyboardState(NULL);
-		//movement(&(wolf->player), &(wolf->sdl), &(wolf->data), keyboard_state_array);
+		//const Uint8 *keyboard_state = SDL_GetKeyboardState(NULL);
+		//movement(&(wolf->player), &(wolf->sdl), &(wolf->data), keyboard_state);
 		//SDL_SetRenderDrawColor(sdl->ren, 255, 255, 255, 255);
 		SDL_UpdateTexture(wolf->sdl.tex, NULL, wolf->data.img_ptr, WIN_WIDTH * sizeof(int));
 		SDL_RenderClear(wolf->sdl.ren);
