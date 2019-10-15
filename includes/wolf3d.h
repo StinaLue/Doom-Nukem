@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/15 13:44:13 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/15 16:58:12 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@
 # define MAX_MAP 100
 # define MAX_LOOK_DOWN -400
 # define MAX_LOOK_UP 400
+
+# define TEX_W 64
+# define TEX_H 64
 
 typedef struct			s_sdl
 {
@@ -43,9 +46,10 @@ typedef struct			s_ttf
 
 typedef struct			s_data
 {
-	int				quit;
+	int				texture[4][TEX_W * TEX_H];
 	int				*img_ptr;
 	int				(*map_ptr)[MAX_MAP][MAX_MAP];
+	int				quit;
 	int				map_width;
 	int				map_height;
 	int				start_thread;
@@ -135,5 +139,7 @@ void	multithread(t_wolf *wolf);
 
 void	fill_pix(int *pixels, int x, int y, int color);
 void	draw_vertical(int *pixels, int x, int y1, int y2, int color);
+
+void	fill_tex(int texture[4][TEX_W * TEX_H]);
 
 #endif

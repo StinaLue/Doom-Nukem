@@ -6,12 +6,41 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:35:15 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/15 13:49:44 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/15 17:13:10 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "wolf3d.h"
+#include <math.h>
+
+void	fill_tex(int texture[4][TEX_W * TEX_H])
+{
+	int x = 0;
+	int y;
+
+	while (x < TEX_W)
+	{
+		y = 0;
+	  while (y < TEX_H)
+	  {
+		    int xorcolor = (x * 256 / TEX_W) ^ (y * 256 / TEX_H);
+		    //int xcolor = x * 256 / TEX_W;
+		    //int ycolor = y * 256 / TEX_H;
+		    int xycolor = y * 128 / TEX_H + x * 128 / TEX_W;
+		    texture[0][TEX_W * y + x] = 65536 * 254 * (x != y && x != TEX_W - y); //flat red texture with black cross
+		    texture[1][TEX_W * y + x] = xycolor + 256 * xycolor + 65536 * xycolor; //sloped greyscale
+		    texture[2][TEX_W * y + x] = 256 * xycolor + 65536 * xycolor; //sloped yellow gradient
+		    texture[3][TEX_W * y + x] = xorcolor + 256 * xorcolor + 65536 * xorcolor; //xor greyscale
+		    //texture[4][TEX_W * y + x] = 256 * xorcolor; //xor green
+		    //texture[5][TEX_W * y + x] = 65536 * 192 * (x % 16 && y % 16); //red bricks
+		    //texture[6][TEX_W * y + x] = 65536 * ycolor; //red gradient
+		    //texture[7][TEX_W * y + x] = 128 + 256 * 128 + 65536 * 128; //flat grey texture
+			y++;
+ 	 	}
+		  x++;
+	}
+}
 
 void	ray_init(t_raycast *raycast, t_wall_finding *find_wall, t_player const *player, int x)
 {
@@ -69,32 +98,49 @@ void	height_calculation(t_raycast *raycast, t_wall_finding *find_wall, int updow
 void    raycasting(t_player const *player, t_raycast *raycast, t_wall_finding *find_wall, t_data *data, int x)
 {
         int     color;
+		double	wallx;
+		int		tex_x;
+		int		tex_num = 0;
 
         color = 0;
         ray_init(raycast, find_wall, player, x);
         find_wall_init(raycast, find_wall);
         find_wall_calculation(raycast, find_wall, data);
-        height_calculation(raycast, find_wall, player->up_and_down, player->crouch);
-        /*switch(data->map[raycast->map_x][raycast->map_y])
-          {
-          case 1:  color = 16711680;  break; //red
-          case 2:  color = 65280;  break; //green
-          case 3:  color = 255;   break; //blue
-          case 4:  color = 16777215;  break; //white
-          default: color = 16776960; break; //yellow
-          }*/
         if ((*data->map_ptr)[raycast->map_y][raycast->map_x] == 1)
-                color = 230;
+			tex_num = 0;
         if (find_wall->side == 0 && player->x < raycast->map_x)
-                color = 16711680;
+			tex_num = 1;
         if (find_wall->side == 1)
         {
-                if (player->y < raycast->map_y)
-                        color = color / 2;
-                else
-                        color = color / 5;
-        }
-        draw_vertical(data->img_ptr, x, raycast->start_line, raycast->end_line, color);
+            if (player->y < raycast->map_y)
+				tex_num = 2;
+			else
+				tex_num = 3;
+		}
+			
+        height_calculation(raycast, find_wall, player->up_and_down, player->crouch);
+		if (find_wall->side == 0)
+			wallx = player->y + find_wall->distance_wall * raycast->dir_y;
+		else
+			wallx = player->x + find_wall->distance_wall * raycast->dir_x;
+		wallx -= floor(wallx);
+		tex_x = (int)(wallx * (double)TEX_W);
+		if (find_wall->side == 0 && raycast->dir_x > 0)
+			tex_x = TEX_W - tex_x - 1;
+		if (find_wall->side == 1 && raycast->dir_y < 0)
+			tex_x = TEX_W - tex_x - 1;
+		for(int y = raycast->start_line; y < raycast->end_line; y++)
+      {
+        int d = y * 256 - WIN_HEIGHT * 128 + raycast->height * 128 - (player->up_and_down - player->crouch) * 256;  //256 and 128 factors to avoid floats
+        // TODO: avoid the division to speed this up
+        int texY = ((d * TEX_H) / raycast->height) / 256;
+        Uint32 color = data->texture[tex_num][TEX_H * texY + tex_x];
+        //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
+        if(find_wall->side == 1) color = (color >> 1) & 8355711;
+        fill_pix(data->img_ptr, x, y, color);
+      }
+		
+        //draw_vertical(data->img_ptr, x, raycast->start_line, raycast->end_line, color);
         draw_vertical(data->img_ptr, x, raycast->end_line, WIN_HEIGHT, 0x808080);
         draw_vertical(data->img_ptr, x, 0, raycast->start_line, 0xC8C8C8);
         /*

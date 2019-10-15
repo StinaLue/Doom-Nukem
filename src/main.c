@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/15 13:45:39 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/15 16:08:30 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,6 +223,7 @@ void	main_loop(t_wolf *wolf)
 	int		current_FPS;
 
 	current_FPS = 0;
+	fill_tex(wolf->data.texture);
 	//int pixels[WIN_WIDTH * WIN_HEIGHT];
 	//wolf->data.img_ptr = &pixels[0];
 	if ((wolf->data.img_ptr = create_pixel_tab()) == NULL)
