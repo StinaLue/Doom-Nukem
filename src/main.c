@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/15 14:47:11 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/15 17:03:17 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,14 +264,13 @@ void	main_loop(t_wolf *wolf)
 		ft_memset(wolf->data.img_ptr, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 		movement(&(wolf->player), &(wolf->data), keyboard_state_array);
 		multithread(wolf);
-		//print_map((*wolf->data.map_ptr), wolf->data.map_width, wolf->data.map_height, &wolf->player);
 		//const Uint8 *keyboard_state_array = SDL_GetKeyboardState(NULL);
 		//movement(&(wolf->player), &(wolf->sdl), &(wolf->data), keyboard_state_array);
 		//SDL_SetRenderDrawColor(sdl->ren, 255, 255, 255, 255);
 		SDL_UpdateTexture(wolf->sdl.tex, NULL, wolf->data.img_ptr, WIN_WIDTH * sizeof(int));
 		SDL_RenderClear(wolf->sdl.ren);
 		SDL_RenderCopy(wolf->sdl.ren, wolf->sdl.tex, NULL, NULL);
-		SDL_RenderCopy(wolf->sdl.ren, wolf->ttf.message, NULL, &wolf->ttf.rect); //you put the renderer's name first, the Message, the crop size(you can ignore this if you don't want to dabble with cropping), and the rect which is the size and coordinate of your texture
+		SDL_RenderCopy(wolf->sdl.ren, wolf->ttf.message, NULL, &wolf->ttf.rect);
 		SDL_RenderPresent(wolf->sdl.ren);
 		delta_clock = SDL_GetTicks() - start_clock;
 		if (delta_clock != 0)
