@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/15 13:45:39 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/15 14:47:11 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,8 +157,8 @@ void	find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP], int map_width,
 		{
 			if (map[i][j] == 'X')
 			{
-				player->x = j;
-				player->y = i;
+				player->x = j + 0.000001;
+				player->y = i + 0.000001;
 				map[i][j] = 0;
 				return ;
 			}
@@ -185,7 +185,7 @@ void	draw_vertical(int *pixels, int x, int y1, int y2, int color)
 	}
 }
 
-void	print_map(int map[MAX_MAP][MAX_MAP], int width, int height)
+void	print_map(int map[MAX_MAP][MAX_MAP], int width, int height, t_player *player)
 {
 	int i;
 	int j;
@@ -196,7 +196,10 @@ void	print_map(int map[MAX_MAP][MAX_MAP], int width, int height)
 		j = 0;
 		while (j < width)
 		{
-			ft_printf("%d ", map[i][j]);
+			if ((int)player->x == j && (int)player->y == i)
+				ft_printf(". ");
+			else
+				ft_printf("%d ", map[i][j]);
 			j++;
 		}
 		write(1, "\n", 1);
@@ -261,6 +264,7 @@ void	main_loop(t_wolf *wolf)
 		ft_memset(wolf->data.img_ptr, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 		movement(&(wolf->player), &(wolf->data), keyboard_state_array);
 		multithread(wolf);
+		//print_map((*wolf->data.map_ptr), wolf->data.map_width, wolf->data.map_height, &wolf->player);
 		//const Uint8 *keyboard_state_array = SDL_GetKeyboardState(NULL);
 		//movement(&(wolf->player), &(wolf->sdl), &(wolf->data), keyboard_state_array);
 		//SDL_SetRenderDrawColor(sdl->ren, 255, 255, 255, 255);
