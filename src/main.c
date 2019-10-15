@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/15 16:08:30 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/15 17:18:31 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,8 +157,8 @@ void	find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP], int map_width,
 		{
 			if (map[i][j] == 'X')
 			{
-				player->x = j;
-				player->y = i;
+				player->x = j + 0.000001;
+				player->y = i + 0.000001;
 				map[i][j] = 0;
 				return ;
 			}
@@ -185,7 +185,7 @@ void	draw_vertical(int *pixels, int x, int y1, int y2, int color)
 	}
 }
 
-void	print_map(int map[MAX_MAP][MAX_MAP], int width, int height)
+void	print_map(int map[MAX_MAP][MAX_MAP], int width, int height, t_player *player)
 {
 	int i;
 	int j;
@@ -196,7 +196,10 @@ void	print_map(int map[MAX_MAP][MAX_MAP], int width, int height)
 		j = 0;
 		while (j < width)
 		{
-			ft_printf("%d ", map[i][j]);
+			if ((int)player->x == j && (int)player->y == i)
+				ft_printf(". ");
+			else
+				ft_printf("%d ", map[i][j]);
 			j++;
 		}
 		write(1, "\n", 1);
@@ -268,7 +271,7 @@ void	main_loop(t_wolf *wolf)
 		SDL_UpdateTexture(wolf->sdl.tex, NULL, wolf->data.img_ptr, WIN_WIDTH * sizeof(int));
 		SDL_RenderClear(wolf->sdl.ren);
 		SDL_RenderCopy(wolf->sdl.ren, wolf->sdl.tex, NULL, NULL);
-		SDL_RenderCopy(wolf->sdl.ren, wolf->ttf.message, NULL, &wolf->ttf.rect); //you put the renderer's name first, the Message, the crop size(you can ignore this if you don't want to dabble with cropping), and the rect which is the size and coordinate of your texture
+		SDL_RenderCopy(wolf->sdl.ren, wolf->ttf.message, NULL, &wolf->ttf.rect);
 		SDL_RenderPresent(wolf->sdl.ren);
 		delta_clock = SDL_GetTicks() - start_clock;
 		if (delta_clock != 0)

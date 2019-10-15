@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/14 16:53:56 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/15 16:55:52 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	init_TTF(t_ttf *ttf)
 		ft_dprintf(STDERR_FILENO, "TTF_Init Error: %{r}s\n", TTF_GetError());
 		return (EXIT_FAILURE);
 	}
-	if ((ttf->font = TTF_OpenFont("/Library/Fonts/Arial.ttf", 24)) == NULL)
+	if ((ttf->font = TTF_OpenFont("/Library/Fonts/Arial.ttf", 150)) == NULL)
 	{
 		ft_dprintf(STDERR_FILENO, "TTF_OpenFont Error: %{r}s\n", TTF_GetError());
 		return (EXIT_FAILURE);
@@ -56,10 +56,10 @@ int	init_TTF(t_ttf *ttf)
 	ttf->color.g = 0;
 	ttf->color.b = 0;
 	ttf->color.a = 100;
-	ttf->rect.x = 0;
-	ttf->rect.y = 0;
-	ttf->rect.w = WIN_WIDTH / 8;
-	ttf->rect.h = WIN_HEIGHT / 8;
+	ttf->rect.x = WIN_WIDTH / 200;
+	ttf->rect.y = WIN_HEIGHT / 200;
+	ttf->rect.w = WIN_WIDTH / 12;
+	ttf->rect.h = WIN_HEIGHT / 12;
 	return (EXIT_SUCCESS);
 }
 

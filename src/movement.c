@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:52:08 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/14 17:19:49 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/15 14:32:39 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void    movement(t_player *player, t_data *data, const Uint8 *keyboard_state_arr
         {
                 player->up_and_down += 20;
         }
-    if (keyboard_state_array[SDL_SCANCODE_RIGHT] || keyboard_state_array[SDL_SCANCODE_E] || x > 0)
+    if (keyboard_state_array[SDL_SCANCODE_LEFT] || keyboard_state_array[SDL_SCANCODE_Q] || x < 0)
     {
                 rotspeed = -rotspeed;
                 player->x_dir = player->x_dir * cos(rotspeed) - player->y_dir * sin(rotspeed);
@@ -85,7 +85,7 @@ void    movement(t_player *player, t_data *data, const Uint8 *keyboard_state_arr
                 player->cam_vector_x = player->cam_vector_x * cos(rotspeed) - player->cam_vector_y * sin(rotspeed);
                 player->cam_vector_y = save_cam_vector_x * sin(rotspeed) + player->cam_vector_y * cos(rotspeed);
     }
-    if (keyboard_state_array[SDL_SCANCODE_LEFT] || keyboard_state_array[SDL_SCANCODE_Q] || x < 0)
+    if (keyboard_state_array[SDL_SCANCODE_RIGHT] || keyboard_state_array[SDL_SCANCODE_E] || x > 0)
     {
                 player->x_dir = player->x_dir * cos(rotspeed) - player->y_dir * sin(rotspeed);
                 player->y_dir = save_x_dir * sin(rotspeed) + player->y_dir * cos(rotspeed);
