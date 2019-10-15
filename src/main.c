@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/14 18:03:46 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/15 13:45:39 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,7 +259,6 @@ void	main_loop(t_wolf *wolf)
 		wolf->ttf.surf_message = NULL;
 		//ft_memset(pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 		ft_memset(wolf->data.img_ptr, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
-		//raycasting(player, raycast, dda, data);
 		movement(&(wolf->player), &(wolf->data), keyboard_state_array);
 		multithread(wolf);
 		//const Uint8 *keyboard_state_array = SDL_GetKeyboardState(NULL);

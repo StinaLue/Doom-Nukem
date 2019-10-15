@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wolf3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/14 18:42:18 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/15 13:44:13 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ typedef struct			s_raycast
 	int				end_line;
 }						t_raycast;
 
-typedef struct			s_dda
+typedef struct			s_wall_finding
 {
 	double			distance_x_side;
 	double			distance_y_side;
@@ -89,7 +89,7 @@ typedef struct			s_dda
 	int				dir_step_y;
 	int				hit;
 	int				side;
-}						t_dda;
+}						t_wall_finding;
 
 typedef struct			s_wolf
 {
@@ -98,7 +98,7 @@ typedef struct			s_wolf
 	t_data			data;
 	t_player		player;
 	t_raycast		raycast;
-	t_dda			dda;
+	t_wall_finding			find_wall;
 }						t_wolf;
 
 void    init_wolf(t_wolf *wolf, char *title);
@@ -116,14 +116,14 @@ void    verify_bordermap(int const (*map)[MAX_MAP][MAX_MAP], char *title, int ma
 void	free_SDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex);
 void	free_TTF(t_ttf *ttf);
 
-void	ray_init(t_raycast *raycast, t_dda *dda, t_player const *player, int x);
-void	raycasting(t_player const *player, t_raycast *raycast, t_dda *dda, t_data *data, int x);
+void	ray_init(t_raycast *raycast, t_wall_finding *find_wall, t_player const *player, int x);
+void	raycasting(t_player const *player, t_raycast *raycast, t_wall_finding *find_wall, t_data *data, int x);
 void	*iterate_raycast(void *param);
 
-void	dda_init(t_raycast const *raycast, t_dda *dda);
-void	dda_calculation(t_raycast *raycast, t_dda *dda, t_data const *data);
+void	find_wall_init(t_raycast const *raycast, t_wall_finding *find_wall);
+void	find_wall_calculation(t_raycast *raycast, t_wall_finding *find_wall, t_data const *data);
 
-void	height_calculation(t_raycast *raycast, t_dda *dda, int updown, double crouch);
+void	height_calculation(t_raycast *raycast, t_wall_finding *find_wall, int updown, double crouch);
 void	draw_vertical(int *pixels, int x, int y1, int y2, int color);
 
 void	movement(t_player *player, t_data *data, const Uint8 *keyboard_state_array);
