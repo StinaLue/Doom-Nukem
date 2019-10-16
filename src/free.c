@@ -6,14 +6,14 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/14 16:44:33 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/16 14:43:43 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "wolf3d.h"
 
-void	free_SDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
+void	free_sdl(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 {
 	SDL_DestroyTexture(*tex);
 	*tex = NULL;
@@ -24,7 +24,7 @@ void	free_SDL(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 	SDL_Quit();
 }
 
-void	free_TTF(t_ttf *ttf)
+void	free_ttf(t_ttf *ttf)
 {
 	TTF_CloseFont(ttf->font);
 	ttf->font = NULL;

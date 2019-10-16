@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/15 22:56:26 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/16 16:15:48 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-//#include <math.h>
 #include "wolf3d.h"
 
 char	check_line(char *line)
@@ -44,12 +43,13 @@ void	copy_line(char *charline, char *line, int width)
 	}
 }
 
-void	fill_chartab(char chartab[MAX_MAP][MAX_MAP], char *title, int *map_width, int *map_height)
+void	fill_chartab(char chartab[MAX_MAP][MAX_MAP], char *title,
+						int *map_width, int *map_height)
 {
 	char	*line;
-	int	ret;
-	int	fd;
-	int	w;
+	int		ret;
+	int		fd;
+	int		w;
 
 	*map_height = 0;
 	ret = 0;
@@ -102,7 +102,8 @@ void	fill_chartab(char chartab[MAX_MAP][MAX_MAP], char *title, int *map_width, i
 **	Parsing the input file
 */
 
-void	fill_map(int (*map)[MAX_MAP][MAX_MAP], char *title, int *map_width, int *map_height)
+void	fill_map(int (*map)[MAX_MAP][MAX_MAP], char *title,
+					int *map_width, int *map_height)
 {
 	char	chartab[MAX_MAP][MAX_MAP];
 	int		i;
@@ -125,13 +126,14 @@ void	fill_map(int (*map)[MAX_MAP][MAX_MAP], char *title, int *map_width, int *ma
 	}
 }
 
-void	verify_bordermap(int const (*map)[MAX_MAP][MAX_MAP], char *title, int map_width, int map_height)
+void	verify_bordermap(int const (*map)[MAX_MAP][MAX_MAP],
+						char *title, int map_width, int map_height)
 {
 	int i;
 	int j;
 	int k;
 	int l;
-	
+
 	i = 0;
 	j = 0;
 	k = 0;
@@ -147,7 +149,7 @@ void	verify_bordermap(int const (*map)[MAX_MAP][MAX_MAP], char *title, int map_w
 	if (i != map_width || j != map_width || k != map_height || l != map_height)
 	{
 		ft_dprintf(STDERR_FILENO, "map %{r}s is not surrounded by walls (1), exiting...\n", title);
-		exit (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -155,7 +157,8 @@ void	verify_bordermap(int const (*map)[MAX_MAP][MAX_MAP], char *title, int map_w
 **	Verify that the map is surrounded by walls (1)
 */
 
-void	find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP], int map_width, int map_height)
+void	find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP],
+						int map_width, int map_height)
 {
 	int	i;
 	int	j;
@@ -180,7 +183,7 @@ void	find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP], int map_width,
 		i++;
 	}
 	ft_dprintf(STDERR_FILENO, "no suitable starting position found for player, exiting...\n");
-	exit (EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 }
 
 /*
@@ -202,7 +205,8 @@ void	draw_vertical(int *pixels, int x, int y1, int y2, int color)
 	}
 }
 
-void	print_map(int map[MAX_MAP][MAX_MAP], int width, int height, t_player *player)
+void	print_map(int map[MAX_MAP][MAX_MAP], int width,
+					int height, t_player *player)
 {
 	int i;
 	int j;
@@ -240,51 +244,41 @@ void	main_loop(t_wolf *wolf)
 {
 	int		start_clock;
 	int		delta_clock;
-	int		current_FPS;
+	int		current_fps;
 
-	current_FPS = 0;
+	current_fps = 0;
 	fill_tex(wolf->data.texture);
-	//int pixels[WIN_WIDTH * WIN_HEIGHT];
-	//wolf->data.img_ptr = &pixels[0];
 	if ((wolf->data.img_ptr = create_pixel_tab()) == NULL)
 		return ;
-
-	//int	leftMouseButtonDown = 0;
-
 	const Uint8 *keyboard_state = SDL_GetKeyboardState(NULL);
 	SDL_WarpMouseInWindow(wolf->sdl.win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
 	while (!wolf->data.quit)
 	{
-		//SDL_UpdateTexture(sdl->tex, NULL, data->pixels, WIN_WIDTH * sizeof(int));
 		while (SDL_PollEvent(&(wolf->sdl.event)) != 0)
 		{
 			if (wolf->sdl.event.type == SDL_QUIT || (wolf->sdl.event.type == SDL_KEYDOWN && wolf->sdl.event.key.keysym.sym == SDLK_ESCAPE))
 				wolf->data.quit = 1;
 		}
-			start_clock = SDL_GetTicks();
-			wolf->ttf.fps = ft_itoa(current_FPS);
-			
-			if ((wolf->ttf.surf_message = TTF_RenderText_Solid(wolf->ttf.font, wolf->ttf.fps, wolf->ttf.color)) == NULL)
-			{
-				ft_dprintf(STDERR_FILENO, "TTF_RenderText_Solid error = %{r}s\n", TTF_GetError());
-				ft_memdel((void **)&wolf->ttf.fps);
-				return ;
-			}
+		start_clock = SDL_GetTicks();
+		wolf->ttf.fps = ft_itoa(current_fps);
+		
+		if ((wolf->ttf.surf_message = TTF_RenderText_Solid(wolf->ttf.font, wolf->ttf.fps, wolf->ttf.color)) == NULL)
+		{
+			ft_dprintf(STDERR_FILENO, "TTF_RenderText_Solid error = %{r}s\n", TTF_GetError());
 			ft_memdel((void **)&wolf->ttf.fps);
-			if ((wolf->ttf.message = SDL_CreateTextureFromSurface(wolf->sdl.ren, wolf->ttf.surf_message)) == NULL)
-			{
-				ft_dprintf(STDERR_FILENO, "SDL_CreateTextureFromSurface error = %{r}s\n", SDL_GetError());
-				return ;
-			}
+			return ;
+		}
+		ft_memdel((void **)&wolf->ttf.fps);
+		if ((wolf->ttf.message = SDL_CreateTextureFromSurface(wolf->sdl.ren, wolf->ttf.surf_message)) == NULL)
+		{
+			ft_dprintf(STDERR_FILENO, "SDL_CreateTextureFromSurface error = %{r}s\n", SDL_GetError());
+			return ;
+		}
 		SDL_FreeSurface(wolf->ttf.surf_message);
 		wolf->ttf.surf_message = NULL;
-		//ft_memset(pixels, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 		ft_memset(wolf->data.img_ptr, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 		movement(&(wolf->player), &(wolf->data), keyboard_state);
 		multithread(wolf);
-		//const Uint8 *keyboard_state = SDL_GetKeyboardState(NULL);
-		//movement(&(wolf->player), &(wolf->sdl), &(wolf->data), keyboard_state);
-		//SDL_SetRenderDrawColor(sdl->ren, 255, 255, 255, 255);
 		SDL_UpdateTexture(wolf->sdl.tex, NULL, wolf->data.img_ptr, WIN_WIDTH * sizeof(int));
 		SDL_RenderClear(wolf->sdl.ren);
 		SDL_RenderCopy(wolf->sdl.ren, wolf->sdl.tex, NULL, NULL);
@@ -292,9 +286,8 @@ void	main_loop(t_wolf *wolf)
 		SDL_RenderPresent(wolf->sdl.ren);
 		delta_clock = SDL_GetTicks() - start_clock;
 		if (delta_clock != 0)
-			current_FPS = 1000 / delta_clock;
+			current_fps = 1000 / delta_clock;
 		SDL_DestroyTexture(wolf->ttf.message);
-		//printf("%s\n", SDL_GetError());
 		wolf->ttf.message = NULL;
 	}
 }
@@ -321,20 +314,20 @@ int	main(int argc, char *argv[])
 		return (EXIT_FAILURE);
 	}
 	init_wolf(&wolf, argv[1]);
-	if (init_SDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex)) != EXIT_SUCCESS)
+	if (init_sdl(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex)) != EXIT_SUCCESS)
 	{
-		free_SDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
+		free_sdl(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
 		return (EXIT_FAILURE);
 	}
-	if (init_TTF(&(wolf.ttf)) != EXIT_SUCCESS)
+	if (init_ttf(&(wolf.ttf)) != EXIT_SUCCESS)
 	{
-		free_SDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
-		free_TTF(&(wolf.ttf));
+		free_sdl(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
+		free_ttf(&(wolf.ttf));
 		return (EXIT_FAILURE);
 	}
 	main_loop(&wolf);
 	ft_memdel((void *)&wolf.data.img_ptr);
-	free_SDL(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
-	free_TTF(&(wolf.ttf));
+	free_sdl(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
+	free_ttf(&(wolf.ttf));
 	return (EXIT_SUCCESS);
 }
