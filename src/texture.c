@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:47:59 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/16 16:07:06 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/16 16:28:28 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,11 @@ void	fill_tex(int texture[4][TEX_W * TEX_H])
 		while (y < TEX_H)
 		{
 			xorcolor = (x * 256 / TEX_W) ^ (y * 256 / TEX_H);
-			//int xcolor = x * 256 / TEX_W;
-			//int ycolor = y * 256 / TEX_H;
 			xycolor = y * 128 / TEX_H + x * 128 / TEX_W;
-			texture[0][TEX_W * y + x] = 65536 * 254 * (x != y && x != TEX_W - y); //flat red texture with black cross
-			texture[1][TEX_W * y + x] = xycolor + 256 * xycolor + 65536 * xycolor; //sloped greyscale
-			texture[2][TEX_W * y + x] = 256 * xycolor + 65536 * xycolor; //sloped yellow gradient
-			texture[3][TEX_W * y + x] = xorcolor + 256 * xorcolor + 65536 * xorcolor; //xor greyscale
-			//texture[4][TEX_W * y + x] = 256 * xorcolor; //xor green
-			//texture[5][TEX_W * y + x] = 65536 * 192 * (x % 16 && y % 16); //red bricks
-			//texture[6][TEX_W * y + x] = 65536 * ycolor; //red gradient
-			//texture[7][TEX_W * y + x] = 128 + 256 * 128 + 65536 * 128; //flat grey texture
+			texture[0][TEX_W * y + x] = 65536 * 254 * (x != y && x != TEX_W - y);
+			texture[1][TEX_W * y + x] = xycolor + 256 * xycolor + 65536 * xycolor;
+			texture[2][TEX_W * y + x] = 256 * xycolor + 65536 * xycolor;
+			texture[3][TEX_W * y + x] = xorcolor + 256 * xorcolor + 65536 * xorcolor;
 			y++;
 		}
 		x++;
@@ -88,3 +82,4 @@ void	draw_tex(t_player const *player, t_wall_finding *find_wall,
 		data->tex_x = TEX_W - data->tex_x - 1;
 	fill_texel(player, find_wall, raycast, data);
 }
+
