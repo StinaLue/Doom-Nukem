@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:47:59 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/16 16:28:28 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/16 17:44:52 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	fill_texel(t_player const *player, t_wall_finding *find_wall,
 			data->texture[data->tex_num][TEX_H * data->tex_y + data->tex_x];
 		if (find_wall->side == 1)
 			data->color = (data->color >> 1) & 8355711;
-		fill_pix(data->img_ptr, raycast->current_x, y, data->color);
+		fill_pix(data->surftest->pixels, raycast->current_x, y, data->color);
 		y++;
 	}
 }

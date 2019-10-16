@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wolf3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/16 16:13:04 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/16 18:07:21 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct			s_ttf
 typedef struct			s_data
 {
 	int				texture[4][TEX_W * TEX_H];
-	int				*img_ptr;
+	SDL_Surface				*surftest;
 	int				(*map_ptr)[MAX_MAP][MAX_MAP];
 	int				quit;
 	int				map_width;
