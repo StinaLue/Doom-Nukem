@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:35:15 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/17 12:53:31 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/17 21:56:07 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	height_calculation(t_raycast *raycast, t_wall_finding *find_wall,
 					+ (1 - find_wall->dir_step_y) / 2) / raycast->dir_y);
 	raycast->height = ft_absolute((int)(WIN_HEIGHT / find_wall->distance_wall));
 	raycast->start_line = -raycast->height / 2 + WIN_HEIGHT / 2
-						+ updown - crouch * 1.2;
+						+ updown - crouch;
 	raycast->end_line = raycast->height / 2 + WIN_HEIGHT / 2 + updown - crouch;
 	if (raycast->start_line < 0)
 		raycast->start_line = 0;
