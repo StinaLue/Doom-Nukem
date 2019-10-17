@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:47:59 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/17 19:01:30 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/17 19:10:18 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,22 @@ void	fill_tex(int texture[4][TEX_W * TEX_H])
 			texture[1][TEX_W * y + x] = xycolor + 256 * xycolor + 65536 * xycolor;
 			texture[2][TEX_W * y + x] = 256 * xycolor + 65536 * xycolor;
 			texture[3][TEX_W * y + x] = xorcolor + 256 * xorcolor + 65536 * xorcolor;
+			/*
+			//xorcolor = (x * 256 / TEX_W + 453453) >> (y * 256);
+			xorcolor = x * y / TEX_H - 2333 * 128; // NEEDED FOR RAINBOW
+			xycolor = y * 128 / TEX_H + x * 128 / TEX_W;
+			//xycolor = y * 128 / TEX_H + x * 128 / TEX_W; // TRIPPY SQUARES
+			//texture[0][TEX_W * y + x] = 65536 * 254 * (x != y && x != TEX_W - y);
+			//texture[1][TEX_W * y + x] = xycolor + 256 * xycolor + 65536 * xycolor;
+			//texture[2][TEX_W * y + x] = 256 * xycolor + 65536 * xycolor;
+			//texture[3][TEX_W * y + x] = xycolor + 256 * xycolor + 65536 * xycolor;
+			//texture[2][TEX_W * y + x] = xorcolor * xorcolor * 6553;
+			texture[0][TEX_W * y + x] = xycolor + 256 * xycolor;
+			texture[1][TEX_W * y + x] = (xycolor + 256 * xycolor) >> 8;
+			texture[2][TEX_W * y + x] = xorcolor * xorcolor * 655;
+			texture[3][TEX_W * y + x] = xorcolor * xorcolor * 65536; // NEEDED FOR RAINBOW
+			//texture[1][TEX_W * y + x] = (xycolor + 256 * xycolor) << 6; // TRIPPY SQUARES
+			*/
 			y++;
 		}
 		x++;
@@ -120,4 +136,3 @@ void	draw_tex(t_player const *player, t_wall_finding *find_wall,
 		data->tex_x = TEX_W - data->tex_x - 1;
 	fill_texel(player, find_wall, raycast, data);
 }
-

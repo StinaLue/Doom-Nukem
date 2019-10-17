@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/17 17:26:56 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/17 19:10:38 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct			s_data
 	int				tex_x;
 	int				tex_num;
 	int				color;
+	int				fps;
 }						t_data;
 
 typedef struct			s_player

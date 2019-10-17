@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/17 15:42:03 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/17 19:08:24 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,7 +255,7 @@ void	main_loop(t_wolf *wolf)
 	int		delta_clock;
 	int		current_fps;
 
-	current_fps = 0;
+	current_fps = 100;
 	wolf->data.img_ptr = wolf->sdl.surf->pixels;
 	const Uint8 *keyboard_state = SDL_GetKeyboardState(NULL);
 	SDL_WarpMouseInWindow(wolf->sdl.win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
@@ -291,6 +291,7 @@ void	main_loop(t_wolf *wolf)
 		delta_clock = SDL_GetTicks() - start_clock;
 		if (delta_clock != 0)
 			current_fps = 1000 / delta_clock;
+		wolf->data.fps = current_fps;
 	}
 }
 
