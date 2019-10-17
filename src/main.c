@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/17 14:22:43 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/17 15:42:03 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,12 +229,31 @@ void	print_map(int map[MAX_MAP][MAX_MAP], int width,
 	write(1, "\n", 1);
 }
 
+char	*translate_fps(int fps)
+{
+	static char charfps[11];
+	int			i;
+
+	i = 10;
+	if (fps <= 0)
+		return ("0");
+	ft_bzero(charfps, 11);
+	charfps[i] = '\0';
+	i--;
+	while (fps && i)
+	{
+		charfps[i] = (fps % 10) + '0';
+		fps /= 10;
+		i--;
+	}
+	return (&charfps[i + 1]);
+}
+
 void	main_loop(t_wolf *wolf)
 {
 	int		start_clock;
 	int		delta_clock;
 	int		current_fps;
-	char	test_fps[4];
 
 	current_fps = 0;
 	wolf->data.img_ptr = wolf->sdl.surf->pixels;
@@ -248,13 +267,7 @@ void	main_loop(t_wolf *wolf)
 				wolf->data.quit = 1;
 		}
 		start_clock = SDL_GetTicks();
-		test_fps[3] = '\0';
-		test_fps[2] = (current_fps % 10) + '0';
-		current_fps /= 10;
-		test_fps[1] = (current_fps % 10) + '0';
-		current_fps /= 10;
-		test_fps[0] = (current_fps % 10) + '0';
-		wolf->ttf.fps = &test_fps[0];//ft_itoa(current_fps);
+		wolf->ttf.fps = translate_fps(current_fps);
 		
 		if ((wolf->ttf.surf_message = TTF_RenderText_Solid(wolf->ttf.font, wolf->ttf.fps, wolf->ttf.color)) == NULL)
 		{
