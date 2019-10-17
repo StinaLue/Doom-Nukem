@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:47:59 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/17 14:20:11 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/17 16:48:11 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,21 @@ void	fill_texel(t_player const *player, t_wall_finding *find_wall,
 	y = raycast->start_line;
 	while (y < raycast->end_line)
 	{
-		d = y * 256 - WIN_HEIGHT * 128 + raycast->height * 128
-			- (player->up_and_down - player->crouch) * 256;
-		data->tex_y = ((d * TEX_H) / raycast->height) / 256;
+		//d = y * 256 - WIN_HEIGHT * 128 + raycast->height * 128
+		//	- (player->up_and_down - player->crouch) * 256;
+		//data->tex_y = ((d * TEX_H) / raycast->height) / 256;
+		d = y - (WIN_HEIGHT / 2) + (raycast->height / 2)
+			- (player->up_and_down - player->crouch);
+		data->tex_y = ((d * TEX_H) / raycast->height);
+		if (data->tex_y < 0)
+			//printf("((%d * %d) / %d) / 256 = %lld\n", d, TEX_H, raycast->height, data->tex_y);
+			printf("((%d * %d) / %d) = %lld\n", d, TEX_H, raycast->height, data->tex_y);
+		//printf("d = %d and raycast->height = %d\n", d, raycast->height);
+		if (data->tex_y < 0)
+		{
+			printf("HEEEEEERE --> d = %d and raycast->height = %d\n", d, raycast->height);
+			exit(-1);
+		}
 		if (data->tex_x >= 0 && data->tex_y >= 0 && data->tex_x < TEX_W && data->tex_y < TEX_H)
 		{
 			data->color =

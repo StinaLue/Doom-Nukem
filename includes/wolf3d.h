@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/17 14:06:32 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/17 16:45:42 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,13 @@ typedef struct			s_data
 	int				texture[4][TEX_W * TEX_H];
 	Uint32			*img_ptr;
 	int				(*map_ptr)[MAX_MAP][MAX_MAP];
+	long long		tex_y;
 	int				quit;
 	int				map_width;
 	int				map_height;
 	int				start_thread;
 	int				end_thread;
 	int				tex_x;
-	int				tex_y;
 	int				tex_num;
 	int				color;
 }						t_data;
