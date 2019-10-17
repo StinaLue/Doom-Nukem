@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/16 18:07:21 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/17 14:06:32 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@
 typedef struct			s_sdl
 {
 	SDL_Window		*win;
-	SDL_Renderer	*ren;
-	SDL_Texture		*tex;
+	SDL_Surface		*surf;
 	SDL_Event		event;
 }						t_sdl;
 
@@ -38,7 +37,6 @@ typedef struct			s_ttf
 {
 	TTF_Font		*font;
 	SDL_Surface		*surf_message;
-	SDL_Texture		*message;
 	char			*fps;
 	SDL_Color		color;
 	SDL_Rect		rect;
@@ -47,7 +45,7 @@ typedef struct			s_ttf
 typedef struct			s_data
 {
 	int				texture[4][TEX_W * TEX_H];
-	SDL_Surface				*surftest;
+	Uint32			*img_ptr;
 	int				(*map_ptr)[MAX_MAP][MAX_MAP];
 	int				quit;
 	int				map_width;
@@ -126,7 +124,7 @@ void	find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP],
 void	verify_bordermap(int const (*map)[MAX_MAP][MAX_MAP], char *title,
 							int map_width, int map_height);
 
-void	free_sdl(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex);
+void	free_sdl(SDL_Window **win);
 void	free_ttf(t_ttf *ttf);
 
 void	ray_init(t_raycast *raycast, t_wall_finding *find_wall,
@@ -141,17 +139,17 @@ void	find_wall_calculation(t_raycast *raycast, t_wall_finding *find_wall,
 
 void	height_calculation(t_raycast *raycast, t_wall_finding *find_wall,
 							int updown, double crouch);
-void	draw_vertical(int *pixels, int x, int y1, int y2, int color);
+//void	draw_vertical(int *pixels, int x, int y1, int y2, int color);
 
 void	movement(t_player *player, t_data *data, const Uint8 *keyboard_state);
 
-int		init_sdl(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex);
+int		init_sdl(SDL_Window **win, SDL_Surface **surf);
 int		init_ttf(t_ttf *ttf);
 
 void	multithread(t_wolf *wolf);
 
-void	fill_pix(int *pixels, int x, int y, int color);
-void	draw_vertical(int *pixels, int x, int y1, int y2, int color);
+void	fill_pix(Uint32 *pixels, int x, int y, int color);
+void	draw_vertical(Uint32 *pixels, int x, int y1, int y2, int color);
 void	draw_tex(t_player const *player, t_wall_finding *find_wall,
 					t_raycast *raycast, t_data *data);
 

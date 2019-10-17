@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/16 17:42:29 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/17 13:47:34 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,20 @@
 void	init_sdl_struct(t_sdl *sdl)
 {
 	sdl->win = NULL;
-	sdl->ren = NULL;
-	sdl->tex = NULL;
+	sdl->surf = NULL;
 }
 
 void	init_ttf_struct(t_ttf *ttf)
 {
 	ttf->font = NULL;
 	ttf->surf_message = NULL;
-	ttf->message = NULL;
 	ttf->fps = NULL;
 }
 
 void	init_data_struct(t_data *data, char *title)
 {
 	data->quit = 0;
-	//data->img_ptr = NULL;
-	data->surftest = NULL;
+	data->img_ptr = NULL;
 	fill_map(data->map_ptr, title, &(data->map_width), &(data->map_height));
 	verify_bordermap(data->map_ptr, title, data->map_width, data->map_height);
 }

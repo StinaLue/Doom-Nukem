@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/16 18:07:05 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/17 14:22:43 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,13 +190,13 @@ void	find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP],
 **	Function that searches for the player (X) in the map.
 */
 
-void	fill_pix(int *pixels, int x, int y, int color)
+void	fill_pix(Uint32 *pixels, int x, int y, int color)
 {
 	if (x < WIN_WIDTH && y < WIN_HEIGHT && x > 0 && y > 0)
 		pixels[x + y * WIN_WIDTH] = color;
 }
 
-void	draw_vertical(int *pixels, int x, int y1, int y2, int color)
+void	draw_vertical(Uint32 *pixels, int x, int y1, int y2, int color)
 {
 	while (y1 < y2)
 	{
@@ -229,28 +229,15 @@ void	print_map(int map[MAX_MAP][MAX_MAP], int width,
 	write(1, "\n", 1);
 }
 
-int	*create_pixel_tab(void)
-{
-	int *ptr;
-
-	ptr = NULL;
-	if ((ptr = (int *)malloc(sizeof(int) * WIN_WIDTH * WIN_HEIGHT)) == NULL)
-		return (NULL);
-	ft_memset(ptr, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
-	return (ptr);
-}
-
 void	main_loop(t_wolf *wolf)
 {
 	int		start_clock;
 	int		delta_clock;
 	int		current_fps;
+	char	test_fps[4];
 
 	current_fps = 0;
-	fill_tex(wolf->data.texture);
-	//if ((wolf->data.img_ptr = create_pixel_tab()) == NULL)
-	//	return ;
-	wolf->data.surftest = SDL_GetWindowSurface(wolf->sdl.win);
+	wolf->data.img_ptr = wolf->sdl.surf->pixels;
 	const Uint8 *keyboard_state = SDL_GetKeyboardState(NULL);
 	SDL_WarpMouseInWindow(wolf->sdl.win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
 	while (!wolf->data.quit)
@@ -261,37 +248,36 @@ void	main_loop(t_wolf *wolf)
 				wolf->data.quit = 1;
 		}
 		start_clock = SDL_GetTicks();
-		wolf->ttf.fps = ft_itoa(current_fps);
+		test_fps[3] = '\0';
+		test_fps[2] = (current_fps % 10) + '0';
+		current_fps /= 10;
+		test_fps[1] = (current_fps % 10) + '0';
+		current_fps /= 10;
+		test_fps[0] = (current_fps % 10) + '0';
+		wolf->ttf.fps = &test_fps[0];//ft_itoa(current_fps);
 		
 		if ((wolf->ttf.surf_message = TTF_RenderText_Solid(wolf->ttf.font, wolf->ttf.fps, wolf->ttf.color)) == NULL)
 		{
 			ft_dprintf(STDERR_FILENO, "TTF_RenderText_Solid error = %{r}s\n", TTF_GetError());
-			ft_memdel((void **)&wolf->ttf.fps);
 			return ;
 		}
-		ft_memdel((void **)&wolf->ttf.fps);
-		//if ((wolf->ttf.message = SDL_CreateTextureFromSurface(wolf->sdl.ren, wolf->ttf.surf_message)) == NULL)
-		//{
-		//	ft_dprintf(STDERR_FILENO, "SDL_CreateTextureFromSurface error = %{r}s\n", SDL_GetError());
-		//	return ;
-		//}
-		//SDL_FreeSurface(wolf->ttf.surf_message);
-		//wolf->ttf.surf_message = NULL;
-		//ft_memset(wolf->data.img_ptr, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 		movement(&(wolf->player), &(wolf->data), keyboard_state);
 		multithread(wolf);
-		SDL_BlitSurface(wolf->ttf.surf_message, NULL, wolf->data.surftest, NULL);
-		//SDL_UpdateTexture(wolf->sdl.tex, NULL, wolf->data.img_ptr, WIN_WIDTH * sizeof(int));
-		//SDL_RenderClear(wolf->sdl.ren);
-		//SDL_RenderCopy(wolf->sdl.ren, wolf->sdl.tex, NULL, NULL);
-		//SDL_RenderCopy(wolf->sdl.ren, wolf->ttf.message, NULL, &wolf->ttf.rect);
-		//SDL_RenderPresent(wolf->sdl.ren);
-		SDL_UpdateWindowSurface(wolf->sdl.win);
+		if ((SDL_BlitSurface(wolf->ttf.surf_message, NULL, wolf->sdl.surf, NULL)) < 0)
+		{
+			ft_dprintf(STDERR_FILENO, "SDL_BlitSurface error = %{r}s\n", SDL_GetError());
+			return ;
+		}
+		SDL_FreeSurface(wolf->ttf.surf_message);
+		wolf->ttf.surf_message = NULL;
+		if ((SDL_UpdateWindowSurface(wolf->sdl.win)) < 0)
+		{
+			ft_dprintf(STDERR_FILENO, "SDL_UpdateWindowSurface error = %{r}s\n", SDL_GetError());
+			return ;
+		}
 		delta_clock = SDL_GetTicks() - start_clock;
 		if (delta_clock != 0)
 			current_fps = 1000 / delta_clock;
-		SDL_DestroyTexture(wolf->ttf.message);
-		wolf->ttf.message = NULL;
 	}
 }
 
@@ -316,21 +302,21 @@ int	main(int argc, char *argv[])
 		ft_printf("max nb of threads = %{r}s, you chose %{r}d\n", "50", NB_THREADS);
 		return (EXIT_FAILURE);
 	}
+	fill_tex(wolf.data.texture);
 	init_wolf(&wolf, argv[1]);
-	if (init_sdl(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex)) != EXIT_SUCCESS)
+	if (init_sdl(&(wolf.sdl.win), &(wolf.sdl.surf)) != EXIT_SUCCESS)
 	{
-		free_sdl(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
+		free_sdl(&(wolf.sdl.win));
 		return (EXIT_FAILURE);
 	}
 	if (init_ttf(&(wolf.ttf)) != EXIT_SUCCESS)
 	{
-		free_sdl(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
+		free_sdl(&(wolf.sdl.win));
 		free_ttf(&(wolf.ttf));
 		return (EXIT_FAILURE);
 	}
 	main_loop(&wolf);
-	//ft_memdel((void *)&wolf.data.img_ptr);
-	free_sdl(&(wolf.sdl.win), &(wolf.sdl.ren), &(wolf.sdl.tex));
+	free_sdl(&(wolf.sdl.win));
 	free_ttf(&(wolf.ttf));
 	return (EXIT_SUCCESS);
 }

@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/16 16:36:09 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/17 12:42:47 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "wolf3d.h"
 
-int	init_sdl(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
+int	init_sdl(SDL_Window **win, SDL_Surface **surf)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
@@ -26,15 +26,9 @@ int	init_sdl(SDL_Window **win, SDL_Renderer **ren, SDL_Texture **tex)
 		ft_dprintf(STDERR_FILENO, "SDL_CreateWindow Error: %{r}s\n", SDL_GetError());
 		return (EXIT_FAILURE);
 	}
-	if ((*ren = SDL_CreateRenderer(*win, -1, SDL_RENDERER_SOFTWARE)) == NULL)
+	if ((*surf = SDL_GetWindowSurface(*win)) == NULL)
 	{
-		ft_dprintf(STDERR_FILENO, "SDL_CreateRenderer Error: %{r}s\n", SDL_GetError());
-		return (EXIT_FAILURE);
-	}
-	if ((*tex = SDL_CreateTexture(*ren, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING,
-			WIN_WIDTH, WIN_HEIGHT)) == NULL)
-	{
-		ft_dprintf(STDERR_FILENO, "SDL_CreateTexture Error: %{r}s\n", SDL_GetError());
+		ft_dprintf(STDERR_FILENO, "SDL_GetWindowSurface Error: %{r}s\n", SDL_GetError());
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:47:59 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/16 17:44:52 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/17 14:20:11 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,16 @@ void	fill_texel(t_player const *player, t_wall_finding *find_wall,
 		d = y * 256 - WIN_HEIGHT * 128 + raycast->height * 128
 			- (player->up_and_down - player->crouch) * 256;
 		data->tex_y = ((d * TEX_H) / raycast->height) / 256;
-		data->color =
-			data->texture[data->tex_num][TEX_H * data->tex_y + data->tex_x];
+		if (data->tex_x >= 0 && data->tex_y >= 0 && data->tex_x < TEX_W && data->tex_y < TEX_H)
+		{
+			data->color =
+				data->texture[data->tex_num][TEX_H * data->tex_y + data->tex_x];
 		if (find_wall->side == 1)
 			data->color = (data->color >> 1) & 8355711;
-		fill_pix(data->surftest->pixels, raycast->current_x, y, data->color);
+		fill_pix(data->img_ptr, raycast->current_x, y, data->color);
+		}
+		else
+			fill_pix(data->img_ptr, raycast->current_x, y, 0x000000);
 		y++;
 	}
 }

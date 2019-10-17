@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:35:15 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/16 17:44:29 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/17 12:53:31 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ void	raycasting(t_player const *player, t_raycast *raycast,
 	find_wall_calculation(raycast, find_wall, data);
 	height_calculation(raycast, find_wall, player->up_and_down, player->crouch);
 	draw_tex(player, find_wall, raycast, data);
-	draw_vertical(data->surftest->pixels, raycast->current_x,
+	draw_vertical(data->img_ptr, raycast->current_x,
 					raycast->end_line, WIN_HEIGHT, 0x808080);
-	draw_vertical(data->surftest->pixels, raycast->current_x, 0,
+	draw_vertical(data->img_ptr, raycast->current_x, 0,
 					raycast->start_line, 0x87CEFA);
 }
 
