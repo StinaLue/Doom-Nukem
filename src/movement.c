@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:52:08 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/16 15:21:25 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/17 15:46:00 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	crouch_and_view(t_player *player, const Uint8 *keyboard_state, int y)
 		player->up_and_down += 20;
 }
 
-void	rotate(t_player *player, const Uint8 *keyboard_state, int x)
+void	rotate(t_player *player, const Uint8 *keyboard_state, int x, int fps)
 {
 	double save_x_dir;
 	double save_cam_vector_x;
@@ -86,7 +86,8 @@ void	rotate(t_player *player, const Uint8 *keyboard_state, int x)
 	save_x_dir = player->x_dir;
 	save_cam_vector_x = player->cam_vector_x;
 	rotspeed = ((keyboard_state[SDL_SCANCODE_LEFT] ||
-				keyboard_state[SDL_SCANCODE_Q] || x < 0) ? -0.06 : 0.06);
+				keyboard_state[SDL_SCANCODE_Q] || x < 0) ? 5 / (-fps + 0.00001)
+				: 5 / (fps + 0.00001));
 	if ((keyboard_state[SDL_SCANCODE_LEFT] || keyboard_state[SDL_SCANCODE_Q]
 		|| x < 0) || (keyboard_state[SDL_SCANCODE_RIGHT]
 		|| keyboard_state[SDL_SCANCODE_E] || x > 0))
@@ -110,11 +111,14 @@ void	movement(t_player *player, t_data *data, const Uint8 *keyboard_state)
 
 	x = 0;
 	y = 0;
-	speed = (player->crouch > 0 ? 0.02 : 0.05);
+	//printf("fps: %d\n", data->current_fps);
+	speed = (player->crouch > 0 ? 5 / (data->fps + 0.00001) : 6 / (data->fps + 0.00001));
+	//	speed = 5 / (data->fps + 0.00001);
+	//printf("speed %f\n", speed);
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	SDL_GetRelativeMouseState(&x, &y);
 	walk_straight(data, player, speed, keyboard_state);
 	walk_sidewards(data, player, speed, keyboard_state);
 	crouch_and_view(player, keyboard_state, y);
-	rotate(player, keyboard_state, x);
+	rotate(player, keyboard_state, x, data->fps);
 }

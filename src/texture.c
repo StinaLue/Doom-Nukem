@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:47:59 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/16 17:44:52 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/17 18:53:44 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,20 @@ void	fill_tex(int texture[4][TEX_W * TEX_H])
 		y = 0;
 		while (y < TEX_H)
 		{
-			xorcolor = (x * 256 / TEX_W) ^ (y * 256 / TEX_H);
+			//xorcolor = (x * 256 / TEX_W + 453453) >> (y * 256);
+			xorcolor = x * y / TEX_H - 2333 * 128; // NEEDED FOR RAINBOW
 			xycolor = y * 128 / TEX_H + x * 128 / TEX_W;
-			texture[0][TEX_W * y + x] = 65536 * 254 * (x != y && x != TEX_W - y);
-			texture[1][TEX_W * y + x] = xycolor + 256 * xycolor + 65536 * xycolor;
-			texture[2][TEX_W * y + x] = 256 * xycolor + 65536 * xycolor;
-			texture[3][TEX_W * y + x] = xorcolor + 256 * xorcolor + 65536 * xorcolor;
+			//xycolor = y * 128 / TEX_H + x * 128 / TEX_W; // TRIPPY SQUARES
+			//texture[0][TEX_W * y + x] = 65536 * 254 * (x != y && x != TEX_W - y);
+			//texture[1][TEX_W * y + x] = xycolor + 256 * xycolor + 65536 * xycolor;
+			//texture[2][TEX_W * y + x] = 256 * xycolor + 65536 * xycolor;
+			//texture[3][TEX_W * y + x] = xycolor + 256 * xycolor + 65536 * xycolor;
+			//texture[2][TEX_W * y + x] = xorcolor * xorcolor * 6553;
+			texture[0][TEX_W * y + x] = xycolor + 256 * xycolor;
+			texture[1][TEX_W * y + x] = (xycolor + 256 * xycolor) >> 8;
+			texture[2][TEX_W * y + x] = xorcolor * xorcolor * 655;
+			texture[3][TEX_W * y + x] = xorcolor * xorcolor * 65536; // NEEDED FOR RAINBOW
+			//texture[1][TEX_W * y + x] = (xycolor + 256 * xycolor) << 6; // TRIPPY SQUARES
 			y++;
 		}
 		x++;
@@ -55,7 +63,12 @@ void	fill_texel(t_player const *player, t_wall_finding *find_wall,
 			data->texture[data->tex_num][TEX_H * data->tex_y + data->tex_x];
 		if (find_wall->side == 1)
 			data->color = (data->color >> 1) & 8355711;
-		fill_pix(data->surftest->pixels, raycast->current_x, y, data->color);
+		fill_pix(data->surftest->pixels, raycast->current_x, y, data->color);/* 
+		if (data->tex_y < 0 || data->tex_y >= TEX_H)
+		{
+			printf("height: %d d: %d\n", raycast->height, d);
+			exit(0);
+		} */
 		y++;
 	}
 }
@@ -82,4 +95,3 @@ void	draw_tex(t_player const *player, t_wall_finding *find_wall,
 		data->tex_x = TEX_W - data->tex_x - 1;
 	fill_texel(player, find_wall, raycast, data);
 }
-

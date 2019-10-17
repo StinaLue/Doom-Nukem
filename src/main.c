@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/16 18:07:05 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/17 15:30:24 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,7 +246,7 @@ void	main_loop(t_wolf *wolf)
 	int		delta_clock;
 	int		current_fps;
 
-	current_fps = 0;
+	current_fps = 100;
 	fill_tex(wolf->data.texture);
 	//if ((wolf->data.img_ptr = create_pixel_tab()) == NULL)
 	//	return ;
@@ -270,26 +270,14 @@ void	main_loop(t_wolf *wolf)
 			return ;
 		}
 		ft_memdel((void **)&wolf->ttf.fps);
-		//if ((wolf->ttf.message = SDL_CreateTextureFromSurface(wolf->sdl.ren, wolf->ttf.surf_message)) == NULL)
-		//{
-		//	ft_dprintf(STDERR_FILENO, "SDL_CreateTextureFromSurface error = %{r}s\n", SDL_GetError());
-		//	return ;
-		//}
-		//SDL_FreeSurface(wolf->ttf.surf_message);
-		//wolf->ttf.surf_message = NULL;
-		//ft_memset(wolf->data.img_ptr, 255, WIN_WIDTH * WIN_HEIGHT * sizeof(int));
 		movement(&(wolf->player), &(wolf->data), keyboard_state);
 		multithread(wolf);
 		SDL_BlitSurface(wolf->ttf.surf_message, NULL, wolf->data.surftest, NULL);
-		//SDL_UpdateTexture(wolf->sdl.tex, NULL, wolf->data.img_ptr, WIN_WIDTH * sizeof(int));
-		//SDL_RenderClear(wolf->sdl.ren);
-		//SDL_RenderCopy(wolf->sdl.ren, wolf->sdl.tex, NULL, NULL);
-		//SDL_RenderCopy(wolf->sdl.ren, wolf->ttf.message, NULL, &wolf->ttf.rect);
-		//SDL_RenderPresent(wolf->sdl.ren);
 		SDL_UpdateWindowSurface(wolf->sdl.win);
 		delta_clock = SDL_GetTicks() - start_clock;
 		if (delta_clock != 0)
 			current_fps = 1000 / delta_clock;
+		wolf->data.fps = current_fps;
 		SDL_DestroyTexture(wolf->ttf.message);
 		wolf->ttf.message = NULL;
 	}
