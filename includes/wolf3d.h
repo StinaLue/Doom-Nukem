@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/17 16:45:42 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/17 17:26:56 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 # define MAX_LOOK_DOWN -400
 # define MAX_LOOK_UP 400
 
-# define TEX_W 64
-# define TEX_H 64
+# define TEX_W 128//64
+# define TEX_H 128//64
 
 typedef struct			s_sdl
 {
