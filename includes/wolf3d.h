@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/18 02:18:04 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/18 04:40:27 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,8 @@ void	verify_bordermap(int const (*map)[MAX_MAP][MAX_MAP], char *title,
 
 void	free_sdl(SDL_Window **win);
 void	free_ttf(t_ttf *ttf);
+int		free_sdl_quit(SDL_Window **win);
+int		free_sdl_ttf_quit(SDL_Window **win, t_ttf *ttf);
 
 void	ray_init(t_raycast *raycast, t_wall_finding *find_wall,
 					t_player const *player);
@@ -157,5 +159,34 @@ void	draw_tex(t_player const *player, t_wall_finding *find_wall,
 void	fill_tex(int texture[8][TEX_W * TEX_H]);
 
 int		is_valid_wall(int wall);
+
+char	check_line(char *line);
+void    check_title(char *title);
+void    check_badwidth_map(int width, int mapwidth, void **line, int fd);
+void    check_badheight_map(int height, int fd, char *title);
+
+void	copy_line(char *charline, char *line, int width);
+
+void    open_error(char *title);
+
+void    invalid_char_error(char badchar, void **line, int fd);
+
+char	*translate_fps(int fps);
+
+
+
+void    open_error(char *title);
+
+void    invalid_char_error(char badchar, void **line, int fd);
+
+int		argc_error();
+
+int		size_error();
+
+int		nbthreads_error();
+
+int		init_fps_surf(t_ttf *ttf, int current_fps, int *start_clock);
+
+void	update_fps(int *delta_clock, int *start_clock, int *current_fps, int *wolf_fps);
 
 #endif

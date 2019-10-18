@@ -6,12 +6,41 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/17 12:42:47 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/18 03:25:54 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "wolf3d.h"
+
+void	find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP],
+						int map_width, int map_height)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	player->x = 0;
+	player->y = 0;
+	while (i < map_height)
+	{
+		j = 0;
+		while (j < map_width)
+		{
+			if (map[i][j] == 'X')
+			{
+				player->x = j + 0.000001;
+				player->y = i + 0.000001;
+				map[i][j] = 0;
+				return ;
+			}
+			j++;
+		}
+		i++;
+	}
+	ft_dprintf(STDERR_FILENO, "no suitable starting position found for player, exiting...\n");
+	exit(EXIT_FAILURE);
+}
 
 int	init_sdl(SDL_Window **win, SDL_Surface **surf)
 {

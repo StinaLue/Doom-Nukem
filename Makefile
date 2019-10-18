@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2019/10/16 15:53:19 by sluetzen         ###   ########.fr        #
+#    Updated: 2019/10/18 04:41:24 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,13 @@ SOURCES_LIST = main.c \
 	       movement.c \
 	       multithreading.c \
 	       raycasting.c \
-		   texture.c
+		   texture.c \
+		   parsing.c \
+		   error_handling.c \
+		   drawing.c \
+		   checking.c \
+		   handle_fps.c \
+		   utils.c
 
 SOURCES = $(addprefix $(SOURCES_DIRECTORY), $(SOURCES_LIST))
 
