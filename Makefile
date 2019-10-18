@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2019/10/18 04:41:24 by afonck           ###   ########.fr        #
+#    Updated: 2019/10/18 13:35:17 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -126,10 +126,18 @@ $(LIBFT):
 clean:
 	@$(MAKE) -sC $(LIBFT_DIRECTORY) clean
 	@rm -rf $(OBJECTS_DIRECTORY)
+	@rm -rf $(SDL2_LIB_DIRECTORY)build
+	@rm -rf $(SDL2TTF_LIB_DIRECTORY)build
 	@echo "$(NAME): $(RED)$(OBJECTS_DIRECTORY) was deleted$(RESET)"
 	@echo "$(NAME): $(RED)object files were deleted$(RESET)"
+	@echo "$(NAME): $(RED)$(SDL2_LIB_DIRECTORY)build was deleted$(RESET)"
+	@echo "$(NAME): $(RED)$(SDL2TTF_LIB_DIRECTORY)build was deleted$(RESET)"
+	@echo "$(NAME): $(RED)SDL2 and SDL2TTF object files were deleted$(RESET)"
 
 fclean: clean
+	@rm -rf $(SDL2_LIB_DIRECTORY)
+	@rm -rf $(SDL2TTF_LIB_DIRECTORY)
+	@echo "$(NAME): $(RED)SDL2 and SDL2TTF was deleted$(RESET)"
 	@rm -f $(LIBFT)
 	@echo "$(NAME): $(RED)$(LIBFT) was deleted$(RESET)"
 	@rm -f $(NAME)
