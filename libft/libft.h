@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/07 19:03:56 by afonck            #+#    #+#             */
-/*   Updated: 2019/10/18 02:39:12 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/18 12:03:30 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 # include "ft_printf/includes/ft_printf.h"
 # define BUFF_SIZE 8
 
-int                             ft_printf(const char *fmt, ...);
+int					ft_printf(const char *fmt, ...);
 
-int                             ft_dprintf(int fd, const char *fmt, ...);
+int					ft_dprintf(int fd, const char *fmt, ...);
 
 int					get_next_line(const int fd, char **line);
 

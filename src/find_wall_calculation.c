@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   find_wall_calculation.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:50:27 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/18 02:43:35 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/18 13:06:50 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "wolf3d.h"
 
-void	find_wall_init(t_raycast const *raycast, t_wall_finding *find_wall)
+void	find_wall_init(t_raycast const *raycast, t_wall_find *find_wall)
 {
 	find_wall->dist_x_to_x = ft_absfloat(1 / (raycast->dir_x != 0 ?
 							raycast->dir_x : 0.00001));
@@ -23,7 +23,7 @@ void	find_wall_init(t_raycast const *raycast, t_wall_finding *find_wall)
 	find_wall->side = 0;
 	find_wall->dir_step_x = (raycast->dir_x < 0 ? -1 : 1);
 	find_wall->dir_step_y = (raycast->dir_y < 0 ? -1 : 1);
-	 if (raycast->dir_y < 0)
+	if (raycast->dir_y < 0)
 		find_wall->distance_y_side =
 				find_wall->dist_y_to_y * (raycast->pos_y - raycast->map_y);
 	else
@@ -37,14 +37,15 @@ void	find_wall_init(t_raycast const *raycast, t_wall_finding *find_wall)
 				find_wall->dist_x_to_x * (raycast->map_x + 1 - raycast->pos_x);
 }
 
-void	find_wall_calculation(t_raycast *raycast, t_wall_finding *find_wall,
+void	find_wall_calculation(t_raycast *raycast, t_wall_find *find_wall,
 								t_data const *data)
 {
 	while (find_wall->hit == 0 && raycast->map_x < data->map_width && \
 			raycast->map_y < data->map_height && raycast->map_x > 0 && \
 			raycast->map_y > 0)
 	{
-		find_wall->side = (find_wall->distance_x_side > find_wall->distance_y_side ? Y_SIDE : X_SIDE);
+		find_wall->side = (find_wall->distance_x_side > \
+			find_wall->distance_y_side ? Y_SIDE : X_SIDE);
 		if (find_wall->distance_x_side > find_wall->distance_y_side)
 		{
 			find_wall->distance_y_side += find_wall->dist_y_to_y;
@@ -55,7 +56,8 @@ void	find_wall_calculation(t_raycast *raycast, t_wall_finding *find_wall,
 			find_wall->distance_x_side += find_wall->dist_x_to_x;
 			raycast->map_x += find_wall->dir_step_x;
 		}
-		if (is_valid_wall((*data->map_ptr)[raycast->map_y][raycast->map_x]) == 1)
+		if (is_valid_wall((*data->map_ptr)[raycast->map_y][raycast->map_x]) \
+			== 1)
 			find_wall->hit = 1;
 	}
 }

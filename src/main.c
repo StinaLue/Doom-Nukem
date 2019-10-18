@@ -6,42 +6,38 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/18 04:41:01 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/18 13:12:49 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "wolf3d.h"
 
-/*
-**	Checks which values the map has.
-**	1 = wall, 0 = walkable space, X = position of player
-*/
-
-/*
-**	Verify that the map is surrounded by walls (1)
-*/
-
-
-/*
-**	Function that searches for the player (X) in the map.
-*/
-
-int		blit_and_update(SDL_Surface **fps, SDL_Surface **screen, SDL_Window **win)
+int		blit_and_update(SDL_Surface **fps, SDL_Surface **screen, \
+			SDL_Window **win)
 {
 	if ((SDL_BlitSurface(*fps, NULL, *screen, NULL)) < 0)
 	{
-		ft_dprintf(STDERR_FILENO, "SDL_BlitSurface error = %{r}s\n", SDL_GetError());
+		ft_dprintf(STDERR_FILENO, "SDL_BlitSurface error = %{r}s\n", \
+			SDL_GetError());
 		return (-1);
 	}
 	SDL_FreeSurface(*fps);
 	*fps = NULL;
 	if ((SDL_UpdateWindowSurface(*win)) < 0)
-	{			
-		ft_dprintf(STDERR_FILENO, "SDL_UpdateWindowSurface error = %{r}s\n", SDL_GetError());
+	{
+		ft_dprintf(STDERR_FILENO, "SDL_UpdateWindowSurface error = %{r}s\n", \
+			SDL_GetError());
 		return (-1);
 	}
 	return (0);
+}
+
+void	check_quit(SDL_Event *event, int *quit)
+{
+	if (event->type == SDL_QUIT || (event->type == SDL_KEYDOWN && \
+		event->key.keysym.sym == SDLK_ESCAPE))
+		*quit = 1;
 }
 
 void	main_loop(t_wolf *wolf)
@@ -49,7 +45,7 @@ void	main_loop(t_wolf *wolf)
 	int			start_clock;
 	int			delta_clock;
 	int			current_fps;
-	const Uint8	*keyboard_state;
+	const Uint8 *keyboard_state;
 
 	current_fps = 100;
 	wolf->data.img_ptr = wolf->sdl.surf->pixels;
@@ -58,63 +54,38 @@ void	main_loop(t_wolf *wolf)
 	while (!wolf->data.quit)
 	{
 		while (SDL_PollEvent(&(wolf->sdl.event)) != 0)
-		{
-			if (wolf->sdl.event.type == SDL_QUIT || (wolf->sdl.event.type == SDL_KEYDOWN && wolf->sdl.event.key.keysym.sym == SDLK_ESCAPE))
-				wolf->data.quit = 1;
-		}
+			check_quit(&(wolf->sdl.event), &(wolf->data.quit));
 		if (init_fps_surf(&(wolf->ttf), current_fps, &start_clock) == -1)
 			return ;
-		//start_clock = SDL_GetTicks();
-		//wolf->ttf.fps = translate_fps(current_fps);
-		
-		//if ((wolf->ttf.surf_message = TTF_RenderText_Solid(wolf->ttf.font, wolf->ttf.fps, wolf->ttf.color)) == NULL)
-		//{
-		//	ft_dprintf(STDERR_FILENO, "TTF_RenderText_Solid error = %{r}s\n", TTF_GetError());
-		//	return ;
-		//}
 		movement(&(wolf->player), &(wolf->data), keyboard_state);
 		multithread(wolf);
-		if ((blit_and_update(&(wolf->ttf.surf_message), &(wolf->sdl.surf), &(wolf->sdl.win))) == -1)
+		if ((blit_and_update(&(wolf->ttf.surf_message), &(wolf->sdl.surf), \
+			&(wolf->sdl.win))) == -1)
 			return ;
-		//if ((SDL_BlitSurface(wolf->ttf.surf_message, NULL, wolf->sdl.surf, NULL)) < 0)
-		//{
-		//	ft_dprintf(STDERR_FILENO, "SDL_BlitSurface error = %{r}s\n", SDL_GetError());
-		//	return ;
-		//}
-		//SDL_FreeSurface(wolf->ttf.surf_message);
-		//wolf->ttf.surf_message = NULL;
-		//if ((SDL_UpdateWindowSurface(wolf->sdl.win)) < 0)
-		//{
-		//	ft_dprintf(STDERR_FILENO, "SDL_UpdateWindowSurface error = %{r}s\n", SDL_GetError());
-		//	return ;
-		//}
-		//delta_clock = SDL_GetTicks() - start_clock;
-		//if (delta_clock != 0)
-			//current_fps = 1000 / delta_clock;
-		//wolf->data.fps = current_fps;
 		update_fps(&delta_clock, &start_clock, &current_fps, &wolf->data.fps);
 	}
 }
 
-int	main(int argc, char *argv[])
+int		main(int argc, char *argv[])
 {
 	t_wolf	wolf;
 	int		map[MAX_MAP][MAX_MAP];
 
 	wolf.data.map_ptr = &map;
 	if (argc != 2)
-		return(argc_error());
-	if (MAX_MAP > 100 || WIN_WIDTH > 1920 || WIN_HEIGHT > 1080 || MAX_MAP < 10 || WIN_WIDTH < 100 || WIN_HEIGHT < 100)
-		return(size_error());
-	if (NB_THREADS > 50 || NB_THREADS < 1)
-		return(nbthreads_error());
+		return (argc_error());
+	if (MAX_MAP > 100 || WIN_WIDTH > 1920 || WIN_HEIGHT > 1080 || MAX_MAP < 10 \
+		|| WIN_WIDTH < 100 || WIN_HEIGHT < 100)
+		return (size_error());
+	if (NB_THREADS > 10 || NB_THREADS < 1)
+		return (nbthreads_error());
 	check_title(argv[1]);
 	fill_tex(wolf.data.texture);
 	init_wolf(&wolf, argv[1]);
 	if (init_sdl(&(wolf.sdl.win), &(wolf.sdl.surf)) != EXIT_SUCCESS)
-		return(free_sdl_quit(&(wolf.sdl.win)));
+		return (free_sdl_quit(&(wolf.sdl.win)));
 	if (init_ttf(&(wolf.ttf)) != EXIT_SUCCESS)
-		return(free_sdl_ttf_quit(&(wolf.sdl.win), &(wolf.ttf)));
+		return (free_sdl_ttf_quit(&(wolf.sdl.win), &(wolf.ttf)));
 	main_loop(&wolf);
 	free_sdl(&(wolf.sdl.win));
 	free_ttf(&(wolf.ttf));

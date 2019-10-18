@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:52:08 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/18 01:50:59 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/18 12:57:56 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,10 +111,8 @@ void	movement(t_player *player, t_data *data, const Uint8 *keyboard_state)
 
 	x = 0;
 	y = 0;
-	//printf("fps: %d\n", data->current_fps);
-	speed = (player->crouch > 0 ? 5 / (data->fps + 0.00001) : 6 / (data->fps + 0.00001));
-	//	speed = 5 / (data->fps + 0.00001);
-	//printf("speed %f\n", speed);
+	speed = (player->crouch > 0 ? 5 / (data->fps + 0.00001) : 6 / \
+		(data->fps + 0.00001));
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	SDL_GetRelativeMouseState(&x, &y);
 	walk_straight(data, player, speed, keyboard_state);

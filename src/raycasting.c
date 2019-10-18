@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:35:15 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/18 03:24:07 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/18 13:09:48 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	ray_init(t_raycast *raycast, t_player const *player)
 	raycast->end_line = 0;
 }
 
-void	height_calculation(t_raycast *raycast, t_wall_finding *find_wall,
+void	height_calculation(t_raycast *raycast, t_wall_find *find_wall,
 							int updown, double crouch)
 {
 	if (find_wall->side == X_SIDE)
@@ -48,17 +48,14 @@ void	height_calculation(t_raycast *raycast, t_wall_finding *find_wall,
 }
 
 void	raycasting(t_player const *player, t_raycast *raycast,
-					t_wall_finding *find_wall, t_data *data)
+					t_wall_find *find_wall, t_data *data)
 {
 	ray_init(raycast, player);
 	find_wall_init(raycast, find_wall);
 	find_wall_calculation(raycast, find_wall, data);
 	height_calculation(raycast, find_wall, player->up_and_down, player->crouch);
 	draw_tex(player, find_wall, raycast, data);
-	draw_vertical(data->img_ptr, raycast->current_x,
-					raycast->end_line, WIN_HEIGHT, 0x808080);
-	draw_vertical(data->img_ptr, raycast->current_x, 0,
-					raycast->start_line, 0x87CEFA);
+	draw_wall_and_floor(data->img_ptr, raycast);
 }
 
 void	*iterate_raycast(void *param)
@@ -75,7 +72,3 @@ void	*iterate_raycast(void *param)
 	}
 	return (NULL);
 }
-
-/*
-**	Do the raycasting for all the threads
-*/

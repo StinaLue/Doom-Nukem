@@ -6,66 +6,69 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 03:29:54 by afonck            #+#    #+#             */
-/*   Updated: 2019/10/18 03:46:49 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/18 12:21:19 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "wolf3d.h"
 
-void    check_title(char *title)
+void	check_title(char *title)
 {
-    int len;
-    int bad_title;
+	int len;
+	int bad_title;
 
-    bad_title = 0;
-    len = ft_strlen(title);
-    len -= 1;
-    if (len < 4)
-    {
-        ft_dprintf(STDERR_FILENO, "%{r}s is not a valid map name\n", title);
-        exit(EXIT_FAILURE);
-    }
-    if (title[len--] != 'd')
-        bad_title = 1;
-    if (title[len--] != '3')
-        bad_title = 1;
-    if (title[len--] != 'w')
-        bad_title = 1;
-    if (title[len] != '.')
-        bad_title = 1;
-    if (bad_title == 1)
-    {
-        ft_dprintf(STDERR_FILENO, "%{r}s is not a valid map name\n", title);
-        exit(EXIT_FAILURE);
-    }
+	bad_title = 0;
+	len = ft_strlen(title);
+	len -= 1;
+	if (len < 4)
+	{
+		ft_dprintf(STDERR_FILENO, "%{r}s is not a valid map name\n", title);
+		exit(EXIT_FAILURE);
+	}
+	if (title[len--] != 'd')
+		bad_title = 1;
+	if (title[len--] != '3')
+		bad_title = 1;
+	if (title[len--] != 'w')
+		bad_title = 1;
+	if (title[len] != '.')
+		bad_title = 1;
+	if (bad_title == 1)
+	{
+		ft_dprintf(STDERR_FILENO, "%{r}s is not a valid map name\n", title);
+		exit(EXIT_FAILURE);
+	}
 }
 
-void    check_badwidth_map(int width, int mapwidth, void **line, int fd)
+void	check_badwidth_map(int width, int mapwidth, void **line, int fd)
 {
-    if (width != mapwidth)
-    {
-		ft_dprintf(STDERR_FILENO, "your map is uneven, only rectangles or squares are allowed\n");
+	if (width != mapwidth)
+	{
+		ft_dprintf(STDERR_FILENO, "your map is uneven, only rectangles or \
+			squares are allowed\n");
 		ft_memdel(line);
 		close(fd);
 		exit(EXIT_FAILURE);
-    }
-    if (width >= MAX_MAP)
-    {
-		ft_dprintf(STDERR_FILENO, "your map is too big, please modify MAP_MAX to %{b}d\n", width);
+	}
+	if (width >= MAX_MAP)
+	{
+		ft_dprintf(STDERR_FILENO, "your map is too big, please modify MAP_MAX \
+			to %{b}d\n", width);
 		ft_memdel(line);
 		close(fd);
 		exit(EXIT_FAILURE);
-    }
+	}
 }
 
-void    check_badheight_map(int height, int fd, char *title)
+void	check_badheight_map(int height, int fd, char *title)
 {
 	if ((close(fd)) == -1)
 		ft_dprintf(STDERR_FILENO, "Error while closing %{r}s\n", title);
 	if (height >= MAX_MAP)
 	{
-		ft_dprintf(STDERR_FILENO, "%{r}s is too big, please modify MAP_MAX to %{b}d\n", title, height);
+		ft_dprintf(STDERR_FILENO, "%{r}s is too big, please modify MAP_MAX \
+			to %{b}d\n", title, height);
 		exit(EXIT_FAILURE);
 	}
 }
@@ -84,7 +87,7 @@ char	check_line(char *line)
 }
 
 void	verify_bordermap(int const (*map)[MAX_MAP][MAX_MAP],
-						char *title, int map_width, int map_height)
+			char *title, int map_width, int map_height)
 {
 	int i;
 	int j;
@@ -105,7 +108,8 @@ void	verify_bordermap(int const (*map)[MAX_MAP][MAX_MAP],
 		l++;
 	if (i != map_width || j != map_width || k != map_height || l != map_height)
 	{
-		ft_dprintf(STDERR_FILENO, "map %{r}s is not surrounded by walls (1 / 2), exiting...\n", title);
+		ft_dprintf(STDERR_FILENO, "map %{r}s is not surrounded by walls \
+			(1 / 2), exiting...\n", title);
 		exit(EXIT_FAILURE);
 	}
 }

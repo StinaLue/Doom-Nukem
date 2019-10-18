@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:47:59 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/18 02:41:40 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/18 13:23:39 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 #include "wolf3d.h"
 #include <math.h>
 
-void	fill_tex_loop(int tex[TEX_W * TEX_H], char raw[(TEX_W * TEX_H) * 4], char buf[5])
+void	fill_tex_loop(int tex[TEX_W * TEX_H], char raw[(TEX_W * TEX_H) * 4], \
+			char buf[5])
 {
 	int tex_index;
 	int	x;
@@ -76,29 +77,19 @@ void	fill_tex(int texture[8][TEX_W * TEX_H])
 		y = 0;
 		while (y < TEX_H)
 		{
-			//xorcolor = (x * 256 / TEX_W) ^ (y * 256 / TEX_H);
-			//xycolor = y * 128 / TEX_H + x * 128 / TEX_W;
-			//xorcolor = (x * 256 / TEX_W + 453453) >> (y * 256);
-			xorcolor = x * y / TEX_H - 2333 * 128; // NEEDED FOR RAINBOW
-			//xycolor = y * 128 / TEX_H + x * 128 / TEX_W;
-			xycolor = y * 128 / TEX_H + x * 128 / TEX_W; // TRIPPY SQUARES
-			//texture[0][TEX_W * y + x] = 65536 * 254 * (x != y && x != TEX_W - y);
-			//texture[1][TEX_W * y + x] = xycolor + 256 * xycolor + 65536 * xycolor;
-			//texture[2][TEX_W * y + x] = 256 * xycolor + 65536 * xycolor;
-			//texture[3][TEX_W * y + x] = xycolor + 256 * xycolor + 65536 * xycolor;
-			//texture[2][TEX_W * y + x] = xorcolor * xorcolor * 6553;
+			xorcolor = x * y / TEX_H - 2333 * 128;
+			xycolor = y * 128 / TEX_H + x * 128 / TEX_W;
 			texture[4][TEX_W * y + x] = xycolor + 256 * xycolor;
 			texture[5][TEX_W * y + x] = (xycolor + 256 * xycolor) >> 8;
 			texture[6][TEX_W * y + x] = xorcolor * xorcolor * 655;
-			texture[7][TEX_W * y + x] = xorcolor * xorcolor * 65536; // NEEDED FOR RAINBOW
-			//texture[1][TEX_W * y + x] = (xycolor + 256 * xycolor) << 6; // TRIPPY SQUARES
+			texture[7][TEX_W * y + x] = xorcolor * xorcolor * 65536;
 			y++;
 		}
 		x++;
 	}
 }
 
-void	fill_texel(t_player const *player, t_wall_finding *find_wall,
+void	fill_texel(t_player const *player, t_wall_find *find_wall,
 					t_raycast *raycast, t_data *data)
 {
 	int		d;
@@ -107,28 +98,18 @@ void	fill_texel(t_player const *player, t_wall_finding *find_wall,
 	y = raycast->start_line;
 	while (y < raycast->end_line)
 	{
-		//d = y * 256 - WIN_HEIGHT * 128 + raycast->height * 128
-		//	- (player->up_and_down - player->crouch) * 256;
-		//data->tex_y = ((d * TEX_H) / raycast->height) / 256;
 		d = y - (WIN_HEIGHT / 2) + (raycast->height / 2)
 			- (player->up_and_down - player->crouch);
 		data->tex_y = (((d / 2) * (TEX_H / 2)) / (raycast->height / 2));
-		//if (data->tex_y < 0)
-			//printf("((%d * %d) / %d) / 256 = %lld\n", d, TEX_H, raycast->height, data->tex_y);
-			//printf("((%d * %d) / %d) = %lld\n", d, TEX_H, raycast->height, data->tex_y);
-		//printf("d = %d and raycast->height = %d\n", d, raycast->height);
-		//if (data->tex_y * 2 < 0)
-		//{
-		//	printf("HEEEEEERE --> d = %d and raycast->height = %d\n", d, raycast->height);
-		//	exit(-1);
-		//}
-		if (data->tex_x >= 0 && data->tex_y * 2 >= 0 && data->tex_x < TEX_W && data->tex_y < TEX_H)
+		if (data->tex_x >= 0 && data->tex_y * 2 >= 0 && data->tex_x < TEX_W && \
+			data->tex_y < TEX_H)
 		{
 			data->color =
-				data->texture[data->tex_num][TEX_H * (data->tex_y * 2) + data->tex_x];
-		if (find_wall->side == 1)
-			data->color = (data->color >> 1) & 8355711;
-		fill_pix(data->img_ptr, raycast->current_x, y, data->color);
+				data->texture[data->tex_num][TEX_H * (data->tex_y * 2) \
+					+ data->tex_x];
+			if (find_wall->side == 1)
+				data->color = (data->color >> 1) & 8355711;
+			fill_pix(data->img_ptr, raycast->current_x, y, data->color);
 		}
 		else
 			fill_pix(data->img_ptr, raycast->current_x, y, 0x000000);
@@ -136,14 +117,14 @@ void	fill_texel(t_player const *player, t_wall_finding *find_wall,
 	}
 }
 
-void	draw_tex(t_player const *player, t_wall_finding *find_wall,
-					t_raycast *raycast, t_data *data)
+void	draw_tex(t_player const *player, t_wall_find *find_wall, \
+			t_raycast *raycast, t_data *data)
 {
 	double	wallx;
 	int		offset;
 
 	offset = (*data->map_ptr)[raycast->map_y][raycast->map_x] == 2 ? 4 : 0;
-	if ((*data->map_ptr)[raycast->map_y][raycast->map_x] == 1)
+	if ((is_valid_wall((*data->map_ptr)[raycast->map_y][raycast->map_x])) == 1)
 		data->tex_num = 0 + offset;
 	if (find_wall->side == 0 && player->x < raycast->map_x)
 		data->tex_num = 1 + offset;

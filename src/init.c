@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/18 03:25:54 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/18 12:46:10 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 #include "wolf3d.h"
 
 void	find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP],
-						int map_width, int map_height)
+			int map_width, int map_height)
 {
-	int	i;
-	int	j;
+	int i;
+	int j;
 
 	i = 0;
 	player->x = 0;
@@ -38,11 +38,12 @@ void	find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP],
 		}
 		i++;
 	}
-	ft_dprintf(STDERR_FILENO, "no suitable starting position found for player, exiting...\n");
+	ft_dprintf(STDERR_FILENO, "no suitable starting position found for player, \
+		exiting...\n");
 	exit(EXIT_FAILURE);
 }
 
-int	init_sdl(SDL_Window **win, SDL_Surface **surf)
+int		init_sdl(SDL_Window **win, SDL_Surface **surf)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
@@ -50,20 +51,23 @@ int	init_sdl(SDL_Window **win, SDL_Surface **surf)
 		return (EXIT_FAILURE);
 	}
 	if ((*win = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, \
-			SDL_WINDOWPOS_UNDEFINED, WIN_WIDTH, WIN_HEIGHT, SDL_WINDOW_SHOWN)) == NULL)
+		SDL_WINDOWPOS_UNDEFINED, WIN_WIDTH, WIN_HEIGHT, SDL_WINDOW_SHOWN)) \
+		== NULL)
 	{
-		ft_dprintf(STDERR_FILENO, "SDL_CreateWindow Error: %{r}s\n", SDL_GetError());
+		ft_dprintf(STDERR_FILENO, "SDL_CreateWindow Error: %{r}s\n", \
+			SDL_GetError());
 		return (EXIT_FAILURE);
 	}
 	if ((*surf = SDL_GetWindowSurface(*win)) == NULL)
 	{
-		ft_dprintf(STDERR_FILENO, "SDL_GetWindowSurface Error: %{r}s\n", SDL_GetError());
+		ft_dprintf(STDERR_FILENO, "SDL_GetWindowSurface Error: %{r}s\n", \
+			SDL_GetError());
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }
 
-int	init_ttf(t_ttf *ttf)
+int		init_ttf(t_ttf *ttf)
 {
 	if (TTF_Init() != 0)
 	{
@@ -73,7 +77,7 @@ int	init_ttf(t_ttf *ttf)
 	if ((ttf->font = TTF_OpenFont("/Library/Fonts/Arial.ttf", 150)) == NULL)
 	{
 		ft_dprintf(STDERR_FILENO, "TTF_OpenFont Error: %{r}s\n",
-						TTF_GetError());
+			TTF_GetError());
 		return (EXIT_FAILURE);
 	}
 	ttf->color.r = 0;
@@ -93,6 +97,6 @@ void	init_wolf(t_wolf *wolf, char *title)
 	init_ttf_struct(&(wolf->ttf));
 	init_data_struct(&(wolf->data), title);
 	init_player_struct(&(wolf->player), *(wolf->data.map_ptr),
-						wolf->data.map_width, wolf->data.map_height);
+		wolf->data.map_width, wolf->data.map_height);
 	init_raycast_struct(&(wolf->raycast), wolf->player.x, wolf->player.y);
 }
