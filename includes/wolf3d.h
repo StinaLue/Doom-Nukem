@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   wolf3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
 /*   Updated: 2019/10/18 04:40:27 by afonck           ###   ########.fr       */
@@ -16,12 +16,14 @@
 # include "SDL.h"
 # include "SDL_ttf.h"
 # define TITLE "WOLF3D"
-# define WIN_WIDTH 1920
-# define WIN_HEIGHT 1080
-# define NB_THREADS 6
+# define WIN_WIDTH 500
+# define WIN_HEIGHT 500
+# define NB_THREADS 1
 # define MAX_MAP 100
 # define MAX_LOOK_DOWN -400
 # define MAX_LOOK_UP 400
+# define X_SIDE	0
+# define Y_SIDE 1
 
 # define TEX_W 128//64
 # define TEX_H 128//64
@@ -65,8 +67,8 @@ typedef struct			s_player
 	double			y;
 	double			x_dir;
 	double			y_dir;
-	double			cam_vector_x;
-	double			cam_vector_y;
+	double			fov_x;
+	double			fov_y;
 	double			crouch;
 	int				up_and_down;
 }						t_player;
@@ -75,7 +77,7 @@ typedef struct			s_raycast
 {
 	int				map_x;
 	int				map_y;
-	double			cam_x;
+	double			camera;
 	double			pos_x;
 	double			pos_y;
 	double			dir_x;
@@ -130,8 +132,7 @@ void	free_ttf(t_ttf *ttf);
 int		free_sdl_quit(SDL_Window **win);
 int		free_sdl_ttf_quit(SDL_Window **win, t_ttf *ttf);
 
-void	ray_init(t_raycast *raycast, t_wall_finding *find_wall,
-					t_player const *player);
+void	ray_init(t_raycast *raycast, t_player const *player);
 void	raycasting(t_player const *player, t_raycast *raycast,
 					t_wall_finding *find_wall, t_data *data);
 void	*iterate_raycast(void *param);

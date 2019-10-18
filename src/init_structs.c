@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/17 13:47:34 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/18 01:50:24 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ void	init_player_struct(t_player *player, int map[MAX_MAP][MAX_MAP],
 	find_player_pos(player, map, map_width, map_height);
 	player->x_dir = 1;
 	player->y_dir = 0;
-	player->cam_vector_x = 0;
-	player->cam_vector_y = 0.66;
+	player->fov_x = 0;
+	player->fov_y = 0.66;
 	player->up_and_down = 0;
 	player->crouch = 0;
 }
