@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:52:08 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/17 15:46:00 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/18 01:50:59 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,20 @@ void	walk_sidewards(t_data *data, t_player *player,
 	if (keyboard_state[SDL_SCANCODE_D])
 	{
 		if ((*data->map_ptr)[(int)(player->y
-			+ player->cam_vector_y * speed)][(int)player->x] == 0)
-			player->y += player->cam_vector_y * speed;
+			+ player->fov_y * speed)][(int)player->x] == 0)
+			player->y += player->fov_y * speed;
 		if ((*data->map_ptr)[(int)player->y][(int)(player->x
-			+ player->cam_vector_x * speed)] == 0)
-			player->x += player->cam_vector_x * speed;
+			+ player->fov_x * speed)] == 0)
+			player->x += player->fov_x * speed;
 	}
 	if (keyboard_state[SDL_SCANCODE_A])
 	{
 		if ((*data->map_ptr)[(int)(player->y
-			- player->cam_vector_y * speed)][(int)player->x] == 0)
-			player->y -= player->cam_vector_y * speed;
+			- player->fov_y * speed)][(int)player->x] == 0)
+			player->y -= player->fov_y * speed;
 		if ((*data->map_ptr)[(int)player->y][(int)(player->x
-			- player->cam_vector_x * speed)] == 0)
-			player->x -= player->cam_vector_x * speed;
+			- player->fov_x * speed)] == 0)
+			player->x -= player->fov_x * speed;
 	}
 }
 
@@ -80,11 +80,11 @@ void	crouch_and_view(t_player *player, const Uint8 *keyboard_state, int y)
 void	rotate(t_player *player, const Uint8 *keyboard_state, int x, int fps)
 {
 	double save_x_dir;
-	double save_cam_vector_x;
+	double save_fov_x;
 	double rotspeed;
 
 	save_x_dir = player->x_dir;
-	save_cam_vector_x = player->cam_vector_x;
+	save_fov_x = player->fov_x;
 	rotspeed = ((keyboard_state[SDL_SCANCODE_LEFT] ||
 				keyboard_state[SDL_SCANCODE_Q] || x < 0) ? 5 / (-fps + 0.00001)
 				: 5 / (fps + 0.00001));
@@ -96,10 +96,10 @@ void	rotate(t_player *player, const Uint8 *keyboard_state, int x, int fps)
 						- player->y_dir * sin(rotspeed);
 		player->y_dir = save_x_dir * sin(rotspeed)
 						+ player->y_dir * cos(rotspeed);
-		player->cam_vector_x = player->cam_vector_x * cos(rotspeed)
-						- player->cam_vector_y * sin(rotspeed);
-		player->cam_vector_y = save_cam_vector_x * sin(rotspeed)
-						+ player->cam_vector_y * cos(rotspeed);
+		player->fov_x = player->fov_x * cos(rotspeed)
+						- player->fov_y * sin(rotspeed);
+		player->fov_y = save_fov_x * sin(rotspeed)
+						+ player->fov_y * cos(rotspeed);
 	}
 }
 
