@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 02:43:20 by afonck            #+#    #+#             */
-/*   Updated: 2019/10/18 12:59:58 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/18 17:44:43 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ void	fill_chartab(char chartab[MAX_MAP][MAX_MAP], char *title,
 		ft_memdel((void **)&line);
 		(*map_height)++;
 	}
+	if (ret < 0)
+		exit(EXIT_FAILURE);
 	ft_memdel((void **)&line);
 	check_badheight_map(*map_height, fd, title);
 }
