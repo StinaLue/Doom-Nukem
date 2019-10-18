@@ -6,39 +6,13 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:47:59 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/18 02:03:23 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/18 02:41:40 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "wolf3d.h"
 #include <math.h>
-
-int		ft_hextodeci(const char *str, int len, int hexflag)
-{
-	int x;
-	int i;
-	int factor;
-
-	x = 0;
-	i = 0;
-	factor = 1;
-	if (hexflag == 1)
-		i += 2;
-	len -= 1;
-	while (len >= i)
-	{
-		if (str[len] >= 97 && str[len] <= 122)
-			x += (str[len] - 87) * factor;
-		else if (str[len] >= 65 && str[len] <= 90)
-			x += (str[len] - 55) * factor;
-		else
-			x += (str[len] - '0') * factor;
-		factor *= 16;
-		len--;
-	}
-	return (x);
-}
 
 void	fill_tex_loop(int tex[TEX_W * TEX_H], char raw[(TEX_W * TEX_H) * 4], char buf[5])
 {
@@ -48,8 +22,6 @@ void	fill_tex_loop(int tex[TEX_W * TEX_H], char raw[(TEX_W * TEX_H) * 4], char b
 
 	tex_index = 0;
 	x = 0;
-	//ft_bzero(buf, 5);
-	//buf[4] = '\0';
 	while (x < TEX_W)
 	{
 		y = 0;
@@ -95,7 +67,6 @@ void	fill_tex(int texture[8][TEX_W * TEX_H])
 	int xorcolor;
 
 	x = 0;
-	//printf("%s\n", test);
 	load_tex("textures/friends1.txt", texture[0]);
 	load_tex("textures/friends2.txt", texture[1]);
 	load_tex("textures/friends3.txt", texture[2]);

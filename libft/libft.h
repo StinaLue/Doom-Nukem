@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/07 19:03:56 by afonck            #+#    #+#             */
-/*   Updated: 2019/07/08 16:15:21 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/18 02:39:12 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -432,6 +432,13 @@ long long			ft_atol(const char *str);
 /*
 ** converts possible portion of the string str to a long long | returns the
 ** converted long long
+*/
+
+int					ft_hextodeci(const char *str, int len, int hexflag);
+/*
+** converts the hex string str of length len into an int, the hexflag needs
+** to be precised --> 1 if str starts by "0x", 0 otherwise | returns the
+** converted int
 */
 
 char				*ft_itoa(int n);
