@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/17 19:10:38 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/18 02:18:04 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef struct			s_ttf
 
 typedef struct			s_data
 {
-	int				texture[4][TEX_W * TEX_H];
+	int				texture[8][TEX_W * TEX_H];
 	Uint32			*img_ptr;
 	int				(*map_ptr)[MAX_MAP][MAX_MAP];
 	long long		tex_y;
@@ -154,6 +154,8 @@ void	draw_vertical(Uint32 *pixels, int x, int y1, int y2, int color);
 void	draw_tex(t_player const *player, t_wall_finding *find_wall,
 					t_raycast *raycast, t_data *data);
 
-void	fill_tex(int texture[4][TEX_W * TEX_H]);
+void	fill_tex(int texture[8][TEX_W * TEX_H]);
+
+int		is_valid_wall(int wall);
 
 #endif

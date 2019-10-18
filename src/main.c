@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/17 19:08:24 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/18 02:19:32 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	check_line(char *line)
 		return ('\0');
 	while (*line != '\0')
 	{
-		if (*line != '0' && *line != '1' && *line != 'X')
+		if (*line != '0' && *line != '1' && *line != '2' && *line != 'X')
 			return (*line);
 		line++;
 	}
@@ -90,7 +90,8 @@ void	fill_chartab(char chartab[MAX_MAP][MAX_MAP], char *title,
 		(*map_height)++;
 	}
 	ft_memdel((void **)&line);
-	close(fd);
+	if ((close(fd)) == -1)
+		ft_dprintf(STDERR_FILENO, "Error while closing %{r}s\n", title);
 	if (*map_height >= MAX_MAP)
 	{
 		ft_dprintf(STDERR_FILENO, "%{r}s is too big, please modify MAP_MAX to %{b}d\n", title, *map_height);
@@ -126,6 +127,13 @@ void	fill_map(int (*map)[MAX_MAP][MAX_MAP], char *title,
 	}
 }
 
+int		is_valid_wall(int wall)
+{
+	if (wall == 1 || wall == 2)
+		return (1);
+	return (0);
+}
+
 void	verify_bordermap(int const (*map)[MAX_MAP][MAX_MAP],
 						char *title, int map_width, int map_height)
 {
@@ -138,17 +146,17 @@ void	verify_bordermap(int const (*map)[MAX_MAP][MAX_MAP],
 	j = 0;
 	k = 0;
 	l = 0;
-	while ((*map)[0][i] == 1 && i < map_width)
+	while (is_valid_wall((*map)[0][i]) == 1 && i < map_width)
 		i++;
-	while ((*map)[map_height - 1][j] == 1 && j < map_width)
+	while (is_valid_wall((*map)[map_height - 1][j]) == 1 && j < map_width)
 		j++;
-	while ((*map)[k][0] == 1 && k < map_height)
+	while (is_valid_wall((*map)[k][0]) == 1 && k < map_height)
 		k++;
-	while ((*map)[l][map_width - 1] == 1 && l < map_height)
+	while (is_valid_wall((*map)[l][map_width - 1]) == 1 && l < map_height)
 		l++;
 	if (i != map_width || j != map_width || k != map_height || l != map_height)
 	{
-		ft_dprintf(STDERR_FILENO, "map %{r}s is not surrounded by walls (1), exiting...\n", title);
+		ft_dprintf(STDERR_FILENO, "map %{r}s is not surrounded by walls (1 / 2), exiting...\n", title);
 		exit(EXIT_FAILURE);
 	}
 }

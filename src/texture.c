@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:47:59 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/17 19:10:18 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/18 02:03:23 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,62 +14,113 @@
 #include "wolf3d.h"
 #include <math.h>
 
-void	fill_tex(int texture[4][TEX_W * TEX_H])
+int		ft_hextodeci(const char *str, int len, int hexflag)
 {
 	int x;
-	int y;
-	int	xycolor;
-	int xorcolor;
-	int fd;
-	int	texindex = 0;
-	char test[(TEX_W * TEX_H) * 4];
-	char buf[5];
-	unsigned char *access;
+	int i;
+	int factor;
 
 	x = 0;
-	fd = open("/Users/afonck/Desktop/gitperso/Wolf3d/textures/friends2.txt", O_RDONLY);
-	read(fd, test, (TEX_W * TEX_H) * 4);
-	//printf("%s\n", test);
+	i = 0;
+	factor = 1;
+	if (hexflag == 1)
+		i += 2;
+	len -= 1;
+	while (len >= i)
+	{
+		if (str[len] >= 97 && str[len] <= 122)
+			x += (str[len] - 87) * factor;
+		else if (str[len] >= 65 && str[len] <= 90)
+			x += (str[len] - 55) * factor;
+		else
+			x += (str[len] - '0') * factor;
+		factor *= 16;
+		len--;
+	}
+	return (x);
+}
+
+void	fill_tex_loop(int tex[TEX_W * TEX_H], char raw[(TEX_W * TEX_H) * 4], char buf[5])
+{
+	int tex_index;
+	int	x;
+	int y;
+
+	tex_index = 0;
+	x = 0;
+	//ft_bzero(buf, 5);
+	//buf[4] = '\0';
 	while (x < TEX_W)
 	{
 		y = 0;
 		while (y < TEX_H)
 		{
-			ft_bzero(buf, 5);
-			buf[4] = '\0';
-			ft_strncpy(buf, &test[texindex], 4);
-			//printf("%s\n", buf);
-			texindex += 4;
-			xorcolor = (x * 256 / TEX_W) ^ (y * 256 / TEX_H);
-			xycolor = y * 128 / TEX_H + x * 128 / TEX_W;
-			texture[0][TEX_W * y + x] = (int)strtol(buf, NULL, 0);//65536 * 254 * (x != y && x != TEX_W - y);//ft_itoa(test[TEX_W * y + x]
-			texture[0][TEX_W * y + x] += texture[0][TEX_W * y + x] << 8;
-			texture[0][TEX_W * y + x] += texture[0][TEX_W * y + x] << 16;
-			texture[0][TEX_W * y + x] += texture[0][TEX_W * y + x] << 24;
-			access = (unsigned char *)&(texture[0][TEX_W * y + x]);
-			*(access + 2) = 0x55;
-			printf("%x %x %x %x\n", *access, *(access + 1), *(access + 2), *(access + 3));
-			printf("%x\n", texture[0][TEX_W * y + x]);
-			//printf("%d\n", texture[0][TEX_W * y + x]);
-			texture[1][TEX_W * y + x] = xycolor + 256 * xycolor + 65536 * xycolor;
-			texture[2][TEX_W * y + x] = 256 * xycolor + 65536 * xycolor;
-			texture[3][TEX_W * y + x] = xorcolor + 256 * xorcolor + 65536 * xorcolor;
-			/*
+			ft_strncpy(buf, &raw[tex_index], 4);
+			tex[TEX_W * y + x] = ft_hextodeci(buf, 4, 1);
+			tex[TEX_W * y + x] += tex[TEX_W * y + x] << 8;
+			tex[TEX_W * y + x] += tex[TEX_W * y + x] << 16;
+			tex_index += 4;
+			y++;
+		}
+		x++;
+	}
+}
+
+void	load_tex(char *path, int texture[TEX_W * TEX_H])
+{
+	int		fd;
+	char	raw[(TEX_W * TEX_H) * 4];
+	char	buf[5];
+
+	if ((fd = open(path, O_RDONLY | O_NOFOLLOW)) == -1)
+	{
+		ft_dprintf(STDERR_FILENO, "texture file could not be opened\n");
+		exit(EXIT_FAILURE);
+	}
+	if ((read(fd, raw, (TEX_W * TEX_H) * 4)) == -1)
+	{
+		ft_dprintf(STDERR_FILENO, "Error while reading texture file\n");
+		exit(EXIT_FAILURE);
+	}
+	if ((close(fd)) == -1)
+		ft_dprintf(STDERR_FILENO, "Error while closing texture file\n");
+	fill_tex_loop(texture, raw, buf);
+}
+
+void	fill_tex(int texture[8][TEX_W * TEX_H])
+{
+	int x;
+	int y;
+	int	xycolor;
+	int xorcolor;
+
+	x = 0;
+	//printf("%s\n", test);
+	load_tex("textures/friends1.txt", texture[0]);
+	load_tex("textures/friends2.txt", texture[1]);
+	load_tex("textures/friends3.txt", texture[2]);
+	load_tex("textures/friends4.txt", texture[3]);
+	while (x < TEX_W)
+	{
+		y = 0;
+		while (y < TEX_H)
+		{
+			//xorcolor = (x * 256 / TEX_W) ^ (y * 256 / TEX_H);
+			//xycolor = y * 128 / TEX_H + x * 128 / TEX_W;
 			//xorcolor = (x * 256 / TEX_W + 453453) >> (y * 256);
 			xorcolor = x * y / TEX_H - 2333 * 128; // NEEDED FOR RAINBOW
-			xycolor = y * 128 / TEX_H + x * 128 / TEX_W;
-			//xycolor = y * 128 / TEX_H + x * 128 / TEX_W; // TRIPPY SQUARES
+			//xycolor = y * 128 / TEX_H + x * 128 / TEX_W;
+			xycolor = y * 128 / TEX_H + x * 128 / TEX_W; // TRIPPY SQUARES
 			//texture[0][TEX_W * y + x] = 65536 * 254 * (x != y && x != TEX_W - y);
 			//texture[1][TEX_W * y + x] = xycolor + 256 * xycolor + 65536 * xycolor;
 			//texture[2][TEX_W * y + x] = 256 * xycolor + 65536 * xycolor;
 			//texture[3][TEX_W * y + x] = xycolor + 256 * xycolor + 65536 * xycolor;
 			//texture[2][TEX_W * y + x] = xorcolor * xorcolor * 6553;
-			texture[0][TEX_W * y + x] = xycolor + 256 * xycolor;
-			texture[1][TEX_W * y + x] = (xycolor + 256 * xycolor) >> 8;
-			texture[2][TEX_W * y + x] = xorcolor * xorcolor * 655;
-			texture[3][TEX_W * y + x] = xorcolor * xorcolor * 65536; // NEEDED FOR RAINBOW
+			texture[4][TEX_W * y + x] = xycolor + 256 * xycolor;
+			texture[5][TEX_W * y + x] = (xycolor + 256 * xycolor) >> 8;
+			texture[6][TEX_W * y + x] = xorcolor * xorcolor * 655;
+			texture[7][TEX_W * y + x] = xorcolor * xorcolor * 65536; // NEEDED FOR RAINBOW
 			//texture[1][TEX_W * y + x] = (xycolor + 256 * xycolor) << 6; // TRIPPY SQUARES
-			*/
 			y++;
 		}
 		x++;
@@ -118,13 +169,15 @@ void	draw_tex(t_player const *player, t_wall_finding *find_wall,
 					t_raycast *raycast, t_data *data)
 {
 	double	wallx;
+	int		offset;
 
+	offset = (*data->map_ptr)[raycast->map_y][raycast->map_x] == 2 ? 4 : 0;
 	if ((*data->map_ptr)[raycast->map_y][raycast->map_x] == 1)
-		data->tex_num = 0;
+		data->tex_num = 0 + offset;
 	if (find_wall->side == 0 && player->x < raycast->map_x)
-		data->tex_num = 1;
+		data->tex_num = 1 + offset;
 	if (find_wall->side == 1)
-		data->tex_num = (player->y < raycast->map_y ? 2 : 3);
+		data->tex_num = (player->y < raycast->map_y ? 2 + offset : 3 + offset);
 	if (find_wall->side == 0)
 		wallx = player->y + find_wall->distance_wall * raycast->dir_y;
 	else
