@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 02:43:20 by afonck            #+#    #+#             */
-/*   Updated: 2019/10/18 17:44:43 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/19 16:51:17 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@ void	fill_chartab(char chartab[MAX_MAP][MAX_MAP], char *title,
 	{
 		if (check_line(line) != '0')
 			invalid_char_error(check_line(line), (void **)&line, fd);
-		if (*map_height == 0)
-			w = ft_strlen(line);
+		w = (*map_height == 0 ? ft_strlen(line) : *map_height);
+		//if (*map_height == 0)
+		//	w = ft_strlen(line);
 		*map_width = ft_strlen(line);
 		check_badwidth_map(*map_width, w, (void **)&line, fd);
 		copy_line(chartab[*map_height], line, *map_width);
