@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:35:15 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/18 13:09:48 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/26 12:20:40 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "wolf3d.h"
+#include "doom.h"
 #include <math.h>
 
 void	ray_init(t_raycast *raycast, t_player const *player)
@@ -60,15 +60,15 @@ void	raycasting(t_player const *player, t_raycast *raycast,
 
 void	*iterate_raycast(void *param)
 {
-	t_wolf	*wolf;
+	t_doom	*doom;
 
-	wolf = (t_wolf *)param;
-	wolf->raycast.current_x = wolf->data.start_thread;
-	while (wolf->raycast.current_x < wolf->data.end_thread)
+	doom = (t_doom *)param;
+	doom->raycast.current_x = doom->data.start_thread;
+	while (doom->raycast.current_x < doom->data.end_thread)
 	{
-		raycasting(&(wolf->player), &(wolf->raycast),
-					&(wolf->find_wall), &(wolf->data));
-		wolf->raycast.current_x++;
+		raycasting(&(doom->player), &(doom->raycast),
+					&(doom->find_wall), &(doom->data));
+		doom->raycast.current_x++;
 	}
 	return (NULL);
 }

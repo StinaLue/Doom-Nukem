@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   wolf3d.h                                           :+:      :+:    :+:   */
+/*   doom.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/18 13:10:37 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/26 12:21:27 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef WOLF3D_H
-# define WOLF3D_H
+#ifndef DOOM_H
+# define DOOM_H
 
 # include "SDL.h"
 # include "SDL_ttf.h"
-# define TITLE "WOLF3D"
+# define TITLE "DOOM"
 # define WIN_WIDTH 1920
 # define WIN_HEIGHT 1080
 # define NB_THREADS 8
@@ -101,7 +101,7 @@ typedef struct	s_wall_finding
 	int			side;
 }				t_wall_find;
 
-typedef struct	s_wolf
+typedef struct	s_doom
 {
 	t_sdl		sdl;
 	t_ttf		ttf;
@@ -109,9 +109,9 @@ typedef struct	s_wolf
 	t_player	player;
 	t_raycast	raycast;
 	t_wall_find	find_wall;
-}				t_wolf;
+}				t_doom;
 
-void			init_wolf(t_wolf *wolf, char *title);
+void			init_doom(t_doom *doom, char *title);
 
 void			init_sdl_struct(t_sdl *sdl);
 void			init_ttf_struct(t_ttf *ttf);
@@ -151,7 +151,7 @@ void			movement(t_player *player, t_data *data,
 int				init_sdl(SDL_Window **win, SDL_Surface **surf);
 int				init_ttf(t_ttf *ttf);
 
-void			multithread(t_wolf *wolf);
+void			multithread(t_doom *doom);
 
 void			fill_pix(Uint32 *pixels, int x, int y, int color);
 void			draw_wall_and_floor(Uint32 *pixels, t_raycast *raycast);
@@ -179,6 +179,6 @@ int				nbthreads_error(void);
 char			*translate_fps(int fps);
 int				init_fps_surf(t_ttf *ttf, int current_fps, int *start_clock);
 void			update_fps(int *delta_clock, int *start_clock,
-					int *current_fps, int *wolf_fps);
+					int *current_fps, int *doom_fps);
 
 #endif

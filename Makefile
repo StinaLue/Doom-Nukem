@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
+#    By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2019/10/18 13:35:17 by afonck           ###   ########.fr        #
+#    Updated: 2019/10/26 12:24:24 by sluetzen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = wolf3d
-DEBUG_NAME = wolf3d_debug
+NAME = doom
+DEBUG_NAME = doom_debug
 
 CC = clang
 
@@ -37,7 +37,7 @@ SDL2TTF_LIB_DIRECTORY = ./sdl2_ttf_lib/
 SDL2_HEADERS_DIRECTORY = ./SDL/include/
 SDL2TTF_HEADERS_DIRECTORY = ./SDL_TTF/
 
-HEADERS_LIST = wolf3d.h
+HEADERS_LIST = doom.h
 
 HEADERS_DIRECTORY = ./includes/
 HEADERS = $(addprefix $(HEADERS_DIRECTORY), $(HEADERS_LIST))

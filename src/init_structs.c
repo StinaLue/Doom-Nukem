@@ -6,12 +6,12 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/18 13:24:31 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/26 12:22:12 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "wolf3d.h"
+#include "doom.h"
 
 #include <pthread.h>
 

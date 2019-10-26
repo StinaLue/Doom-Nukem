@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   error_handling.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 03:26:24 by afonck            #+#    #+#             */
-/*   Updated: 2019/10/18 13:13:01 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/26 12:22:43 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "wolf3d.h"
+#include "doom.h"
 
 void	open_error(char *title)
 {
@@ -29,7 +29,7 @@ void	invalid_char_error(char badchar, void **line, int fd)
 
 int		argc_error(void)
 {
-	ft_dprintf(STDERR_FILENO, "usage: ./wolf3d %{g}s\n", "[valid .w3d map]");
+	ft_dprintf(STDERR_FILENO, "usage: ./doom %{g}s\n", "[valid .w3d map]");
 	return (EXIT_FAILURE);
 }
 

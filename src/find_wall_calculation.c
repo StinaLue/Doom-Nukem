@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   find_wall_calculation.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:50:27 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/18 13:06:50 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/26 12:20:50 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "wolf3d.h"
+#include "doom.h"
 
 void	find_wall_init(t_raycast const *raycast, t_wall_find *find_wall)
 {

@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 02:43:20 by afonck            #+#    #+#             */
-/*   Updated: 2019/10/19 16:51:17 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/26 12:23:53 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "wolf3d.h"
+#include "doom.h"
 
 void	fill_chartab(char chartab[MAX_MAP][MAX_MAP], char *title,
 			int *map_width, int *map_height)

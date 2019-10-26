@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/18 12:46:10 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/26 12:27:03 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "wolf3d.h"
+#include "doom.h"
 
 void	find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP],
 			int map_width, int map_height)
@@ -74,7 +74,7 @@ int		init_ttf(t_ttf *ttf)
 		ft_dprintf(STDERR_FILENO, "TTF_Init Error: %{r}s\n", TTF_GetError());
 		return (EXIT_FAILURE);
 	}
-	if ((ttf->font = TTF_OpenFont("/Library/Fonts/Arial.ttf", 150)) == NULL)
+	if ((ttf->font = TTF_OpenFont("/Library/Fonts/Arial\tUnicode.ttf", 150)) == NULL)
 	{
 		ft_dprintf(STDERR_FILENO, "TTF_OpenFont Error: %{r}s\n",
 			TTF_GetError());
@@ -91,12 +91,12 @@ int		init_ttf(t_ttf *ttf)
 	return (EXIT_SUCCESS);
 }
 
-void	init_wolf(t_wolf *wolf, char *title)
+void	init_doom(t_doom *doom, char *title)
 {
-	init_sdl_struct(&(wolf->sdl));
-	init_ttf_struct(&(wolf->ttf));
-	init_data_struct(&(wolf->data), title);
-	init_player_struct(&(wolf->player), *(wolf->data.map_ptr),
-		wolf->data.map_width, wolf->data.map_height);
-	init_raycast_struct(&(wolf->raycast), wolf->player.x, wolf->player.y);
+	init_sdl_struct(&(doom->sdl));
+	init_ttf_struct(&(doom->ttf));
+	init_data_struct(&(doom->data), title);
+	init_player_struct(&(doom->player), *(doom->data.map_ptr),
+		doom->data.map_width, doom->data.map_height);
+	init_raycast_struct(&(doom->raycast), doom->player.x, doom->player.y);
 }
