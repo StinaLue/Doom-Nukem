@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+         #
+#    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2019/10/26 12:24:24 by sluetzen         ###   ########.fr        #
+#    Updated: 2019/10/28 00:06:29 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ LIBFT_DIRECTORY = ./libft/
 LIBFT_HEADER = $(LIBFT_DIRECTORY)
 
 SDL2 = $(SDL2_LIB_DIRECTORY)lib/libSDL2.dylib
+SDL2_VERSION = 2.0.10
 SDL2TTF = $(SDL2TTF_LIB_DIRECTORY)lib/libSDL2_ttf.dylib
 SDL2_LIB_DIRECTORY = ./sdl2_lib/
 SDL2TTF_LIB_DIRECTORY = ./sdl2_ttf_lib/
@@ -79,9 +80,12 @@ RESET = \033[0m
 all: $(NAME)
 
 $(SDL2):
-	@mkdir -p $(SDL2_LIB_DIRECTORY)/build && \
+	curl -OL http://www.libsdl.org/release/SDL2-$(SDL2_VERSION).tar.gz && \
+	tar -xvf SDL2-$(SDL2_VERSION).tar.gz && \
+	rm SDL2-$(SDL2_VERSION).tar.gz && \
+	mkdir -p $(SDL2_LIB_DIRECTORY)/build && \
 	cd $(SDL2_LIB_DIRECTORY)build && \
-	$(CURRENT_DIR)/SDL/configure --prefix $(CURRENT_DIR)/$(SDL2_LIB_DIRECTORY) && \
+	$(CURRENT_DIR)/SDL2-$(SDL2_VERSION)/configure --prefix $(CURRENT_DIR)/$(SDL2_LIB_DIRECTORY) && \
 	make && \
 	make install
 
