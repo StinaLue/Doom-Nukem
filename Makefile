@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2019/10/28 13:25:41 by afonck           ###   ########.fr        #
+#    Updated: 2019/10/28 14:31:20 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,10 +18,10 @@ CC = clang
 CFLAGS = -Wall -Werror -Wextra -D_THREAD_SAFE -O3
 DEBUGFLAGS = -Wall -Werror -Wextra -D_THREAD_SAFE -g
 
-LDFLAGS = -L$(LIBFT_DIRECTORY) -L$(SDL2_LIB_DIRECTORY)lib -L$(SDL2TTF_LIB_DIRECTORY)lib
-LDLIBS = -lft -lSDL2 -lSDL2_ttf
+LDFLAGS = -L$(LIBFT_DIRECTORY) -L$(LIBBMP_DIRECTORY) -L$(SDL2_LIB_DIRECTORY)lib -L$(SDL2TTF_LIB_DIRECTORY)lib
+LDLIBS = -lft -lbmp -lSDL2 -lSDL2_ttf
 
-INCLUDES = -I$(HEADERS_DIRECTORY) -I$(LIBFT_HEADER) -I$(SDL2_HEADERS_DIRECTORY) -I$(SDL2TTF_HEADERS_DIRECTORY)
+INCLUDES =  -I$(HEADERS_DIRECTORY) -I$(LIBFT_HEADER) -I$(LIBBMP_HEADER) -I$(SDL2_HEADERS_DIRECTORY) -I$(SDL2TTF_HEADERS_DIRECTORY)
 
 HARD_DBG ?= 1
 
@@ -31,14 +31,18 @@ LIBFT = $(LIBFT_DIRECTORY)libft.a
 LIBFT_DIRECTORY = ./libft/
 LIBFT_HEADER = $(LIBFT_DIRECTORY)
 
+LIBBMP = $(LIBBMP_DIRECTORY)libbmp.a
+LIBBMP_DIRECTORY = ./libbmp/
+LIBBMP_HEADER = $(LIBBMP_DIRECTORY)includes/
+
 SDL2 = $(SDL2_LIB_DIRECTORY)lib/libSDL2.dylib
 SDL2_VERSION = 2.0.10
 SDL2TTF = $(SDL2TTF_LIB_DIRECTORY)lib/libSDL2_ttf.dylib
 SDL2TTF_VERSION = 2.0.15
 SDL2_LIB_DIRECTORY = ./sdl2_lib/
 SDL2TTF_LIB_DIRECTORY = ./sdl2_ttf_lib/
-SDL2_HEADERS_DIRECTORY = ./sdl2_lib/include/SDL2/
-SDL2TTF_HEADERS_DIRECTORY = ./sdl2_ttf_lib/include/SDL2/
+SDL2_HEADERS_DIRECTORY = $(SDL2_LIB_DIRECTORY)include/SDL2/
+SDL2TTF_HEADERS_DIRECTORY = $(SDL2TTF_LIB_DIRECTORY)include/SDL2/
 
 HEADERS_LIST = doom.h
 
@@ -106,7 +110,7 @@ $(SDL2TTF):
 	cd ../.. && \
 	rm -rf SDL2_ttf-$(SDL2TTF_VERSION);
 
-$(NAME): $(SDL2) $(SDL2TTF) $(LIBFT) $(OBJECTS_DIRECTORY) $(OBJECTS)
+$(NAME): $(SDL2) $(SDL2TTF) $(LIBFT) $(LIBBMP) $(OBJECTS_DIRECTORY) $(OBJECTS)
 	@$(CC) $(INCLUDES) $(OBJECTS) $(LDFLAGS) $(LDLIBS) -o $(NAME)
 	@echo "\n$(NAME): $(GREEN)object files were created$(RESET)"
 	@echo "$(NAME): $(GREEN)$(NAME) was created$(RESET)"
@@ -136,11 +140,17 @@ $(LIBFT):
 	@echo "$(NAME): $(GREEN)Creating $(LIBFT)...$(RESET)"
 	@$(MAKE) -sC $(LIBFT_DIRECTORY)
 
+$(LIBBMP):
+	@echo "$(NAME): $(GREEN)Creating $(LIBBMP)...$(RESET)"
+	@$(MAKE) -sC $(LIBBMP_DIRECTORY)
+
 clean:
 	@$(MAKE) -sC $(LIBFT_DIRECTORY) clean
+	@$(MAKE) -sC $(LIBBMP_DIRECTORY) clean
 	@rm -rf $(OBJECTS_DIRECTORY)
 	@rm -rf $(SDL2_LIB_DIRECTORY)build
 	@rm -rf $(SDL2TTF_LIB_DIRECTORY)build
+	@echo "$(NAME): $(RED)$(LIBFT_DIRECTORY) and $(LIBBMP_DIRECTORY) were cleaned$(RESET)"
 	@echo "$(NAME): $(RED)$(OBJECTS_DIRECTORY) was deleted$(RESET)"
 	@echo "$(NAME): $(RED)object files were deleted$(RESET)"
 	@echo "$(NAME): $(RED)$(SDL2_LIB_DIRECTORY)build was deleted$(RESET)"
@@ -151,8 +161,10 @@ fclean: clean
 	@rm -rf $(SDL2_LIB_DIRECTORY)
 	@rm -rf $(SDL2TTF_LIB_DIRECTORY)
 	@echo "$(NAME): $(RED)SDL2 and SDL2TTF was deleted$(RESET)"
-	@rm -f $(LIBFT)
+	@$(MAKE) -sC $(LIBFT_DIRECTORY) fclean
 	@echo "$(NAME): $(RED)$(LIBFT) was deleted$(RESET)"
+	@$(MAKE) -sC $(LIBBMP_DIRECTORY) fclean
+	@echo "$(NAME): $(RED)$(LIBBMP) was deleted$(RESET)"
 	@rm -f $(NAME)
 	@echo "$(NAME): $(RED)$(NAME) was deleted$(RESET)"
 
@@ -162,7 +174,7 @@ re:
 
 debug: $(DEBUG_NAME)
 
-$(DEBUG_NAME): $(SDL2) $(SDL2TTF) $(LIBFT) $(OBJECTS_DIRECTORY_DEBUG) $(OBJECTS_DEBUG)
+$(DEBUG_NAME): $(SDL2) $(SDL2TTF) $(LIBFT) $(LIBBMP) $(OBJECTS_DIRECTORY_DEBUG) $(OBJECTS_DEBUG)
 	@$(CC) $(INCLUDES) $(OBJECTS_DEBUG) $(LDFLAGS) $(LDLIBS) -o $(DEBUG_NAME)
 	@echo "\n$(DEBUG_NAME): $(GREEN)object debug files were created$(RESET)"
 	@echo "$(DEBUG_NAME): $(GREEN)$(DEBUG_NAME) was created$(RESET)"
