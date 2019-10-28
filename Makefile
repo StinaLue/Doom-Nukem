@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2019/10/28 01:57:33 by afonck           ###   ########.fr        #
+#    Updated: 2019/10/28 13:25:41 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -97,7 +97,7 @@ $(SDL2TTF):
 	curl -OL http://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-$(SDL2TTF_VERSION).tar.gz && \
 	tar -xvf SDL2_ttf-$(SDL2TTF_VERSION).tar.gz && \
 	rm SDL2_ttf-$(SDL2TTF_VERSION).tar.gz && \
-	export PATH=$(PATH):$(CURRENT_DIR)/$(SDL2_LIB_DIRECTORY)bin && \
+	export PATH="$(PATH):$(CURRENT_DIR)/$(SDL2_LIB_DIRECTORY)bin" && \
 	mkdir -p $(SDL2TTF_LIB_DIRECTORY)/build && \
 	cd $(SDL2TTF_LIB_DIRECTORY)build && \
 	$(CURRENT_DIR)/SDL2_ttf-$(SDL2TTF_VERSION)/configure --prefix $(CURRENT_DIR)/$(SDL2TTF_LIB_DIRECTORY) && \
