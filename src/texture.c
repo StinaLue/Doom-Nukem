@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:47:59 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/28 17:32:53 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/28 20:08:12 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,9 @@ void	fill_tex(int texture[8][TEX_W * TEX_H])
 	int xorcolor;
 
 	x = 0;
-	if ((simpleparse_BMP("textures/brick.bmp", texture[0])) != EXIT_SUCCESS)
+	if ((simpleparse_bmp("textures/brick.bmp", texture[0])) != EXIT_SUCCESS)
 		exit(EXIT_FAILURE);
-	if ((simpleparse_BMP("textures/weirdo.bmp", texture[1])) != EXIT_SUCCESS)
+	if ((simpleparse_bmp("textures/weirdo.bmp", texture[1])) != EXIT_SUCCESS)
 		exit(EXIT_FAILURE);
 	//load_tex("textures/friends1.txt", texture[0]);
 	//load_tex("textures/friends2.txt", texture[1]);
