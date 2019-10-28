@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/26 12:27:03 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/28 13:18:10 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int		init_ttf(t_ttf *ttf)
 		ft_dprintf(STDERR_FILENO, "TTF_Init Error: %{r}s\n", TTF_GetError());
 		return (EXIT_FAILURE);
 	}
-	if ((ttf->font = TTF_OpenFont("/Library/Fonts/Arial\tUnicode.ttf", 150)) == NULL)
+	if ((ttf->font = TTF_OpenFont("/Library/Fonts/Arial.ttf", 150)) == NULL)
 	{
 		ft_dprintf(STDERR_FILENO, "TTF_OpenFont Error: %{r}s\n",
 			TTF_GetError());
