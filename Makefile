@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2019/10/28 00:06:29 by afonck           ###   ########.fr        #
+#    Updated: 2019/10/28 01:57:33 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,9 @@ CC = clang
 CFLAGS = -Wall -Werror -Wextra -D_THREAD_SAFE -O3
 DEBUGFLAGS = -Wall -Werror -Wextra -D_THREAD_SAFE -g
 
-LIBRARIES = -lft -lSDL2-2.0.0 -lSDL2_ttf-2.0.0 -L$(LIBFT_DIRECTORY) -L$(SDL2_LIB_DIRECTORY)lib -L$(SDL2TTF_LIB_DIRECTORY)lib
-DEBUGLIBRARIES = -lft -lSDL2-2.0.0 -lSDL2_ttf-2.0.0 -L$(LIBFT_DIRECTORY) -L$(SDL2_LIB_DIRECTORY)lib -L$(SDL2TTF_LIB_DIRECTORY)lib
+LDFLAGS = -L$(LIBFT_DIRECTORY) -L$(SDL2_LIB_DIRECTORY)lib -L$(SDL2TTF_LIB_DIRECTORY)lib
+LDLIBS = -lft -lSDL2 -lSDL2_ttf
+
 INCLUDES = -I$(HEADERS_DIRECTORY) -I$(LIBFT_HEADER) -I$(SDL2_HEADERS_DIRECTORY) -I$(SDL2TTF_HEADERS_DIRECTORY)
 
 HARD_DBG ?= 1
@@ -33,10 +34,11 @@ LIBFT_HEADER = $(LIBFT_DIRECTORY)
 SDL2 = $(SDL2_LIB_DIRECTORY)lib/libSDL2.dylib
 SDL2_VERSION = 2.0.10
 SDL2TTF = $(SDL2TTF_LIB_DIRECTORY)lib/libSDL2_ttf.dylib
+SDL2TTF_VERSION = 2.0.15
 SDL2_LIB_DIRECTORY = ./sdl2_lib/
 SDL2TTF_LIB_DIRECTORY = ./sdl2_ttf_lib/
-SDL2_HEADERS_DIRECTORY = ./SDL/include/
-SDL2TTF_HEADERS_DIRECTORY = ./SDL_TTF/
+SDL2_HEADERS_DIRECTORY = ./sdl2_lib/include/SDL2/
+SDL2TTF_HEADERS_DIRECTORY = ./sdl2_ttf_lib/include/SDL2/
 
 HEADERS_LIST = doom.h
 
@@ -87,18 +89,25 @@ $(SDL2):
 	cd $(SDL2_LIB_DIRECTORY)build && \
 	$(CURRENT_DIR)/SDL2-$(SDL2_VERSION)/configure --prefix $(CURRENT_DIR)/$(SDL2_LIB_DIRECTORY) && \
 	make && \
-	make install
+	make install && \
+	cd ../.. && \
+	rm -rf SDL2-$(SDL2_VERSION);
 
 $(SDL2TTF):
-	@export PATH=$(PATH):$(CURRENT_DIR)/$(SDL2_LIB_DIRECTORY)bin && \
+	curl -OL http://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-$(SDL2TTF_VERSION).tar.gz && \
+	tar -xvf SDL2_ttf-$(SDL2TTF_VERSION).tar.gz && \
+	rm SDL2_ttf-$(SDL2TTF_VERSION).tar.gz && \
+	export PATH=$(PATH):$(CURRENT_DIR)/$(SDL2_LIB_DIRECTORY)bin && \
 	mkdir -p $(SDL2TTF_LIB_DIRECTORY)/build && \
 	cd $(SDL2TTF_LIB_DIRECTORY)build && \
-	$(CURRENT_DIR)/SDL_ttf/configure --prefix $(CURRENT_DIR)/$(SDL2TTF_LIB_DIRECTORY) && \
+	$(CURRENT_DIR)/SDL2_ttf-$(SDL2TTF_VERSION)/configure --prefix $(CURRENT_DIR)/$(SDL2TTF_LIB_DIRECTORY) && \
 	make && \
-	make install
+	make install && \
+	cd ../.. && \
+	rm -rf SDL2_ttf-$(SDL2TTF_VERSION);
 
 $(NAME): $(SDL2) $(SDL2TTF) $(LIBFT) $(OBJECTS_DIRECTORY) $(OBJECTS)
-	@$(CC) $(LIBRARIES) $(INCLUDES) $(OBJECTS) -o $(NAME)
+	@$(CC) $(INCLUDES) $(OBJECTS) $(LDFLAGS) $(LDLIBS) -o $(NAME)
 	@echo "\n$(NAME): $(GREEN)object files were created$(RESET)"
 	@echo "$(NAME): $(GREEN)$(NAME) was created$(RESET)"
 
@@ -117,7 +126,7 @@ $(OBJECTS_DIRECTORY)%.o : $(SOURCES_DIRECTORY)%.c $(HEADERS)
 $(OBJECTS_DIRECTORY_DEBUG)%.o : $(SOURCES_DIRECTORY)%.c $(HEADERS)
 ifeq ($(HARD_DBG), 1)
 	@$(eval DEBUGFLAGS += -fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined)
-	@$(eval DEBUGLIBRARIES += -fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined)
+	@$(eval LDFLAGS += -fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined)
 endif
 
 	@$(CC) $(DEBUGFLAGS) -c $(INCLUDES) $< -o $@
@@ -154,7 +163,7 @@ re:
 debug: $(DEBUG_NAME)
 
 $(DEBUG_NAME): $(SDL2) $(SDL2TTF) $(LIBFT) $(OBJECTS_DIRECTORY_DEBUG) $(OBJECTS_DEBUG)
-	@$(CC) $(DEBUGLIBRARIES) $(INCLUDES) $(OBJECTS_DEBUG) -o $(DEBUG_NAME)
+	@$(CC) $(INCLUDES) $(OBJECTS_DEBUG) $(LDFLAGS) $(LDLIBS) -o $(DEBUG_NAME)
 	@echo "\n$(DEBUG_NAME): $(GREEN)object debug files were created$(RESET)"
 	@echo "$(DEBUG_NAME): $(GREEN)$(DEBUG_NAME) was created$(RESET)"
 
