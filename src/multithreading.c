@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   multithreading.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 17:00:17 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/26 12:23:47 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/28 12:26:54 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,11 @@ void	multithread(t_doom *doom)
 		ft_memcpy((void *)&params[i], (void *)doom, sizeof(t_doom));
 		params[i].data.start_thread = (WIN_WIDTH / NB_THREADS) * i;
 		params[i].data.end_thread = (WIN_WIDTH / NB_THREADS) * (i + 1);
-		pthread_create(&threads[i], NULL, iterate_raycast, &params[i]);
+		if ((pthread_create(&threads[i], NULL, iterate_raycast, &params[i])) != 0)
+			exit(EXIT_FAILURE);
 		i++;
 	}
 	while (i--)
-		pthread_join(threads[i], NULL);
+		if ((pthread_join(threads[i], NULL)) != 0)
+			exit(EXIT_FAILURE);
 }
