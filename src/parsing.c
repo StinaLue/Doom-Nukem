@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 02:43:20 by afonck            #+#    #+#             */
-/*   Updated: 2019/10/26 12:23:53 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/28 14:13:17 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,18 +51,23 @@ void	fill_map(int (*map)[MAX_MAP][MAX_MAP], char *title,
 	char	chartab[MAX_MAP][MAX_MAP];
 	int		i;
 	int		j;
+	int		found_player;
 
 	i = 0;
+	found_player = 0;
 	fill_chartab(chartab, title, map_width, map_height);
 	while (i < *map_height)
 	{
 		j = 0;
 		while (j < *map_width)
 		{
-			if (chartab[i][j] == 'X')
+			if (chartab[i][j] == 'X' && found_player == 0)
+			{
 				(*map)[i][j] = 'X';
+				found_player = 1;
+			}
 			else
-				(*map)[i][j] = chartab[i][j] - '0';
+				(*map)[i][j] = (chartab[i][j] == 'X' ? 0 : chartab[i][j] - '0');
 			j++;
 		}
 		i++;
