@@ -158,6 +158,8 @@ void			fill_pix(Uint32 *pixels, int x, int y, int color);
 void			draw_wall_and_floor(Uint32 *pixels, t_raycast *raycast);
 void			draw_tex(t_player const *player, t_wall_find *find_wall,
 					t_raycast *raycast, t_data *data);
+void			draw_floor(t_player const *player, t_wall_find *find_wall,
+					t_raycast *raycast, t_data *data);
 
 void			fill_tex(int texture[8][TEX_W * TEX_H]);
 

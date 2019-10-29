@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/28 13:56:04 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/29 15:58:39 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	init_player_struct(t_player *player, int map[MAX_MAP][MAX_MAP],
 							int map_width, int map_height)
 {
 	find_player_pos(player, map, map_width, map_height);
-	player->x_dir = 1;
+	player->x_dir = -1;
 	player->y_dir = 0;
 	player->fov_x = 0;
 	player->fov_y = 0.9;

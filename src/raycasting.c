@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:35:15 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/26 12:20:40 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/29 17:59:54 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ void	raycasting(t_player const *player, t_raycast *raycast,
 	find_wall_calculation(raycast, find_wall, data);
 	height_calculation(raycast, find_wall, player->up_and_down, player->crouch);
 	draw_tex(player, find_wall, raycast, data);
-	draw_wall_and_floor(data->img_ptr, raycast);
+	draw_floor(player, find_wall, raycast, data);
+	//draw_wall_and_floor(data->img_ptr, raycast);
 }
 
 void	*iterate_raycast(void *param)

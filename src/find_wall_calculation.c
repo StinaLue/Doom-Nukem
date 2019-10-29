@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_wall_calculation.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:50:27 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/26 12:20:50 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/29 15:27:04 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	find_wall_calculation(t_raycast *raycast, t_wall_find *find_wall,
 			find_wall->distance_x_side += find_wall->dist_x_to_x;
 			raycast->map_x += find_wall->dir_step_x;
 		}
-		if (is_valid_wall((*data->map_ptr)[raycast->map_y][raycast->map_x]) \
+		if (is_valid_wall((*data->map_ptr)[raycast->map_x][raycast->map_y]) \
 			== 1)
 			find_wall->hit = 1;
 	}

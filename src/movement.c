@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:52:08 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/26 12:23:38 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/29 16:41:54 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,23 @@ void	walk_straight(t_data *data, t_player *player,
 	{
 		if (keyboard_state[SDL_SCANCODE_LSHIFT])
 			speed += 0.03;
-		if ((*data->map_ptr)[(int)(player->y
-			+ player->y_dir * speed)][(int)player->x] == 0)
-			player->y += player->y_dir * speed;
-		if ((*data->map_ptr)[(int)player->y][(int)(player->x
-			+ player->x_dir * speed)] == 0)
+		if ((*data->map_ptr)[(int)(player->x
+			+ player->x_dir * speed)][(int)player->y] == 0)
 			player->x += player->x_dir * speed;
+		if ((*data->map_ptr)[(int)player->x][(int)(player->y
+			+ player->y_dir * speed)] == 0)
+			player->y += player->y_dir * speed;
 	}
 	if (keyboard_state[SDL_SCANCODE_DOWN] || keyboard_state[SDL_SCANCODE_S])
 	{
 		if (keyboard_state[SDL_SCANCODE_LSHIFT])
 			speed = 0.08;
-		if ((*data->map_ptr)[(int)(player->y
-			- player->y_dir * speed)][(int)player->x] == 0)
-			player->y -= player->y_dir * speed;
-		if ((*data->map_ptr)[(int)player->y][(int)(player->x
-			- player->x_dir * speed)] == 0)
+		if ((*data->map_ptr)[(int)(player->x
+			- player->x_dir * speed)][(int)player->y] == 0)
 			player->x -= player->x_dir * speed;
+		if ((*data->map_ptr)[(int)player->x][(int)(player->y
+			- player->y_dir * speed)] == 0)
+			player->y -= player->y_dir * speed;
 	}
 }
 
@@ -44,21 +44,21 @@ void	walk_sidewards(t_data *data, t_player *player,
 {
 	if (keyboard_state[SDL_SCANCODE_D])
 	{
-		if ((*data->map_ptr)[(int)(player->y
-			+ player->fov_y * speed)][(int)player->x] == 0)
-			player->y += player->fov_y * speed;
-		if ((*data->map_ptr)[(int)player->y][(int)(player->x
-			+ player->fov_x * speed)] == 0)
+		if ((*data->map_ptr)[(int)(player->x
+			+ player->fov_x * speed)][(int)player->y] == 0)
 			player->x += player->fov_x * speed;
+		if ((*data->map_ptr)[(int)player->x][(int)(player->y
+			+ player->fov_y * speed)] == 0)
+			player->y += player->fov_y * speed;
 	}
 	if (keyboard_state[SDL_SCANCODE_A])
 	{
-		if ((*data->map_ptr)[(int)(player->y
-			- player->fov_y * speed)][(int)player->x] == 0)
-			player->y -= player->fov_y * speed;
-		if ((*data->map_ptr)[(int)player->y][(int)(player->x
-			- player->fov_x * speed)] == 0)
+		if ((*data->map_ptr)[(int)(player->x
+			- player->fov_x * speed)][(int)player->y] == 0)
 			player->x -= player->fov_x * speed;
+		if ((*data->map_ptr)[(int)player->x][(int)(player->y
+			- player->fov_y * speed)] == 0)
+			player->y -= player->fov_y * speed;
 	}
 }
 
@@ -86,8 +86,8 @@ void	rotate(t_player *player, const Uint8 *keyboard_state, int x, int fps)
 	save_x_dir = player->x_dir;
 	save_fov_x = player->fov_x;
 	rotspeed = ((keyboard_state[SDL_SCANCODE_LEFT] ||
-				keyboard_state[SDL_SCANCODE_Q] || x < 0) ? 5 / (-fps + 0.00001)
-				: 5 / (fps + 0.00001));
+				keyboard_state[SDL_SCANCODE_Q] || x < 0) ? 5 / (fps + 0.00001)
+				: 5 / (-fps + 0.00001));
 	if ((keyboard_state[SDL_SCANCODE_LEFT] || keyboard_state[SDL_SCANCODE_Q]
 		|| x < 0) || (keyboard_state[SDL_SCANCODE_RIGHT]
 		|| keyboard_state[SDL_SCANCODE_E] || x > 0))
