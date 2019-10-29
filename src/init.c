@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/28 13:18:10 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/29 12:33:18 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ void	find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP],
 		{
 			if (map[i][j] == 'X')
 			{
-				player->x = j + 0.000001;
-				player->y = i + 0.000001;
+				player->x = j + 0.5;
+				player->y = i + 0.5;
 				map[i][j] = 0;
 				return ;
 			}
