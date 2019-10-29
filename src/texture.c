@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:47:59 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/29 12:53:03 by afonck           ###   ########.fr       */
+/*   Updated: 2019/10/29 13:15:17 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,11 @@ void	fill_tex(int texture[8][TEX_W * TEX_H])
 	x = 0;
 	if ((simpleparse_bmp("textures/flower.bmp", texture[0])) != EXIT_SUCCESS)
 		exit(EXIT_FAILURE);
-	if ((simpleparse_bmp("textures/flower.bmp", texture[1])) != EXIT_SUCCESS)
+	if ((simpleparse_bmp("textures/mandala.bmp", texture[1])) != EXIT_SUCCESS)
 		exit(EXIT_FAILURE);
-	if ((simpleparse_bmp("textures/flower.bmp", texture[2])) != EXIT_SUCCESS)
+	if ((simpleparse_bmp("textures/weirdo.bmp", texture[2])) != EXIT_SUCCESS)
 		exit(EXIT_FAILURE);
-	if ((simpleparse_bmp("textures/flower.bmp", texture[3])) != EXIT_SUCCESS)
+	if ((simpleparse_bmp("textures/brick.bmp", texture[3])) != EXIT_SUCCESS)
 		exit(EXIT_FAILURE);
 	//load_tex("textures/friends1.txt", texture[0]);
 	//load_tex("textures/friends2.txt", texture[1]);
