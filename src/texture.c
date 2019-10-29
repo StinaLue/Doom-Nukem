@@ -6,11 +6,12 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:47:59 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/29 12:38:01 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/29 12:47:53 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "libbmp.h"
 #include "doom.h"
 #include <math.h>
 
@@ -68,8 +69,12 @@ void	fill_tex(int texture[8][TEX_W * TEX_H])
 	int xorcolor;
 
 	x = 0;
-	load_tex("textures/friends1.txt", texture[0]);
-	load_tex("textures/friends2.txt", texture[1]);
+	if ((simpleparse_bmp("textures/brick.bmp", texture[0])) != EXIT_SUCCESS)
+		exit(EXIT_FAILURE);
+	if ((simpleparse_bmp("textures/weirdo.bmp", texture[1])) != EXIT_SUCCESS)
+		exit(EXIT_FAILURE);
+	//load_tex("textures/friends1.txt", texture[0]);
+	//load_tex("textures/friends2.txt", texture[1]);
 	load_tex("textures/friends3.txt", texture[2]);
 	load_tex("textures/friends4.txt", texture[3]);
 	while (x < TEX_W)
