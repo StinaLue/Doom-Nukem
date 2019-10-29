@@ -95,6 +95,7 @@ typedef struct	s_wall_finding
 	double		dist_x_to_x;
 	double		dist_y_to_y;
 	double		distance_wall;
+	double		wall_x;
 	int			dir_step_x;
 	int			dir_step_y;
 	int			hit;
@@ -159,6 +160,7 @@ void			draw_tex(t_player const *player, t_wall_find *find_wall,
 					t_raycast *raycast, t_data *data);
 
 void			fill_tex(int texture[8][TEX_W * TEX_H]);
+
 
 int				is_valid_wall(int wall);
 
