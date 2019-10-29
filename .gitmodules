@@ -1,6 +1,8 @@
 [submodule "libft"]
 	path = libft
 	url = https://github.com/AntoineFonck/LIBFT_afonck.git
+	branch = master
 [submodule "libbmp"]
 	path = libbmp
 	url = https://github.com/AntoineFonck/simple_bmp_parser.git
+	branch = master
