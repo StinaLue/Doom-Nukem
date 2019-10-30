@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checking.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 03:29:54 by afonck            #+#    #+#             */
-/*   Updated: 2019/10/26 12:22:23 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/30 18:32:25 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ char	check_line(char *line)
 }
 
 void	verify_bordermap(int const (*map)[MAX_MAP][MAX_MAP],
-			char *title, int map_width, int map_height)
+			char *title, int map_height, int map_width)
 {
 	int i;
 	int j;
@@ -98,15 +98,15 @@ void	verify_bordermap(int const (*map)[MAX_MAP][MAX_MAP],
 	j = 0;
 	k = 0;
 	l = 0;
-	while (is_valid_wall((*map)[0][i]) == 1 && i < map_width)
+	while (is_valid_wall((*map)[0][i]) == 1 && i < map_height)
 		i++;
-	while (is_valid_wall((*map)[map_height - 1][j]) == 1 && j < map_width)
+	while (is_valid_wall((*map)[map_width - 1][j]) == 1 && j < map_height)
 		j++;
-	while (is_valid_wall((*map)[k][0]) == 1 && k < map_height)
+	while (is_valid_wall((*map)[k][0]) == 1 && k < map_width)
 		k++;
-	while (is_valid_wall((*map)[l][map_width - 1]) == 1 && l < map_height)
+	while (is_valid_wall((*map)[l][map_height - 1]) == 1 && l < map_width)
 		l++;
-	if (i != map_width || j != map_width || k != map_height || l != map_height)
+	if (i != map_height || j != map_height || k != map_width || l != map_width)
 	{
 		ft_dprintf(STDERR_FILENO, "map %{r}s is not surrounded by walls \
 			(1 / 2), exiting...\n", title);

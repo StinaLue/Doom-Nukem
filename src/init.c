@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/29 12:33:18 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/30 18:35:29 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "doom.h"
 
 void	find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP],
-			int map_width, int map_height)
+			int map_height, int map_width)
 {
 	int i;
 	int j;
@@ -22,10 +22,10 @@ void	find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP],
 	i = 0;
 	player->x = 0;
 	player->y = 0;
-	while (i < map_height)
+	while (i < map_width)
 	{
 		j = 0;
-		while (j < map_width)
+		while (j < map_height)
 		{
 			if (map[i][j] == 'X')
 			{
@@ -97,6 +97,6 @@ void	init_doom(t_doom *doom, char *title)
 	init_ttf_struct(&(doom->ttf));
 	init_data_struct(&(doom->data), title);
 	init_player_struct(&(doom->player), *(doom->data.map_ptr),
-		doom->data.map_width, doom->data.map_height);
+		doom->data.map_height, doom->data.map_width);
 	init_raycast_struct(&(doom->raycast), doom->player.x, doom->player.y);
 }
