@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/29 15:58:39 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/30 13:44:18 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ void	init_data_struct(t_data *data, char *title)
 {
 	data->quit = 0;
 	data->img_ptr = NULL;
-	fill_map(data->map_ptr, title, &(data->map_width), &(data->map_height));
-	verify_bordermap(data->map_ptr, title, data->map_width, data->map_height);
+	fill_map(data->map_ptr, title, &(data->map_height), &(data->map_width));
+	verify_bordermap(data->map_ptr, title, data->map_height, data->map_width);
 }
 
 void	init_player_struct(t_player *player, int map[MAX_MAP][MAX_MAP],
