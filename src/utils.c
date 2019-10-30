@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 03:31:56 by afonck            #+#    #+#             */
-/*   Updated: 2019/10/26 12:24:04 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/31 00:48:02 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,21 +57,32 @@ void	print_map(int map[MAX_MAP][MAX_MAP], int width,
 {
 	int i;
 	int j;
+	char buf[2048];
+	int index;
 
 	i = 0;
+	index = 0;
 	while (i < height)
 	{
 		j = 0;
 		while (j < width)
 		{
-			if ((int)player->x == j && (int)player->y == i)
-				ft_printf(". ");
+			if ((int)player->x == i && (int)player->y == j)
+				buf[index] = 'o';
+				//ft_printf(". ");
 			else
-				ft_printf("%d ", map[i][j]);
+				buf[index] = (map[i][j] == 0 ? ' ' : 'X');
+				//ft_printf("%d ", map[i][j]);
 			j++;
+			index++;
 		}
-		write(1, "\n", 1);
+		buf[index] = '\n';
+		//write(1, "\n", 1);
 		i++;
+		index++;
 	}
-	write(1, "\n", 1);
+	buf[index] = '\n';
+	buf[index + 1] = '\0';
+	//write(1, "\n", 1);
+	printf("%s", buf);
 }
