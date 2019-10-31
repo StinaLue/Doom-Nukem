@@ -185,4 +185,7 @@ int				init_fps_surf(t_ttf *ttf, int current_fps, int *start_clock);
 void			update_fps(int *delta_clock, int *start_clock,
 					int *current_fps, int *doom_fps);
 
+void	print_map(int map[MAX_MAP][MAX_MAP], int width,
+					int height, t_player *player);
+
 #endif

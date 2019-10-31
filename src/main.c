@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/26 12:23:28 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/31 00:35:14 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	main_loop(t_doom *doom)
 			&(doom->sdl.win))) == -1)
 			return ;
 		update_fps(&delta_clock, &start_clock, &current_fps, &doom->data.fps);
+		print_map((*doom->data.map_ptr), doom->data.map_height, doom->data.map_width, &doom->player);
 	}
 }
 
