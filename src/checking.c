@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 03:29:54 by afonck            #+#    #+#             */
-/*   Updated: 2019/10/30 18:32:25 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/10/31 18:27:38 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,18 +98,32 @@ void	verify_bordermap(int const (*map)[MAX_MAP][MAX_MAP],
 	j = 0;
 	k = 0;
 	l = 0;
-	while (is_valid_wall((*map)[0][i]) == 1 && i < map_height)
+	while (is_valid_wall((*map)[i][0]) == 1 && i < map_width)
+	{
+		printf("map[i = %d][0]: %d\n", i, (*map)[i][0]);
 		i++;
-	while (is_valid_wall((*map)[map_width - 1][j]) == 1 && j < map_height)
+	}
+	//printf("\n\ni: %d, width: %d\n", i, map_width);
+	while (is_valid_wall((*map)[j][map_height - 1]) == 1 && j < map_width)
+	{
+		printf("map[j = %d][%d]: %d\n", j, map_height - 1, (*map)[j][map_height - 1]);
 		j++;
-	while (is_valid_wall((*map)[k][0]) == 1 && k < map_width)
+		printf("map[j = %d][%d]: %d\n", j, map_height - 1, (*map)[j][map_height - 1]);
+	}
+	while (is_valid_wall((*map)[0][k]) == 1 && k < map_height)
+	{
+		printf("map[0][k = %d]: %d\n", k, (*map)[0][k]);
 		k++;
-	while (is_valid_wall((*map)[l][map_height - 1]) == 1 && l < map_width)
+	}
+	while (is_valid_wall((*map)[map_width - 1][l]) == 1 && l < map_height)
+	{
+		printf("map[%d][l = %d]: %d\n", map_width - 1, l, (*map)[map_width - 1][l]);
 		l++;
-	if (i != map_height || j != map_height || k != map_width || l != map_width)
+	}
+	if (i != map_width || j != map_width || k != map_height || l != map_height)
 	{
 		ft_dprintf(STDERR_FILENO, "map %{r}s is not surrounded by walls \
-			(1 / 2), exiting...\n", title);
+(1 / 2), exiting...\n", title);
 		exit(EXIT_FAILURE);
 	}
 }
