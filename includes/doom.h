@@ -46,11 +46,12 @@ typedef struct	s_ttf
 
 typedef struct	s_data
 {
-	int			texture[8][TEX_W * TEX_H];
+	//int			texture[8][TEX_W * TEX_H];
 	Uint32		*img_ptr;
-	int			(*map_ptr)[MAX_MAP][MAX_MAP];
-	long long	tex_y;
+	//int			(*map_ptr)[MAX_MAP][MAX_MAP];
+	//long long	tex_y;
 	int			quit;
+	/*
 	int			map_width;
 	int			map_height;
 	int			start_thread;
@@ -58,7 +59,7 @@ typedef struct	s_data
 	int			tex_x;
 	int			tex_num;
 	int			color;
-	int			fps;
+	int			fps;*/
 }				t_data;
 
 typedef struct	s_player
@@ -102,16 +103,50 @@ typedef struct	s_wall_finding
 	int			side;
 }				t_wall_find;
 
+typedef struct	s_vec
+{
+	int			x;
+	int			y;
+}				t_vec;
+
+typedef struct	s_vecdb
+{
+	double		x;
+	double		y;
+}				t_vecdb;
+
+typedef struct	s_bresen
+{
+	t_vec point_one;
+	t_vec point_two;
+	int xinc;
+	int yinc;
+	int dx;
+	int dy;
+}				t_bresen;
+
 typedef struct	s_doom
 {
 	t_sdl		sdl;
-	t_ttf		ttf;
+	//t_ttf		ttf;
 	t_data		data;
-	t_player	player;
-	t_raycast	raycast;
-	t_wall_find	find_wall;
+	//t_player	player;
+	t_vec		player_pos;
+	//t_raycast	raycast;
+	//t_wall_find	find_wall;
 }				t_doom;
 
+void	fill_pix(Uint32 *pixels, int x, int y, int color);
+
+void	draw_line(const t_vec *point_one, const t_vec *point_two, Uint32 *img_ptr, int color);
+
+void			free_sdl(SDL_Window **win);
+
+int				free_sdl_quit(SDL_Window **win);
+
+int				init_sdl(SDL_Window **win, SDL_Surface **surf);
+
+/*
 void			init_doom(t_doom *doom, char *title);
 
 void			init_sdl_struct(t_sdl *sdl);
@@ -187,5 +222,5 @@ void			update_fps(int *delta_clock, int *start_clock,
 
 void	print_map(int map[MAX_MAP][MAX_MAP], int width,
 					int height, t_player *player);
-
+*/
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   drawing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 03:35:35 by afonck            #+#    #+#             */
-/*   Updated: 2019/10/26 12:22:29 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/11/11 13:47:02 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	fill_pix(Uint32 *pixels, int x, int y, int color)
 	if (x < WIN_WIDTH && y < WIN_HEIGHT && x > 0 && y > 0)
 		pixels[x + y * WIN_WIDTH] = color;
 }
-
+/*
 void	draw_wall_and_floor(Uint32 *pixels, t_raycast *raycast)
 {
 	int sky;
@@ -36,3 +36,4 @@ void	draw_wall_and_floor(Uint32 *pixels, t_raycast *raycast)
 		floor--;
 	}
 }
+*/

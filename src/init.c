@@ -6,13 +6,13 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/31 00:31:12 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/11 13:56:48 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "doom.h"
-
+/*
 void	find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP],
 			int map_height, int map_width)
 {
@@ -42,7 +42,7 @@ void	find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP],
 		exiting...\n");
 	exit(EXIT_FAILURE);
 }
-
+*/
 int		init_sdl(SDL_Window **win, SDL_Surface **surf)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -90,7 +90,7 @@ int		init_ttf(t_ttf *ttf)
 	ttf->rect.h = WIN_HEIGHT / 12;
 	return (EXIT_SUCCESS);
 }
-
+/*
 void	init_doom(t_doom *doom, char *title)
 {
 	init_sdl_struct(&(doom->sdl));
@@ -100,3 +100,4 @@ void	init_doom(t_doom *doom, char *title)
 		doom->data.map_height, doom->data.map_width);
 	init_raycast_struct(&(doom->raycast), doom->player.x, doom->player.y);
 }
+*/
