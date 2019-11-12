@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/13 00:28:45 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/13 01:02:51 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,20 +78,33 @@ void	main_loop(t_doom *doom)
 	//int			delta_clock;
 	//int			current_fps;
 	const Uint8 *keyboard_state;
-	SDL_Surface *my_map = NULL;
-	double angle = 0.0;
-	t_vec vec1 = {50, 20};
-	t_vec vec2 = {50, 70};
-	t_vecdb playerdb = {70, 70};
-	t_vecdb direcdb;//= {cos(angle) * 5 + playerdb.x, sin(angle) * 5 + playerdb.y};
-	t_vec player;
-	t_vec direc;
-	Uint32 *img_map_ptr;
-	SDL_Rect myrect = {.x=0, .y=0, .w=WIN_WIDTH, .h=WIN_HEIGHT};
+
+	SDL_Surface *my_map = NULL; // surface for the map
+	Uint32 *img_map_ptr; // pointer to the pixels of the map surface
+
+	t_vec vec1 = {50, 20}; // start of wall
+	t_vec vec2 = {50, 70}; // end of wall
+
+	double angle = 0.0; // direction angle of player
+	t_vecdb playerdb = {70, 70}; // player pos in float
+	t_vecdb direcdb; // player direction in float
+	t_vec player; // player pos in int
+	t_vec direc; // player pos in float
+
+	SDL_Rect myrect = {.x=0, .y=0, .w=WIN_WIDTH, .h=WIN_HEIGHT}; // Stretching rectangle to print the map in fullscreen
 
 	//current_fps = 100;
-	if ((my_map = SDL_CreateRGBSurface(0, FIRST_MAP_WIDTH, FIRST_MAP_HEIGHT, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0x0/*0xFF000000*/)) == NULL)
+	/*
+		When creating a surface, the last four parameters correspond to the RGBA masks for the created surface. They need to correspond
+		to the format of the surface we copy to (the window)
+		SDL_ConvertSurface function can be used to adapt the format of a new surface to the format of an other surface (the window in our case)
+
+		NOT FORGET --> if something feels wrong about the colors in the project, it could come from the format of the surfaces, including the
+		surface of the window
+	*/
+	if ((my_map = SDL_CreateRGBSurface(0, FIRST_MAP_WIDTH, FIRST_MAP_HEIGHT, 32, 0, 0, 0, 0)) == NULL)
 		printf("create surface error = %s\n", SDL_GetError());
+	//my_map = SDL_ConvertSurface(my_map, doom->sdl.surf->format, 0);
 	img_map_ptr = my_map->pixels;
 	doom->data.img_ptr = doom->sdl.surf->pixels;
 	keyboard_state = SDL_GetKeyboardState(NULL);
@@ -102,12 +115,8 @@ void	main_loop(t_doom *doom)
 		while (SDL_PollEvent(&(doom->sdl.event)) != 0)
 			check_quit(&(doom->sdl.event), &(doom->data.quit));
 		//ft_bzero(doom->data.img_ptr, WIN_WIDTH * WIN_HEIGHT);
-		/*if ((SDL_UpdateWindowSurface(doom->sdl.win)) < 0)
-		{
-			ft_dprintf(STDERR_FILENO, "SDL_UpdateWindowSurface error = %{r}s\n", \
-				SDL_GetError());
-			return ;
-		}*/
+
+		//move the player and assign his new position, need float and then int converting because of angle calculation
 		basic_move(&playerdb, &angle, keyboard_state);
 		direcdb.x = cos(angle) * 5 + playerdb.x;
 		direcdb.y = sin(angle) * 5 + playerdb.y;
@@ -115,6 +124,8 @@ void	main_loop(t_doom *doom)
 		player.y = (int)playerdb.y;
 		direc.x = (int)direcdb.x;
 		direc.y = (int)direcdb.y;
+
+
 		//draw_line(&vec1, &vec2, doom->data.img_ptr, 0xFFFFFF);
 		//draw_line(&player, &direc, doom->data.img_ptr, 0xFF0000);
 		//fill_pix(doom->data.img_ptr, player.x, player.y, 0xFFFF00);
@@ -133,15 +144,6 @@ void	main_loop(t_doom *doom)
 				SDL_GetError());
 			return ;
 		}
-		//if (init_fps_surf(&(doom->ttf), current_fps, &start_clock) == -1)
-		//	return ;
-		//movement(&(doom->player), &(doom->data), keyboard_state);
-		//multithread(doom);
-		//if ((blit_and_update(&(doom->ttf.surf_message), &(doom->sdl.surf), \
-		//	&(doom->sdl.win))) == -1)
-		//	return ;
-		//update_fps(&delta_clock, &start_clock, &current_fps, &doom->data.fps);
-		//print_map((*doom->data.map_ptr), doom->data.map_height, doom->data.map_width, &doom->player);
 	}
 }
 
