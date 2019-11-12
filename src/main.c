@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/12 22:52:54 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/13 00:28:45 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,31 @@ void	check_quit(SDL_Event *event, int *quit)
 		*quit = 1;
 }
 
+int		is_in_map(t_vecdb *player)
+{
+	if (player->x < 0 || player->x >= FIRST_MAP_WIDTH)
+		return (0);
+	if (player->y < 0 || player->y >= FIRST_MAP_HEIGHT)
+		return (0);
+	return (1);
+}
+
 void	basic_move(t_vecdb *player, double *angle, const Uint8 *keyboard_state)
 {
+	if (!is_in_map(player))
+	{
+		player->x = 70;
+		player->y = 70;
+	}
 	if (keyboard_state[SDL_SCANCODE_UP])
 	{
-		player->x += cos(*angle);
-		player->y += sin(*angle);
+		player->x += cos(*angle) / 5; //5 == speed reduction
+		player->y += sin(*angle) / 5;
 	}
 	if (keyboard_state[SDL_SCANCODE_DOWN])
 	{
-		player->x -= cos(*angle);
-		player->y -= sin(*angle);
+		player->x -= cos(*angle) / 5;
+		player->y -= sin(*angle) / 5;
 	}
 	if (keyboard_state[SDL_SCANCODE_LEFT])
 		*angle -= 0.1;
@@ -76,7 +90,7 @@ void	main_loop(t_doom *doom)
 	SDL_Rect myrect = {.x=0, .y=0, .w=WIN_WIDTH, .h=WIN_HEIGHT};
 
 	//current_fps = 100;
-	if ((my_map = SDL_CreateRGBSurface(0, 100, 100, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0x0/*0xFF000000*/)) == NULL)
+	if ((my_map = SDL_CreateRGBSurface(0, FIRST_MAP_WIDTH, FIRST_MAP_HEIGHT, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0x0/*0xFF000000*/)) == NULL)
 		printf("create surface error = %s\n", SDL_GetError());
 	img_map_ptr = my_map->pixels;
 	doom->data.img_ptr = doom->sdl.surf->pixels;
@@ -84,7 +98,7 @@ void	main_loop(t_doom *doom)
 	SDL_WarpMouseInWindow(doom->sdl.win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
 	while (!doom->data.quit)
 	{
-		ft_bzero(img_map_ptr, (100 * 100) * 4);
+		ft_bzero(img_map_ptr, (FIRST_MAP_WIDTH * FIRST_MAP_HEIGHT) * 4);
 		while (SDL_PollEvent(&(doom->sdl.event)) != 0)
 			check_quit(&(doom->sdl.event), &(doom->data.quit));
 		//ft_bzero(doom->data.img_ptr, WIN_WIDTH * WIN_HEIGHT);

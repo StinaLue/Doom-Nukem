@@ -16,6 +16,8 @@
 # include "SDL.h"
 # include "SDL_ttf.h"
 # define TITLE "DOOM"
+# define FIRST_MAP_WIDTH 100
+# define FIRST_MAP_HEIGHT 100
 # define WIN_WIDTH 1680//1920
 # define WIN_HEIGHT 1050//1080
 # define NB_THREADS 8

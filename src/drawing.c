@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 03:35:35 by afonck            #+#    #+#             */
-/*   Updated: 2019/11/12 22:15:56 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/13 00:11:17 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	fill_pix(Uint32 *pixels, int x, int y, int color)
 {
 	if (x < WIN_WIDTH && y < WIN_HEIGHT && x > 0 && y > 0)
 		//pixels[x + y * WIN_WIDTH] = color;
-		pixels[x + y * 100] = color;
+		pixels[x + y * FIRST_MAP_WIDTH] = color;
 }
 /*
 void	draw_wall_and_floor(Uint32 *pixels, t_raycast *raycast)
