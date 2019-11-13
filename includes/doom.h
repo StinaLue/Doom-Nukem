@@ -16,10 +16,15 @@
 # include "SDL.h"
 # include "SDL_ttf.h"
 # define TITLE "DOOM"
+
 # define FIRST_MAP_WIDTH 100
 # define FIRST_MAP_HEIGHT 100
-# define WIN_WIDTH 1680//1920
-# define WIN_HEIGHT 1050//1080
+
+# define SECOND_MAP_WIDTH 100
+# define SECOND_MAP_HEIGHT 100
+
+# define WIN_WIDTH 1920
+# define WIN_HEIGHT 1080
 # define NB_THREADS 8
 # define MAX_MAP 100
 # define MAX_LOOK_DOWN -400
@@ -105,6 +110,12 @@ typedef struct	s_wall_finding
 	int			side;
 }				t_wall_find;
 
+typedef struct	s_img_data
+{
+	Uint32		*img_ptr;
+	int			rowsize;
+}				t_img_data;
+
 typedef struct	s_vec
 {
 	int			x;
@@ -116,6 +127,12 @@ typedef struct	s_vecdb
 	double		x;
 	double		y;
 }				t_vecdb;
+
+typedef	struct	s_wall
+{
+	t_vec		start_wall;
+	t_vec		end_wall;
+}				t_wall;
 
 typedef struct	s_bresen
 {
@@ -138,9 +155,9 @@ typedef struct	s_doom
 	//t_wall_find	find_wall;
 }				t_doom;
 
-void	fill_pix(Uint32 *pixels, int x, int y, int color);
+void	fill_pix(Uint32 *pixels, t_vec *point, int color, int rowsize);
 
-void	draw_line(const t_vec *point_one, const t_vec *point_two, Uint32 *img_ptr, int color);
+void	draw_line(const t_vec *point_one, const t_vec *point_two, t_img_data *img_data, int color);
 
 void			free_sdl(SDL_Window **win);
 

@@ -6,17 +6,17 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 03:35:35 by afonck            #+#    #+#             */
-/*   Updated: 2019/11/13 00:11:17 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/13 13:14:56 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-void	fill_pix(Uint32 *pixels, int x, int y, int color)
+void	fill_pix(Uint32 *pixels, t_vec *point, int color, int rowsize)
 {
-	if (x < WIN_WIDTH && y < WIN_HEIGHT && x > 0 && y > 0)
+	if (point->x < WIN_WIDTH && point->y < WIN_HEIGHT && point->x > 0 && point->y > 0)
 		//pixels[x + y * WIN_WIDTH] = color;
-		pixels[x + y * FIRST_MAP_WIDTH] = color;
+		pixels[point->x + point->y * rowsize] = color;
 }
 /*
 void	draw_wall_and_floor(Uint32 *pixels, t_raycast *raycast)
