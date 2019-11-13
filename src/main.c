@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/13 17:24:59 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/13 23:38:25 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,38 +76,49 @@ void	basic_move(t_vecdb *player, double *angle, const Uint8 *keyboard_state)
 		*angle += 0.01;//0.1;
 }
 
-void	print_first_map(t_img_data *img_data, t_vec *player, t_vec *direc, t_wall walls[1])
+void	print_first_map(t_img_data *img_data, t_vec *player, t_vec *direc, t_wall *walls)
 {
 	t_wall transfo_wall;
 	t_vec transfo_player = {50, 50};
 	t_vec transfo_direc = {50, 45};
 	(void)player;
 	(void)direc;
+	int i = 0;
+	while (i < 4) // looping through each existing wall
+	{
+		int tx1 = walls[i].start_wall.x - player->x;
+		int ty1 = walls[i].start_wall.y - player->y;
 
-	int tx1 = walls[0].start_wall.x - player->x;
-	int ty1 = walls[0].start_wall.y - player->y;
+		int tx2 = walls[i].end_wall.x - player->x;
+		int ty2 = walls[i].end_wall.y - player->y;
 
-	int tx2 = walls[0].end_wall.x - player->x;
-	int ty2 = walls[0].end_wall.y - player->y;
+		int tz1 = tx1 * cos(angle) + ty1 * sin(angle);
+		int tz2 = tx2 * cos(angle) + ty2 * sin(angle);
 
-	int tz1 = tx1 * cos(angle) + ty1 * sin(angle);
-	int tz2 = tx2 * cos(angle) + ty2 * sin(angle);
+		tx1 = tx1 * sin(angle) - ty1 * cos(angle);
+		tx2 = tx2 * sin(angle) - ty2 * cos(angle);
 
-	tx1 = tx1 * sin(angle) - ty1 * cos(angle);
-	tx2 = tx2 * sin(angle) - ty2 * cos(angle);
-
-	transfo_wall.start_wall.x = 50 - tx1;
-	transfo_wall.start_wall.y = 50 - tz1;
-	transfo_wall.end_wall.x = 50 - tx2;
-	transfo_wall.end_wall.y = 50 - tz2;
-	draw_line(&transfo_wall.start_wall, &transfo_wall.end_wall, img_data, 0xFFFFFF);
+		transfo_wall.start_wall.x = 50 - tx1;
+		transfo_wall.start_wall.y = 50 - tz1;
+		transfo_wall.end_wall.x = 50 - tx2;
+		transfo_wall.end_wall.y = 50 - tz2;
+		draw_line(&transfo_wall.start_wall, &transfo_wall.end_wall, img_data, 0xFFFFFF);
+		i++;
+}
 	draw_line(&transfo_player, &transfo_direc, img_data, 0xFF0000);
 	fill_pix(img_data->img_ptr, &transfo_player, 0xFFFF00, FIRST_MAP_WIDTH);
 }
 
-void	print_second_map(t_img_data *img_data, t_vec *player, t_vec *direc, t_wall walls[1])
+void	print_second_map(t_img_data *img_data, t_vec *player, t_vec *direc, t_wall *walls)
 {
-	draw_line(&walls[0].start_wall, &walls[0].end_wall, img_data, 0xFFFFFF);
+	int i;
+
+	i = 0;
+	while (i < 4) // looping through each existing wall -> we do the same in print_first_map
+	{
+		draw_line(&walls[i].start_wall, &walls[i].end_wall, img_data, 0xFFFFFF);
+		i++;
+	}
 	draw_line(player, direc, img_data, 0xFF0000);
 	fill_pix(img_data->img_ptr, player, 0xFFFF00, FIRST_MAP_WIDTH);
 }
@@ -126,9 +137,11 @@ void	main_loop(t_doom *doom)
 	t_img_data img_data_firstmap;
 	t_img_data img_data_secondmap;
 
-	t_vec vec1 = {50, 20}; // start of wall
-	t_vec vec2 = {50, 70}; // end of wall
-	t_wall walls[1] = {{vec1, vec2}};
+	t_vec vec1 = {50, 20}; // start of "first" wall
+	t_vec vec2 = {50, 70}; // end of "first" wall
+	t_vec vec3 = {70, 90};
+	t_vec vec4 = {90, 20};
+	t_wall walls[4] = {{vec1, vec2}, {vec2, vec3}, {vec3, vec4}, {vec4, vec1}};
 
 	//double angle = 0.0; direction angle of player
 	t_vecdb playerdb = {70, 70}; // player pos in float
