@@ -6,12 +6,22 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/14 15:59:59 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/14 16:06:41 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "doom.h"
+
+/*
+** TODO --> SEPARATE VECTOR LIBRARY FILE
+*/
+void	assign_vec(t_vec *one, const t_vec *two)
+{
+	one->x = two->x;
+	one->y = two->y;
+}
+//------------------------------------------
 
 void	check_quit(SDL_Event *event, int *quit)
 {
@@ -137,7 +147,7 @@ void	main_loop(t_doom *doom)
 	{
 		ft_bzero(doom->sdl.first_map->pixels, doom->sdl.first_map->h * doom->sdl.first_map->pitch);
 		ft_bzero(doom->sdl.second_map->pixels, doom->sdl.second_map->h * doom->sdl.second_map->pitch);
-		draw_line(&mid_window_top, &mid_window_bottom, doom->sdl.first_map, 0xFFFFFF);
+		draw_line(mid_window_top, mid_window_bottom, doom->sdl.first_map, 0xFFFFFF);
 
 		while (SDL_PollEvent(&(doom->sdl.event)) != 0)
 			check_quit(&(doom->sdl.event), &(doom->data.quit));

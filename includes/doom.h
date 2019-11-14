@@ -63,16 +63,6 @@ typedef	struct	s_wall
 	//int		flags; BIT FLAGS for walls specifications?
 }				t_wall;
 
-typedef struct	s_bresen
-{
-	t_vec		point_one;
-	t_vec		point_two;
-	int			xinc;
-	int			yinc;
-	int			dx;
-	int			dy;
-}				t_bresen;
-
 typedef struct	s_player
 {
 	t_vec		pos;
@@ -108,7 +98,7 @@ void	init_player_struct(t_player *player);
 */
 void			fill_pix(SDL_Surface *surf, int x, int y, int color);
 
-void			draw_line(const t_vec *point_one, const t_vec *point_two, SDL_Surface *surf, int color);
+void			draw_line(const t_vec a, const t_vec b, SDL_Surface *surf, int color);
 
 /*
 ** FREE FUNCTIONS
