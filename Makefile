@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2019/11/11 15:15:44 by afonck           ###   ########.fr        #
+#    Updated: 2019/11/14 15:45:27 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,6 +60,7 @@ HEADERS = $(addprefix $(HEADERS_DIRECTORY), $(HEADERS_LIST))
 SOURCES_DIRECTORY = ./src/
 SOURCES_LIST = main.c \
 			init.c \
+			init_structs.c \
 			free.c \
 			drawing.c \
 			draw_line.c#\

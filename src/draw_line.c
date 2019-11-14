@@ -6,86 +6,46 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 16:06:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/14 13:21:22 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/14 16:04:55 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 #include "libft.h"
 
-void	draw_vertical(t_bresen *bresen, t_img_data *img_data, int color)
+int		get_steps(double *x, double *y)
 {
-	int i;
-	int cumul;
+	int	steps;
 
-	i = 1;
-	cumul = bresen->dy / 2;
-	while (i <= bresen->dy)
+	if (ft_absolute(*y) > ft_absolute(*x))
+		return get_steps(y, x);
+	else if (ft_absolute(*x) > 0)
 	{
-		bresen->point_one.y += bresen->yinc;
-		cumul += bresen->dx;
-		if (cumul >= bresen->dy)
-		{
-			cumul -= bresen->dy;
-			bresen->point_one.x += bresen->xinc;
-		}
-		fill_pix(img_data, bresen->point_one.x, bresen->point_one.y, color);
-		i++;
+		steps = *x;
+		*y = *y / ft_absolute(*x);
+		*x = *x / ft_absolute(*x);
+		return (steps);
 	}
+	return (0);
 }
 
-void	draw_horizontal(t_bresen *bresen, t_img_data *img_data, int color)
+void	draw_line(const t_vec a, const t_vec b, SDL_Surface *surf, int color)
 {
-	int i;
-	int cumul;
+	double	deltax;
+	double	deltay;
+	t_vecdb	pos;
+	int		steps;
 
-	i = 1;
-	cumul = bresen->dx / 2;
-	while (i <= bresen->dx)
+	deltax = b.x - a.x;
+	deltay = b.y - a.y;
+	steps = ft_absolute(get_steps(&deltax, &deltay));
+	pos.x = a.x + 0.5;
+	pos.y = a.y + 0.5;
+	while (steps >= 0)
 	{
-		bresen->point_one.x += bresen->xinc;
-		cumul += bresen->dy;
-		if (cumul >= bresen->dx)
-		{
-			cumul -= bresen->dx;
-			bresen->point_one.y += bresen->yinc;
-		}
-		fill_pix(img_data, bresen->point_one.x, bresen->point_one.y, color);
-		i++;
+		fill_pix(surf, (int)pos.x, (int)pos.y, color);
+		pos.x += deltax;
+		pos.y += deltay;
+		steps--;
 	}
-}
-
-void	assign_vec(t_vec *one, const t_vec *two)
-{
-	one->x = two->x;
-	one->y = two->y;
-}
-
-int		pos_or_neg(int i)
-{
-	if (i > 0)
-		return (1);
-	else
-		return (-1);
-}
-
-void	draw_line(const t_vec *point_one, const t_vec *point_two, t_img_data *img_data, int color)
-{
-	t_bresen bresen;
-
-	bresen.point_one.x = point_one->x;
-	bresen.point_one.y = point_one->y;
-	bresen.point_two.x = point_two->x;
-	bresen.point_two.y = point_two->y;
-	bresen.dx = point_two->x - point_one->x;
-	bresen.dy = point_two->y - point_one->y;
-	bresen.xinc = pos_or_neg(bresen.dx);
-	bresen.yinc = pos_or_neg(bresen.dy);
-	bresen.dx = ft_absolute(bresen.dx);
-	bresen.dy = ft_absolute(bresen.dy);
-	//fill_pix(point_one->x, point_one->y, map->altitude_z, map);
-	if (bresen.dx > bresen.dy)
-		draw_horizontal(&bresen, img_data, color);
-	else
-		draw_vertical(&bresen, img_data, color);
 }
