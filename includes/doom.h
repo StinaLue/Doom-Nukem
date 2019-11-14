@@ -18,11 +18,11 @@
 
 # define NB_WALLS 4
 
-# define FIRST_MAP_WIDTH 100
-# define FIRST_MAP_HEIGHT 100
+# define ROT_MAP_WIDTH 100
+# define ROT_MAP_HEIGHT 100
 
-# define SECOND_MAP_WIDTH 100
-# define SECOND_MAP_HEIGHT 100
+# define FIXED_MAP_WIDTH 100
+# define FIXED_MAP_HEIGHT 100
 
 # define WIN_WIDTH 1920
 # define WIN_HEIGHT 1080
@@ -46,8 +46,8 @@ typedef struct	s_sdl
 {
 	SDL_Window	*win;
 	SDL_Surface	*win_surf;
-	SDL_Surface *first_map;
-	SDL_Surface *second_map;
+	SDL_Surface *fixed_mmap;
+	SDL_Surface *rot_mmap;
 	SDL_Event	event;
 }				t_sdl;
 
@@ -65,8 +65,8 @@ typedef	struct	s_wall
 
 typedef struct	s_player
 {
-	t_vec		pos;
-	t_vec		direc;
+	t_vecdb		pos;
+	t_vecdb		direc;
 	double		angle;
 }				t_player;
 
@@ -87,11 +87,19 @@ int				init_sdl(SDL_Window **win, SDL_Surface **surf);
 /*
 ** INIT STRUCT FUNCTIONS
 */
-void	init_sdl_struct(t_sdl *sdl);
+void			init_sdl_struct(t_sdl *sdl);
 
-void	init_data_struct(t_data *data);
+void			init_data_struct(t_data *data);
 
-void	init_player_struct(t_player *player);
+void			init_player_struct(t_player *player);
+
+/*
+** PRINT MINIMAP FUNCTIONS
+*/
+
+void			draw_fixed_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);
+
+void			draw_rot_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);
 
 /*
 ** DRAWING FUNCTIONS
@@ -99,6 +107,7 @@ void	init_player_struct(t_player *player);
 void			fill_pix(SDL_Surface *surf, int x, int y, int color);
 
 void			draw_line(const t_vec a, const t_vec b, SDL_Surface *surf, int color);
+
 
 /*
 ** FREE FUNCTIONS

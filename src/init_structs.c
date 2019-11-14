@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/14 15:45:43 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/14 17:34:08 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ void	init_sdl_struct(t_sdl *sdl)
 {
 	sdl->win = NULL;
 	sdl->win_surf = NULL;
-	sdl->first_map = NULL;
-	sdl->second_map = NULL;
+	sdl->fixed_mmap = NULL;
+	sdl->rot_mmap = NULL;
 }
 
 void	init_data_struct(t_data *data)
