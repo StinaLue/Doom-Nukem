@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/14 13:26:29 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/14 15:10:34 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,9 @@ int		init_sdl(SDL_Window **win, SDL_Surface **surf)
 	return (EXIT_SUCCESS);
 }
 
-/*
-void	init_doom(t_doom *doom, char *title)
+void	init_doom(t_doom *doom)
 {
 	init_sdl_struct(&(doom->sdl));
-	init_ttf_struct(&(doom->ttf));
-	init_data_struct(&(doom->data), title);
-	init_player_struct(&(doom->player), *(doom->data.map_ptr),
-		doom->data.map_height, doom->data.map_width);
-	init_raycast_struct(&(doom->raycast), doom->player.x, doom->player.y);
+	init_data_struct(&(doom->data));
+	init_player_struct(&(doom->player));
 }
-*/

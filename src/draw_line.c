@@ -6,14 +6,14 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 16:06:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/14 13:21:22 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/14 14:39:33 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 #include "libft.h"
 
-void	draw_vertical(t_bresen *bresen, t_img_data *img_data, int color)
+void	draw_vertical(t_bresen *bresen, SDL_Surface *surf, int color)
 {
 	int i;
 	int cumul;
@@ -29,12 +29,12 @@ void	draw_vertical(t_bresen *bresen, t_img_data *img_data, int color)
 			cumul -= bresen->dy;
 			bresen->point_one.x += bresen->xinc;
 		}
-		fill_pix(img_data, bresen->point_one.x, bresen->point_one.y, color);
+		fill_pix(surf, bresen->point_one.x, bresen->point_one.y, color);
 		i++;
 	}
 }
 
-void	draw_horizontal(t_bresen *bresen, t_img_data *img_data, int color)
+void	draw_horizontal(t_bresen *bresen, SDL_Surface *surf, int color)
 {
 	int i;
 	int cumul;
@@ -50,7 +50,7 @@ void	draw_horizontal(t_bresen *bresen, t_img_data *img_data, int color)
 			cumul -= bresen->dx;
 			bresen->point_one.y += bresen->yinc;
 		}
-		fill_pix(img_data, bresen->point_one.x, bresen->point_one.y, color);
+		fill_pix(surf, bresen->point_one.x, bresen->point_one.y, color);
 		i++;
 	}
 }
@@ -69,7 +69,7 @@ int		pos_or_neg(int i)
 		return (-1);
 }
 
-void	draw_line(const t_vec *point_one, const t_vec *point_two, t_img_data *img_data, int color)
+void	draw_line(const t_vec *point_one, const t_vec *point_two, SDL_Surface *surf, int color)
 {
 	t_bresen bresen;
 
@@ -85,7 +85,7 @@ void	draw_line(const t_vec *point_one, const t_vec *point_two, t_img_data *img_d
 	bresen.dy = ft_absolute(bresen.dy);
 	//fill_pix(point_one->x, point_one->y, map->altitude_z, map);
 	if (bresen.dx > bresen.dy)
-		draw_horizontal(&bresen, img_data, color);
+		draw_horizontal(&bresen, surf, color);
 	else
-		draw_vertical(&bresen, img_data, color);
+		draw_vertical(&bresen, surf, color);
 }

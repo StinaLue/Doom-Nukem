@@ -6,17 +6,29 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/14 13:26:44 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/14 15:45:43 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "doom.h"
 
-#include <pthread.h>
-
 void	init_sdl_struct(t_sdl *sdl)
 {
 	sdl->win = NULL;
-	sdl->surf = NULL;
+	sdl->win_surf = NULL;
+	sdl->first_map = NULL;
+	sdl->second_map = NULL;
+}
+
+void	init_data_struct(t_data *data)
+{
+	data->quit = 0;
+}
+
+void	init_player_struct(t_player *player)
+{
+	player->pos.x = 70;
+	player->pos.y = 70;
+	player->angle = 0.0;
 }
