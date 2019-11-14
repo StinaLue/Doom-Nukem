@@ -17,13 +17,16 @@
 # include "SDL_ttf.h"
 # define TITLE "DOOM"
 
-# define NB_WALLS 4
+# define NB_WALLS 1
 
 # define FIRST_MAP_WIDTH 100
 # define FIRST_MAP_HEIGHT 100
 
 # define SECOND_MAP_WIDTH 100
 # define SECOND_MAP_HEIGHT 100
+
+# define THIRD_MAP_WIDTH 100
+# define THIRD_MAP_HEIGHT 100
 
 # define WIN_WIDTH 1920
 # define WIN_HEIGHT 1080
@@ -77,6 +80,14 @@ typedef struct	s_vecdb
 	double		x;
 	double		y;
 }				t_vecdb;
+
+typedef struct	s_wall3d
+{
+	t_vec 		top_left;
+	t_vec 		top_right;
+	t_vec 		bottom_left;
+	t_vec 		bottom_right;
+}				t_wall3d;
 
 typedef	struct	s_wall
 {
