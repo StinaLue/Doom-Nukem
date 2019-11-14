@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/14 13:32:06 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/14 14:33:03 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,10 @@ void	print_first_map(t_img_data *img_data, t_vec *player, t_vec *direc, t_wall *
 		transfo_wall.start_wall.y = 50 - tz1;
 		transfo_wall.end_wall.x = 50 - tx2;
 		transfo_wall.end_wall.y = 50 - tz2;
-		draw_line(&transfo_wall.start_wall, &transfo_wall.end_wall, img_data, 0xFFFFFF);
+		draw_line(transfo_wall.start_wall, transfo_wall.end_wall, img_data, 0xFFFFFF);
 		i++;
 	}
-	draw_line(&transfo_player, &transfo_direc, img_data, 0xFF0000);
+	draw_line(transfo_player, transfo_direc, img_data, 0xFF0000);
 	fill_pix(img_data, transfo_player.x, transfo_player.y, 0xFFFF00);
 }
 
@@ -95,10 +95,10 @@ void	print_second_map(t_img_data *img_data, t_vec *player, t_vec *direc, t_wall 
 	i = 0;
 	while (i < NB_WALLS) // looping through each existing wall -> we do the same in print_first_map
 	{
-		draw_line(&walls[i].start_wall, &walls[i].end_wall, img_data, 0xFFFFFF);
+		draw_line(walls[i].start_wall, walls[i].end_wall, img_data, 0xFFFFFF);
 		i++;
 	}
-	draw_line(player, direc, img_data, 0xFF0000);
+	draw_line(*player, *direc, img_data, 0xFF0000);
 	fill_pix(img_data, player->x, player->y, 0xFFFF00);
 }
 
@@ -159,7 +159,7 @@ void	main_loop(t_doom *doom)
 	{
 		ft_bzero(img_data_firstmap.img_ptr, (FIRST_MAP_WIDTH * FIRST_MAP_HEIGHT) * 4);
 		ft_bzero(img_data_secondmap.img_ptr, (SECOND_MAP_WIDTH * SECOND_MAP_HEIGHT) * 4);
-		draw_line(&mid_window_top, &mid_window_bottom, &img_data_firstmap, 0xFFFFFF);
+		draw_line(mid_window_top, mid_window_bottom, &img_data_firstmap, 0xFFFFFF);
 
 		while (SDL_PollEvent(&(doom->sdl.event)) != 0)
 			check_quit(&(doom->sdl.event), &(doom->data.quit));
