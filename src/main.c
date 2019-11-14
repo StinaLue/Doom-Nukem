@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/14 15:44:06 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/14 15:59:59 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,10 @@ void	print_first_map(SDL_Surface *surf, t_player *player, t_wall *walls)
 		transfo_wall.start_wall.y = 50 - tz1;
 		transfo_wall.end_wall.x = 50 - tx2;
 		transfo_wall.end_wall.y = 50 - tz2;
-		draw_line(&transfo_wall.start_wall, &transfo_wall.end_wall, surf, 0xFFFFFF);
+		draw_line(transfo_wall.start_wall, transfo_wall.end_wall, surf, 0xFFFFFF);
 		i++;
 	}
-	draw_line(&transfo_player, &transfo_direc, surf, 0xFF0000);
+	draw_line(transfo_player, transfo_direc, surf, 0xFF0000);
 	fill_pix(surf, transfo_player.x, transfo_player.y, 0xFFFF00);
 }
 
@@ -90,10 +90,10 @@ void	print_second_map(SDL_Surface *surf, t_player *player, t_wall *walls)
 	i = 0;
 	while (i < NB_WALLS) // looping through each existing wall -> we do the same in print_first_map
 	{
-		draw_line(&walls[i].start_wall, &walls[i].end_wall, surf, 0xFFFFFF);
+		draw_line(walls[i].start_wall, walls[i].end_wall, surf, 0xFFFFFF);
 		i++;
 	}
-	draw_line(&player->pos, &player->direc, surf, 0xFF0000);
+	draw_line(player->pos, player->direc, surf, 0xFF0000);
 	fill_pix(surf, player->pos.x, player->pos.y, 0xFFFF00);
 }
 
