@@ -110,7 +110,7 @@ typedef struct	s_doom
 
 void			fill_pix(t_img_data *img_data, int x, int y, int color);
 
-void			draw_line(const t_vec *point_one, const t_vec *point_two, t_img_data *img_data, int color);
+void			draw_line(const t_vec a, const t_vec b, t_img_data *img_data, int color);
 
 void			free_sdl(SDL_Window **win);
 

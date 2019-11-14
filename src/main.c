@@ -6,12 +6,15 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/14 14:33:03 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/11/14 14:25:30 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "doom.h"
+
+#include <stdio.h>
+#include <time.h>
 
 // THIS VARIABLE SHOULD NOT BE GLOBAL, TEMPORARLY DONE FOR MAKING THINGS EASY
 static double angle = 0.0;// direction angle of player
@@ -93,11 +96,21 @@ void	print_second_map(t_img_data *img_data, t_vec *player, t_vec *direc, t_wall 
 	int i;
 
 	i = 0;
+
+	clock_t begin;
+	double time_spent;
+	/* Mark beginning time */
+	begin = clock();
+
 	while (i < NB_WALLS) // looping through each existing wall -> we do the same in print_first_map
 	{
 		draw_line(walls[i].start_wall, walls[i].end_wall, img_data, 0xFFFFFF);
 		i++;
 	}
+
+	time_spent = (double)(clock() - begin) / CLOCKS_PER_SEC;
+	printf("%f\n", time_spent);
+
 	draw_line(*player, *direc, img_data, 0xFF0000);
 	fill_pix(img_data, player->x, player->y, 0xFFFF00);
 }
