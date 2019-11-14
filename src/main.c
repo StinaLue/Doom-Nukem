@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/14 18:34:51 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/11/14 21:38:53 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void	main_loop(t_doom *doom)
 
 		draw_fixed_minimap(doom->sdl.fixed_mmap, &doom->player, walls);
 		draw_rot_minimap(doom->sdl.rot_mmap, &doom->player, walls);
-		//draw_perspective_minimap(doom->sdl.perspective_mmap, &doom->player, walls);
+		draw_perspective_minimap(doom->sdl.perspective_mmap, &doom->player, walls);
 
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, &doom->sdl.surf->clip_rect)) < 0)
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, NULL)) < 0)
