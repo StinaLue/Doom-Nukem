@@ -3,36 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/13 23:38:25 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/11/14 13:32:06 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "doom.h"
-/*
-int		blit_and_update(SDL_Surface **fps, SDL_Surface **screen, \
-			SDL_Window **win)
-{
-	if ((SDL_BlitSurface(*fps, NULL, *screen, NULL)) < 0)
-	{
-		ft_dprintf(STDERR_FILENO, "SDL_BlitSurface error = %{r}s\n", \
-			SDL_GetError());
-		return (-1);
-	}
-	SDL_FreeSurface(*fps);
-	*fps = NULL;
-	if ((SDL_UpdateWindowSurface(*win)) < 0)
-	{
-		ft_dprintf(STDERR_FILENO, "SDL_UpdateWindowSurface error = %{r}s\n", \
-			SDL_GetError());
-		return (-1);
-	}
-	return (0);
-}
-*/
 
 // THIS VARIABLE SHOULD NOT BE GLOBAL, TEMPORARLY DONE FOR MAKING THINGS EASY
 static double angle = 0.0;// direction angle of player
@@ -84,7 +63,7 @@ void	print_first_map(t_img_data *img_data, t_vec *player, t_vec *direc, t_wall *
 	(void)player;
 	(void)direc;
 	int i = 0;
-	while (i < 4) // looping through each existing wall
+	while (i < NB_WALLS) // looping through each existing wall
 	{
 		int tx1 = walls[i].start_wall.x - player->x;
 		int ty1 = walls[i].start_wall.y - player->y;
@@ -104,9 +83,9 @@ void	print_first_map(t_img_data *img_data, t_vec *player, t_vec *direc, t_wall *
 		transfo_wall.end_wall.y = 50 - tz2;
 		draw_line(&transfo_wall.start_wall, &transfo_wall.end_wall, img_data, 0xFFFFFF);
 		i++;
-}
+	}
 	draw_line(&transfo_player, &transfo_direc, img_data, 0xFF0000);
-	fill_pix(img_data->img_ptr, &transfo_player, 0xFFFF00, FIRST_MAP_WIDTH);
+	fill_pix(img_data, transfo_player.x, transfo_player.y, 0xFFFF00);
 }
 
 void	print_second_map(t_img_data *img_data, t_vec *player, t_vec *direc, t_wall *walls)
@@ -114,22 +93,17 @@ void	print_second_map(t_img_data *img_data, t_vec *player, t_vec *direc, t_wall 
 	int i;
 
 	i = 0;
-	while (i < 4) // looping through each existing wall -> we do the same in print_first_map
+	while (i < NB_WALLS) // looping through each existing wall -> we do the same in print_first_map
 	{
 		draw_line(&walls[i].start_wall, &walls[i].end_wall, img_data, 0xFFFFFF);
 		i++;
 	}
 	draw_line(player, direc, img_data, 0xFF0000);
-	fill_pix(img_data->img_ptr, player, 0xFFFF00, FIRST_MAP_WIDTH);
+	fill_pix(img_data, player->x, player->y, 0xFFFF00);
 }
 
 void	main_loop(t_doom *doom)
 {
-	//int			start_clock;
-	//int			delta_clock;
-	//int			current_fps;
-	//current_fps = 100;
-
 	const Uint8 *keyboard_state;
 
 	SDL_Surface *my_first_map = NULL; // surface for the first map
@@ -141,7 +115,7 @@ void	main_loop(t_doom *doom)
 	t_vec vec2 = {50, 70}; // end of "first" wall
 	t_vec vec3 = {70, 90};
 	t_vec vec4 = {90, 20};
-	t_wall walls[4] = {{vec1, vec2}, {vec2, vec3}, {vec3, vec4}, {vec4, vec1}};
+	t_wall walls[NB_WALLS] = {{vec1, vec2}, {vec2, vec3}, {vec3, vec4}, {vec4, vec1}};
 
 	//double angle = 0.0; direction angle of player
 	t_vecdb playerdb = {70, 70}; // player pos in float
@@ -168,11 +142,13 @@ void	main_loop(t_doom *doom)
 
 	img_data_firstmap.img_ptr = my_first_map->pixels;
 	img_data_firstmap.rowsize = FIRST_MAP_WIDTH;
+	img_data_firstmap.height = FIRST_MAP_HEIGHT;
 
 	img_data_secondmap.img_ptr = my_second_map->pixels;
 	img_data_secondmap.rowsize = SECOND_MAP_WIDTH;
+	img_data_secondmap.height = SECOND_MAP_HEIGHT;
 
-	doom->data.img_ptr = doom->sdl.surf->pixels;
+	doom->data.win_img_ptr = doom->sdl.surf->pixels;
 
 	t_vec mid_window_top = {FIRST_MAP_WIDTH - 1, 0};
 	t_vec mid_window_bottom = {FIRST_MAP_WIDTH - 1, FIRST_MAP_HEIGHT - 1};
@@ -242,10 +218,7 @@ int		main(/*int argc, char *argv[]*/)
 		return (1);
 	if (init_sdl(&(doom.sdl.win), &(doom.sdl.surf)) != EXIT_SUCCESS)
 		return (free_sdl_quit(&(doom.sdl.win)));
-	//if (init_ttf(&(doom.ttf)) != EXIT_SUCCESS)
-	//	return (free_sdl_ttf_quit(&(doom.sdl.win), &(doom.ttf)));
 	main_loop(&doom);
 	free_sdl(&(doom.sdl.win));
-	//free_ttf(&(doom.ttf));
 	return (EXIT_SUCCESS);
 }

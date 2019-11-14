@@ -6,43 +6,13 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/11 13:56:48 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/14 13:26:29 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "doom.h"
-/*
-void	find_player_pos(t_player *player, int map[MAX_MAP][MAX_MAP],
-			int map_height, int map_width)
-{
-	int i;
-	int j;
 
-	i = 0;
-	player->x = 0;
-	player->y = 0;
-	while (i < map_width)
-	{
-		j = 0;
-		while (j < map_height)
-		{
-			if (map[i][j] == 'X')
-			{
-				player->x = i + 0.5;
-				player->y = j + 0.5;
-				map[i][j] = 0;
-				return ;
-			}
-			j++;
-		}
-		i++;
-	}
-	ft_dprintf(STDERR_FILENO, "no suitable starting position found for player, \
-		exiting...\n");
-	exit(EXIT_FAILURE);
-}
-*/
 int		init_sdl(SDL_Window **win, SDL_Surface **surf)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -67,29 +37,6 @@ int		init_sdl(SDL_Window **win, SDL_Surface **surf)
 	return (EXIT_SUCCESS);
 }
 
-int		init_ttf(t_ttf *ttf)
-{
-	if (TTF_Init() != 0)
-	{
-		ft_dprintf(STDERR_FILENO, "TTF_Init Error: %{r}s\n", TTF_GetError());
-		return (EXIT_FAILURE);
-	}
-	if ((ttf->font = TTF_OpenFont("/Library/Fonts/Arial.ttf", 150)) == NULL)
-	{
-		ft_dprintf(STDERR_FILENO, "TTF_OpenFont Error: %{r}s\n",
-			TTF_GetError());
-		return (EXIT_FAILURE);
-	}
-	ttf->color.r = 0;
-	ttf->color.g = 0;
-	ttf->color.b = 0;
-	ttf->color.a = 100;
-	ttf->rect.x = WIN_WIDTH / 200;
-	ttf->rect.y = WIN_HEIGHT / 200;
-	ttf->rect.w = WIN_WIDTH / 12;
-	ttf->rect.h = WIN_HEIGHT / 12;
-	return (EXIT_SUCCESS);
-}
 /*
 void	init_doom(t_doom *doom, char *title)
 {
