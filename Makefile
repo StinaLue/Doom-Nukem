@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
+#    By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2019/11/14 15:45:27 by afonck           ###   ########.fr        #
+#    Updated: 2019/11/14 18:30:45 by sluetzen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,7 +63,10 @@ SOURCES_LIST = main.c \
 			init_structs.c \
 			free.c \
 			drawing.c \
-			draw_line.c#\
+			draw_line.c \
+			fixed_minimap.c \
+			rot_minimap.c \
+			perspective_minimap.c#\
 	       find_wall_calculation.c \
 	       free.c \
 	       init_structs.c \
