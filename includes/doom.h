@@ -72,6 +72,7 @@ typedef	struct	s_wall
 {
 	t_vec		start_wall;
 	t_vec		end_wall;
+	int			color;
 	//int		flags; BIT FLAGS for walls specifications?
 }				t_wall;
 
@@ -88,6 +89,8 @@ typedef struct	s_doom
 	t_data		data;
 	t_player	player;
 }				t_doom;
+
+t_vec			vecdb_to_vec(t_vecdb vectordb);
 
 /*
 ** INIT FUNCTIONS
