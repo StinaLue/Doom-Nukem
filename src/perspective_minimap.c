@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   perspective_minimap.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/14 21:38:07 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/11/15 17:09:02 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,15 @@ double	fn_cross(double xone, double yone, double xtwo, double ytwo)
 t_vecdb	intersect(t_vecdb one, t_vecdb two, t_vecdb three, t_vecdb four)
 {
 	t_vecdb test;
+	t_vecdb tmp;
 	double det;
 
 	test.x = fn_cross(one.x, one.y, two.x, two.y);
 	test.y = fn_cross(three.x, three.y, four.x, four.y);
 	det = fn_cross(one.x - two.x, one.y - two.y, three.x - four.x, three.y - four.y);
-	test.x = fn_cross(test.x, one.x - two.x, test.y, three.x - four.x) / det;
+	tmp.x = fn_cross(test.x, one.x - two.x, test.y, three.x - four.x) / det;
 	test.y = fn_cross(test.x, one.y - two.y, test.y, three.y - four.y) / det;
+	test.x = tmp.x;
 	return (test);
 }
 
