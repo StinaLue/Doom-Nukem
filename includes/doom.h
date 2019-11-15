@@ -90,6 +90,8 @@ typedef struct	s_doom
 	t_player	player;
 }				t_doom;
 
+t_vec			vecdb_to_vec(t_vecdb vectordb);
+
 /*
 ** INIT FUNCTIONS
 */
