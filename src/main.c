@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/14 21:38:53 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/11/15 14:00:02 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	main_loop(t_doom *doom)
 	t_vec vec2 = {50, 70}; // end of "first" wall
 	t_vec vec3 = {70, 90};
 	t_vec vec4 = {90, 20};
-	t_wall walls[NB_WALLS] = {{vec1, vec2}, {vec2, vec3}, {vec3, vec4}, {vec4, vec1}};
+	t_wall walls[NB_WALLS] = {{vec1, vec2, 0xFF0000}, {vec2, vec3, 0x00FF00}, {vec3, vec4, 0x0000FF}, {vec4, vec1, 0x00FFFF}};
 
 	//double angle = 0.0; direction angle of player
 
@@ -117,7 +117,7 @@ void	main_loop(t_doom *doom)
 
 		draw_fixed_minimap(doom->sdl.fixed_mmap, &doom->player, walls);
 		draw_rot_minimap(doom->sdl.rot_mmap, &doom->player, walls);
-		draw_perspective_minimap(doom->sdl.perspective_mmap, &doom->player, walls);
+		//draw_perspective_minimap(doom->sdl.perspective_mmap, &doom->player, walls);
 
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, &doom->sdl.surf->clip_rect)) < 0)
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, NULL)) < 0)

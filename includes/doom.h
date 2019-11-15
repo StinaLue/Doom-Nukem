@@ -72,6 +72,7 @@ typedef	struct	s_wall
 {
 	t_vec		start_wall;
 	t_vec		end_wall;
+	int			color;
 	//int		flags; BIT FLAGS for walls specifications?
 }				t_wall;
 
