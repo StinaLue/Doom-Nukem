@@ -47,10 +47,10 @@ typedef struct	s_vecdb
 
 typedef struct	s_wall3d
 {
-	t_vec 		top_left;
-	t_vec 		top_right;
-	t_vec 		bottom_left;
-	t_vec 		bottom_right;
+	t_vecdb 	top_left;
+	t_vecdb 	top_right;
+	t_vecdb 	bottom_left;
+	t_vecdb 	bottom_right;
 }				t_wall3d;
 
 typedef struct	s_sdl
@@ -89,6 +89,8 @@ typedef struct	s_doom
 	t_data		data;
 	t_player	player;
 }				t_doom;
+
+void	init_rotate_wall(t_wall *new_wall, const t_wall *old_wall, const t_player *player);
 
 /*
 ** VECTOR FUNCTIONS
