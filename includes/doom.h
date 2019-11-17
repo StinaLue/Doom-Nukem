@@ -27,8 +27,8 @@
 # define THIRD_MAP_WIDTH 100
 # define THIRD_MAP_HEIGHT 100
 
-# define WIN_WIDTH 1920
-# define WIN_HEIGHT 1080
+# define WIN_WIDTH 1680
+# define WIN_HEIGHT 1050
 
 /*
 ** VECTOR STRUCTS
@@ -70,8 +70,8 @@ typedef struct	s_data
 
 typedef	struct	s_wall
 {
-	t_vec		start_wall;
-	t_vec		end_wall;
+	t_vecdb		start_wall;
+	t_vecdb		end_wall;
 	int			color;
 	//int		flags; BIT FLAGS for walls specifications?
 }				t_wall;
@@ -90,7 +90,14 @@ typedef struct	s_doom
 	t_player	player;
 }				t_doom;
 
+/*
+** VECTOR FUNCTIONS
+*/
+void			assign_vec(t_vec *one, const t_vec *two);
+
 t_vec			vecdb_to_vec(t_vecdb vectordb);
+
+t_vecdb			rotate2d(t_vecdb vector, double angle);
 
 /*
 ** INIT FUNCTIONS
