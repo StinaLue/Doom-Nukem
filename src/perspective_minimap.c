@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/17 22:48:10 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/18 15:45:14 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,13 @@ double	fn_cross(double xone, double yone, double xtwo, double ytwo)
 t_vecdb	intersect(t_vecdb one, t_vecdb two, t_vecdb three, t_vecdb four)
 {
 	t_vecdb test;
-	t_vecdb tmp;
 	double det;
 
 	test.x = fn_cross(one.x, one.y, two.x, two.y);
 	test.y = fn_cross(three.x, three.y, four.x, four.y);
 	det = fn_cross(one.x - two.x, one.y - two.y, three.x - four.x, three.y - four.y);
-	tmp.x = fn_cross(test.x, one.x - two.x, test.y, three.x - four.x) / det;
+	test.x = fn_cross(test.x, one.x - two.x, test.y, three.x - four.x) / det;
 	test.y = fn_cross(test.x, one.y - two.y, test.y, three.y - four.y) / det;
-	test.x = tmp.x;
 	return (test);
 }
 
@@ -88,18 +86,18 @@ void	draw_perspective_minimap(SDL_Surface *surf, t_player *player, t_wall *walls
 			}
 			double x1 = -wall_tmp.start_wall.y * 16 / wall_tmp.start_wall.x; // perspective works because of division of x and y coordinates by z -> matrix
 			double x2 = -wall_tmp.end_wall.y * 16 / wall_tmp.end_wall.x; // use multiplication to change field of view: higher number = bigger fov
-			double y1a = -50 / wall_tmp.start_wall.x;
-			double y2a = -50 / wall_tmp.end_wall.x;
-			double y1b = 50 / wall_tmp.start_wall.x;
-			double y2b = 50 / wall_tmp.end_wall.x;
-			transfo_wall.top_left.x = 50 + x1;
-			transfo_wall.top_left.y = 50 + y1a;
-			transfo_wall.top_right.x = 50 + x2;
-			transfo_wall.top_right.y = 50 + y2a;
-			transfo_wall.bottom_left.x = 50 + x1;
-			transfo_wall.bottom_left.y = 50 + y1b;
-			transfo_wall.bottom_right.x = 50 + x2;
-			transfo_wall.bottom_right.y = 50 + y2b;
+			double y1a = -(surf->h / 2) / wall_tmp.start_wall.x;
+			double y2a = -(surf->h / 2) / wall_tmp.end_wall.x;
+			double y1b = (surf->h / 2) / wall_tmp.start_wall.x;
+			double y2b = (surf->h / 2) / wall_tmp.end_wall.x;
+			transfo_wall.top_left.x = (surf->w / 2) + x1;
+			transfo_wall.top_left.y = (surf->h / 2) + y1a;
+			transfo_wall.top_right.x = (surf->w / 2) + x2;
+			transfo_wall.top_right.y = (surf->h / 2) + y2a;
+			transfo_wall.bottom_left.x = (surf->w / 2) + x1;
+			transfo_wall.bottom_left.y = (surf->h / 2) + y1b;
+			transfo_wall.bottom_right.x = (surf->w / 2) + x2;
+			transfo_wall.bottom_right.y = (surf->h / 2) + y2b;
 			draw_line(vecdb_to_vec(transfo_wall.top_left), vecdb_to_vec(transfo_wall.top_right), surf, walls[i].color); // drawing a line for each line around wall
 			draw_line(vecdb_to_vec(transfo_wall.top_right), vecdb_to_vec(transfo_wall.bottom_right), surf, walls[i].color);
 			draw_line(vecdb_to_vec(transfo_wall.bottom_right), vecdb_to_vec(transfo_wall.bottom_left), surf, walls[i].color);

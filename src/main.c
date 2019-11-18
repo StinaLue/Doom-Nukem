@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/17 18:26:42 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/18 15:49:54 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,27 +29,29 @@ int		is_in_map(t_vecdb *player)
 	return (1);
 }
 
-void	basic_move(t_vecdb *player, double *angle, const Uint8 *keyboard_state)
+void	basic_move(t_player *player, const Uint8 *keyboard_state)
 {
-	if (!is_in_map(player))
+	if (!is_in_map(&player->pos))
 	{
-		player->x = 70;
-		player->y = 70;
+		player->pos.x = 70;
+		player->pos.y = 70;
 	}
 	if (keyboard_state[SDL_SCANCODE_UP])
 	{
-		player->x += cos(*angle) / 10; // == speed reduction
-		player->y += sin(*angle) / 10;
+		player->pos.x += cos(player->angle) / 10; // == speed reduction
+		player->pos.y += sin(player->angle) / 10;
 	}
 	if (keyboard_state[SDL_SCANCODE_DOWN])
 	{
-		player->x -= cos(*angle) / 10;
-		player->y -= sin(*angle) / 10;
+		player->pos.x -= cos(player->angle) / 10;
+		player->pos.y -= sin(player->angle) / 10;
 	}
 	if (keyboard_state[SDL_SCANCODE_LEFT])
-		*angle -= 0.01;
+		player->angle -= 0.01;
 	if (keyboard_state[SDL_SCANCODE_RIGHT])
-		*angle += 0.01;
+		player->angle += 0.01;
+	player->direc.x = cos(player->angle) * 5 + player->pos.x;
+	player->direc.y = sin(player->angle) * 5 + player->pos.y;
 }
 
 void	main_loop(t_doom *doom)
@@ -61,6 +63,7 @@ void	main_loop(t_doom *doom)
 	t_vecdb vec3 = {70, 90};
 	t_vecdb vec4 = {90, 20};
 	t_wall walls[NB_WALLS] = {{vec1, vec2, 0xFF0000}, {vec2, vec3, 0x00FF00}, {vec3, vec4, 0x0000FF}, {vec4, vec1, 0x00FFFF}};
+	//t_wall walls[NB_WALLS] = {{vec1, vec2, 0xFF0000}};
 
 	//double angle = 0.0; direction angle of player
 
@@ -101,9 +104,7 @@ void	main_loop(t_doom *doom)
 			check_quit(&(doom->sdl.event), &(doom->data.quit));
 
 		//move the player and assign his new position, need float and then int converting because of angle calculation
-		basic_move(&doom->player.pos, &doom->player.angle, keyboard_state);
-		doom->player.direc.x = cos(doom->player.angle) * 5 + (int)doom->player.pos.x;
-		doom->player.direc.y = sin(doom->player.angle) * 5 + (int)doom->player.pos.y;
+		basic_move(&doom->player, keyboard_state);
 
 		draw_fixed_minimap(doom->sdl.fixed_mmap, &doom->player, walls);
 		draw_rot_minimap(doom->sdl.rot_mmap, &doom->player, walls);
