@@ -18,17 +18,17 @@
 
 # define NB_WALLS 4
 
-# define ROT_MAP_WIDTH 100
-# define ROT_MAP_HEIGHT 100
+# define ROT_MAP_WIDTH 600 /2
+# define ROT_MAP_HEIGHT 1000 /2
 
-# define FIXED_MAP_WIDTH 100
-# define FIXED_MAP_HEIGHT 100
+# define FIXED_MAP_WIDTH 600 /2
+# define FIXED_MAP_HEIGHT 1000 /2
 
-# define THIRD_MAP_WIDTH 100
-# define THIRD_MAP_HEIGHT 100
+# define THIRD_MAP_WIDTH 600 /2
+# define THIRD_MAP_HEIGHT 1000 /2
 
-# define WIN_WIDTH 1680
-# define WIN_HEIGHT 1050
+# define WIN_WIDTH 1800
+# define WIN_HEIGHT 1000
 
 /*
 ** VECTOR STRUCTS
@@ -141,5 +141,12 @@ void			draw_line(const t_vec a, const t_vec b, SDL_Surface *surf, int color);
 void			free_sdl(SDL_Window **win);
 
 int				free_sdl_quit(SDL_Window **win);
+
+/*
+** PARSE FUNCTIONS
+*/
+
+int				parse_everything(t_wall *walls);
+
 
 #endif
