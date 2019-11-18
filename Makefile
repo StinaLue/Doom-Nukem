@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
+#    By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2019/11/17 14:09:45 by afonck           ###   ########.fr        #
+#    Updated: 2019/11/18 14:53:00 by phaydont         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,7 +67,8 @@ SOURCES_LIST = main.c \
 			fixed_minimap.c \
 			rot_minimap.c \
 			perspective_minimap.c \
-			vector.c#\
+			vector.c \
+			map_parser.c#\
 	       find_wall_calculation.c \
 	       free.c \
 	       init_structs.c \
