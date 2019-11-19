@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/18 15:45:14 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/19 18:38:38 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,43 @@ t_vecdb	rotate3d(t_vecdb vector, double angle)
 	return (newvector);
 }
 
+void	transform_to_winsize(t_wall3d *wall3d, int maxw, int maxh)
+{
+	if (wall3d->top_left.x >= maxw)
+		wall3d->top_left.x = maxw;
+	if (wall3d->top_left.y >= maxh)
+		wall3d->top_left.y = maxh;
+	if (wall3d->top_right.x >= maxw)
+		wall3d->top_right.x = maxw;
+	if (wall3d->top_right.y >= maxh)
+		wall3d->top_right.y = maxh;
+	if (wall3d->bottom_left.x >= maxw)
+		wall3d->bottom_left.x = maxw;
+	if (wall3d->bottom_left.y >= maxh)
+		wall3d->bottom_left.y = maxh;
+	if (wall3d->bottom_right.x >= maxw)
+		wall3d->bottom_right.x = maxw;
+	if (wall3d->bottom_right.y >= maxh)
+		wall3d->bottom_right.y = maxh;
+
+	if (wall3d->top_left.x < 0)
+		wall3d->top_left.x = 0;
+	if (wall3d->top_left.y < 0)
+		wall3d->top_left.y = 0;
+	if (wall3d->top_right.x < 0)
+		wall3d->top_right.x = 0;
+	if (wall3d->top_right.y < 0)
+		wall3d->top_right.y = 0;
+	if (wall3d->bottom_left.x < 0)
+		wall3d->bottom_left.x = 0;
+	if (wall3d->bottom_left.y < 0)
+		wall3d->bottom_left.y = 0;
+	if (wall3d->bottom_right.x < 0)
+		wall3d->bottom_right.x = 0;
+	if (wall3d->bottom_right.y < 0)
+		wall3d->bottom_right.y = 0;
+}
+
 void	draw_perspective_minimap(SDL_Surface *surf, t_player *player, t_wall *walls)
 {
 	t_wall3d transfo_wall; // need t_wall3d because we have to access more values than just x and y (top/bottom/left/right)
@@ -52,8 +89,9 @@ void	draw_perspective_minimap(SDL_Surface *surf, t_player *player, t_wall *walls
 		{
 			t_vecdb one = {wall_tmp.start_wall.y, wall_tmp.start_wall.x};
 			t_vecdb two = {wall_tmp.end_wall.y, wall_tmp.end_wall.x};
-			t_vecdb three = {-0.0001, 0.0001};
-			t_vecdb four = {-20, 5};
+			//t_vecdb three = {-0.0001, 0.0001};
+			t_vecdb three = {0, 0};
+			t_vecdb four = {-600, 5};
 			t_vecdb intersect1 = intersect(one, two, three, four);
 			three.x = fabs(three.x);
 			four.x = fabs(four.x);
@@ -84,12 +122,12 @@ void	draw_perspective_minimap(SDL_Surface *surf, t_player *player, t_wall *walls
 					wall_tmp.end_wall.x = intersect2.y;
 				}
 			}
-			double x1 = -wall_tmp.start_wall.y * 16 / wall_tmp.start_wall.x; // perspective works because of division of x and y coordinates by z -> matrix
-			double x2 = -wall_tmp.end_wall.y * 16 / wall_tmp.end_wall.x; // use multiplication to change field of view: higher number = bigger fov
-			double y1a = -(surf->h / 2) / wall_tmp.start_wall.x;
-			double y2a = -(surf->h / 2) / wall_tmp.end_wall.x;
-			double y1b = (surf->h / 2) / wall_tmp.start_wall.x;
-			double y2b = (surf->h / 2) / wall_tmp.end_wall.x;
+			double x1 = -wall_tmp.start_wall.y * (surf->w / 2) / wall_tmp.start_wall.x; // perspective works because of division of x and y coordinates by z -> matrix
+			double x2 = -wall_tmp.end_wall.y * (surf->w / 2) / wall_tmp.end_wall.x; // use multiplication to change field of view: higher number = bigger fov
+			double y1a = -(surf->h ) / wall_tmp.start_wall.x;
+			double y2a = -(surf->h ) / wall_tmp.end_wall.x;
+			double y1b = (surf->h ) / wall_tmp.start_wall.x;
+			double y2b = (surf->h ) / wall_tmp.end_wall.x;
 			transfo_wall.top_left.x = (surf->w / 2) + x1;
 			transfo_wall.top_left.y = (surf->h / 2) + y1a;
 			transfo_wall.top_right.x = (surf->w / 2) + x2;
@@ -98,6 +136,7 @@ void	draw_perspective_minimap(SDL_Surface *surf, t_player *player, t_wall *walls
 			transfo_wall.bottom_left.y = (surf->h / 2) + y1b;
 			transfo_wall.bottom_right.x = (surf->w / 2) + x2;
 			transfo_wall.bottom_right.y = (surf->h / 2) + y2b;
+			//transform_to_winsize(&transfo_wall, surf->w, surf->h);
 			draw_line(vecdb_to_vec(transfo_wall.top_left), vecdb_to_vec(transfo_wall.top_right), surf, walls[i].color); // drawing a line for each line around wall
 			draw_line(vecdb_to_vec(transfo_wall.top_right), vecdb_to_vec(transfo_wall.bottom_right), surf, walls[i].color);
 			draw_line(vecdb_to_vec(transfo_wall.bottom_right), vecdb_to_vec(transfo_wall.bottom_left), surf, walls[i].color);
