@@ -6,30 +6,39 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/19 18:38:38 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/20 17:36:47 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
-
-
-double	fn_cross(double xone, double yone, double xtwo, double ytwo)
+double	vxs(double xone, double yone, double xtwo, double ytwo)
 {
 	return(xone * ytwo - yone * xtwo);
 }
 
+t_vecdb intersect(t_vecdb one, t_vecdb two, t_vecdb three, t_vecdb four)
+{
+	t_vecdb intersection;
+	intersection.x = vxs(vxs(one.x, one.y, two.x, two.y), one.x - two.x, vxs(three.x, three.y, four.x, four.y), three.x - four.x) / vxs(one.x - two.x, one.y - two.y, three.x - four.x, three.y - four.y);
+	intersection.y = vxs(vxs(one.x, one.y, two.x, two.y), one.y - two.y, vxs(three.x, three.y, four.x, four.y), three.y - four.y) / vxs(one.x - two.x, one.y - two.y, three.x - four.x, three.y - four.y);
+	return (intersection);
+}
+/*
 t_vecdb	intersect(t_vecdb one, t_vecdb two, t_vecdb three, t_vecdb four)
 {
 	t_vecdb test;
+	double tempx;
 	double det;
 
 	test.x = fn_cross(one.x, one.y, two.x, two.y);
 	test.y = fn_cross(three.x, three.y, four.x, four.y);
 	det = fn_cross(one.x - two.x, one.y - two.y, three.x - four.x, three.y - four.y);
-	test.x = fn_cross(test.x, one.x - two.x, test.y, three.x - four.x) / det;
+	//test.x = fn_cross(test.x, one.x - two.x, test.y, three.x - four.x) / det;
+	tempx = fn_cross(test.x, one.x - two.x, test.y, three.x - four.x) / det;
 	test.y = fn_cross(test.x, one.y - two.y, test.y, three.y - four.y) / det;
+	test.x = tempx;
 	return (test);
-}
+}*/
 
 t_vecdb	rotate3d(t_vecdb vector, double angle)
 {
@@ -85,18 +94,21 @@ void	draw_perspective_minimap(SDL_Surface *surf, t_player *player, t_wall *walls
 	while (i < NB_WALLS) // looping through each existing wall
 	{
 		init_rotate_wall(&wall_tmp, &walls[i], player);
-		if (wall_tmp.start_wall.x > 0 || wall_tmp.end_wall.x > 0)
+		if ((wall_tmp.start_wall.x <= 0 || wall_tmp.end_wall.x <= 0))
 		{
 			t_vecdb one = {wall_tmp.start_wall.y, wall_tmp.start_wall.x};
 			t_vecdb two = {wall_tmp.end_wall.y, wall_tmp.end_wall.x};
-			//t_vecdb three = {-0.0001, 0.0001};
-			t_vecdb three = {0, 0};
-			t_vecdb four = {-600, 5};
+			t_vecdb three = {-0.0001, 0.0001};
+			//t_vecdb three = {0, 0};
+			//t_vecdb four = {-(surf->w), surf->h / 32};
+			//t_vecdb four = {-(surf->w), 1};
+			t_vecdb four = {-20, 1};
 			t_vecdb intersect1 = intersect(one, two, three, four);
 			three.x = fabs(three.x);
 			four.x = fabs(four.x);
 			t_vecdb intersect2 = intersect(one, two, three, four);
     		if (wall_tmp.start_wall.x <= 0) 
+    		//if (wall_tmp.start_wall.x < four.y) 
 			{
 				if (intersect1.y > 0)
 				{
@@ -110,6 +122,7 @@ void	draw_perspective_minimap(SDL_Surface *surf, t_player *player, t_wall *walls
 				}
 			}
 			if (wall_tmp.end_wall.x <= 0)
+			//if (wall_tmp.end_wall.x < four.y)
 			{
 				if (intersect1.y > 0)
 				{
@@ -122,6 +135,7 @@ void	draw_perspective_minimap(SDL_Surface *surf, t_player *player, t_wall *walls
 					wall_tmp.end_wall.x = intersect2.y;
 				}
 			}
+		}
 			double x1 = -wall_tmp.start_wall.y * (surf->w / 2) / wall_tmp.start_wall.x; // perspective works because of division of x and y coordinates by z -> matrix
 			double x2 = -wall_tmp.end_wall.y * (surf->w / 2) / wall_tmp.end_wall.x; // use multiplication to change field of view: higher number = bigger fov
 			double y1a = -(surf->h ) / wall_tmp.start_wall.x;
@@ -141,7 +155,6 @@ void	draw_perspective_minimap(SDL_Surface *surf, t_player *player, t_wall *walls
 			draw_line(vecdb_to_vec(transfo_wall.top_right), vecdb_to_vec(transfo_wall.bottom_right), surf, walls[i].color);
 			draw_line(vecdb_to_vec(transfo_wall.bottom_right), vecdb_to_vec(transfo_wall.bottom_left), surf, walls[i].color);
 			draw_line(vecdb_to_vec(transfo_wall.bottom_left), vecdb_to_vec(transfo_wall.top_left), surf, walls[i].color);
-		}
 		i++;
 	}
 }
