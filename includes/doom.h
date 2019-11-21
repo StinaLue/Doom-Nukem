@@ -18,11 +18,11 @@
 
 # define NB_WALLS 4
 
-# define ROT_MAP_WIDTH 100//600 /2
-# define ROT_MAP_HEIGHT 100//1000 /2
+# define ROT_MAP_WIDTH 100
+# define ROT_MAP_HEIGHT 100
 
-# define FIXED_MAP_WIDTH 100//600 /2
-# define FIXED_MAP_HEIGHT 100//1000 /2
+# define FIXED_MAP_WIDTH 100
+# define FIXED_MAP_HEIGHT 100
 
 # define THIRD_MAP_WIDTH 600 /2
 # define THIRD_MAP_HEIGHT 600 /2
@@ -66,6 +66,7 @@ typedef struct	s_sdl
 typedef struct	s_data
 {
 	int			quit;
+	char		hud_flags;
 }				t_data;
 
 typedef	struct	s_wall
@@ -95,6 +96,9 @@ void	init_rotate_wall(t_wall *new_wall, const t_wall *old_wall, const t_player *
 /*
 ** VECTOR FUNCTIONS
 */
+
+void			give_vec_values(t_vec *vec, int x, int y);
+
 void			assign_vec(t_vec *one, const t_vec *two);
 
 t_vec			vecdb_to_vec(t_vecdb vectordb);
@@ -121,9 +125,11 @@ void			init_player_struct(t_player *player);
 ** PRINT MINIMAP FUNCTIONS
 */
 
-void			draw_fixed_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);
+void			draw_full_fixedmap(SDL_Surface *surf, t_player *player, t_wall *walls);
+//void			draw_fixed_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);
 
-void			draw_rot_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);
+void			draw_full_rotmap(SDL_Surface *surf, t_player *player, t_wall *walls);
+//void			draw_rot_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);
 
 void			draw_perspective_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);
 

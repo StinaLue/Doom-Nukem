@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/21 12:49:47 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/21 15:40:30 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,15 +91,6 @@ void	main_loop(t_doom *doom)
 		printf("create surface error = %s\n", SDL_GetError());
 	//my_map = SDL_ConvertSurface(my_map, doom->sdl.surf->format, 0);
 
-	t_vec bottomleft_leftmap = {0, ROT_MAP_HEIGHT - 1};
-	t_vec bottomleft_rightmap = {0, FIXED_MAP_HEIGHT - 1};
-	t_vec bottomright_leftmap = {ROT_MAP_WIDTH - 1, ROT_MAP_HEIGHT - 1};
-	t_vec bottomright_rightmap = {FIXED_MAP_WIDTH - 1, FIXED_MAP_HEIGHT - 1};
-	t_vec topleft_leftmap = {0, 0};
-	t_vec topleft_rightmap = {0, 0};
-	t_vec topright_leftmap = {ROT_MAP_WIDTH - 1, 0};
-	t_vec topright_rightmap = {FIXED_MAP_WIDTH - 1, 0};
-
 	keyboard_state = SDL_GetKeyboardState(NULL);
 	SDL_WarpMouseInWindow(doom->sdl.win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
 	while (!doom->data.quit)
@@ -114,15 +105,8 @@ void	main_loop(t_doom *doom)
 		basic_move(&doom->player, keyboard_state);
 
 		draw_perspective_minimap(doom->sdl.perspective_mmap, &doom->player, walls);
-		draw_fixed_minimap(doom->sdl.fixed_mmap, &doom->player, walls);
-		draw_rot_minimap(doom->sdl.rot_mmap, &doom->player, walls);
-		draw_line(topleft_leftmap, topright_leftmap, doom->sdl.rot_mmap, 0xFFFFFF);
-		draw_line(topleft_rightmap, topright_rightmap, doom->sdl.fixed_mmap, 0xFFFFFF);
-		draw_line(bottomleft_leftmap, bottomright_leftmap, doom->sdl.rot_mmap, 0xFFFFFF);
-		draw_line(bottomleft_rightmap, bottomright_rightmap, doom->sdl.fixed_mmap, 0xFFFFFF);
-		draw_line(topleft_leftmap, bottomleft_leftmap, doom->sdl.rot_mmap, 0xFFFFFF);
-		draw_line(topleft_rightmap, bottomleft_rightmap, doom->sdl.fixed_mmap, 0xFFFFFF);
-		draw_line(topright_rightmap, bottomright_rightmap, doom->sdl.fixed_mmap, 0xFFFFFF);
+		draw_full_fixedmap(doom->sdl.fixed_mmap, &doom->player, walls);
+		draw_full_rotmap(doom->sdl.rot_mmap, &doom->player, walls);
 
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, &doom->sdl.surf->clip_rect)) < 0)
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, NULL)) < 0)

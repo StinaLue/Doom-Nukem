@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 16:22:14 by phaydont          #+#    #+#             */
-/*   Updated: 2019/11/18 14:58:23 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/21 15:39:27 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,22 @@ void	draw_rot_minimap(SDL_Surface *surf, t_player *player, t_wall *walls)
 	}
 	draw_line(vecdb_to_vec(transfo_player), vecdb_to_vec(transfo_direc), surf, 0xFF0000);
 	fill_pix(surf, transfo_player.x, transfo_player.y, 0xFFFF00);
+}
+
+void	draw_full_rotmap(SDL_Surface *surf, t_player *player, t_wall *walls)
+{
+	t_vec topleft_rotmap;// = {0, 0};
+	t_vec topright_rotmap;// = {ROT_MAP_WIDTH - 1, 0};
+	t_vec bottomleft_rotmap;// = {0, ROT_MAP_HEIGHT - 1};
+	t_vec bottomright_rotmap;// = {ROT_MAP_WIDTH - 1, ROT_MAP_HEIGHT - 1};
+
+	give_vec_values(&topleft_rotmap, 0, 0);
+	give_vec_values(&topright_rotmap, ROT_MAP_WIDTH - 1, 0);
+	give_vec_values(&bottomleft_rotmap, 0, ROT_MAP_HEIGHT - 1);
+	give_vec_values(&bottomright_rotmap, ROT_MAP_WIDTH - 1, ROT_MAP_HEIGHT - 1);
+	draw_line(topleft_rotmap, topright_rotmap, surf, 0xFFFFFF);
+	draw_line(bottomleft_rotmap, bottomright_rotmap, surf, 0xFFFFFF);
+	draw_line(topleft_rotmap, bottomleft_rotmap, surf, 0xFFFFFF);
+	draw_line(topright_rotmap, bottomright_rotmap, surf, 0xFFFFFF);
+	draw_rot_minimap(surf, player, walls);
 }

@@ -6,11 +6,17 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:06:54 by afonck            #+#    #+#             */
-/*   Updated: 2019/11/17 14:08:15 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/21 15:15:01 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
+
+void	give_vec_values(t_vec *vec, int x, int y)
+{
+	vec->x = x;
+	vec->y = y;
+}
 
 void	assign_vec(t_vec *one, const t_vec *two)
 {

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 16:23:32 by phaydont          #+#    #+#             */
-/*   Updated: 2019/11/17 18:34:18 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/21 15:22:54 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,22 @@ void	draw_fixed_minimap(SDL_Surface *surf, t_player *player, t_wall *walls)
 	}
 	draw_line(vecdb_to_vec(player->pos), vecdb_to_vec(player->direc), surf, 0xFF0000);
 	fill_pix(surf, (int)player->pos.x, (int)player->pos.y, 0xFFFF00);
+}
+
+void	draw_full_fixedmap(SDL_Surface *surf, t_player *player, t_wall *walls)
+{
+	t_vec topleft_fixedmap;// = {0, 0};
+	t_vec topright_fixedmap;// = {FIXED_MAP_WIDTH - 1, 0};
+	t_vec bottomleft_fixedmap;// = {0, FIXED_MAP_HEIGHT - 1};
+	t_vec bottomright_fixedmap;// = {FIXED_MAP_WIDTH - 1, FIXED_MAP_HEIGHT - 1};
+
+	give_vec_values(&topleft_fixedmap, 0, 0);
+	give_vec_values(&topright_fixedmap, FIXED_MAP_WIDTH - 1, 0);
+	give_vec_values(&bottomleft_fixedmap, 0, FIXED_MAP_HEIGHT - 1);
+	give_vec_values(&bottomright_fixedmap, FIXED_MAP_WIDTH - 1, FIXED_MAP_HEIGHT - 1);
+	draw_line(topleft_fixedmap, topright_fixedmap, surf, 0xFFFFFF);
+	draw_line(bottomleft_fixedmap, bottomright_fixedmap, surf, 0xFFFFFF);
+	draw_line(topleft_fixedmap, bottomleft_fixedmap, surf, 0xFFFFFF);
+	draw_line(topright_fixedmap, bottomright_fixedmap, surf, 0xFFFFFF);
+	draw_fixed_minimap(surf, player, walls);
 }
