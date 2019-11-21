@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/21 12:49:47 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/21 19:12:27 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,32 @@ int		is_in_map(t_vecdb *player)
 	return (1);
 }
 
-void	basic_move(t_player *player, const Uint8 *keyboard_state)
+int		check_side_wall(double pos_x, double pos_y, t_vecdb start_wall, t_vecdb end_wall)
 {
+	double det = (start_wall.x - end_wall.x) * (start_wall.y - pos_y) - (start_wall.x - pos_x) * (start_wall.y - end_wall.y);
+	if (det > -20.0) // the lower this number, the bigger the distance between player and collision will be
+		return (1);
+	else
+		return (0);
+}
+
+int 	check_collision(double pos_x, double pos_y, t_wall *walls)
+{
+	int i;
+	i = 0;
+	while(i < NB_WALLS)//loop through each wall
+	{
+		if (check_side_wall(pos_x, pos_y, walls[i].start_wall, walls[i].end_wall))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void	basic_move(t_player *player, t_wall *walls, const Uint8 *keyboard_state)
+{
+	double pos_x = player->pos.x;
+	double pos_y = player->pos.y;
 	if (!is_in_map(&player->pos))
 	{
 		player->pos.x = 70;
@@ -40,11 +64,21 @@ void	basic_move(t_player *player, const Uint8 *keyboard_state)
 	{
 		player->pos.x += cos(player->angle) / 10; // == speed reduction
 		player->pos.y += sin(player->angle) / 10;
+		if (check_collision(player->pos.x, player->pos.y, walls))
+		{
+			player->pos.x = pos_x;
+			player->pos.y = pos_y;
+		}
 	}
 	if (keyboard_state[SDL_SCANCODE_DOWN])
 	{
 		player->pos.x -= cos(player->angle) / 10;
 		player->pos.y -= sin(player->angle) / 10;
+		if (check_collision(player->pos.x, player->pos.y, walls))
+		{
+			player->pos.x = pos_x;
+			player->pos.y = pos_y;
+		}
 	}
 	if (keyboard_state[SDL_SCANCODE_LEFT])
 		player->angle -= 0.01;
@@ -111,7 +145,7 @@ void	main_loop(t_doom *doom)
 			check_quit(&(doom->sdl.event), &(doom->data.quit));
 
 		//move the player and assign his new position, need float and then int converting because of angle calculation
-		basic_move(&doom->player, keyboard_state);
+		basic_move(&doom->player, walls, keyboard_state);
 
 		draw_perspective_minimap(doom->sdl.perspective_mmap, &doom->player, walls);
 		draw_fixed_minimap(doom->sdl.fixed_mmap, &doom->player, walls);
