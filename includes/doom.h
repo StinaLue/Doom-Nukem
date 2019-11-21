@@ -102,6 +102,8 @@ typedef struct	s_doom
 	t_player	player;
 }				t_doom;
 
+int 	check_collision(double pos_x, double pos_y, t_wall *walls);
+
 void	init_rotate_wall(t_wall *new_wall, const t_wall *old_wall, const t_player *player);
 
 int		is_in_map(t_vecdb *player);
@@ -137,7 +139,7 @@ void			init_player_struct(t_player *player);
 /*
 ** EVENT FUNCTIONS
 */
-void	handle_events(t_doom *doom, const Uint8 *keyboard_state);
+void	handle_events(t_doom *doom, t_wall *walls, const Uint8 *keyboard_state);
 
 /*
 ** PRINT MINIMAP FUNCTIONS
