@@ -18,6 +18,10 @@
 
 # define NB_WALLS 4
 
+/*
+** DIMENSIONS
+*/
+
 # define ROT_MAP_WIDTH 100
 # define ROT_MAP_HEIGHT 100
 
@@ -29,6 +33,13 @@
 
 # define WIN_WIDTH 1800
 # define WIN_HEIGHT 1000
+
+/*
+** FLAGS
+*/
+
+# define ROT_MAP_SHOW 1//0x00000001
+# define FIX_MAP_SHOW 2//0x00000010
 
 /*
 ** VECTOR STRUCTS
@@ -93,6 +104,8 @@ typedef struct	s_doom
 
 void	init_rotate_wall(t_wall *new_wall, const t_wall *old_wall, const t_player *player);
 
+int		is_in_map(t_vecdb *player);
+
 /*
 ** VECTOR FUNCTIONS
 */
@@ -122,13 +135,18 @@ void			init_data_struct(t_data *data);
 void			init_player_struct(t_player *player);
 
 /*
+** EVENT FUNCTIONS
+*/
+void	handle_events(t_doom *doom, const Uint8 *keyboard_state);
+
+/*
 ** PRINT MINIMAP FUNCTIONS
 */
 
-void			draw_full_fixedmap(SDL_Surface *surf, t_player *player, t_wall *walls);
+void			draw_full_fixedmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf);
 //void			draw_fixed_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);
 
-void			draw_full_rotmap(SDL_Surface *surf, t_player *player, t_wall *walls);
+void			draw_full_rotmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf);
 //void			draw_rot_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);
 
 void			draw_perspective_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);
@@ -136,6 +154,9 @@ void			draw_perspective_minimap(SDL_Surface *surf, t_player *player, t_wall *wal
 /*
 ** DRAWING FUNCTIONS
 */
+
+void			blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf);
+
 void			fill_pix(SDL_Surface *surf, int x, int y, int color);
 
 void			draw_line(const t_vec a, const t_vec b, SDL_Surface *surf, int color);

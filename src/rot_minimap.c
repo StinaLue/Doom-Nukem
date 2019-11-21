@@ -6,11 +6,12 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 16:22:14 by phaydont          #+#    #+#             */
-/*   Updated: 2019/11/21 15:39:27 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/21 17:42:53 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
+#include "libft.h"
 
 void	init_rotate_wall(t_wall *new_wall, const t_wall *old_wall, const t_player *player)
 {
@@ -49,20 +50,22 @@ void	draw_rot_minimap(SDL_Surface *surf, t_player *player, t_wall *walls)
 	fill_pix(surf, transfo_player.x, transfo_player.y, 0xFFFF00);
 }
 
-void	draw_full_rotmap(SDL_Surface *surf, t_player *player, t_wall *walls)
+void	draw_full_rotmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf)
 {
-	t_vec topleft_rotmap;// = {0, 0};
-	t_vec topright_rotmap;// = {ROT_MAP_WIDTH - 1, 0};
-	t_vec bottomleft_rotmap;// = {0, ROT_MAP_HEIGHT - 1};
-	t_vec bottomright_rotmap;// = {ROT_MAP_WIDTH - 1, ROT_MAP_HEIGHT - 1};
+	t_vec topleft_rotmap;
+	t_vec topright_rotmap;
+	t_vec bottomleft_rotmap;
+	t_vec bottomright_rotmap;
 
+	ft_bzero(surf->pixels, surf->h * surf->pitch);
 	give_vec_values(&topleft_rotmap, 0, 0);
 	give_vec_values(&topright_rotmap, ROT_MAP_WIDTH - 1, 0);
 	give_vec_values(&bottomleft_rotmap, 0, ROT_MAP_HEIGHT - 1);
 	give_vec_values(&bottomright_rotmap, ROT_MAP_WIDTH - 1, ROT_MAP_HEIGHT - 1);
+	draw_rot_minimap(surf, player, walls);
 	draw_line(topleft_rotmap, topright_rotmap, surf, 0xFFFFFF);
 	draw_line(bottomleft_rotmap, bottomright_rotmap, surf, 0xFFFFFF);
 	draw_line(topleft_rotmap, bottomleft_rotmap, surf, 0xFFFFFF);
 	draw_line(topright_rotmap, bottomright_rotmap, surf, 0xFFFFFF);
-	draw_rot_minimap(surf, player, walls);
+	blit_in_rect(surf, winsurf, ROT_MAP_SHOW);
 }

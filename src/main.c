@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/21 15:40:30 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/21 19:02:51 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,31 +29,6 @@ int		is_in_map(t_vecdb *player)
 	return (1);
 }
 
-void	basic_move(t_player *player, const Uint8 *keyboard_state)
-{
-	if (!is_in_map(&player->pos))
-	{
-		player->pos.x = 70;
-		player->pos.y = 70;
-	}
-	if (keyboard_state[SDL_SCANCODE_UP])
-	{
-		player->pos.x += cos(player->angle) / 10; // == speed reduction
-		player->pos.y += sin(player->angle) / 10;
-	}
-	if (keyboard_state[SDL_SCANCODE_DOWN])
-	{
-		player->pos.x -= cos(player->angle) / 10;
-		player->pos.y -= sin(player->angle) / 10;
-	}
-	if (keyboard_state[SDL_SCANCODE_LEFT])
-		player->angle -= 0.01;
-	if (keyboard_state[SDL_SCANCODE_RIGHT])
-		player->angle += 0.01;
-	player->direc.x = cos(player->angle) * 5 + player->pos.x;
-	player->direc.y = sin(player->angle) * 5 + player->pos.y;
-}
-
 void	main_loop(t_doom *doom)
 {
 	const Uint8 *keyboard_state;
@@ -70,10 +45,6 @@ void	main_loop(t_doom *doom)
 		printf("parsing error\n");
 	}
 
-	//double angle = 0.0; direction angle of player
-
-	SDL_Rect myrect_firstmap = {.x=0, .y=0, .w=(WIN_WIDTH / 8), .h=WIN_HEIGHT / 4}; // Stretching rectangle to print the map in fullscreen
-	SDL_Rect myrect_secondmap = {.x=(WIN_WIDTH / 8), .y=0, .w=(WIN_WIDTH / 8), .h=WIN_HEIGHT / 4}; // Stretching rectangle to print the map in fullscreen
 	SDL_Rect myrect_thirdmap = {.x=0, .y=0, .w=WIN_WIDTH, .h=WIN_HEIGHT}; // Stretching rectangle to print the map in fullscreen
 	/*
 		When creating a surface, the last four parameters correspond to the RGBA masks for the created surface. They need to correspond
@@ -95,27 +66,24 @@ void	main_loop(t_doom *doom)
 	SDL_WarpMouseInWindow(doom->sdl.win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
 	while (!doom->data.quit)
 	{
-		ft_bzero(doom->sdl.rot_mmap->pixels, doom->sdl.rot_mmap->h * doom->sdl.rot_mmap->pitch);
-		ft_bzero(doom->sdl.fixed_mmap->pixels, doom->sdl.fixed_mmap->h * doom->sdl.fixed_mmap->pitch);
 		ft_bzero(doom->sdl.perspective_mmap->pixels, doom->sdl.perspective_mmap->h * doom->sdl.perspective_mmap->pitch);
 		while (SDL_PollEvent(&(doom->sdl.event)) != 0)
 			check_quit(&(doom->sdl.event), &(doom->data.quit));
 
-		//move the player and assign his new position, need float and then int converting because of angle calculation
-		basic_move(&doom->player, keyboard_state);
+		//handle events (for now player movement and HUD activation/deactivation)
+		handle_events(doom, keyboard_state);
 
 		draw_perspective_minimap(doom->sdl.perspective_mmap, &doom->player, walls);
-		draw_full_fixedmap(doom->sdl.fixed_mmap, &doom->player, walls);
-		draw_full_rotmap(doom->sdl.rot_mmap, &doom->player, walls);
+		if ((SDL_BlitScaled(doom->sdl.perspective_mmap, NULL, doom->sdl.win_surf, &myrect_thirdmap)) < 0)
+			printf("BlitScale error = %s\n", SDL_GetError());
+
+		if (doom->data.hud_flags & FIX_MAP_SHOW)
+			draw_full_fixedmap(doom->sdl.fixed_mmap, &doom->player, walls, doom->sdl.win_surf);
+		if (doom->data.hud_flags & ROT_MAP_SHOW)
+			draw_full_rotmap(doom->sdl.rot_mmap, &doom->player, walls, doom->sdl.win_surf);
 
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, &doom->sdl.surf->clip_rect)) < 0)
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, NULL)) < 0)
-		if ((SDL_BlitScaled(doom->sdl.perspective_mmap, NULL, doom->sdl.win_surf, &myrect_thirdmap)) < 0)
-			printf("BlitScale error = %s\n", SDL_GetError());
-		if ((SDL_BlitScaled(doom->sdl.rot_mmap, NULL, doom->sdl.win_surf, &myrect_firstmap)) < 0)
-			printf("BlitScale error = %s\n", SDL_GetError());
-		if ((SDL_BlitScaled(doom->sdl.fixed_mmap, NULL, doom->sdl.win_surf, &myrect_secondmap)) < 0)
-			printf("BlitScale error = %s\n", SDL_GetError());
 		if ((SDL_UpdateWindowSurface(doom->sdl.win)) < 0)
 		{
 			ft_dprintf(STDERR_FILENO, "SDL_UpdateWindowSurface error = %{r}s\n", \

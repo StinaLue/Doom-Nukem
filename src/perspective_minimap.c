@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/20 17:36:47 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/21 17:50:15 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,43 +47,6 @@ t_vecdb	rotate3d(t_vecdb vector, double angle)
 	newvector.x = vector.x * cos(angle) + vector.y * sin(angle);
 	newvector.y = vector.x * sin(angle) - vector.y * cos(angle);
 	return (newvector);
-}
-
-void	transform_to_winsize(t_wall3d *wall3d, int maxw, int maxh)
-{
-	if (wall3d->top_left.x >= maxw)
-		wall3d->top_left.x = maxw;
-	if (wall3d->top_left.y >= maxh)
-		wall3d->top_left.y = maxh;
-	if (wall3d->top_right.x >= maxw)
-		wall3d->top_right.x = maxw;
-	if (wall3d->top_right.y >= maxh)
-		wall3d->top_right.y = maxh;
-	if (wall3d->bottom_left.x >= maxw)
-		wall3d->bottom_left.x = maxw;
-	if (wall3d->bottom_left.y >= maxh)
-		wall3d->bottom_left.y = maxh;
-	if (wall3d->bottom_right.x >= maxw)
-		wall3d->bottom_right.x = maxw;
-	if (wall3d->bottom_right.y >= maxh)
-		wall3d->bottom_right.y = maxh;
-
-	if (wall3d->top_left.x < 0)
-		wall3d->top_left.x = 0;
-	if (wall3d->top_left.y < 0)
-		wall3d->top_left.y = 0;
-	if (wall3d->top_right.x < 0)
-		wall3d->top_right.x = 0;
-	if (wall3d->top_right.y < 0)
-		wall3d->top_right.y = 0;
-	if (wall3d->bottom_left.x < 0)
-		wall3d->bottom_left.x = 0;
-	if (wall3d->bottom_left.y < 0)
-		wall3d->bottom_left.y = 0;
-	if (wall3d->bottom_right.x < 0)
-		wall3d->bottom_right.x = 0;
-	if (wall3d->bottom_right.y < 0)
-		wall3d->bottom_right.y = 0;
 }
 
 void	draw_perspective_minimap(SDL_Surface *surf, t_player *player, t_wall *walls)
