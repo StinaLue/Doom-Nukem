@@ -18,14 +18,14 @@
 
 # define NB_WALLS 4
 
-# define ROT_MAP_WIDTH 600 /2
-# define ROT_MAP_HEIGHT 1000 /2
+# define ROT_MAP_WIDTH 100//600 /2
+# define ROT_MAP_HEIGHT 100//1000 /2
 
-# define FIXED_MAP_WIDTH 600 /2
-# define FIXED_MAP_HEIGHT 1000 /2
+# define FIXED_MAP_WIDTH 100//600 /2
+# define FIXED_MAP_HEIGHT 100//1000 /2
 
 # define THIRD_MAP_WIDTH 600 /2
-# define THIRD_MAP_HEIGHT 1000 /2
+# define THIRD_MAP_HEIGHT 600 /2
 
 # define WIN_WIDTH 1800
 # define WIN_HEIGHT 1000

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/18 16:30:02 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/21 12:49:47 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ void	main_loop(t_doom *doom)
 
 	//double angle = 0.0; direction angle of player
 
-	SDL_Rect myrect_firstmap = {.x=0, .y=0, .w=(WIN_WIDTH / 3), .h=WIN_HEIGHT}; // Stretching rectangle to print the map in fullscreen
-	SDL_Rect myrect_secondmap = {.x=(WIN_WIDTH / 3), .y=0, .w=(WIN_WIDTH / 3), .h=WIN_HEIGHT}; // Stretching rectangle to print the map in fullscreen
-	SDL_Rect myrect_thirdmap = {.x=2 * (WIN_WIDTH / 3), .y=0, .w=WIN_WIDTH, .h=WIN_HEIGHT}; // Stretching rectangle to print the map in fullscreen
+	SDL_Rect myrect_firstmap = {.x=0, .y=0, .w=(WIN_WIDTH / 8), .h=WIN_HEIGHT / 4}; // Stretching rectangle to print the map in fullscreen
+	SDL_Rect myrect_secondmap = {.x=(WIN_WIDTH / 8), .y=0, .w=(WIN_WIDTH / 8), .h=WIN_HEIGHT / 4}; // Stretching rectangle to print the map in fullscreen
+	SDL_Rect myrect_thirdmap = {.x=0, .y=0, .w=WIN_WIDTH, .h=WIN_HEIGHT}; // Stretching rectangle to print the map in fullscreen
 	/*
 		When creating a surface, the last four parameters correspond to the RGBA masks for the created surface. They need to correspond
 		to the format of the surface we copy to (the window)
@@ -91,10 +91,14 @@ void	main_loop(t_doom *doom)
 		printf("create surface error = %s\n", SDL_GetError());
 	//my_map = SDL_ConvertSurface(my_map, doom->sdl.surf->format, 0);
 
-	t_vec left_window_top = {ROT_MAP_WIDTH - 1, 0}; // startline border between firstmap and secondmap
-	t_vec left_window_bottom = {ROT_MAP_WIDTH - 1, ROT_MAP_HEIGHT - 1}; // endline
-	t_vec right_window_top = {FIXED_MAP_WIDTH - 1, 0}; // startline border between secondmap and thirdmap
-	t_vec right_window_bottom = {FIXED_MAP_WIDTH - 1, FIXED_MAP_HEIGHT - 1}; // endline
+	t_vec bottomleft_leftmap = {0, ROT_MAP_HEIGHT - 1};
+	t_vec bottomleft_rightmap = {0, FIXED_MAP_HEIGHT - 1};
+	t_vec bottomright_leftmap = {ROT_MAP_WIDTH - 1, ROT_MAP_HEIGHT - 1};
+	t_vec bottomright_rightmap = {FIXED_MAP_WIDTH - 1, FIXED_MAP_HEIGHT - 1};
+	t_vec topleft_leftmap = {0, 0};
+	t_vec topleft_rightmap = {0, 0};
+	t_vec topright_leftmap = {ROT_MAP_WIDTH - 1, 0};
+	t_vec topright_rightmap = {FIXED_MAP_WIDTH - 1, 0};
 
 	keyboard_state = SDL_GetKeyboardState(NULL);
 	SDL_WarpMouseInWindow(doom->sdl.win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
@@ -103,25 +107,30 @@ void	main_loop(t_doom *doom)
 		ft_bzero(doom->sdl.rot_mmap->pixels, doom->sdl.rot_mmap->h * doom->sdl.rot_mmap->pitch);
 		ft_bzero(doom->sdl.fixed_mmap->pixels, doom->sdl.fixed_mmap->h * doom->sdl.fixed_mmap->pitch);
 		ft_bzero(doom->sdl.perspective_mmap->pixels, doom->sdl.perspective_mmap->h * doom->sdl.perspective_mmap->pitch);
-		draw_line(left_window_top, left_window_bottom, doom->sdl.rot_mmap, 0xFFFFFF);
-		draw_line(right_window_top, right_window_bottom, doom->sdl.fixed_mmap, 0xFFFFFF);
 		while (SDL_PollEvent(&(doom->sdl.event)) != 0)
 			check_quit(&(doom->sdl.event), &(doom->data.quit));
 
 		//move the player and assign his new position, need float and then int converting because of angle calculation
 		basic_move(&doom->player, keyboard_state);
 
+		draw_perspective_minimap(doom->sdl.perspective_mmap, &doom->player, walls);
 		draw_fixed_minimap(doom->sdl.fixed_mmap, &doom->player, walls);
 		draw_rot_minimap(doom->sdl.rot_mmap, &doom->player, walls);
-		draw_perspective_minimap(doom->sdl.perspective_mmap, &doom->player, walls);
+		draw_line(topleft_leftmap, topright_leftmap, doom->sdl.rot_mmap, 0xFFFFFF);
+		draw_line(topleft_rightmap, topright_rightmap, doom->sdl.fixed_mmap, 0xFFFFFF);
+		draw_line(bottomleft_leftmap, bottomright_leftmap, doom->sdl.rot_mmap, 0xFFFFFF);
+		draw_line(bottomleft_rightmap, bottomright_rightmap, doom->sdl.fixed_mmap, 0xFFFFFF);
+		draw_line(topleft_leftmap, bottomleft_leftmap, doom->sdl.rot_mmap, 0xFFFFFF);
+		draw_line(topleft_rightmap, bottomleft_rightmap, doom->sdl.fixed_mmap, 0xFFFFFF);
+		draw_line(topright_rightmap, bottomright_rightmap, doom->sdl.fixed_mmap, 0xFFFFFF);
 
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, &doom->sdl.surf->clip_rect)) < 0)
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, NULL)) < 0)
+		if ((SDL_BlitScaled(doom->sdl.perspective_mmap, NULL, doom->sdl.win_surf, &myrect_thirdmap)) < 0)
+			printf("BlitScale error = %s\n", SDL_GetError());
 		if ((SDL_BlitScaled(doom->sdl.rot_mmap, NULL, doom->sdl.win_surf, &myrect_firstmap)) < 0)
 			printf("BlitScale error = %s\n", SDL_GetError());
 		if ((SDL_BlitScaled(doom->sdl.fixed_mmap, NULL, doom->sdl.win_surf, &myrect_secondmap)) < 0)
-			printf("BlitScale error = %s\n", SDL_GetError());
-		if ((SDL_BlitScaled(doom->sdl.perspective_mmap, NULL, doom->sdl.win_surf, &myrect_thirdmap)) < 0)
 			printf("BlitScale error = %s\n", SDL_GetError());
 		if ((SDL_UpdateWindowSurface(doom->sdl.win)) < 0)
 		{
