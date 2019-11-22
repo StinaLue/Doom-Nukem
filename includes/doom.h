@@ -137,9 +137,14 @@ void			init_data_struct(t_data *data);
 void			init_player_struct(t_player *player);
 
 /*
+** POLL EVENT FUNCTIONS
+*/
+void			handle_events(SDL_Event *event, t_data *data);
+
+/*
 ** EVENT FUNCTIONS
 */
-void	handle_events(t_doom *doom, t_wall *walls, const Uint8 *keyboard_state);
+void			handle_keys(t_doom *doom, t_wall *walls, const Uint8 *keyboard_state);
 
 /*
 ** PRINT MINIMAP FUNCTIONS

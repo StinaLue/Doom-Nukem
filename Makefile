@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2019/11/21 16:02:11 by afonck           ###   ########.fr        #
+#    Updated: 2019/11/22 16:31:45 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,7 +69,8 @@ SOURCES_LIST = main.c \
 			perspective_minimap.c \
 			vector.c \
 			map_parser.c \
-			events.c#\
+			poll_event.c \
+			handle_keys.c#\
 	       multithreading.c \
 		   texture.c \
 		   parsing.c \

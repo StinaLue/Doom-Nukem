@@ -6,19 +6,12 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/21 19:45:33 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/22 16:32:37 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "doom.h"
-
-void	check_quit(SDL_Event *event, int *quit)
-{
-	if (event->type == SDL_QUIT || (event->type == SDL_KEYDOWN && \
-		event->key.keysym.sym == SDLK_ESCAPE))
-		*quit = 1;
-}
 
 int		is_in_map(t_vecdb *player)
 {
@@ -90,10 +83,10 @@ void	main_loop(t_doom *doom)
 	{
 		ft_bzero(doom->sdl.perspective_mmap->pixels, doom->sdl.perspective_mmap->h * doom->sdl.perspective_mmap->pitch);
 		while (SDL_PollEvent(&(doom->sdl.event)) != 0)
-			check_quit(&(doom->sdl.event), &(doom->data.quit));
+			handle_events(&doom->sdl.event, &doom->data);
 
 		//handle events (for now player movement and HUD activation/deactivation)
-		handle_events(doom, walls, keyboard_state);
+		handle_keys(doom, walls, keyboard_state);
 
 		draw_perspective_minimap(doom->sdl.perspective_mmap, &doom->player, walls);
 		if ((SDL_BlitScaled(doom->sdl.perspective_mmap, NULL, doom->sdl.win_surf, &myrect_thirdmap)) < 0)

@@ -6,33 +6,11 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2019/11/21 19:46:05 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/22 16:28:15 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
-
-void	handle_hud(char *hud_flags, SDL_Event *event, const Uint8 *keyboard_state)
-{
-	//(void)keyboard_state;
-	(void)event;
-	if (keyboard_state[SDL_SCANCODE_1])
-	//if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDL_SCANCODE_1)
-	{
-		if ((*hud_flags & ROT_MAP_SHOW) == 0)
-			*hud_flags |= ROT_MAP_SHOW;
-		else
-			*hud_flags &= ~(ROT_MAP_SHOW);
-	}	
-	if (keyboard_state[SDL_SCANCODE_2])
-	//if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_2)
-	{
-		if ((*hud_flags & FIX_MAP_SHOW) == 0)
-			*hud_flags |= FIX_MAP_SHOW;
-		else
-			*hud_flags &= ~(FIX_MAP_SHOW);
-	}
-}
 
 void	basic_move(t_player *player, t_wall *walls, const Uint8 *keyboard_state)
 {
@@ -71,8 +49,7 @@ void	basic_move(t_player *player, t_wall *walls, const Uint8 *keyboard_state)
 	player->direc.y = sin(player->angle) * 5 + player->pos.y;
 }
 
-void	handle_events(t_doom *doom, t_wall *walls, const Uint8 *keyboard_state)
+void	handle_keys(t_doom *doom, t_wall *walls, const Uint8 *keyboard_state)
 {
-	handle_hud(&doom->data.hud_flags, &doom->sdl.event, keyboard_state);
 	basic_move(&doom->player, walls, keyboard_state);
 }
