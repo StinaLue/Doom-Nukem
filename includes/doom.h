@@ -28,8 +28,8 @@
 # define FIXED_MAP_WIDTH 100
 # define FIXED_MAP_HEIGHT 100
 
-# define THIRD_MAP_WIDTH 600 /2
-# define THIRD_MAP_HEIGHT 600 /2
+# define THIRD_MAP_WIDTH 600 
+# define THIRD_MAP_HEIGHT 600 
 
 # define WIN_WIDTH 1800
 # define WIN_HEIGHT 1000
@@ -149,6 +149,8 @@ void			handle_keys(t_doom *doom, t_wall *walls, const Uint8 *keyboard_state);
 /*
 ** PRINT MINIMAP FUNCTIONS
 */
+
+void			draw_map(t_sdl *sdl, t_player *player, t_wall *walls, char *hud_flags);
 
 void			draw_full_fixedmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf);
 //void			draw_fixed_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);

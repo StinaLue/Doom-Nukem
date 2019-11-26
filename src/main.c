@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/22 16:32:37 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/26 22:01:59 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,7 @@ void	main_loop(t_doom *doom)
 		if ((SDL_BlitScaled(doom->sdl.perspective_mmap, NULL, doom->sdl.win_surf, &myrect_thirdmap)) < 0)
 			printf("BlitScale error = %s\n", SDL_GetError());
 
-		if (doom->data.hud_flags & FIX_MAP_SHOW)
-			draw_full_fixedmap(doom->sdl.fixed_mmap, &doom->player, walls, doom->sdl.win_surf);
-		if (doom->data.hud_flags & ROT_MAP_SHOW)
-			draw_full_rotmap(doom->sdl.rot_mmap, &doom->player, walls, doom->sdl.win_surf);
+		draw_map(&doom->sdl, &doom->player, walls, &doom->data.hud_flags);
 
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, &doom->sdl.surf->clip_rect)) < 0)
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, NULL)) < 0)

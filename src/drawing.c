@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 03:35:35 by afonck            #+#    #+#             */
-/*   Updated: 2019/11/21 17:49:48 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/26 21:59:39 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,28 @@ SDL_Rect	assign_SDLrect(int x, int y, int w, int h)
 	return (newrect);
 }
 
+void		draw_map(t_sdl *sdl, t_player *player, t_wall *walls, char *hud_flags)
+{
+	sdl->fixed_mmap->userdata = "1map";
+	if ((*hud_flags & ROT_MAP_SHOW) && (*hud_flags & FIX_MAP_SHOW) == 0)
+		draw_full_rotmap(sdl->rot_mmap, player, walls, sdl->win_surf);
+	else if ((*hud_flags & FIX_MAP_SHOW) && (*hud_flags & ROT_MAP_SHOW) == 0)
+		draw_full_fixedmap(sdl->fixed_mmap, player, walls, sdl->win_surf);
+	if ((*hud_flags & ROT_MAP_SHOW) && (*hud_flags & FIX_MAP_SHOW))
+	{
+		sdl->fixed_mmap->userdata = "2maps";
+		draw_full_rotmap(sdl->rot_mmap, player, walls, sdl->win_surf);
+		draw_full_fixedmap(sdl->fixed_mmap, player, walls, sdl->win_surf);
+	}
+}
+
 void		blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf)
 {
 	SDL_Rect rect;
 
-	if (whichsurf == FIX_MAP_SHOW)
+	if (whichsurf == FIX_MAP_SHOW + ROT_MAP_SHOW)
 		rect = assign_SDLrect(WIN_WIDTH / 8, 0, WIN_WIDTH / 8, WIN_HEIGHT / 4);
-	else if (whichsurf == ROT_MAP_SHOW)
+	else if (whichsurf == ROT_MAP_SHOW || whichsurf == FIX_MAP_SHOW)
 		rect = assign_SDLrect(0, 0, WIN_WIDTH / 8, WIN_HEIGHT / 4);
 	else
 		rect = assign_SDLrect(0, 0, WIN_WIDTH, WIN_HEIGHT);

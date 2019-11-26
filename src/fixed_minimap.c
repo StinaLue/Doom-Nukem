@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 16:23:32 by phaydont          #+#    #+#             */
-/*   Updated: 2019/11/21 17:43:00 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/26 22:00:06 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,8 @@ void	draw_full_fixedmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_
 	draw_line(bottomleft_fixedmap, bottomright_fixedmap, surf, 0xFFFFFF);
 	draw_line(topleft_fixedmap, bottomleft_fixedmap, surf, 0xFFFFFF);
 	draw_line(topright_fixedmap, bottomright_fixedmap, surf, 0xFFFFFF);
-	blit_in_rect(surf, winsurf, FIX_MAP_SHOW);
+	if (surf->userdata && ft_strncmp(surf->userdata, "2maps", 5) == 0)
+		blit_in_rect(surf, winsurf, FIX_MAP_SHOW + ROT_MAP_SHOW);
+	else
+		blit_in_rect(surf, winsurf, FIX_MAP_SHOW);
 }
