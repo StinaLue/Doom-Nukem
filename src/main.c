@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/26 22:01:59 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/27 17:36:14 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,11 @@ void	main_loop(t_doom *doom)
 		//handle events (for now player movement and HUD activation/deactivation)
 		handle_keys(doom, walls, keyboard_state);
 
+		if (doom->data.hud_flags & COLORFLAG)
+			doom->sdl.perspective_mmap->userdata = "yescolor";
+		else
+			doom->sdl.perspective_mmap->userdata = "nocolor";
+		
 		draw_perspective_minimap(doom->sdl.perspective_mmap, &doom->player, walls);
 		if ((SDL_BlitScaled(doom->sdl.perspective_mmap, NULL, doom->sdl.win_surf, &myrect_thirdmap)) < 0)
 			printf("BlitScale error = %s\n", SDL_GetError());
