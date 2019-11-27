@@ -93,6 +93,7 @@ typedef struct	s_player
 	t_vecdb		pos;
 	t_vecdb		direc;
 	double		angle;
+	double		view_z;
 }				t_player;
 
 typedef struct	s_doom

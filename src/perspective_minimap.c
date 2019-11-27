@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/21 17:50:15 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/27 13:07:27 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,13 +106,13 @@ void	draw_perspective_minimap(SDL_Surface *surf, t_player *player, t_wall *walls
 			double y1b = (surf->h ) / wall_tmp.start_wall.x;
 			double y2b = (surf->h ) / wall_tmp.end_wall.x;
 			transfo_wall.top_left.x = (surf->w / 2) + x1;
-			transfo_wall.top_left.y = (surf->h / 2) + y1a;
+			transfo_wall.top_left.y = (surf->h / 2) + y1a + player->view_z;
 			transfo_wall.top_right.x = (surf->w / 2) + x2;
-			transfo_wall.top_right.y = (surf->h / 2) + y2a;
+			transfo_wall.top_right.y = (surf->h / 2) + y2a + player->view_z;
 			transfo_wall.bottom_left.x = (surf->w / 2) + x1;
-			transfo_wall.bottom_left.y = (surf->h / 2) + y1b;
+			transfo_wall.bottom_left.y = (surf->h / 2) + y1b + player->view_z;
 			transfo_wall.bottom_right.x = (surf->w / 2) + x2;
-			transfo_wall.bottom_right.y = (surf->h / 2) + y2b;
+			transfo_wall.bottom_right.y = (surf->h / 2) + y2b + player->view_z;
 			//transform_to_winsize(&transfo_wall, surf->w, surf->h);
 			draw_line(vecdb_to_vec(transfo_wall.top_left), vecdb_to_vec(transfo_wall.top_right), surf, walls[i].color); // drawing a line for each line around wall
 			draw_line(vecdb_to_vec(transfo_wall.top_right), vecdb_to_vec(transfo_wall.bottom_right), surf, walls[i].color);

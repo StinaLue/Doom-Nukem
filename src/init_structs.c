@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/21 15:49:07 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/27 13:06:49 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,5 @@ void	init_player_struct(t_player *player)
 	player->pos.x = 70;
 	player->pos.y = 70;
 	player->angle = 0.0;
+	player->view_z = 0;
 }
