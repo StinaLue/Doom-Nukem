@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:06:54 by afonck            #+#    #+#             */
-/*   Updated: 2019/11/21 15:15:01 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/28 13:06:04 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
+
+t_vec	create_vec(int x, int y)
+{
+	t_vec vec;
+
+	vec.x = x;
+	vec.y = y;
+	return (vec);
+}
 
 void	give_vec_values(t_vec *vec, int x, int y)
 {
@@ -18,7 +27,7 @@ void	give_vec_values(t_vec *vec, int x, int y)
 	vec->y = y;
 }
 
-void	assign_vec(t_vec *one, const t_vec *two)
+void	vectorcpy(t_vec *one, const t_vec *two)
 {
 	one->x = two->x;
 	one->y = two->y;
@@ -40,4 +49,13 @@ t_vec	vecdb_to_vec(t_vecdb vectordb)
 	vector.x = (int)vectordb.x;
 	vector.y = (int)vectordb.y;
 	return (vector);
+}
+
+t_vecdb	vec_to_vecdb(t_vec vector)
+{
+	t_vecdb vectordb;
+
+	vectordb.x = vector.x;
+	vectordb.y = vector.y;
+	return (vectordb);
 }

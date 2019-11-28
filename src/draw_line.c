@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_line.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 16:06:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/15 16:34:03 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/28 13:46:37 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,10 @@ void	draw_line(const t_vec a, const t_vec b, SDL_Surface *surf, int color)
 	double	deltay;
 	t_vecdb	pos;
 	int		steps;
+	t_vecdb	mid;
 
+	mid.x = (a.x + b.x) / 2;
+	mid.y = (a.y + b.y) / 2;
 	deltax = b.x - a.x;
 	deltay = b.y - a.y;
 	steps = ft_absolute(get_steps(&deltax, &deltay));
@@ -43,7 +46,10 @@ void	draw_line(const t_vec a, const t_vec b, SDL_Surface *surf, int color)
 	pos.y = a.y + 0.5;
 	while (steps >= 0)
 	{
-		fill_pix(surf, (int)pos.x, (int)pos.y, color);
+		if (fabs(pos.x - mid.x) < 2 && fabs(pos.y - mid.y) < 2)
+			fill_pix(surf, (int)pos.x, (int)pos.y, color ^ 0xFFFFFF);
+		else
+			fill_pix(surf, (int)pos.x, (int)pos.y, color);
 		pos.x += deltax;
 		pos.y += deltay;
 		steps--;

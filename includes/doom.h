@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   doom.h   	                                        :+:      :+:    :+:   */
+/*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/10/26 12:21:27 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/11/28 17:51:48 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,11 +117,15 @@ int		is_in_map(t_vecdb *player);
 ** VECTOR FUNCTIONS
 */
 
+t_vec			create_vec(int x, int y);
+
 void			give_vec_values(t_vec *vec, int x, int y);
 
-void			assign_vec(t_vec *one, const t_vec *two);
+void			vectorcpy(t_vec *one, const t_vec *two);
 
 t_vec			vecdb_to_vec(t_vecdb vectordb);
+
+t_vecdb			vec_to_vecdb(t_vec vector);
 
 t_vecdb			rotate2d(t_vecdb vector, double angle);
 
