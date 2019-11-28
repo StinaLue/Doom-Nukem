@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2019/11/27 14:19:20 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/28 12:39:28 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	basic_move(t_player *player, t_wall *walls, const Uint8 *keyboard_state)
 		player->pos.x = 70;
 		player->pos.y = 70;
 	}
-	if (keyboard_state[SDL_SCANCODE_W])
+	if (keyboard_state[SDL_SCANCODE_W] && !keyboard_state[SDL_SCANCODE_S])
 	{
 		//player->pos.x += cos(player->angle) / 10; // == speed reduction
 		//player->pos.y += sin(player->angle) / 10;
@@ -33,7 +33,7 @@ void	basic_move(t_player *player, t_wall *walls, const Uint8 *keyboard_state)
 			player->pos.y = pos_y;
 		}
 	}
-	if (keyboard_state[SDL_SCANCODE_S])
+	if (keyboard_state[SDL_SCANCODE_S] && !keyboard_state[SDL_SCANCODE_W])
 	{
 		//player->pos.x -= cos(player->angle) / 10;
 		//player->pos.y -= sin(player->angle) / 10;
@@ -45,7 +45,7 @@ void	basic_move(t_player *player, t_wall *walls, const Uint8 *keyboard_state)
 			player->pos.y = pos_y;
 		}
 	}
-	if (keyboard_state[SDL_SCANCODE_A])
+	if (keyboard_state[SDL_SCANCODE_A] && !keyboard_state[SDL_SCANCODE_D])
 	{
 		player->pos.x += (player->direc.y - player->pos.y) / 100;
 		player->pos.y -= (player->direc.x - player->pos.x) / 100; // == speed reduction
@@ -55,7 +55,7 @@ void	basic_move(t_player *player, t_wall *walls, const Uint8 *keyboard_state)
 			player->pos.y = pos_y;
 		}
 	}
-	if (keyboard_state[SDL_SCANCODE_D])
+	if (keyboard_state[SDL_SCANCODE_D] && !keyboard_state[SDL_SCANCODE_A])
 	{
 		player->pos.x -= (player->direc.y - player->pos.y) / 100;
 		player->pos.y += (player->direc.x - player->pos.x) / 100; // == speed reduction

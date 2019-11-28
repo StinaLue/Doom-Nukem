@@ -28,11 +28,14 @@
 # define FIXED_MAP_WIDTH 100
 # define FIXED_MAP_HEIGHT 100
 
-# define THIRD_MAP_WIDTH 600
-# define THIRD_MAP_HEIGHT 600
+# define THIRD_MAP_WIDTH 1800 / 3//600
+# define THIRD_MAP_HEIGHT 1000 / 3//600
 
 # define WIN_WIDTH 1800
 # define WIN_HEIGHT 1000
+
+# define HFOV (0.73 * THIRD_MAP_HEIGHT)
+# define VFOV (0.2 * THIRD_MAP_HEIGHT)
 
 /*
 ** FLAGS
@@ -59,10 +62,10 @@ typedef struct	s_vecdb
 
 typedef struct	s_wall3d
 {
-	t_vecdb 	top_left;
-	t_vecdb 	top_right;
-	t_vecdb 	bottom_left;
-	t_vecdb 	bottom_right;
+	t_vec	 	top_left;
+	t_vec	 	top_right;
+	t_vec	 	bottom_left;
+	t_vec	 	bottom_right;
 }				t_wall3d;
 
 typedef struct	s_sdl
