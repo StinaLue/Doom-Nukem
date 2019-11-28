@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/29 14:25:28 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/02 11:38:03 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # define TITLE "DOOM"
 
 # define NB_WALLS 4
+# define SQRT2 1.4142135623730950488
 
 /*
 ** DIMENSIONS
@@ -96,6 +97,7 @@ typedef struct	s_player
 {
 	t_vecdb		pos;
 	t_vecdb		direc;
+	t_vecdb		inertia;
 	double		angle;
 	double		view_z;
 }				t_player;
@@ -116,6 +118,8 @@ int		is_in_map(t_vecdb *player);
 /*
 ** VECTOR FUNCTIONS
 */
+
+t_vecdb			multvec(t_vecdb vecdb, double n);
 
 t_vec			create_vec(int x, int y);
 
@@ -192,6 +196,9 @@ int				free_sdl_quit(SDL_Window **win);
 */
 
 int				parse_everything(t_wall *walls);
+
+
+void			movement(t_player *player, t_vecdb move, t_wall *walls);
 
 
 #endif
