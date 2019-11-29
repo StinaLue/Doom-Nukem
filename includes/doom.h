@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/28 17:51:48 by afonck           ###   ########.fr       */
+/*   Updated: 2019/11/29 14:25:28 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@
 # define FIXED_MAP_WIDTH 100
 # define FIXED_MAP_HEIGHT 100
 
-# define THIRD_MAP_WIDTH 1800 / 3//600
-# define THIRD_MAP_HEIGHT 1000 / 3//600
+# define THIRD_MAP_WIDTH 1800 / 4//600
+# define THIRD_MAP_HEIGHT 1000 / 4//600
 
 # define WIN_WIDTH 1800
 # define WIN_HEIGHT 1000
