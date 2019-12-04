@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/11/28 17:46:39 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/04 11:01:31 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ void	init_data_struct(t_data *data)
 
 void	init_player_struct(t_player *player)
 {
-	player->pos.x = 70;
-	player->pos.y = 70;
-	player->angle = 0.0;
+	player->pos.x = 70.5;
+	player->pos.y = 70.5;
+	player->angle = 0;
 	player->view_z = 0;
 	player->inertia.x = 0;
 	player->inertia.y = 0;

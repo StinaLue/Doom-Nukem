@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/02 11:38:03 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/04 10:40:16 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,8 @@
 ** DIMENSIONS
 */
 
-# define ROT_MAP_WIDTH 100
-# define ROT_MAP_HEIGHT 100
-
-# define FIXED_MAP_WIDTH 100
-# define FIXED_MAP_HEIGHT 100
+# define MINIMAP_WIDTH 200
+# define MINIMAP_HEIGHT 200
 
 # define THIRD_MAP_WIDTH 1800 / 4//600
 # define THIRD_MAP_HEIGHT 1000 / 4//600
@@ -35,7 +32,7 @@
 # define WIN_WIDTH 1800
 # define WIN_HEIGHT 1000
 
-# define HFOV (0.73 * THIRD_MAP_HEIGHT)
+# define HFOV (0.5 * THIRD_MAP_HEIGHT)
 # define VFOV (0.2 * THIRD_MAP_HEIGHT)
 
 /*
@@ -132,6 +129,12 @@ t_vec			vecdb_to_vec(t_vecdb vectordb);
 t_vecdb			vec_to_vecdb(t_vec vector);
 
 t_vecdb			rotate2d(t_vecdb vector, double angle);
+
+t_vecdb			rotate2dcc(t_vecdb vector, double angle);
+
+//double	dot_product(t_vecdb a, t_vecdb b);
+
+t_vecdb			create_vecdb(double x, double y);
 
 /*
 ** INIT FUNCTIONS

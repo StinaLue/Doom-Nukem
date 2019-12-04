@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/02 17:19:21 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/12/04 12:18:24 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,13 @@ void	basic_move(t_player *player, t_wall *walls, const Uint8 *keyboard_state)
 	move.x = 0;
 	move.y = 0;
 	if (keyboard_state[SDL_SCANCODE_W])
-	{
-		move.x += 1;
-	}
-	if (keyboard_state[SDL_SCANCODE_S])
-	{
-		move.x -= 1;
-	}
-	if (keyboard_state[SDL_SCANCODE_A])
-	{
 		move.y += 1;
-	}
-	if (keyboard_state[SDL_SCANCODE_D])
-	{
+	if (keyboard_state[SDL_SCANCODE_S])
 		move.y -= 1;
-	}
+	if (keyboard_state[SDL_SCANCODE_A])
+		move.x -= 1;
+	if (keyboard_state[SDL_SCANCODE_D])
+		move.x += 1;
 	movement(player, move, walls);
 }
 
@@ -54,11 +46,11 @@ void	basic_look(t_player *player, const Uint8 *keyboard_state)
 		player->view_z -= 1;
 	}
 	if (keyboard_state[SDL_SCANCODE_LEFT])
-		player->angle -= 0.01;
-	if (keyboard_state[SDL_SCANCODE_RIGHT])
 		player->angle += 0.01;
-	player->direc.x = cos(player->angle) * 5 + player->pos.x;
-	player->direc.y = sin(player->angle) * 5 + player->pos.y;
+	if (keyboard_state[SDL_SCANCODE_RIGHT])
+		player->angle -= 0.01;
+	player->direc.x = sin(player->angle) * -5 + player->pos.x;
+	player->direc.y = cos(player->angle) * 5 + player->pos.y;
 }
 
 void	handle_keys(t_doom *doom, t_wall *walls, const Uint8 *keyboard_state)

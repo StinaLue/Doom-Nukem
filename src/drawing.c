@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   drawing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 03:35:35 by afonck            #+#    #+#             */
-/*   Updated: 2019/11/26 21:59:39 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/03 13:33:30 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ void		blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf)
 	SDL_Rect rect;
 
 	if (whichsurf == FIX_MAP_SHOW + ROT_MAP_SHOW)
-		rect = assign_SDLrect(WIN_WIDTH / 8, 0, WIN_WIDTH / 8, WIN_HEIGHT / 4);
+		rect = assign_SDLrect(MINIMAP_WIDTH * 2, 0, MINIMAP_WIDTH * 2, MINIMAP_HEIGHT * 2);
 	else if (whichsurf == ROT_MAP_SHOW || whichsurf == FIX_MAP_SHOW)
-		rect = assign_SDLrect(0, 0, WIN_WIDTH / 8, WIN_HEIGHT / 4);
+		rect = assign_SDLrect(0, 0, MINIMAP_WIDTH * 2, MINIMAP_HEIGHT * 2);
 	else
 		rect = assign_SDLrect(0, 0, WIN_WIDTH, WIN_HEIGHT);
 	if ((SDL_BlitScaled(surf, NULL, winsurf, &rect)) < 0)
@@ -58,5 +58,5 @@ void		blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf)
 void		fill_pix(SDL_Surface *surf, int x, int y, int color)
 {
 	if (x < surf->w && y < surf->h && x >= 0 && y >= 0)
-		((Uint32 *)surf->pixels)[x + y * surf->w] = color;
+		((Uint32 *)surf->pixels)[x + (surf->h - y - 1) * surf->w] = color;
 }

@@ -6,15 +6,29 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:06:54 by afonck            #+#    #+#             */
-/*   Updated: 2019/11/28 18:06:55 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/03 15:44:52 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
+/*double	dot_product(t_vecdb a, t_vecdb b)
+{
+	return (a.x * -b.x + a.y * b.y);
+}*/
+
 t_vec	create_vec(int x, int y)
 {
 	t_vec vec;
+
+	vec.x = x;
+	vec.y = y;
+	return (vec);
+}
+
+t_vecdb	create_vecdb(double x, double y)
+{
+	t_vecdb vec;
 
 	vec.x = x;
 	vec.y = y;
@@ -40,12 +54,21 @@ t_vecdb	multvec(t_vecdb vecdb, double n)
 	return (vecdb);
 }
 
-t_vecdb	rotate2d(t_vecdb vector, double angle)
+t_vecdb	rotate2dcc(t_vecdb vector, double angle)
 {
 	t_vecdb newvector;
 
 	newvector.x = vector.x * cos(angle) + vector.y * sin(angle);
-	newvector.y = vector.x * sin(angle) - vector.y * cos(angle);
+	newvector.y = -1 * vector.x * sin(angle) + vector.y * cos(angle);
+	return (newvector);
+}
+
+t_vecdb	rotate2d(t_vecdb vector, double angle)
+{
+	t_vecdb newvector;
+
+	newvector.x = vector.x * cos(angle) - vector.y * sin(angle);
+	newvector.y = vector.x * sin(angle) + vector.y * cos(angle);
 	return (newvector);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fixed_minimap.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 16:23:32 by phaydont          #+#    #+#             */
-/*   Updated: 2019/11/26 22:00:06 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/03 13:37:02 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ void	draw_full_fixedmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_
 
 	ft_bzero(surf->pixels, surf->h * surf->pitch);
 	give_vec_values(&topleft_fixedmap, 0, 0);
-	give_vec_values(&topright_fixedmap, FIXED_MAP_WIDTH - 1, 0);
-	give_vec_values(&bottomleft_fixedmap, 0, FIXED_MAP_HEIGHT - 1);
-	give_vec_values(&bottomright_fixedmap, FIXED_MAP_WIDTH - 1, FIXED_MAP_HEIGHT - 1);
+	give_vec_values(&topright_fixedmap, MINIMAP_WIDTH - 1, 0);
+	give_vec_values(&bottomleft_fixedmap, 0, MINIMAP_HEIGHT - 1);
+	give_vec_values(&bottomright_fixedmap, MINIMAP_WIDTH - 1, MINIMAP_HEIGHT - 1);
 	draw_fixed_minimap(surf, player, walls);
 	draw_line(topleft_fixedmap, topright_fixedmap, surf, 0xFFFFFF);
 	draw_line(bottomleft_fixedmap, bottomright_fixedmap, surf, 0xFFFFFF);
