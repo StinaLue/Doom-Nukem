@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/04 10:40:16 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/04 16:41:34 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int		is_in_map(t_vecdb *player);
 ** VECTOR FUNCTIONS
 */
 
-t_vecdb			multvec(t_vecdb vecdb, double n);
+void			multvec(t_vecdb *vecdb, double n);
 
 t_vec			create_vec(int x, int y);
 

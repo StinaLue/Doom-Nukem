@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:06:54 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/03 15:44:52 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/04 16:41:31 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,10 @@ void	vectorcpy(t_vec *one, const t_vec *two)
 	one->y = two->y;
 }
 
-t_vecdb	multvec(t_vecdb vecdb, double n)
+void	multvec(t_vecdb *vecdb, double n)
 {
-	vecdb.x *= n;
-	vecdb.y *= n;
-	return (vecdb);
+	vecdb->x *= n;
+	vecdb->y *= n;
 }
 
 t_vecdb	rotate2dcc(t_vecdb vector, double angle)
@@ -59,7 +58,7 @@ t_vecdb	rotate2dcc(t_vecdb vector, double angle)
 	t_vecdb newvector;
 
 	newvector.x = vector.x * cos(angle) + vector.y * sin(angle);
-	newvector.y = -1 * vector.x * sin(angle) + vector.y * cos(angle);
+	newvector.y = vector.y * cos(angle) - vector.x * sin(angle);
 	return (newvector);
 }
 
