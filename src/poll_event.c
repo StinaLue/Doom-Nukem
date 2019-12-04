@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:22:12 by afonck            #+#    #+#             */
-/*   Updated: 2019/11/27 17:32:44 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/04 17:39:57 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,15 @@ void	check_quit(SDL_Event *event, int *quit)
 	if (event->type == SDL_QUIT || (event->type == SDL_KEYDOWN && \
 		event->key.keysym.sym == SDLK_ESCAPE))
 		*quit = 1;
+}
+
+void	check_editor(SDL_Event *event, int *editor_flag)
+{
+	if (event->type == SDL_KEYDOWN && event->key.repeat == 0)
+	{
+		if (event->key.keysym.sym == SDLK_e)
+			*editor_flag = 1;
+	}
 }
 
 void	activate_map_flags(char *hud_flags)
@@ -56,5 +65,6 @@ void	handle_hud(char *hud_flags, SDL_Event *event)
 void    handle_events(SDL_Event *event, t_data *data)
 {
     check_quit(event, &data->quit);
+	check_editor(event, &data->editor_flag);
     handle_hud(&data->hud_flags, event);
 }

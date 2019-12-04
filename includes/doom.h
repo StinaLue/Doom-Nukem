@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/04 16:41:34 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/04 19:13:41 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct	s_sdl
 typedef struct	s_data
 {
 	int			quit;
+	int			editor_flag;
 	char		hud_flags;
 }				t_data;
 
@@ -190,9 +191,9 @@ void			draw_line(const t_vec a, const t_vec b, SDL_Surface *surf, int color);
 /*
 ** FREE FUNCTIONS
 */
-void			free_sdl(SDL_Window **win);
+void			free_sdl(t_sdl *sdl);//SDL_Window **win);
 
-int				free_sdl_quit(SDL_Window **win);
+int				free_sdl_quit(t_sdl *sdl);//SDL_Window **win);
 
 /*
 ** PARSE FUNCTIONS

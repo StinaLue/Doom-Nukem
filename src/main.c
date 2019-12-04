@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/04 11:13:32 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/05 00:33:10 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,66 @@ int 	check_collision(double pos_x, double pos_y, t_wall *walls)
 		i++;
 	}
 	return (0);
+}
+
+void	draw_editor(SDL_Surface *editor_surf, int offset)
+{
+	int x = 0;
+	int y;
+	while (x < editor_surf->w)
+	{
+		y = 0;
+		while (y < editor_surf->h)
+		{
+			fill_pix(editor_surf, x, y, 0xFFFFFF);
+			y += offset;
+		}
+		x += offset;
+	}
+}
+
+void	editor(SDL_Window **win, SDL_Surface **win_surf, int *editor_flag)
+{
+	SDL_Surface *editor_surf = NULL;
+	SDL_Surface *instruct_surf = NULL;
+	SDL_Event event;
+	int offset = 20;
+	SDL_Rect editor_rect = {0, 0, WIN_WIDTH / 1.5, WIN_HEIGHT};
+	SDL_Rect instruct_rect = {WIN_WIDTH / 1.5, 0, WIN_WIDTH - (WIN_WIDTH / 1.5), WIN_HEIGHT};
+	if ((editor_surf = SDL_CreateRGBSurface(0, WIN_WIDTH / 1.5, WIN_HEIGHT, 32, 0, 0, 0, 0)) == NULL)
+		printf("create surface error = %s\n", SDL_GetError());
+	if ((instruct_surf = SDL_CreateRGBSurface(0, WIN_WIDTH - (WIN_WIDTH / 1.5), WIN_HEIGHT, 32, 0, 0, 0, 0)) == NULL)
+		printf("create surface error = %s\n", SDL_GetError());
+	while (*editor_flag == 1)
+	{
+		ft_bzero(editor_surf->pixels, editor_surf->h * editor_surf->pitch);
+		ft_bzero(instruct_surf->pixels, instruct_surf->h * instruct_surf->pitch);
+		while (SDL_PollEvent(&event) != 0)
+		{
+			if (event.type == SDL_KEYDOWN)
+			{
+				if (event.key.keysym.sym == SDLK_e)
+					*editor_flag = 0;
+				if (event.key.keysym.sym == SDLK_UP && offset < 100)
+					offset++;
+				else if (event.key.keysym.sym == SDLK_DOWN && offset > 20)
+					offset--;
+			}
+		}
+		draw_editor(editor_surf, offset);
+		if ((SDL_BlitScaled(editor_surf, NULL, *win_surf, &editor_rect)) < 0)
+			printf("BlitScale error = %s\n", SDL_GetError());
+
+		if ((SDL_BlitScaled(instruct_surf, NULL, *win_surf, &instruct_rect)) < 0)
+			printf("BlitScale error = %s\n", SDL_GetError());
+		
+		if ((SDL_UpdateWindowSurface(*win)) < 0)
+		{
+			ft_dprintf(STDERR_FILENO, "SDL_UpdateWindowSurface error = %{r}s\n", \
+				SDL_GetError());
+			return ;
+		}
+	}
 }
 
 void	main_loop(t_doom *doom)
@@ -84,7 +144,8 @@ void	main_loop(t_doom *doom)
 		ft_bzero(doom->sdl.perspective_mmap->pixels, doom->sdl.perspective_mmap->h * doom->sdl.perspective_mmap->pitch);
 		while (SDL_PollEvent(&(doom->sdl.event)) != 0)
 			handle_events(&doom->sdl.event, &doom->data);
-
+		if (doom->data.editor_flag)
+			editor(&doom->sdl.win, &doom->sdl.win_surf, &doom->data.editor_flag);
 		//handle events (for now player movement and HUD activation/deactivation)
 		handle_keys(doom, walls, keyboard_state);
 
@@ -96,7 +157,11 @@ void	main_loop(t_doom *doom)
 		(void)myrect_thirdmap;
 		draw_perspective_minimap(doom->sdl.perspective_mmap, &doom->player, walls);
 		if ((SDL_BlitScaled(doom->sdl.perspective_mmap, NULL, doom->sdl.win_surf, &myrect_thirdmap)) < 0)
+		{
 			printf("BlitScale error = %s\n", SDL_GetError());
+			free_sdl(&doom->sdl);
+			return ;
+		}
 
 		draw_map(&doom->sdl, &doom->player, walls, &doom->data.hud_flags);
 
@@ -106,6 +171,7 @@ void	main_loop(t_doom *doom)
 		{
 			ft_dprintf(STDERR_FILENO, "SDL_UpdateWindowSurface error = %{r}s\n", \
 				SDL_GetError());
+			free_sdl(&doom->sdl);
 			return ;
 		}
 	}
@@ -119,8 +185,10 @@ int		main(/*int argc, char *argv[]*/)
 	if (WIN_WIDTH > 1920 || WIN_HEIGHT > 1080 || WIN_WIDTH < 100 || WIN_HEIGHT < 100)
 		return (1);
 	if (init_sdl(&(doom.sdl.win), &(doom.sdl.win_surf)) != EXIT_SUCCESS)
-		return (free_sdl_quit(&(doom.sdl.win)));
+		return (free_sdl_quit(&doom.sdl));
+		//return (free_sdl_quit(&(doom.sdl.win)));
 	main_loop(&doom);
-	free_sdl(&(doom.sdl.win));
+	//free_sdl(&(doom.sdl.win));
+	free_sdl(&doom.sdl);
 	return (EXIT_SUCCESS);
 }
