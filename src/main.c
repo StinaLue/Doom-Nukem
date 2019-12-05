@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/05 16:55:41 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/05 17:03:40 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,30 @@ int check_collision(double pos_x, double pos_y, t_wall *walls)
 	return (0);
 }
 
-void draw_editor(SDL_Surface *editor_surf, int offset)
+void	draw_editor(SDL_Surface *editor_surf, double offset)
 {
 	int x = 0;
 	int y;
-	while (x < editor_surf->w)
+	char point_values[NBPOINTS][2]; // saves all the coordinates (x, y) for the whole grid -> only works without zooming for now
+	int i = 0;
+	while (x < editor_surf->w - offset)
 	{
-		y = 0;
-		while (y < editor_surf->h)
-		{
-			fill_pix(editor_surf, x, y, 0xFFFFFF);
-			y += offset;
-		}
 		x += offset;
+		y = 0;
+		while (y < editor_surf->h - offset)
+		{
+			y += offset;
+			fill_pix(editor_surf, x, y, 0xFFFFFF);
+			if (offset == OFFSET)
+			{
+				point_values[i][0] = x / offset; // need to put this into struct to keep the values even when zooming
+				point_values[i][1] = y / offset;
+			}
+			i++;
+		}
 	}
+	//printf("x: %d\n", point_values[244][0]);
+	//printf("y: %d\n", point_values[244][1]);
 }
 
 void editor(SDL_Window **win, SDL_Surface **win_surf, int *editor_flag)
@@ -65,7 +75,8 @@ void editor(SDL_Window **win, SDL_Surface **win_surf, int *editor_flag)
 	SDL_Surface *editor_surf = NULL;
 	SDL_Surface *instruct_surf = NULL;
 	SDL_Event event;
-	int offset = 20;
+	double offset = OFFSET;
+	//SDL_Rect editor_rect = {0, WIN_HEIGHT, 0, WIN_WIDTH / 1.5};
 	SDL_Rect editor_rect = {0, 0, WIN_WIDTH / 1.5, WIN_HEIGHT};
 	SDL_Rect instruct_rect = {WIN_WIDTH / 1.5, 0, WIN_WIDTH - (WIN_WIDTH / 1.5), WIN_HEIGHT};
 	if ((editor_surf = SDL_CreateRGBSurface(0, WIN_WIDTH / 1.5, WIN_HEIGHT, 32, 0, 0, 0, 0)) == NULL)
@@ -82,9 +93,9 @@ void editor(SDL_Window **win, SDL_Surface **win_surf, int *editor_flag)
 			{
 				if (event.key.keysym.sym == SDLK_e)
 					*editor_flag = 0;
-				if (event.key.keysym.sym == SDLK_UP && offset < 100)
+				if (event.key.keysym.sym == SDLK_UP && offset < 100 / SIZE)
 					offset++;
-				else if (event.key.keysym.sym == SDLK_DOWN && offset > 20)
+				else if (event.key.keysym.sym == SDLK_DOWN && offset > 20 / SIZE)
 					offset--;
 			}
 		}
@@ -154,12 +165,12 @@ int main_loop(t_doom *doom)
 		}
 		//handle events (for now player movement and HUD activation/deactivation)
 		handle_keys(doom, walls, keyboard_state);
-
+		//if (doom->data.editor_flag)
+		//	editor(&doom->sdl.win, &doom->sdl.win_surf, &doom->data.editor_flag);
 		if (doom->data.hud_flags & COLORFLAG)
 			doom->sdl.perspective_mmap->userdata = "yescolor";
 		else
 			doom->sdl.perspective_mmap->userdata = "nocolor";
-
 		draw_perspective_minimap(doom->sdl.perspective_mmap, &doom->player, walls);
 		if ((SDL_BlitScaled(doom->sdl.perspective_mmap, NULL, doom->sdl.win_surf, &myrect_thirdmap)) < 0)
 		{
@@ -167,9 +178,7 @@ int main_loop(t_doom *doom)
 			free_sdl(&doom->sdl);
 			return (1);
 		}
-
 		draw_map(&doom->sdl, &doom->player, walls, &doom->data.hud_flags);
-
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, &doom->sdl.surf->clip_rect)) < 0)
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, NULL)) < 0)
 		if ((SDL_UpdateWindowSurface(doom->sdl.win)) < 0)
