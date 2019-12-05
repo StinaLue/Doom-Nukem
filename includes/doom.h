@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/04 19:13:41 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/05 16:09:07 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,15 @@
 # define THIRD_MAP_WIDTH 1800 / 4//600
 # define THIRD_MAP_HEIGHT 1000 / 4//600
 
-# define WIN_WIDTH 1800
-# define WIN_HEIGHT 1000
+# define SIZE 2
+# define WIN_WIDTH (1800 / SIZE)
+# define WIN_HEIGHT (1000 / SIZE)
+# define OFFSET (20 / SIZE)
 
 # define HFOV (0.5 * THIRD_MAP_HEIGHT)
 # define VFOV (0.2 * THIRD_MAP_HEIGHT)
+
+# define NBPOINTS 2891 // map has 59 * 49 points
 
 /*
 ** FLAGS
