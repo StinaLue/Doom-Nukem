@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/04 19:12:32 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/05 14:05:12 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,14 @@ int		free_sdl_quit(t_sdl *sdl)//SDL_Window **win)
 	SDL_Quit();
 	//free_sdl(win);
 	return (EXIT_FAILURE);
+}
+
+void	free_menu(t_menu *menu)
+{
+    SDL_FreeSurface( menu->background );
+    SDL_FreeSurface( menu->menu_title );
+    SDL_FreeSurface( menu->first_option );
+    
+    //Close the font that was used
+    TTF_CloseFont( menu->font );
 }

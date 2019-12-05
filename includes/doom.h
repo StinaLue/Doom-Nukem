@@ -3,10 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+<<<<<<< HEAD
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
 /*   Updated: 2019/12/05 17:08:43 by phaydont         ###   ########.fr       */
+=======
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
+/*   Updated: 2019/12/05 17:04:09 by afonck           ###   ########.fr       */
+>>>>>>> 547d4ba7b5c89d26c9bbe9728f073b7b34da8ff6
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +21,7 @@
 # define DOOM_H
 
 # include "SDL.h"
+# include "SDL_ttf.h"
 # define TITLE "DOOM"
 
 # define NB_WALLS 4
@@ -29,10 +37,13 @@
 # define THIRD_MAP_WIDTH 1800 / 4//600
 # define THIRD_MAP_HEIGHT 1000 / 4//600
 
-# define SIZE 2
+# define SIZE 1
 # define WIN_WIDTH (1800 / SIZE)
 # define WIN_HEIGHT (1000 / SIZE)
 # define OFFSET (20 / SIZE)
+
+# define MENU_WIDTH WIN_WIDTH - (WIN_WIDTH / 8)
+# define MENU_HEIGHT WIN_HEIGHT - (WIN_HEIGHT / 4)
 
 # define HFOV (0.5 * THIRD_MAP_HEIGHT)
 # define VFOV (0.2 * THIRD_MAP_HEIGHT)
@@ -40,12 +51,18 @@
 # define NBPOINTS 2891 // map has 59 * 49 points
 
 /*
-** FLAGS
+** HUD FLAGS
 */
 
 # define ROT_MAP_SHOW 1//0x00000001
 # define FIX_MAP_SHOW 2//0x00000010
 # define COLORFLAG 4//0x00000100
+
+/*
+** MENU FLAGS
+*/
+
+# define FIRST_OPTION_SELECT 1
 
 /*
 ** VECTOR STRUCTS
@@ -83,7 +100,8 @@ typedef struct	s_sdl
 typedef struct	s_data
 {
 	int			quit;
-	int			editor_flag;
+	int			menu_flag;
+	//int			editor_flag;
 	char		hud_flags;
 }				t_data;
 
@@ -110,6 +128,28 @@ typedef struct	s_doom
 	t_data		data;
 	t_player	player;
 }				t_doom;
+
+typedef struct	s_menu
+{
+	//The surfaces
+	SDL_Surface *background;
+	SDL_Surface *menu_title;
+	SDL_Surface *first_option;
+
+	//Clip rectangles
+	SDL_Rect background_rect;
+	SDL_Rect menu_title_rect;
+	SDL_Rect first_option_rect;
+	//The event structure
+	SDL_Event event;
+
+	//The font that's going to be used
+	TTF_Font *font;
+
+	//The color of the font
+	SDL_Color textColor;
+	char flags;
+}				t_menu;
 
 int 	check_collision(double pos_x, double pos_y, t_wall *walls);
 
@@ -192,10 +232,21 @@ void			fill_pix(SDL_Surface *surf, int x, int y, int color);
 
 void			draw_line(const t_vec a, const t_vec b, SDL_Surface *surf, int color);
 
+void			draw_border(SDL_Surface *surf, int color);
+
+/*
+** TEXT FUNCTIONS
+*/
+
+int				highlight_text(TTF_Font **font, SDL_Surface **surf, SDL_Color *color, char *text);
+
+int				reset_text(TTF_Font **font, SDL_Surface **surf, SDL_Color *color, char *text);
 
 /*
 ** FREE FUNCTIONS
 */
+void			free_menu(t_menu *menu);
+
 void			free_sdl(t_sdl *sdl);//SDL_Window **win);
 
 int				free_sdl_quit(t_sdl *sdl);//SDL_Window **win);
@@ -206,8 +257,33 @@ int				free_sdl_quit(t_sdl *sdl);//SDL_Window **win);
 
 int				parse_everything(t_wall *walls);
 
+/*
+** SDL_SUB_FUNCTIONS
+*/
+
+void			assign_sdlcolor(SDL_Color *color, Uint8 red, Uint8 green, Uint8 blue);
+
+SDL_Rect		create_sdlrect(int x, int y, int w, int h);
+
+void			assign_sdlrect(SDL_Rect *rect, t_vec origin, t_vec size);
+
+
+/*
+** MOVEMENT
+*/
 
 void			movement(t_player *player, t_vecdb move, t_wall *walls);
 
+/*
+** MENU FUNCTIONS
+*/
+
+int				menu_loop(SDL_Window **win, SDL_Surface **win_surf, int *menu_flag);
+
+/*
+** ERROR FUNCTIONS
+*/
+
+int				error_return(const char *error_msg, const char *sdl_error);
 
 #endif
