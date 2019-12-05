@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/04 17:39:18 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/05 11:43:57 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ void	init_sdl_struct(t_sdl *sdl)
 void	init_data_struct(t_data *data)
 {
 	data->quit = 0;
-	data->editor_flag = 0;
+	data->menu_flag = 0;
+	//data->editor_flag = 0;
 	data->hud_flags = 0;
 }
 

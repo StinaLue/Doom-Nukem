@@ -6,14 +6,14 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/05 00:33:10 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/05 16:55:41 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "doom.h"
 
-int		is_in_map(t_vecdb *player)
+int is_in_map(t_vecdb *player)
 {
 	if (player->x < 0 || player->x >= MINIMAP_WIDTH)
 		return (0);
@@ -22,7 +22,7 @@ int		is_in_map(t_vecdb *player)
 	return (1);
 }
 
-int		check_side_wall(double pos_x, double pos_y, t_vecdb start_wall, t_vecdb end_wall)
+int check_side_wall(double pos_x, double pos_y, t_vecdb start_wall, t_vecdb end_wall)
 {
 	double det = (start_wall.x - end_wall.x) * (start_wall.y - pos_y) - (start_wall.x - pos_x) * (start_wall.y - end_wall.y);
 	if (det > -20.0) // the lower this number, the bigger the distance between player and collision will be
@@ -31,11 +31,11 @@ int		check_side_wall(double pos_x, double pos_y, t_vecdb start_wall, t_vecdb end
 		return (0);
 }
 
-int 	check_collision(double pos_x, double pos_y, t_wall *walls)
+int check_collision(double pos_x, double pos_y, t_wall *walls)
 {
 	int i;
 	i = 0;
-	while(i < NB_WALLS)//loop through each wall
+	while (i < NB_WALLS) //loop through each wall
 	{
 		if (check_side_wall(pos_x, pos_y, walls[i].start_wall, walls[i].end_wall))
 			return (1);
@@ -44,7 +44,7 @@ int 	check_collision(double pos_x, double pos_y, t_wall *walls)
 	return (0);
 }
 
-void	draw_editor(SDL_Surface *editor_surf, int offset)
+void draw_editor(SDL_Surface *editor_surf, int offset)
 {
 	int x = 0;
 	int y;
@@ -60,7 +60,7 @@ void	draw_editor(SDL_Surface *editor_surf, int offset)
 	}
 }
 
-void	editor(SDL_Window **win, SDL_Surface **win_surf, int *editor_flag)
+void editor(SDL_Window **win, SDL_Surface **win_surf, int *editor_flag)
 {
 	SDL_Surface *editor_surf = NULL;
 	SDL_Surface *instruct_surf = NULL;
@@ -90,21 +90,21 @@ void	editor(SDL_Window **win, SDL_Surface **win_surf, int *editor_flag)
 		}
 		draw_editor(editor_surf, offset);
 		if ((SDL_BlitScaled(editor_surf, NULL, *win_surf, &editor_rect)) < 0)
-			printf("BlitScale error = %s\n", SDL_GetError());
+			ft_dprintf(STDERR_FILENO, "BlitScale error = %s\n", SDL_GetError());
 
 		if ((SDL_BlitScaled(instruct_surf, NULL, *win_surf, &instruct_rect)) < 0)
-			printf("BlitScale error = %s\n", SDL_GetError());
-		
+			ft_dprintf(STDERR_FILENO, "BlitScale error = %s\n", SDL_GetError());
+
 		if ((SDL_UpdateWindowSurface(*win)) < 0)
 		{
-			ft_dprintf(STDERR_FILENO, "SDL_UpdateWindowSurface error = %{r}s\n", \
-				SDL_GetError());
-			return ;
+			ft_dprintf(STDERR_FILENO, "SDL_UpdateWindowSurface error = %{r}s\n",
+					   SDL_GetError());
+			return;
 		}
 	}
 }
 
-void	main_loop(t_doom *doom)
+int main_loop(t_doom *doom)
 {
 	const Uint8 *keyboard_state;
 
@@ -117,10 +117,13 @@ void	main_loop(t_doom *doom)
 
 	if (parse_everything(walls) != 0)
 	{
-		printf("parsing error\n");
+		ft_dprintf(STDERR_FILENO, "parsing error\n");
+		return (1);
 	}
 
-	SDL_Rect myrect_thirdmap = {.x=0, .y=0, .w=WIN_WIDTH, .h=WIN_HEIGHT}; // Stretching rectangle to print the map in fullscreen
+	SDL_Rect myrect_thirdmap;
+	
+	myrect_thirdmap = create_sdlrect(0, 0, WIN_WIDTH, WIN_HEIGHT);
 	/*
 		When creating a surface, the last four parameters correspond to the RGBA masks for the created surface. They need to correspond
 		to the format of the surface we copy to (the window)
@@ -130,11 +133,11 @@ void	main_loop(t_doom *doom)
 		surface of the window
 	*/
 	if ((doom->sdl.rot_mmap = SDL_CreateRGBSurface(0, MINIMAP_WIDTH, MINIMAP_HEIGHT, 32, 0, 0, 0, 0)) == NULL)
-		printf("create surface error = %s\n", SDL_GetError());
+		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
 	if ((doom->sdl.fixed_mmap = SDL_CreateRGBSurface(0, MINIMAP_WIDTH, MINIMAP_HEIGHT, 32, 0, 0, 0, 0)) == NULL)
-		printf("create surface error = %s\n", SDL_GetError());
+		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
 	if ((doom->sdl.perspective_mmap = SDL_CreateRGBSurface(0, THIRD_MAP_WIDTH, THIRD_MAP_HEIGHT, 32, 0, 0, 0, 0)) == NULL)
-		printf("create surface error = %s\n", SDL_GetError());
+		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
 	//my_map = SDL_ConvertSurface(my_map, doom->sdl.surf->format, 0);
 
 	keyboard_state = SDL_GetKeyboardState(NULL);
@@ -144,8 +147,11 @@ void	main_loop(t_doom *doom)
 		ft_bzero(doom->sdl.perspective_mmap->pixels, doom->sdl.perspective_mmap->h * doom->sdl.perspective_mmap->pitch);
 		while (SDL_PollEvent(&(doom->sdl.event)) != 0)
 			handle_events(&doom->sdl.event, &doom->data);
-		if (doom->data.editor_flag)
-			editor(&doom->sdl.win, &doom->sdl.win_surf, &doom->data.editor_flag);
+		if (doom->data.menu_flag)
+		{
+			if ((menu_loop(&doom->sdl.win, &doom->sdl.win_surf, &doom->data.menu_flag)) == 1)
+				doom->data.menu_flag = 0;
+		}
 		//handle events (for now player movement and HUD activation/deactivation)
 		handle_keys(doom, walls, keyboard_state);
 
@@ -153,14 +159,13 @@ void	main_loop(t_doom *doom)
 			doom->sdl.perspective_mmap->userdata = "yescolor";
 		else
 			doom->sdl.perspective_mmap->userdata = "nocolor";
-		
-		(void)myrect_thirdmap;
+
 		draw_perspective_minimap(doom->sdl.perspective_mmap, &doom->player, walls);
 		if ((SDL_BlitScaled(doom->sdl.perspective_mmap, NULL, doom->sdl.win_surf, &myrect_thirdmap)) < 0)
 		{
 			printf("BlitScale error = %s\n", SDL_GetError());
 			free_sdl(&doom->sdl);
-			return ;
+			return (1);
 		}
 
 		draw_map(&doom->sdl, &doom->player, walls, &doom->data.hud_flags);
@@ -169,25 +174,33 @@ void	main_loop(t_doom *doom)
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, NULL)) < 0)
 		if ((SDL_UpdateWindowSurface(doom->sdl.win)) < 0)
 		{
-			ft_dprintf(STDERR_FILENO, "SDL_UpdateWindowSurface error = %{r}s\n", \
-				SDL_GetError());
+			ft_dprintf(STDERR_FILENO, "SDL_UpdateWindowSurface error = %{r}s\n",
+					   SDL_GetError());
 			free_sdl(&doom->sdl);
-			return ;
+			return (1);
 		}
 	}
+	return (0);
 }
 
-int		main(/*int argc, char *argv[]*/)
+int main(/*int argc, char *argv[]*/)
 {
-	t_doom	doom;
+	t_doom doom;
 
 	init_doom(&doom);
 	if (WIN_WIDTH > 1920 || WIN_HEIGHT > 1080 || WIN_WIDTH < 100 || WIN_HEIGHT < 100)
 		return (1);
 	if (init_sdl(&(doom.sdl.win), &(doom.sdl.win_surf)) != EXIT_SUCCESS)
 		return (free_sdl_quit(&doom.sdl));
-		//return (free_sdl_quit(&(doom.sdl.win)));
-	main_loop(&doom);
+	if (TTF_Init() != 0)
+	{
+		ft_dprintf(STDERR_FILENO, "TTF_Init Error: %{r}s\n", TTF_GetError());
+		return (EXIT_FAILURE);
+	}
+	//return (free_sdl_quit(&(doom.sdl.win)));
+	if (main_loop(&doom) == 1)
+		ft_dprintf(STDERR_FILENO, "Error during main loop\n");
+	TTF_Quit();
 	//free_sdl(&(doom.sdl.win));
 	free_sdl(&doom.sdl);
 	return (EXIT_SUCCESS);
