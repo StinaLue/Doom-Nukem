@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/05 16:39:55 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/05 16:44:41 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,15 @@
 # define THIRD_MAP_WIDTH 1800 / 4//600
 # define THIRD_MAP_HEIGHT 1000 / 4//600
 
-# define WIN_WIDTH 1800
-# define WIN_HEIGHT 1000
+# define SIZE 2
+# define WIN_WIDTH (1800 / SIZE)
+# define WIN_HEIGHT (1000 / SIZE)
+# define OFFSET (20 / SIZE)
 
 # define HFOV (0.5 * THIRD_MAP_HEIGHT)
 # define VFOV (0.2 * THIRD_MAP_HEIGHT)
+
+# define NBPOINTS 2891 // map has 59 * 49 points
 
 /*
 ** FLAGS
@@ -79,6 +83,7 @@ typedef struct	s_sdl
 typedef struct	s_data
 {
 	int			quit;
+	int			editor_flag;
 	char		hud_flags;
 }				t_data;
 
@@ -191,9 +196,9 @@ void			draw_line(const t_vec a, const t_vec b, SDL_Surface *surf, int color);
 /*
 ** FREE FUNCTIONS
 */
-void			free_sdl(SDL_Window **win);
+void			free_sdl(t_sdl *sdl);//SDL_Window **win);
 
-int				free_sdl_quit(SDL_Window **win);
+int				free_sdl_quit(t_sdl *sdl);//SDL_Window **win);
 
 /*
 ** PARSE FUNCTIONS

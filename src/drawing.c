@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   drawing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 03:35:35 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/03 13:33:30 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/05 00:39:47 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,11 @@ void		blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf)
 	SDL_Rect rect;
 
 	if (whichsurf == FIX_MAP_SHOW + ROT_MAP_SHOW)
-		rect = assign_SDLrect(MINIMAP_WIDTH * 2, 0, MINIMAP_WIDTH * 2, MINIMAP_HEIGHT * 2);
+		rect = assign_SDLrect(WIN_WIDTH / 8, 0, WIN_WIDTH / 8, WIN_HEIGHT / 4);
+		//rect = assign_SDLrect(MINIMAP_WIDTH * 2, 0, MINIMAP_WIDTH * 2, MINIMAP_HEIGHT * 2);
 	else if (whichsurf == ROT_MAP_SHOW || whichsurf == FIX_MAP_SHOW)
-		rect = assign_SDLrect(0, 0, MINIMAP_WIDTH * 2, MINIMAP_HEIGHT * 2);
+		rect = assign_SDLrect(0, 0, WIN_WIDTH / 8, WIN_HEIGHT / 4);
+		//rect = assign_SDLrect(0, 0, MINIMAP_WIDTH * 2, MINIMAP_HEIGHT * 2);
 	else
 		rect = assign_SDLrect(0, 0, WIN_WIDTH, WIN_HEIGHT);
 	if ((SDL_BlitScaled(surf, NULL, winsurf, &rect)) < 0)
