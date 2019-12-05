@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:06:54 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/04 16:41:31 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/05 16:39:56 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,16 @@
 {
 	return (a.x * -b.x + a.y * b.y);
 }*/
+
+double	get_magnitude(t_vecdb a, t_vecdb b)
+{
+	double dx;
+	double dy;
+
+	dx = b.x - a.x;
+	dy = b.y - a.y;
+	return (sqrt(dx * dx + dy * dy));
+}
 
 t_vec	create_vec(int x, int y)
 {

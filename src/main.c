@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/04 11:13:32 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/05 15:51:11 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,36 +22,18 @@ int		is_in_map(t_vecdb *player)
 	return (1);
 }
 
-int		check_side_wall(double pos_x, double pos_y, t_vecdb start_wall, t_vecdb end_wall)
-{
-	double det = (start_wall.x - end_wall.x) * (start_wall.y - pos_y) - (start_wall.x - pos_x) * (start_wall.y - end_wall.y);
-	if (det > -20.0) // the lower this number, the bigger the distance between player and collision will be
-		return (1);
-	else
-		return (0);
-}
-
-int 	check_collision(double pos_x, double pos_y, t_wall *walls)
-{
-	int i;
-	i = 0;
-	while(i < NB_WALLS)//loop through each wall
-	{
-		if (check_side_wall(pos_x, pos_y, walls[i].start_wall, walls[i].end_wall))
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
 void	main_loop(t_doom *doom)
 {
 	const Uint8 *keyboard_state;
 
-	t_vecdb vec1 = {50, 20}; // start of "first" wall
-	t_vecdb vec2 = {50, 70}; // end of "first" wall
-	t_vecdb vec3 = {70, 100};
-	t_vecdb vec4 = {90, 20};
+	//t_vecdb vec1 = {50, 20}; // start of "first" wall
+	//t_vecdb vec2 = {50, 30}; // end of "first" wall
+	//t_vecdb vec3 = {70, 100};
+	//t_vecdb vec4 = {90, 20};
+	t_vecdb vec1 = {50, 50}; // start of "first" wall
+	t_vecdb vec2 = {50, 60}; // end of "first" wall
+	t_vecdb vec3 = {100, 100};
+	t_vecdb vec4 = {80, 50};
 	t_wall walls[NB_WALLS] = {{vec1, vec2, 0xFF0000}, {vec2, vec3, 0x00FF00}, {vec3, vec4, 0x0000FF}, {vec4, vec1, 0x00FFFF}};
 	//t_wall walls[NB_WALLS] = {{vec1, vec2, 0xFF0000}};
 

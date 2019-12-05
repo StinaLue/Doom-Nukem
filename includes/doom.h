@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/04 16:41:34 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/05 16:39:55 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ int		is_in_map(t_vecdb *player);
 /*
 ** VECTOR FUNCTIONS
 */
+double			get_magnitude(t_vecdb a, t_vecdb b);
 
 void			multvec(t_vecdb *vecdb, double n);
 
