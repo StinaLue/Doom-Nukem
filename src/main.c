@@ -3,17 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/05 16:44:45 by phaydont         ###   ########.fr       */
-=======
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/05 17:03:40 by afonck           ###   ########.fr       */
->>>>>>> 547d4ba7b5c89d26c9bbe9728f073b7b34da8ff6
+/*   Updated: 2019/12/05 17:16:44 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,31 +22,6 @@ int is_in_map(t_vecdb *player)
 	return (1);
 }
 
-<<<<<<< HEAD
-=======
-int check_side_wall(double pos_x, double pos_y, t_vecdb start_wall, t_vecdb end_wall)
-{
-	double det = (start_wall.x - end_wall.x) * (start_wall.y - pos_y) - (start_wall.x - pos_x) * (start_wall.y - end_wall.y);
-	if (det > -20.0) // the lower this number, the bigger the distance between player and collision will be
-		return (1);
-	else
-		return (0);
-}
-
-int check_collision(double pos_x, double pos_y, t_wall *walls)
-{
-	int i;
-	i = 0;
-	while (i < NB_WALLS) //loop through each wall
-	{
-		if (check_side_wall(pos_x, pos_y, walls[i].start_wall, walls[i].end_wall))
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
->>>>>>> 547d4ba7b5c89d26c9bbe9728f073b7b34da8ff6
 void	draw_editor(SDL_Surface *editor_surf, double offset)
 {
 	int x = 0;
