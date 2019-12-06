@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2019/12/05 20:17:39 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/06 11:39:52 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ int		collision(t_vecdb point, t_vecdb b, t_vecdb a, double distance)
 	double dist;
 
 	dist = (point.x - a.x) * (a.y - b.y) + (point.y - a.y) * (b.x - a.x);
-	printf("wat:%f\n", dist);
+	//printf("wat:%f\n", dist);
 	dist /= sqrt((a.y - b.y) * (a.y - b.y) + (b.x - a.x) * (b.x - a.x));
-	printf("mur dist:%f\n", dist);
+	//printf("mur dist:%f\n", dist);
 	if (dist < distance)
 		return (1);
 	else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/05 17:16:52 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/06 11:42:35 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,4 +279,10 @@ int				menu_loop(SDL_Window **win, SDL_Surface **win_surf, int *menu_flag);
 
 int				error_return(const char *error_msg, const char *sdl_error);
 
+
+/*
+** EDITOR FUNCTIONS
+*/
+
+void	editor(SDL_Window **win, SDL_Surface **win_surf, int *editor_flag);
 #endif
