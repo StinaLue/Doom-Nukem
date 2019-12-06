@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:22:12 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/05 11:45:37 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/06 13:00:42 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	handle_hud(char *hud_flags, SDL_Event *event)
 void    handle_events(SDL_Event *event, t_data *data)
 {
     check_quit(event, &data->quit);
-	check_menu(event, &data->menu_flag);
+	check_menu(event, &data->menu_activate);
 	//check_editor(event, &data->editor_flag);
     handle_hud(&data->hud_flags, event);
 }

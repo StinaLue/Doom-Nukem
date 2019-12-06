@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/06 11:42:35 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/12/06 16:19:47 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@
 */
 
 # define FIRST_OPTION_SELECT 1
+# define SECOND_OPTION_SELECT 2
 
 /*
 ** VECTOR STRUCTS
@@ -80,20 +81,24 @@ typedef struct	s_wall3d
 	t_vec	 	bottom_right;
 }				t_wall3d;
 
-typedef struct	s_sdl
+typedef struct	s_sdlmain
 {
 	SDL_Window	*win;
 	SDL_Surface	*win_surf;
+	SDL_Event	event;
+}				t_sdlmain;
+
+typedef struct	s_gamesurfs
+{
 	SDL_Surface *fixed_mmap;
 	SDL_Surface *rot_mmap;
 	SDL_Surface *perspective_mmap;
-	SDL_Event	event;
-}				t_sdl;
+}				t_gamesurfs;
 
 typedef struct	s_data
 {
 	int			quit;
-	int			menu_flag;
+	int			menu_activate;
 	//int			editor_flag;
 	char		hud_flags;
 }				t_data;
@@ -117,7 +122,7 @@ typedef struct	s_player
 
 typedef struct	s_doom
 {
-	t_sdl		sdl;
+	t_gamesurfs	surfs;
 	t_data		data;
 	t_player	player;
 }				t_doom;
@@ -128,11 +133,13 @@ typedef struct	s_menu
 	SDL_Surface *background;
 	SDL_Surface *menu_title;
 	SDL_Surface *first_option;
+	SDL_Surface *second_option;
 
 	//Clip rectangles
 	SDL_Rect background_rect;
 	SDL_Rect menu_title_rect;
 	SDL_Rect first_option_rect;
+	SDL_Rect second_option_rect;
 	//The event structure
 	SDL_Event event;
 
@@ -141,6 +148,8 @@ typedef struct	s_menu
 
 	//The color of the font
 	SDL_Color textColor;
+	int		editor_flag;
+	int		current_option;
 	char flags;
 }				t_menu;
 
@@ -178,14 +187,19 @@ t_vecdb			create_vecdb(double x, double y);
 /*
 ** INIT FUNCTIONS
 */
-void			init_doom(t_doom *doom);
 
-int				init_sdl(SDL_Window **win, SDL_Surface **surf);
+int				init_sdl_and_ttf();
+
+int				init_doom(t_doom *doom);
+
+int				init_menu(t_menu *menu);
+
+int				init_sdlmain(t_sdlmain *sdlmain);
 
 /*
 ** INIT STRUCT FUNCTIONS
 */
-void			init_sdl_struct(t_sdl *sdl);
+int				init_gamesurfs_struct(t_gamesurfs *gamesurfs);
 
 void			init_data_struct(t_data *data);
 
@@ -205,7 +219,7 @@ void			handle_keys(t_doom *doom, t_wall *walls, const Uint8 *keyboard_state);
 ** PRINT MINIMAP FUNCTIONS
 */
 
-void			draw_map(t_sdl *sdl, t_player *player, t_wall *walls, char *hud_flags);
+void			draw_map(t_sdlmain *sdlmain, t_doom *doom, t_wall *walls, char *hud_flags);
 
 void			draw_full_fixedmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf);
 //void			draw_fixed_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);
@@ -238,11 +252,14 @@ int				reset_text(TTF_Font **font, SDL_Surface **surf, SDL_Color *color, char *t
 /*
 ** FREE FUNCTIONS
 */
-void			free_menu(t_menu *menu);
 
-void			free_sdl(t_sdl *sdl);//SDL_Window **win);
+void			quit_sdl_and_ttf();
 
-int				free_sdl_quit(t_sdl *sdl);//SDL_Window **win);
+int				free_menu(t_menu *menu);
+
+int				free_doom(t_doom *doom);
+
+int				free_sdlmain(t_sdlmain *sdlmain);
 
 /*
 ** PARSE FUNCTIONS
@@ -271,7 +288,14 @@ void			movement(t_player *player, t_vecdb move, t_wall *walls);
 ** MENU FUNCTIONS
 */
 
-int				menu_loop(SDL_Window **win, SDL_Surface **win_surf, int *menu_flag);
+
+/*
+** LOOPS
+*/
+
+int				game_loop(t_doom *doom, t_sdlmain *sdlmain);
+
+int 			menu_loop(t_menu *menu, t_sdlmain *sdlmain, int *menu_activate);
 
 /*
 ** ERROR FUNCTIONS

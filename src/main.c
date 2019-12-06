@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/06 11:45:24 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/12/06 16:19:32 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int is_in_map(t_vecdb *player)
 	return (1);
 }
 
-int main_loop(t_doom *doom)
+int game_loop(t_doom *doom, t_sdlmain *sdlmain)
 {
 	const Uint8 *keyboard_state;
 
@@ -54,74 +54,88 @@ int main_loop(t_doom *doom)
 		NOT FORGET --> if something feels wrong about the colors in the project, it could come from the format of the surfaces, including the
 		surface of the window
 	*/
-	if ((doom->sdl.rot_mmap = SDL_CreateRGBSurface(0, MINIMAP_WIDTH, MINIMAP_HEIGHT, 32, 0, 0, 0, 0)) == NULL)
-		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
-	if ((doom->sdl.fixed_mmap = SDL_CreateRGBSurface(0, MINIMAP_WIDTH, MINIMAP_HEIGHT, 32, 0, 0, 0, 0)) == NULL)
-		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
-	if ((doom->sdl.perspective_mmap = SDL_CreateRGBSurface(0, THIRD_MAP_WIDTH, THIRD_MAP_HEIGHT, 32, 0, 0, 0, 0)) == NULL)
-		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
 	//my_map = SDL_ConvertSurface(my_map, doom->sdl.surf->format, 0);
 
 	keyboard_state = SDL_GetKeyboardState(NULL);
-	SDL_WarpMouseInWindow(doom->sdl.win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
+	SDL_WarpMouseInWindow(sdlmain->win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
 	while (!doom->data.quit)
 	{
-		ft_bzero(doom->sdl.perspective_mmap->pixels, doom->sdl.perspective_mmap->h * doom->sdl.perspective_mmap->pitch);
-		while (SDL_PollEvent(&(doom->sdl.event)) != 0)
-			handle_events(&doom->sdl.event, &doom->data);
-		if (doom->data.menu_flag)
+		ft_bzero(doom->surfs.perspective_mmap->pixels, doom->surfs.perspective_mmap->h * doom->surfs.perspective_mmap->pitch);
+		while (SDL_PollEvent(&(sdlmain->event)) != 0)
+			handle_events(&sdlmain->event, &doom->data);
+		/*if (doom->data.menu_activate)
 		{
-			if ((menu_loop(&doom->sdl.win, &doom->sdl.win_surf, &doom->data.menu_flag)) == 1)
-				doom->data.menu_flag = 0;
-		}
+			if ((menu_loop(&sdlmain->win, &sdlmain->win_surf, &doom->data.menu_activate)) == 1)
+				doom->data.menu_activate = 0;
+		}*/
 		//handle events (for now player movement and HUD activation/deactivation)
 		handle_keys(doom, walls, keyboard_state);
-		//if (doom->data.editor_flag)
-		//	editor(&doom->sdl.win, &doom->sdl.win_surf, &doom->data.editor_flag);
 		if (doom->data.hud_flags & COLORFLAG)
-			doom->sdl.perspective_mmap->userdata = "yescolor";
+			doom->surfs.perspective_mmap->userdata = "yescolor";
 		else
-			doom->sdl.perspective_mmap->userdata = "nocolor";
-		draw_perspective_minimap(doom->sdl.perspective_mmap, &doom->player, walls);
-		if ((SDL_BlitScaled(doom->sdl.perspective_mmap, NULL, doom->sdl.win_surf, &myrect_thirdmap)) < 0)
+			doom->surfs.perspective_mmap->userdata = "nocolor";
+		draw_perspective_minimap(doom->surfs.perspective_mmap, &doom->player, walls);
+		if ((SDL_BlitScaled(doom->surfs.perspective_mmap, NULL, sdlmain->win_surf, &myrect_thirdmap)) < 0)
 		{
 			printf("BlitScale error = %s\n", SDL_GetError());
-			free_sdl(&doom->sdl);
+			free_doom(doom);
 			return (1);
 		}
-		draw_map(&doom->sdl, &doom->player, walls, &doom->data.hud_flags);
+		draw_map(sdlmain, doom, walls, &doom->data.hud_flags);
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, &doom->sdl.surf->clip_rect)) < 0)
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, NULL)) < 0)
-		if ((SDL_UpdateWindowSurface(doom->sdl.win)) < 0)
+		if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)
 		{
 			ft_dprintf(STDERR_FILENO, "SDL_UpdateWindowSurface error = %{r}s\n",
 					   SDL_GetError());
-			free_sdl(&doom->sdl);
+			free_doom(doom);
 			return (1);
 		}
 	}
 	return (0);
 }
 
-int main(/*int argc, char *argv[]*/)
+int	main_loop()
 {
 	t_doom doom;
+	t_menu menu;
+	t_sdlmain sdlmain;
+	int	quit;
 
-	init_doom(&doom);
+	quit = 0;
+	if (init_sdl_and_ttf() == 1)
+		return (1);
+	if (init_sdlmain(&sdlmain) == 1)
+		return (free_sdlmain(&sdlmain));
+	if (init_doom(&doom) == 1)
+		return (free_doom(&doom));
+	if (init_menu(&menu) == 1)
+	{
+		free_doom(&doom);
+		free_menu(&menu);
+		return (free_sdlmain(&sdlmain));
+	}
+	while (!quit)
+	{
+		if (doom.data.menu_activate == 0 && doom.data.quit == 0)
+			game_loop(&doom, &sdlmain);
+		else if (doom.data.menu_activate == 1 && doom.data.quit == 0)
+			menu_loop(&menu, &sdlmain, &doom.data.menu_activate);
+	}
+	free_doom(&doom);
+	free_menu(&menu);
+	free_sdlmain(&sdlmain);
+	quit_sdl_and_ttf();
+	return (0);
+}
+
+int main(/*int argc, char *argv[]*/)
+{
 	if (WIN_WIDTH > 1920 || WIN_HEIGHT > 1080 || WIN_WIDTH < 100 || WIN_HEIGHT < 100)
 		return (1);
-	if (init_sdl(&(doom.sdl.win), &(doom.sdl.win_surf)) != EXIT_SUCCESS)
-		return (free_sdl_quit(&doom.sdl));
-	if (TTF_Init() != 0)
-	{
-		ft_dprintf(STDERR_FILENO, "TTF_Init Error: %{r}s\n", TTF_GetError());
-		return (EXIT_FAILURE);
-	}
-	//return (free_sdl_quit(&(doom.sdl.win)));
-	if (main_loop(&doom) == 1)
-		ft_dprintf(STDERR_FILENO, "Error during main loop\n");
-	TTF_Quit();
-	//free_sdl(&(doom.sdl.win));
-	free_sdl(&doom.sdl);
+	if (main_loop() == 1)
+		return (error_return("Error during main loop\n", NULL));
+	//if (game_loop(&doom) == 1)
+	//	ft_dprintf(STDERR_FILENO, "Error during game loop\n");
 	return (EXIT_SUCCESS);
 }

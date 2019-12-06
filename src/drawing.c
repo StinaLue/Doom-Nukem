@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 03:35:35 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/05 16:10:52 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/06 16:13:29 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,18 @@ void	draw_border(SDL_Surface *surf, int color)
 	draw_line(bottom_right, bottom_left, surf, color);
 }
 
-void		draw_map(t_sdl *sdl, t_player *player, t_wall *walls, char *hud_flags)
+void		draw_map(t_sdlmain *sdlmain, t_doom *doom, t_wall *walls, char *hud_flags)
 {
-	sdl->fixed_mmap->userdata = "1map";
+	doom->surfs.fixed_mmap->userdata = "1map";
 	if ((*hud_flags & ROT_MAP_SHOW) && (*hud_flags & FIX_MAP_SHOW) == 0)
-		draw_full_rotmap(sdl->rot_mmap, player, walls, sdl->win_surf);
+		draw_full_rotmap(doom->surfs.rot_mmap, &doom->player, walls, sdlmain->win_surf);
 	else if ((*hud_flags & FIX_MAP_SHOW) && (*hud_flags & ROT_MAP_SHOW) == 0)
-		draw_full_fixedmap(sdl->fixed_mmap, player, walls, sdl->win_surf);
+		draw_full_fixedmap(doom->surfs.fixed_mmap, &doom->player, walls, sdlmain->win_surf);
 	if ((*hud_flags & ROT_MAP_SHOW) && (*hud_flags & FIX_MAP_SHOW))
 	{
-		sdl->fixed_mmap->userdata = "2maps";
-		draw_full_rotmap(sdl->rot_mmap, player, walls, sdl->win_surf);
-		draw_full_fixedmap(sdl->fixed_mmap, player, walls, sdl->win_surf);
+		doom->surfs.fixed_mmap->userdata = "2maps";
+		draw_full_rotmap(doom->surfs.rot_mmap, &doom->player, walls, sdlmain->win_surf);
+		draw_full_fixedmap(doom->surfs.fixed_mmap, &doom->player, walls, sdlmain->win_surf);
 	}
 }
 

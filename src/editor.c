@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/06 11:45:23 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/12/06 13:07:10 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,5 @@ void editor(SDL_Window **win, SDL_Surface **win_surf, int *editor_flag)
 			return;
 		}
 	}
+	*editor_flag = 0;
 }
