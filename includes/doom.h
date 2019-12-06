@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/05 17:16:52 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/06 16:07:37 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ t_vecdb			rotate2d(t_vecdb vector, double angle);
 
 t_vecdb			rotate2dcc(t_vecdb vector, double angle);
 
-//double	dot_product(t_vecdb a, t_vecdb b);
+double			dot_product(t_vecdb a, t_vecdb b);
 
 t_vecdb			create_vecdb(double x, double y);
 

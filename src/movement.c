@@ -6,68 +6,100 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2019/12/05 20:17:39 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/06 16:42:03 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-int		collision(t_vecdb point, t_vecdb b, t_vecdb a, double distance)
+double	wall_distance(t_vecdb point, t_vecdb a, t_vecdb b)
 {
 	double dist;
 
-	dist = (point.x - a.x) * (a.y - b.y) + (point.y - a.y) * (b.x - a.x);
-	printf("wat:%f\n", dist);
-	dist /= sqrt((a.y - b.y) * (a.y - b.y) + (b.x - a.x) * (b.x - a.x));
-	printf("mur dist:%f\n", dist);
-	if (dist < distance)
-		return (1);
-	else
-		return (0);
+	dist = (point.x - b.x) * (b.y - a.y) + (point.y - b.y) * (a.x - b.x);
+	//could be stored to avoid making long sqrt() operations in real time
+	dist /= sqrt((b.y - a.y) * (b.y - a.y) + (a.x - b.x) * (a.x - b.x));
+
+	return (dist);
 }
 
-int		try_move(t_vecdb position, t_vecdb move, t_wall *walls)
+void	move_player(t_vecdb *position, t_vecdb *move, t_wall *walls)
 {
 	int		i;
+	double	offset;
+	double	col_angle = 0;
 
-	position.y += move.y;
-	position.x += move.x;
+	int		count;
+	t_vecdb	origin = {0, 0};
+	t_vecdb	A;
+	t_vecdb	B;
+	t_vecdb	C;
+	t_vecdb	P;
+	t_vecdb	old_pos = *position;
+	(void)old_pos;
+	double	col_angle2 = 0;
+
+	position->x += move->x;
+	position->y += move->y;
+	//can change to this decide wich walls to check collision
+	count = 0;
 	i = 0;
-
 	while (i < NB_WALLS)
 	{
-		//can change to this decide wich walls to check collision
-		if (collision(position, walls[i].start_wall, walls[i].end_wall, 1.0))
+		offset = wall_distance(*position, walls[i].start_wall, walls[i].end_wall);
+		if (offset < 0.5)
 		{
-			//can change this to calculate actual new velocity
-			return (0);
+			if (count)
+			{
+				
+				//attempt to calculate true length of move vector
+				offset = 0.5 - offset;
+				col_angle2 = atan2(walls[i].end_wall.y - walls[i].start_wall.y, walls[i].end_wall.x - walls[i].start_wall.x) - col_angle;
+
+				B.x = offset * sin(col_angle2);
+				B.y = offset * -cos(col_angle2);
+				C.x = A.x + B.x;
+				C.y = A.y + B.y;
+				P = C;
+				multvec(&P, dot_product(A, C) / (get_magnitude(origin, A) * get_magnitude(origin, A)));
+				C.x = C.x * get_magnitude(origin, A) / get_magnitude(origin, P);
+				C.y = C.y * get_magnitude(origin, A) / get_magnitude(origin, P);
+				position->x = old_pos.x + C.x;
+				position->y = old_pos.y + C.y;
+				return ;
+			}
+			else
+			{
+				offset = 0.5 - offset;
+				col_angle = atan2(walls[i].end_wall.y - walls[i].start_wall.y, walls[i].end_wall.x - walls[i].start_wall.x);
+
+				A.x = offset * sin(col_angle);
+				A.y = offset * -cos(col_angle);
+				position->x += offset * sin(col_angle);
+				position->y += offset * -cos(col_angle);
+				count++;
+			}
 		}
 		i++;
 	}
-	return (1);
 }
 
 void	movement(t_player *player, t_vecdb move, t_wall *walls)
 {	
 	double	movespeed = 0.01;
+	t_vecdb	old_position;
 
 	if (fabs(move.x) + fabs(move.y) > 1)
 		multvec(&move, 1 / SQRT2);//change later to actually calculate velocity
 	move = rotate2d(move, player->angle);
 	multvec(&move, movespeed);
+	
+	old_position = player->pos;
 	move.x += player->inertia.x;
 	move.y += player->inertia.y;
-
-	if (try_move(player->pos, move, walls))
-	{
-		player->pos.y += move.y;
-		player->pos.x += move.x;
-		multvec(&move, 0.9);
-		player->inertia = move;
-	}
-	else
-	{
-		player->inertia.x = 0;
-		player->inertia.y = 0;
-	}
+	move_player(&player->pos, &move, walls);
+	printf("Px:%f\nPy:%f\n", player->pos.x, player->pos.y);
+	player->inertia.x = (player->pos.x - old_position.x) * 0.9;
+	player->inertia.y = (player->pos.y - old_position.y) * 0.9;
+	//printf("Ix:%f\nIy:%f\n", player->inertia.x, player->inertia.y);
 }
