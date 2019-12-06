@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
+#    By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2019/12/05 16:29:52 by afonck           ###   ########.fr        #
+#    Updated: 2019/12/06 11:42:55 by sluetzen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,6 +74,7 @@ SOURCES_LIST = main.c \
 			movement.c \
 			menu.c \
 			text.c \
+			editor.c \
 			SDL_sub_functions.c#\
 	       multithreading.c \
 		   texture.c \
