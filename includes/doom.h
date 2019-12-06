@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/06 11:42:35 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/12/06 12:57:55 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@
 # define THIRD_MAP_HEIGHT 1000 / 4//600
 
 # define SIZE 1
-# define WIN_WIDTH (1800 / SIZE)
-# define WIN_HEIGHT (1000 / SIZE)
+# define WIN_W (1800 / SIZE)
+# define WIN_H (1000 / SIZE)
 # define OFFSET (20 / SIZE)
 
-# define MENU_WIDTH WIN_WIDTH - (WIN_WIDTH / 8)
-# define MENU_HEIGHT WIN_HEIGHT - (WIN_HEIGHT / 4)
+# define MENU_WIDTH WIN_W - (WIN_W / 8)
+# define MENU_HEIGHT WIN_H - (WIN_H / 4)
 
 # define HFOV (0.5 * THIRD_MAP_HEIGHT)
 # define VFOV (0.2 * THIRD_MAP_HEIGHT)
@@ -94,7 +94,7 @@ typedef struct	s_data
 {
 	int			quit;
 	int			menu_flag;
-	//int			editor_flag;
+	int			editor_flag;
 	char		hud_flags;
 }				t_data;
 
@@ -121,6 +121,11 @@ typedef struct	s_doom
 	t_data		data;
 	t_player	player;
 }				t_doom;
+
+typedef struct 	s_editor
+{
+	t_vec 		grid_values[NBPOINTS];
+}				t_editor;
 
 typedef struct	s_menu
 {
@@ -284,5 +289,5 @@ int				error_return(const char *error_msg, const char *sdl_error);
 ** EDITOR FUNCTIONS
 */
 
-void	editor(SDL_Window **win, SDL_Surface **win_surf, int *editor_flag);
+void	editor(SDL_Window **win, SDL_Surface **win_surf, int *editor_flag, const Uint8 *keyboard_state);
 #endif

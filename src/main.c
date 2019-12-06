@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/06 11:45:24 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/12/06 12:18:05 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int main_loop(t_doom *doom)
 
 	SDL_Rect myrect_thirdmap;
 	
-	myrect_thirdmap = create_sdlrect(0, 0, WIN_WIDTH, WIN_HEIGHT);
+	myrect_thirdmap = create_sdlrect(0, 0, WIN_W, WIN_H);
 	/*
 		When creating a surface, the last four parameters correspond to the RGBA masks for the created surface. They need to correspond
 		to the format of the surface we copy to (the window)
@@ -63,7 +63,7 @@ int main_loop(t_doom *doom)
 	//my_map = SDL_ConvertSurface(my_map, doom->sdl.surf->format, 0);
 
 	keyboard_state = SDL_GetKeyboardState(NULL);
-	SDL_WarpMouseInWindow(doom->sdl.win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
+	SDL_WarpMouseInWindow(doom->sdl.win, WIN_W / 2, WIN_H / 2);
 	while (!doom->data.quit)
 	{
 		ft_bzero(doom->sdl.perspective_mmap->pixels, doom->sdl.perspective_mmap->h * doom->sdl.perspective_mmap->pitch);
@@ -76,8 +76,8 @@ int main_loop(t_doom *doom)
 		}
 		//handle events (for now player movement and HUD activation/deactivation)
 		handle_keys(doom, walls, keyboard_state);
-		//if (doom->data.editor_flag)
-		//	editor(&doom->sdl.win, &doom->sdl.win_surf, &doom->data.editor_flag);
+		if (doom->data.editor_flag)
+			editor(&doom->sdl.win, &doom->sdl.win_surf, &doom->data.editor_flag, keyboard_state);
 		if (doom->data.hud_flags & COLORFLAG)
 			doom->sdl.perspective_mmap->userdata = "yescolor";
 		else
@@ -108,7 +108,7 @@ int main(/*int argc, char *argv[]*/)
 	t_doom doom;
 
 	init_doom(&doom);
-	if (WIN_WIDTH > 1920 || WIN_HEIGHT > 1080 || WIN_WIDTH < 100 || WIN_HEIGHT < 100)
+	if (WIN_W > 1920 || WIN_H > 1080 || WIN_W < 100 || WIN_H < 100)
 		return (1);
 	if (init_sdl(&(doom.sdl.win), &(doom.sdl.win_surf)) != EXIT_SUCCESS)
 		return (free_sdl_quit(&doom.sdl));

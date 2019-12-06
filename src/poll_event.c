@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   poll_event.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:22:12 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/05 11:45:37 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/06 11:50:43 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	check_quit(SDL_Event *event, int *quit)
 		event->key.keysym.sym == SDLK_ESCAPE))
 		*quit = 1;
 }
-/*
+
 void	check_editor(SDL_Event *event, int *editor_flag)
 {
 	if (event->type == SDL_KEYDOWN && event->key.repeat == 0)
@@ -27,7 +27,7 @@ void	check_editor(SDL_Event *event, int *editor_flag)
 			*editor_flag = 1;
 	}
 }
-*/
+
 void	check_menu(SDL_Event *event, int *menu_flag)
 {
 	if (event->type == SDL_KEYDOWN && event->key.repeat == 0)
@@ -75,6 +75,6 @@ void    handle_events(SDL_Event *event, t_data *data)
 {
     check_quit(event, &data->quit);
 	check_menu(event, &data->menu_flag);
-	//check_editor(event, &data->editor_flag);
+	check_editor(event, &data->editor_flag);
     handle_hud(&data->hud_flags, event);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/05 17:18:04 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/06 11:51:11 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	init_data_struct(t_data *data)
 {
 	data->quit = 0;
 	data->menu_flag = 0;
-	//data->editor_flag = 0;
+	data->editor_flag = 0;
 	data->hud_flags = 0;
 }
 
