@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/06 12:57:55 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/12/08 00:17:42 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define THIRD_MAP_WIDTH 1800 / 4//600
 # define THIRD_MAP_HEIGHT 1000 / 4//600
 
-# define SIZE 1
+# define SIZE 2
 # define WIN_W (1800 / SIZE)
 # define WIN_H (1000 / SIZE)
 # define OFFSET (20 / SIZE)
@@ -42,7 +42,7 @@
 # define VFOV (0.2 * THIRD_MAP_HEIGHT)
 
 # define NBPOINTS 2891 // map has 59 * 49 points
-
+# define MAX_WALLS 30
 /*
 ** HUD FLAGS
 */
@@ -124,7 +124,10 @@ typedef struct	s_doom
 
 typedef struct 	s_editor
 {
+    t_wall      walls;
+    int         clicked;
 	t_vec 		grid_values[NBPOINTS];
+    t_vec       mouse_pos;
 }				t_editor;
 
 typedef struct	s_menu
