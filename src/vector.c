@@ -6,16 +6,16 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:06:54 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/05 16:39:56 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/06 16:07:20 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-/*double	dot_product(t_vecdb a, t_vecdb b)
+double	dot_product(t_vecdb a, t_vecdb b)
 {
-	return (a.x * -b.x + a.y * b.y);
-}*/
+	return (a.x * b.x + a.y * b.y);
+}
 
 double	get_magnitude(t_vecdb a, t_vecdb b)
 {

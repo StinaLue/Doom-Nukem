@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/09 00:08:20 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/09 00:19:10 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ int game_loop(t_doom *doom, t_sdlmain *sdlmain)
 	//t_vecdb vec2 = {50, 30}; // end of "first" wall
 	//t_vecdb vec3 = {70, 100};
 	//t_vecdb vec4 = {90, 20};
-	t_vecdb vec1 = {50, 50}; // start of "first" wall
-	t_vecdb vec2 = {50, 60}; // end of "first" wall
-	t_vecdb vec3 = {100, 100};
-	t_vecdb vec4 = {80, 50};
+	t_vecdb vec1 = {60, 70}; // start of "first" wall
+	t_vecdb vec2 = {70, 200}; // end of "first" wall
+	t_vecdb vec3 = {80, 70};
+	t_vecdb vec4 = {70, -60};
 	t_wall walls[NB_WALLS] = {{vec1, vec2, 0xFF0000}, {vec2, vec3, 0x00FF00}, {vec3, vec4, 0x0000FF}, {vec4, vec1, 0x00FFFF}};
 	//t_wall walls[NB_WALLS] = {{vec1, vec2, 0xFF0000}};
 
