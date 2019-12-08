@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/08 17:17:19 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/09 00:08:20 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int game_loop(t_doom *doom, t_sdlmain *sdlmain)
 
 	SDL_Rect myrect_thirdmap;
 	
-	myrect_thirdmap = create_sdlrect(0, 0, WIN_WIDTH, WIN_HEIGHT);
+	myrect_thirdmap = create_sdlrect(0, 0, WIN_W, WIN_H);
 	/*
 		When creating a surface, the last four parameters correspond to the RGBA masks for the created surface. They need to correspond
 		to the format of the surface we copy to (the window)
@@ -57,7 +57,7 @@ int game_loop(t_doom *doom, t_sdlmain *sdlmain)
 	//my_map = SDL_ConvertSurface(my_map, doom->sdl.surf->format, 0);
 
 	keyboard_state = SDL_GetKeyboardState(NULL);
-	SDL_WarpMouseInWindow(sdlmain->win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
+	SDL_WarpMouseInWindow(sdlmain->win, WIN_W / 2, WIN_H / 2);
 	while (doom->data.quit == 0)
 	{
 		ft_bzero(doom->surfs.perspective_mmap->pixels, doom->surfs.perspective_mmap->h * doom->surfs.perspective_mmap->pitch);
@@ -145,7 +145,7 @@ int	main_loop()
 
 int main(/*int argc, char *argv[]*/)
 {
-	if (WIN_WIDTH > 1920 || WIN_HEIGHT > 1080 || WIN_WIDTH < 100 || WIN_HEIGHT < 100)
+	if (WIN_W > 1920 || WIN_H > 1080 || WIN_W < 100 || WIN_H < 100)
 		return (1);
 	if (main_loop() == 1)
 	{

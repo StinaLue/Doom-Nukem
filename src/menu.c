@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:27:36 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/08 19:33:49 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/09 00:12:45 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int init_menu(t_menu *menu)
 	if ((menu->font = TTF_OpenFont("assets/fonts/dukes-3d.ttf", 28)) == NULL)
 		return (error_return("TTF_OpenFont error = %s\n", TTF_GetError()));
 	assign_sdlcolor(&menu->textColor, 255, 0, 0);
-	assign_sdlrect(&menu->background_rect, create_vec((WIN_WIDTH / 8) / 2, (WIN_HEIGHT / 4) / 2), create_vec(0, 0));//MENU_WIDTH, MENU_HEIGHT));
+	assign_sdlrect(&menu->background_rect, create_vec((WIN_W / 8) / 2, (WIN_H / 4) / 2), create_vec(0, 0));//MENU_WIDTH, MENU_HEIGHT));
 	if ((menu->menu_title = TTF_RenderText_Solid(menu->font, "MENU", menu->textColor)) == NULL)
 		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
 	if ((menu->first_option = TTF_RenderText_Solid(menu->font, "editor", menu->textColor)) == NULL)
@@ -33,7 +33,7 @@ int init_menu(t_menu *menu)
 		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
 	if ((menu->third_option = TTF_RenderText_Solid(menu->font, "quit game", menu->textColor)) == NULL)
 		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
-	if ((menu->background = SDL_CreateRGBSurface(0, WIN_WIDTH - (WIN_WIDTH / 8), WIN_HEIGHT - (WIN_HEIGHT / 4), 32, 0, 0, 0, 0)) == NULL)
+	if ((menu->background = SDL_CreateRGBSurface(0, WIN_W - (WIN_W / 8), WIN_H - (WIN_H / 4), 32, 0, 0, 0, 0)) == NULL)
 		return (error_return("SDL_CreateRGBSurface error = %s\n", SDL_GetError()));
 	assign_sdlrect(&menu->menu_title_rect, create_vec((menu->background->w - menu->menu_title->w) / 2, (menu->background->h - menu->menu_title->h) / 8), create_vec(0, 0));
 	assign_sdlrect(&menu->first_option_rect, create_vec((menu->background->w - menu->first_option->w) / 2, menu->second_option_rect.y - menu->second_option->h), create_vec(0, 0));
@@ -54,7 +54,6 @@ void	browse_options(SDL_Event *event, int *option)
 
 void	launch_option(t_menu *menu, int *option_selected, SDL_Window **win, SDL_Surface **win_surf)
 {
-	printf("option selected = %d\n", *option_selected);
 	if (*option_selected == FIRST_OPTION_SELECT)
 	{
 		menu->editor_flag = 1;

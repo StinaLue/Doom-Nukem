@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/08 19:21:24 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/09 00:03:59 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,18 +39,19 @@
 # define THIRD_MAP_HEIGHT 1000 / 4//600
 
 # define SIZE 1
-# define WIN_WIDTH (1800 / SIZE)
-# define WIN_HEIGHT (1000 / SIZE)
+# define WIN_W (1800 / SIZE)
+# define WIN_H (1000 / SIZE)
 # define OFFSET (20 / SIZE)
 
-# define MENU_WIDTH WIN_WIDTH - (WIN_WIDTH / 8)
-# define MENU_HEIGHT WIN_HEIGHT - (WIN_HEIGHT / 4)
+# define MENU_WIDTH WIN_W - (WIN_W / 8)
+# define MENU_HEIGHT WIN_H - (WIN_H / 4)
 
 # define HFOV (0.5 * THIRD_MAP_HEIGHT)
 # define VFOV (0.2 * THIRD_MAP_HEIGHT)
 
 # define NBPOINTS 2891 // map has 59 * 49 points
-
+# define MAX_WALLS 30
+# define MAX_SECTORS 10
 /*
 ** HUD FLAGS
 */
@@ -134,6 +135,16 @@ typedef struct	s_doom
 	t_data		data;
 	t_player	player;
 }				t_doom;
+
+typedef struct 	s_editor
+{
+    int         clicked;
+	int			num_walls;
+	int			num_sectors;
+    t_wall      walls[MAX_WALLS];
+	t_vec 		grid_values[NBPOINTS];
+	t_vec       mouse_pos;
+}				t_editor;
 
 typedef struct	s_menu
 {

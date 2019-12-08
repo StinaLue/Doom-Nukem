@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_parser.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 13:02:54 by phaydont          #+#    #+#             */
-/*   Updated: 2019/11/18 15:47:51 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/06 16:12:04 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int		write_map_walls(int fd, t_wall *walls, int index)//can be remade to work wi
 		total += write(fd, &(walls[index].end_wall.y), sizeof(walls[index].end_wall.y));
 		total += write(fd, &(walls[index].color), sizeof(walls[index].color));
 	}
-	printf("wall write: %d\n", total);
+	//printf("wall write: %d\n", total);
 	return (0);
 }
 
@@ -82,7 +82,7 @@ int		read_map_walls(int fd, t_wall *walls)
 		total += read(fd, &(walls[index].color), sizeof(walls[index].color));
 		index++;
 	}
-	printf("wall read: %d\n", total);
+	//printf("wall read: %d\n", total);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:22:12 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/08 01:27:13 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/09 00:09:39 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	check_quit(SDL_Event *event, int *quit)
 		event->key.keysym.sym == SDLK_ESCAPE))
 		*quit = 1;
 }
-/*
+
 void	check_editor(SDL_Event *event, int *editor_flag)
 {
 	if (event->type == SDL_KEYDOWN && event->key.repeat == 0)
@@ -27,7 +27,7 @@ void	check_editor(SDL_Event *event, int *editor_flag)
 			*editor_flag = 1;
 	}
 }
-*/
+
 int		check_menu(SDL_Event *event)
 {
 		if (event->key.keysym.sym == SDLK_TAB)
