@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 03:35:35 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/09 00:04:08 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/09 00:33:59 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,11 @@ void		blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf)
 	SDL_Rect rect;
 
 	if (whichsurf == FIX_MAP_SHOW + ROT_MAP_SHOW)
-		rect = create_sdlrect(WIN_W / 8, 0, WIN_W / 8, WIN_H / 4);
-		//rect = assign_SDLrect(MINIMAP_WIDTH * 2, 0, MINIMAP_WIDTH * 2, MINIMAP_HEIGHT * 2);
+		//rect = create_sdlrect(WIN_W / 8, 0, WIN_W / 8, WIN_H / 4);
+		rect = create_sdlrect(MINIMAP_WIDTH * 2, 0, MINIMAP_WIDTH * 2, MINIMAP_HEIGHT * 2);
 	else if (whichsurf == ROT_MAP_SHOW || whichsurf == FIX_MAP_SHOW)
-		rect = create_sdlrect(0, 0, WIN_W / 8, WIN_H / 4);
-		//rect = assign_SDLrect(0, 0, MINIMAP_WIDTH * 2, MINIMAP_HEIGHT * 2);
+		//rect = create_sdlrect(0, 0, WIN_W / 8, WIN_H / 4);
+		rect = create_sdlrect(0, 0, MINIMAP_WIDTH * 2, MINIMAP_HEIGHT * 2);
 	else
 		rect = create_sdlrect(0, 0, WIN_W, WIN_H);
 	if ((SDL_BlitScaled(surf, NULL, winsurf, &rect)) < 0)

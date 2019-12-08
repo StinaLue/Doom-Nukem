@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/09 00:19:10 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/09 00:44:41 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,14 @@ int game_loop(t_doom *doom, t_sdlmain *sdlmain)
 {
 	const Uint8 *keyboard_state;
 
-	//t_vecdb vec1 = {50, 20}; // start of "first" wall
-	//t_vecdb vec2 = {50, 30}; // end of "first" wall
-	//t_vecdb vec3 = {70, 100};
-	//t_vecdb vec4 = {90, 20};
-	t_vecdb vec1 = {60, 70}; // start of "first" wall
-	t_vecdb vec2 = {70, 200}; // end of "first" wall
+	t_vecdb vec1 = {50, 20}; // start of "first" wall
+	t_vecdb vec2 = {50, 30}; // end of "first" wall
+	t_vecdb vec3 = {70, 100};
+	t_vecdb vec4 = {90, 20};
+	/* t_vecdb vec1 = {60, 70}; 
+	t_vecdb vec2 = {70, 200}; 		<--COLLISION TEST MAP
 	t_vecdb vec3 = {80, 70};
-	t_vecdb vec4 = {70, -60};
+	t_vecdb vec4 = {70, -60};*/
 	t_wall walls[NB_WALLS] = {{vec1, vec2, 0xFF0000}, {vec2, vec3, 0x00FF00}, {vec3, vec4, 0x0000FF}, {vec4, vec1, 0x00FFFF}};
 	//t_wall walls[NB_WALLS] = {{vec1, vec2, 0xFF0000}};
 

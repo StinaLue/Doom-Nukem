@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_keys.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/04 12:18:24 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/09 00:36:16 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ void	basic_move(t_player *player, t_wall *walls, const Uint8 *keyboard_state)
 	t_vecdb	move;
 	
 
-	if (!is_in_map(&player->pos))
+	/* if (!is_in_map(&player->pos))
 	{
 		player->pos.x = 70;
 		player->pos.y = 70;
-	}
+	}*/
 	move.x = 0;
 	move.y = 0;
 	if (keyboard_state[SDL_SCANCODE_W])
