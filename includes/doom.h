@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/08 01:27:34 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/08 19:21:24 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,12 @@
 # define COLORFLAG 4//0x00000100
 
 /*
-** MENU FLAGS
+** MENU OPTIONS
 */
 
 # define FIRST_OPTION_SELECT 1
 # define SECOND_OPTION_SELECT 2
+# define THIRD_OPTION_SELECT 3
 
 /*
 ** VECTOR STRUCTS
@@ -141,12 +142,14 @@ typedef struct	s_menu
 	SDL_Surface *menu_title;
 	SDL_Surface *first_option;
 	SDL_Surface *second_option;
+	SDL_Surface *third_option;
 
 	//Clip rectangles
 	SDL_Rect background_rect;
 	SDL_Rect menu_title_rect;
 	SDL_Rect first_option_rect;
 	SDL_Rect second_option_rect;
+	SDL_Rect third_option_rect;
 	//The event structure
 	SDL_Event event;
 
@@ -158,7 +161,6 @@ typedef struct	s_menu
 	int		editor_flag;
 	int		current_option;
 	int		activate;
-	char flags;
 }				t_menu;
 
 int 	check_collision(double pos_x, double pos_y, t_wall *walls);
