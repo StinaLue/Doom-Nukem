@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/06 16:19:47 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/08 01:27:34 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,14 @@
 
 # define NB_WALLS 4
 # define SQRT2 1.4142135623730950488
+
+/*
+** LOOP LOGIC
+*/
+
+# define ERROR_QUIT -1
+# define QUIT 0
+# define CONTINUE 1
 
 /*
 ** DIMENSIONS
@@ -98,7 +106,6 @@ typedef struct	s_gamesurfs
 typedef struct	s_data
 {
 	int			quit;
-	int			menu_activate;
 	//int			editor_flag;
 	char		hud_flags;
 }				t_data;
@@ -150,6 +157,7 @@ typedef struct	s_menu
 	SDL_Color textColor;
 	int		editor_flag;
 	int		current_option;
+	int		activate;
 	char flags;
 }				t_menu;
 
@@ -208,7 +216,7 @@ void			init_player_struct(t_player *player);
 /*
 ** POLL EVENT FUNCTIONS
 */
-void			handle_events(SDL_Event *event, t_data *data);
+int				handle_events(SDL_Event *event, t_data *data);
 
 /*
 ** EVENT FUNCTIONS
@@ -295,7 +303,7 @@ void			movement(t_player *player, t_vecdb move, t_wall *walls);
 
 int				game_loop(t_doom *doom, t_sdlmain *sdlmain);
 
-int 			menu_loop(t_menu *menu, t_sdlmain *sdlmain, int *menu_activate);
+int 			menu_loop(t_menu *menu, t_sdlmain *sdlmain);
 
 /*
 ** ERROR FUNCTIONS

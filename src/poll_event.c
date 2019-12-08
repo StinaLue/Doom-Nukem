@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:22:12 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/06 13:00:42 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/08 01:27:13 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,11 @@ void	check_editor(SDL_Event *event, int *editor_flag)
 	}
 }
 */
-void	check_menu(SDL_Event *event, int *menu_flag)
+int		check_menu(SDL_Event *event)
 {
-	if (event->type == SDL_KEYDOWN && event->key.repeat == 0)
-	{
 		if (event->key.keysym.sym == SDLK_TAB)
-			*menu_flag = 1;
-	}
+			return (1);
+		return (0);
 }
 
 void	activate_map_flags(char *hud_flags)
@@ -57,8 +55,6 @@ void	activate_map_flags(char *hud_flags)
 
 void	handle_hud(char *hud_flags, SDL_Event *event)
 {
-	if (event->type == SDL_KEYDOWN && event->key.repeat == 0)
-	{
         if (event->key.keysym.sym == SDLK_m)
 			activate_map_flags(hud_flags);
 		if (event->key.keysym.sym == SDLK_c)
@@ -68,13 +64,17 @@ void	handle_hud(char *hud_flags, SDL_Event *event)
 			else if ((*hud_flags & COLORFLAG))
 				*hud_flags &= ~(COLORFLAG);
 		}
-	}	
 }
 
-void    handle_events(SDL_Event *event, t_data *data)
+int    handle_events(SDL_Event *event, t_data *data)
 {
     check_quit(event, &data->quit);
-	check_menu(event, &data->menu_activate);
+	if (event->type == SDL_KEYDOWN && event->key.repeat == 0)
+	{
+		if (check_menu(event) == 1)
+			return (1);
 	//check_editor(event, &data->editor_flag);
-    handle_hud(&data->hud_flags, event);
+		handle_hud(&data->hud_flags, event);
+	}
+	return (0);
 }

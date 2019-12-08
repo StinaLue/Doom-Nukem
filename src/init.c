@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/06 15:56:16 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/07 22:14:17 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int		init_sdl_and_ttf()
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
 		ft_dprintf(STDERR_FILENO, "SDL_Init Error: %{r}s\n", SDL_GetError());
+		SDL_Quit();
 		error = 1;
 	}
 	if (TTF_Init() != 0)
@@ -28,8 +29,8 @@ int		init_sdl_and_ttf()
 		ft_dprintf(STDERR_FILENO, "TTF_Init Error: %{r}s\n", TTF_GetError());
 		error = 1;
 	}
-	if (error == 1)
-		quit_sdl_and_ttf();
+	//if (error == 1)
+	//	quit_sdl_and_ttf();
 	return (error);
 }
 

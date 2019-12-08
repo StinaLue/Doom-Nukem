@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/06 16:19:32 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/08 02:20:42 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,12 @@ int game_loop(t_doom *doom, t_sdlmain *sdlmain)
 
 	keyboard_state = SDL_GetKeyboardState(NULL);
 	SDL_WarpMouseInWindow(sdlmain->win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
-	while (!doom->data.quit)
+	while (doom->data.quit == 0)
 	{
 		ft_bzero(doom->surfs.perspective_mmap->pixels, doom->surfs.perspective_mmap->h * doom->surfs.perspective_mmap->pitch);
 		while (SDL_PollEvent(&(sdlmain->event)) != 0)
-			handle_events(&sdlmain->event, &doom->data);
+			if (handle_events(&sdlmain->event, &doom->data) == 1)
+				return (0);
 		/*if (doom->data.menu_activate)
 		{
 			if ((menu_loop(&sdlmain->win, &sdlmain->win_surf, &doom->data.menu_activate)) == 1)
@@ -78,7 +79,6 @@ int game_loop(t_doom *doom, t_sdlmain *sdlmain)
 		if ((SDL_BlitScaled(doom->surfs.perspective_mmap, NULL, sdlmain->win_surf, &myrect_thirdmap)) < 0)
 		{
 			printf("BlitScale error = %s\n", SDL_GetError());
-			free_doom(doom);
 			return (1);
 		}
 		draw_map(sdlmain, doom, walls, &doom->data.hud_flags);
@@ -88,7 +88,6 @@ int game_loop(t_doom *doom, t_sdlmain *sdlmain)
 		{
 			ft_dprintf(STDERR_FILENO, "SDL_UpdateWindowSurface error = %{r}s\n",
 					   SDL_GetError());
-			free_doom(doom);
 			return (1);
 		}
 	}
@@ -103,29 +102,44 @@ int	main_loop()
 	int	quit;
 
 	quit = 0;
+	if (init_sdl_and_ttf() == 1 || init_sdlmain(&sdlmain) == 1 \
+		|| init_doom(&doom) || init_menu(&menu) == 1)
+		quit = -1;
+	/*
 	if (init_sdl_and_ttf() == 1)
-		return (1);
+		quit = -1;
+		//return (1);
 	if (init_sdlmain(&sdlmain) == 1)
-		return (free_sdlmain(&sdlmain));
+		quit = -1;
+		//return (free_sdlmain(&sdlmain));
 	if (init_doom(&doom) == 1)
-		return (free_doom(&doom));
+		quit = -1;
+		//return (free_doom(&doom));
 	if (init_menu(&menu) == 1)
+		quit = -1;
+	*/
+	while (quit == 0)
 	{
-		free_doom(&doom);
-		free_menu(&menu);
-		return (free_sdlmain(&sdlmain));
-	}
-	while (!quit)
-	{
-		if (doom.data.menu_activate == 0 && doom.data.quit == 0)
-			game_loop(&doom, &sdlmain);
-		else if (doom.data.menu_activate == 1 && doom.data.quit == 0)
-			menu_loop(&menu, &sdlmain, &doom.data.menu_activate);
+		// IF ANY OF THE LOOPS FAIL --> RETURN AND EXIT PROPERLY
+		if (game_loop(&doom, &sdlmain) == 1)
+		{
+			quit = -1;
+			break ;
+		}
+		if (doom.data.quit == 1)
+			break ;
+		if (menu_loop(&menu, &sdlmain) == 1)
+		{
+			quit = -1;
+			break;
+		}
 	}
 	free_doom(&doom);
 	free_menu(&menu);
 	free_sdlmain(&sdlmain);
 	quit_sdl_and_ttf();
+	if (quit == -1)
+		return (error_return("Error during main loop init\n", NULL));
 	return (0);
 }
 
@@ -134,8 +148,8 @@ int main(/*int argc, char *argv[]*/)
 	if (WIN_WIDTH > 1920 || WIN_HEIGHT > 1080 || WIN_WIDTH < 100 || WIN_HEIGHT < 100)
 		return (1);
 	if (main_loop() == 1)
+	{
 		return (error_return("Error during main loop\n", NULL));
-	//if (game_loop(&doom) == 1)
-	//	ft_dprintf(STDERR_FILENO, "Error during game loop\n");
+	}
 	return (EXIT_SUCCESS);
 }
