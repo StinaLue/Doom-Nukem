@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/07 20:29:24 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/09 16:45:54 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,14 @@ int		free_menu(t_menu *menu)
     //Close the font that was used
     TTF_CloseFont( menu->font );
 	menu->font = NULL;
+	return (EXIT_FAILURE);
+}
+
+int		free_editor(t_editor *editor)
+{
+	SDL_FreeSurface(editor->editor_surf);
+	editor->editor_surf = NULL;
+	SDL_FreeSurface(editor->instruct_surf);
+	editor->instruct_surf = NULL;
 	return (EXIT_FAILURE);
 }

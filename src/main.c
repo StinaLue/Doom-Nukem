@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/09 00:44:41 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/09 18:02:20 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int game_loop(t_doom *doom, t_sdlmain *sdlmain)
 		ft_bzero(doom->surfs.perspective_mmap->pixels, doom->surfs.perspective_mmap->h * doom->surfs.perspective_mmap->pitch);
 		while (SDL_PollEvent(&(sdlmain->event)) != 0)
 			if (handle_events(&sdlmain->event, &doom->data) == 1)
-				return (0);
+				return (2);
 		/*if (doom->data.menu_activate)
 		{
 			if ((menu_loop(&sdlmain->win, &sdlmain->win_surf, &doom->data.menu_activate)) == 1)
@@ -98,12 +98,13 @@ int	main_loop()
 {
 	t_doom doom;
 	t_menu menu;
+	t_editor editor;
 	t_sdlmain sdlmain;
 	int	quit;
 
 	quit = 0;
 	if (init_sdl_and_ttf() == 1 || init_sdlmain(&sdlmain) == 1 \
-		|| init_doom(&doom) || init_menu(&menu) == 1)
+		|| init_doom(&doom) || init_menu(&menu) == 1 || init_editor(&editor) == 1)
 		quit = -1;
 	/*
 	if (init_sdl_and_ttf() == 1)
@@ -118,28 +119,79 @@ int	main_loop()
 	if (init_menu(&menu) == 1)
 		quit = -1;
 	*/
+	int state = GAME_STATE;
+	int loop_ret = 0;
 	while (quit == 0)
 	{
 		// IF ANY OF THE LOOPS FAIL --> RETURN AND EXIT PROPERLY
-		if (game_loop(&doom, &sdlmain) == 1)
+		if (state == GAME_STATE)
 		{
-			quit = -1;
-			break ;
+			loop_ret = game_loop(&doom, &sdlmain);
+			if (loop_ret == 1)
+			{
+				quit = -1;
+				break ;
+			}
+			else if (loop_ret == 2)
+				menu.activate = 1;
+			else if (loop_ret == 0)
+				menu.activate = 0;
 		}
-		if (doom.data.quit == 1)
-			break ;
-		if (menu_loop(&menu, &sdlmain) == 1)
+		else if (state == MENU_STATE)
 		{
-			quit = -1;
-			break;
+			loop_ret = menu_loop(&menu, &sdlmain);
+			if (loop_ret == 1)
+			{
+				quit = -1;
+				break ;
+			}
+			else if (loop_ret == 2)
+			{ 
+				menu.activate = 0;
+				editor.activate = 1;
+			}
+			else if (loop_ret == 3)
+			{
+				menu.activate = 0;
+				editor.activate = 0;
+				doom.data.quit = 1;
+			}
+			else if (loop_ret == 0)
+			{
+				menu.activate = 0;
+				editor.activate = 0;
+			}
 		}
+		else if (state == EDITOR_STATE)
+		{
+			state = editor_loop(&editor, &sdlmain);
+			if (loop_ret == 1)
+			{
+				quit = -1;
+				break ;
+			}
+			else if (loop_ret == 2)
+			{
+				menu.activate = 1;
+				editor.activate = 0;
+			}
+		}
+		if (doom.data.quit == 1 && menu.activate == 0 && editor.activate == 0)
+			quit = 1;
+		else if (doom.data.quit == 0 && menu.activate == 0 && editor.activate == 0)
+			state = GAME_STATE;
+		else if (doom.data.quit == 0 && menu.activate == 1 && editor.activate == 0)
+			state = MENU_STATE;
+		else if (doom.data.quit == 0 && menu.activate == 0 && editor.activate == 1)
+			state = EDITOR_STATE;
 	}
 	free_doom(&doom);
 	free_menu(&menu);
+	free_editor(&editor);
 	free_sdlmain(&sdlmain);
 	quit_sdl_and_ttf();
 	if (quit == -1)
-		return (error_return("Error during main loop init\n", NULL));
+		return (error_return("Error during main loop\n", NULL));
 	return (0);
 }
 

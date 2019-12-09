@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/09 00:19:40 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/09 17:57:40 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@
 # define SQRT2 1.4142135623730950488
 
 /*
-** LOOP LOGIC
+** MAIN LOOP STATES
 */
 
-# define ERROR_QUIT -1
-# define QUIT 0
-# define CONTINUE 1
+# define GAME_STATE 0
+# define MENU_STATE 1
+# define EDITOR_STATE 2
 
 /*
 ** DIMENSIONS
@@ -138,12 +138,17 @@ typedef struct	s_doom
 
 typedef struct 	s_editor
 {
+	SDL_Surface *editor_surf;
+	SDL_Surface *instruct_surf;
+	SDL_Rect	editor_rect;
+	SDL_Rect	instruct_rect;
     int         clicked;
 	int			num_walls;
 	int			num_sectors;
     t_wall      walls[MAX_WALLS];
 	t_vec 		grid_values[NBPOINTS];
 	t_vec       mouse_pos;
+	int			activate;
 }				t_editor;
 
 typedef struct	s_menu
@@ -169,7 +174,6 @@ typedef struct	s_menu
 
 	//The color of the font
 	SDL_Color textColor;
-	int		editor_flag;
 	int		current_option;
 	int		activate;
 }				t_menu;
@@ -214,6 +218,8 @@ int				init_sdl_and_ttf();
 int				init_doom(t_doom *doom);
 
 int				init_menu(t_menu *menu);
+
+int				init_editor(t_editor *editor);
 
 int				init_sdlmain(t_sdlmain *sdlmain);
 
@@ -280,6 +286,8 @@ int				free_menu(t_menu *menu);
 
 int				free_doom(t_doom *doom);
 
+int				free_editor(t_editor *editor);
+
 int				free_sdlmain(t_sdlmain *sdlmain);
 
 /*
@@ -318,6 +326,8 @@ int				game_loop(t_doom *doom, t_sdlmain *sdlmain);
 
 int 			menu_loop(t_menu *menu, t_sdlmain *sdlmain);
 
+int				editor_loop(t_editor *editor, t_sdlmain *sdlmain);
+
 /*
 ** ERROR FUNCTIONS
 */
@@ -329,5 +339,4 @@ int				error_return(const char *error_msg, const char *sdl_error);
 ** EDITOR FUNCTIONS
 */
 
-void	editor(SDL_Window **win, SDL_Surface **win_surf, int *editor_flag);
 #endif
