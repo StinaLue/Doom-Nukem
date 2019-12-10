@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/09 18:02:20 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/10 21:21:48 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,19 +57,14 @@ int game_loop(t_doom *doom, t_sdlmain *sdlmain)
 	//my_map = SDL_ConvertSurface(my_map, doom->sdl.surf->format, 0);
 
 	keyboard_state = SDL_GetKeyboardState(NULL);
+	int event_return = 0;
 	SDL_WarpMouseInWindow(sdlmain->win, WIN_W / 2, WIN_H / 2);
-	while (doom->data.quit == 0)
+	while (doom->data.activate == 1)
 	{
 		ft_bzero(doom->surfs.perspective_mmap->pixels, doom->surfs.perspective_mmap->h * doom->surfs.perspective_mmap->pitch);
 		while (SDL_PollEvent(&(sdlmain->event)) != 0)
-			if (handle_events(&sdlmain->event, &doom->data) == 1)
-				return (2);
-		/*if (doom->data.menu_activate)
-		{
-			if ((menu_loop(&sdlmain->win, &sdlmain->win_surf, &doom->data.menu_activate)) == 1)
-				doom->data.menu_activate = 0;
-		}*/
-		//handle events (for now player movement and HUD activation/deactivation)
+			if ((event_return = handle_events(&sdlmain->event, &doom->data)) != CONTINUE_GAME)
+				return(event_return);
 		handle_keys(doom, walls, keyboard_state);
 		if (doom->data.hud_flags & COLORFLAG)
 			doom->surfs.perspective_mmap->userdata = "yescolor";
@@ -77,118 +72,103 @@ int game_loop(t_doom *doom, t_sdlmain *sdlmain)
 			doom->surfs.perspective_mmap->userdata = "nocolor";
 		draw_perspective_minimap(doom->surfs.perspective_mmap, &doom->player, walls);
 		if ((SDL_BlitScaled(doom->surfs.perspective_mmap, NULL, sdlmain->win_surf, &myrect_thirdmap)) < 0)
-		{
-			printf("BlitScale error = %s\n", SDL_GetError());
-			return (1);
-		}
+			return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
 		draw_map(sdlmain, doom, walls, &doom->data.hud_flags);
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, &doom->sdl.surf->clip_rect)) < 0)
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, NULL)) < 0)
 		if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)
-		{
-			ft_dprintf(STDERR_FILENO, "SDL_UpdateWindowSurface error = %{r}s\n",
-					   SDL_GetError());
-			return (1);
-		}
+			return (error_return("SDL_UpdateWindowSurface error = %{r}s\n", SDL_GetError()));
 	}
-	return (0);
+	return (QUIT_GAME);
 }
 
 int	main_loop()
 {
-	t_doom doom;
+	t_game game;
+	/*t_doom doom;
 	t_menu menu;
 	t_editor editor;
-	t_sdlmain sdlmain;
+	t_sdlmain sdlmain;*/
 	int	quit;
 
 	quit = 0;
-	if (init_sdl_and_ttf() == 1 || init_sdlmain(&sdlmain) == 1 \
-		|| init_doom(&doom) || init_menu(&menu) == 1 || init_editor(&editor) == 1)
+	if (init_sdl_and_ttf() == 1 || init_sdlmain(&game.sdlmain) == 1 \
+		|| init_doom(&game.doom) || init_menu(&game.menu) == 1 || init_editor(&game.editor) == 1)
 		quit = -1;
-	/*
-	if (init_sdl_and_ttf() == 1)
-		quit = -1;
-		//return (1);
-	if (init_sdlmain(&sdlmain) == 1)
-		quit = -1;
-		//return (free_sdlmain(&sdlmain));
-	if (init_doom(&doom) == 1)
-		quit = -1;
-		//return (free_doom(&doom));
-	if (init_menu(&menu) == 1)
-		quit = -1;
-	*/
 	int state = GAME_STATE;
+	game.doom.data.activate = 1;
 	int loop_ret = 0;
 	while (quit == 0)
 	{
 		// IF ANY OF THE LOOPS FAIL --> RETURN AND EXIT PROPERLY
 		if (state == GAME_STATE)
 		{
-			loop_ret = game_loop(&doom, &sdlmain);
-			if (loop_ret == 1)
+			loop_ret = game_loop(&game.doom, &game.sdlmain);
+			if (loop_ret == ERROR_GAME)
 			{
 				quit = -1;
 				break ;
 			}
-			else if (loop_ret == 2)
-				menu.activate = 1;
-			else if (loop_ret == 0)
-				menu.activate = 0;
+			else if (loop_ret == MENU_GAME)
+				game.menu.activate = 1;
+			else if (loop_ret == QUIT_GAME)
+				game.doom.data.activate = 0;
 		}
 		else if (state == MENU_STATE)
 		{
-			loop_ret = menu_loop(&menu, &sdlmain);
-			if (loop_ret == 1)
+			loop_ret = menu_loop(&game.menu, &game.sdlmain);
+			if (loop_ret == ERROR_MENU)
 			{
 				quit = -1;
 				break ;
 			}
-			else if (loop_ret == 2)
+			else if (loop_ret == FIRST_OPT)
 			{ 
-				menu.activate = 0;
-				editor.activate = 1;
+				game.doom.data.activate = 0;
+				game.menu.activate = 0;
+				game.editor.activate = 1;
 			}
-			else if (loop_ret == 3)
+			else if (loop_ret == SECOND_OPT)
 			{
-				menu.activate = 0;
-				editor.activate = 0;
-				doom.data.quit = 1;
+				game.menu.activate = 0;
+				game.editor.activate = 0;
+				game.doom.data.activate = 1;
 			}
-			else if (loop_ret == 0)
+			else if (loop_ret == THIRD_OPT)
 			{
-				menu.activate = 0;
-				editor.activate = 0;
+				game.menu.activate = 0;
+				game.editor.activate = 0;
+				quit = 1;
 			}
+			else if (loop_ret == QUIT_MENU)
+				game.menu.activate = 0;
 		}
 		else if (state == EDITOR_STATE)
 		{
-			state = editor_loop(&editor, &sdlmain);
-			if (loop_ret == 1)
+			loop_ret = editor_loop(&game.editor, &game.sdlmain);
+			if (loop_ret == ERROR_EDITOR)
 			{
 				quit = -1;
 				break ;
 			}
-			else if (loop_ret == 2)
-			{
-				menu.activate = 1;
-				editor.activate = 0;
-			}
+			else if (loop_ret == MENU_EDITOR)
+				game.menu.activate = 1;
+			else if (loop_ret == QUIT_EDITOR)
+				game.editor.activate = 0;
 		}
-		if (doom.data.quit == 1 && menu.activate == 0 && editor.activate == 0)
+		if (game.doom.data.activate == 0 && game.menu.activate == 0 && game.editor.activate == 0)
 			quit = 1;
-		else if (doom.data.quit == 0 && menu.activate == 0 && editor.activate == 0)
-			state = GAME_STATE;
-		else if (doom.data.quit == 0 && menu.activate == 1 && editor.activate == 0)
+		else if (game.menu.activate == 1)
 			state = MENU_STATE;
-		else if (doom.data.quit == 0 && menu.activate == 0 && editor.activate == 1)
+		else if (game.editor.activate == 1)
 			state = EDITOR_STATE;
+		else if (game.doom.data.activate == 1)
+			state = GAME_STATE;
 	}
-	free_doom(&doom);
-	free_menu(&menu);
-	free_editor(&editor);
-	free_sdlmain(&sdlmain);
+	free_doom(&game.doom);
+	free_menu(&game.menu);
+	free_editor(&game.editor);
+	free_sdlmain(&game.sdlmain);
 	quit_sdl_and_ttf();
 	if (quit == -1)
 		return (error_return("Error during main loop\n", NULL));

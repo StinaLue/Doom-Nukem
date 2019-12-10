@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/09 17:57:40 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/10 19:59:16 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,42 @@
 # define EDITOR_STATE 2
 
 /*
+** GAME LOOP STATE RETURNS
+*/
+
+# define QUIT_GAME 0
+# define ERROR_GAME 1
+# define MENU_GAME 2
+# define CONTINUE_GAME 3
+
+/*
+** MENU LOOP STATE RETURNS
+*/
+
+# define QUIT_MENU 0
+# define ERROR_MENU 1
+# define FIRST_OPT 2
+# define SECOND_OPT 3
+# define THIRD_OPT 4
+# define CONTINUE_MENU 5
+
+/*
+** EDITOR LOOP STATE RETURNS
+*/
+
+# define QUIT_EDITOR 0
+# define ERROR_EDITOR 1
+# define MENU_EDITOR 2
+# define CONTINUE_EDITOR 3
+
+/*
 ** DIMENSIONS
 */
 
 # define MINIMAP_WIDTH 200
 # define MINIMAP_HEIGHT 200
 
-# define THIRD_MAP_WIDTH 1800 / 4//600
+# define THIRD_MAP_WIDTH 1800 / 4
 # define THIRD_MAP_HEIGHT 1000 / 4//600
 
 # define SIZE 1
@@ -107,8 +136,7 @@ typedef struct	s_gamesurfs
 
 typedef struct	s_data
 {
-	int			quit;
-	//int			editor_flag;
+	int			activate;
 	char		hud_flags;
 }				t_data;
 
@@ -177,6 +205,14 @@ typedef struct	s_menu
 	int		current_option;
 	int		activate;
 }				t_menu;
+
+typedef struct	s_game
+{
+	t_doom		doom;
+	t_menu		menu;
+	t_editor	editor;
+	t_sdlmain	sdlmain;
+}				t_game;
 
 int 	check_collision(double pos_x, double pos_y, t_wall *walls);
 

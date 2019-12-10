@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/09 17:45:43 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/10 17:43:53 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int		editor_events(t_editor *editor, t_sdlmain *sdlmain)
 	if (sdlmain->event.type == SDL_KEYDOWN)
 	{
 		if (sdlmain->event.key.keysym.sym == SDLK_TAB)
-			return (2);
+			return (MENU_EDITOR);
 			//editor->activate = 0;
 		//if (event.key.keysym.sym == SDLK_UP && offset < 100 / SIZE)
 		//	offset++;
@@ -119,7 +119,7 @@ int		editor_events(t_editor *editor, t_sdlmain *sdlmain)
 			}
 		}
 	}
-	return (0);
+	return (CONTINUE_EDITOR);
 }
 
 int editor_loop(t_editor *editor, t_sdlmain *sdlmain)
@@ -141,7 +141,7 @@ int editor_loop(t_editor *editor, t_sdlmain *sdlmain)
 		ft_bzero(editor->instruct_surf->pixels, editor->instruct_surf->h * editor->instruct_surf->pitch);
 		draw_editor(editor->editor_surf, editor);
 		while (SDL_PollEvent(&sdlmain->event) != 0)
-			if ((state = editor_events(editor, sdlmain)) != 0)
+			if ((state = editor_events(editor, sdlmain)) != CONTINUE_EDITOR)
 				return (state);
 		draw_lines(editor, editor->editor_surf);
 		//draw_lines(editor.mouse_pos.x, editor.mouse_pos.y, &editor);
@@ -154,6 +154,6 @@ int editor_loop(t_editor *editor, t_sdlmain *sdlmain)
 		if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)
 			return (error_return("SDL_UpdateWindowSurface error = %{r}s\n", SDL_GetError()));
 	}
-	editor->activate = 0;
-	return (0);
+	//editor->activate = 0;
+	return (QUIT_EDITOR);
 }

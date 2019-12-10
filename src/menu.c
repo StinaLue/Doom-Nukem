@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:27:36 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/09 17:32:26 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/10 17:35:04 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,28 +56,34 @@ int		launch_option(t_menu *menu, int *option_selected, t_sdlmain *sdlmain)
 {
 	(void)sdlmain;
 	if (*option_selected == FIRST_OPTION_SELECT)
-		return (2);
+		return (FIRST_OPT);
 	else if (*option_selected == SECOND_OPTION_SELECT)
+	{
 		menu->activate = 0;
+		return (SECOND_OPT);
+	}
 	else if (*option_selected == THIRD_OPTION_SELECT)
-		return (3);
-	return (0);
+		return (THIRD_OPT);
+	return (CONTINUE_MENU);
 }
 
 int		menu_events(t_menu *menu, t_sdlmain *sdlmain)
 {
 	int state;
 	state = 0;
-		if (menu->event.type == SDL_KEYDOWN && menu->event.key.repeat == 0)
+	if (menu->event.type == SDL_KEYDOWN && menu->event.key.repeat == 0)
+	{
+		if (menu->event.key.keysym.sym == SDLK_TAB)
 		{
-			if (menu->event.key.keysym.sym == SDLK_TAB)
-				menu->activate = 0;
-			browse_options(&menu->event, &menu->current_option);
-			if (menu->event.key.keysym.sym == SDLK_RETURN)
-				if ((state = launch_option(menu, &menu->current_option, sdlmain)) != 0)
-					return (state);
+			menu->activate = 0;
+			return (QUIT_MENU);
 		}
-		return (0);
+		browse_options(&menu->event, &menu->current_option);
+		if (menu->event.key.keysym.sym == SDLK_RETURN)
+			if ((state = launch_option(menu, &menu->current_option, sdlmain)) != CONTINUE_MENU)
+				return (state);
+	}
+	return (CONTINUE_MENU);
 }
 
 int	highlight_select(t_menu *menu)
@@ -126,7 +132,7 @@ int menu_loop(t_menu *menu, t_sdlmain *sdlmain)
 		ft_bzero(menu->background->pixels, menu->background->h * menu->background->pitch);
 		draw_border(menu->background, 0xFFFFFF);
 		while (SDL_PollEvent(&menu->event) != 0)
-			if ((state = menu_events(menu, sdlmain)) != 0)
+			if ((state = menu_events(menu, sdlmain)) != CONTINUE_MENU)
 				return (state);
 		
 		if ((SDL_BlitSurface(menu->menu_title, NULL, menu->background, &menu->menu_title_rect)) < 0)
@@ -145,6 +151,6 @@ int menu_loop(t_menu *menu, t_sdlmain *sdlmain)
 		if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)
 			return (error_return("SDL_UpdateWindowSurface error = %{r}s\n", SDL_GetError()));
 	}
-	menu->activate = 1;
-	return (0);
+	//menu->activate = 1;
+	return (QUIT_MENU);
 }

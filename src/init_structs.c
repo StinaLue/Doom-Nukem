@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/09 00:05:47 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/10 20:00:00 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	init_gamesurfs_struct(t_gamesurfs *gamesurfs)
 
 void	init_data_struct(t_data *data)
 {
-	data->quit = 0;
+	data->activate = 0;
 	//data->editor_flag = 0;
 	data->hud_flags = 0;
 }
