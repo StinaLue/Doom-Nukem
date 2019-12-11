@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/10 19:59:16 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/11 15:07:44 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,22 +61,9 @@
 ** DIMENSIONS
 */
 
-# define MINIMAP_WIDTH 200
-# define MINIMAP_HEIGHT 200
-
-# define THIRD_MAP_WIDTH 1800 / 4
-# define THIRD_MAP_HEIGHT 1000 / 4//600
-
-# define SIZE 1
-# define WIN_W (1800 / SIZE)
-# define WIN_H (1000 / SIZE)
-# define OFFSET (20 / SIZE)
-
-# define MENU_WIDTH WIN_W - (WIN_W / 8)
-# define MENU_HEIGHT WIN_H - (WIN_H / 4)
-
-# define HFOV (0.5 * THIRD_MAP_HEIGHT)
-# define VFOV (0.2 * THIRD_MAP_HEIGHT)
+# define WIN_W 1920
+# define WIN_H 1080
+# define OFFSET 20
 
 # define NBPOINTS 2891 // map has 59 * 49 points
 # define MAX_WALLS 30
@@ -282,13 +269,11 @@ void			handle_keys(t_doom *doom, t_wall *walls, const Uint8 *keyboard_state);
 ** PRINT MINIMAP FUNCTIONS
 */
 
-void			draw_map(t_sdlmain *sdlmain, t_doom *doom, t_wall *walls, char *hud_flags);
+int				draw_map(t_sdlmain *sdlmain, t_doom *doom, t_wall *walls, char *hud_flags);
 
-void			draw_full_fixedmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf);
-//void			draw_fixed_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);
+int				draw_full_fixedmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf);
 
-void			draw_full_rotmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf);
-//void			draw_rot_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);
+int				draw_full_rotmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf);
 
 void			draw_perspective_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);
 
@@ -296,7 +281,7 @@ void			draw_perspective_minimap(SDL_Surface *surf, t_player *player, t_wall *wal
 ** DRAWING FUNCTIONS
 */
 
-void			blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf);
+int				blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf);
 
 void			fill_pix(SDL_Surface *surf, int x, int y, int color);
 

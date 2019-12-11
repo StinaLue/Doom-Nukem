@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fixed_minimap.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 16:23:32 by phaydont          #+#    #+#             */
-/*   Updated: 2019/12/03 13:37:02 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/11 14:58:22 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,25 +28,17 @@ void	draw_fixed_minimap(SDL_Surface *surf, t_player *player, t_wall *walls)
 	fill_pix(surf, (int)player->pos.x, (int)player->pos.y, 0xFFFF00);
 }
 
-void	draw_full_fixedmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf)
+int		draw_full_fixedmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf)
 {
-	t_vec topleft_fixedmap;
-	t_vec topright_fixedmap;
-	t_vec bottomleft_fixedmap;
-	t_vec bottomright_fixedmap;
+	int ret;
 
+	ret = 0;
 	ft_bzero(surf->pixels, surf->h * surf->pitch);
-	give_vec_values(&topleft_fixedmap, 0, 0);
-	give_vec_values(&topright_fixedmap, MINIMAP_WIDTH - 1, 0);
-	give_vec_values(&bottomleft_fixedmap, 0, MINIMAP_HEIGHT - 1);
-	give_vec_values(&bottomright_fixedmap, MINIMAP_WIDTH - 1, MINIMAP_HEIGHT - 1);
 	draw_fixed_minimap(surf, player, walls);
-	draw_line(topleft_fixedmap, topright_fixedmap, surf, 0xFFFFFF);
-	draw_line(bottomleft_fixedmap, bottomright_fixedmap, surf, 0xFFFFFF);
-	draw_line(topleft_fixedmap, bottomleft_fixedmap, surf, 0xFFFFFF);
-	draw_line(topright_fixedmap, bottomright_fixedmap, surf, 0xFFFFFF);
+	draw_border(surf, 0xFFFFFF);
 	if (surf->userdata && ft_strncmp(surf->userdata, "2maps", 5) == 0)
-		blit_in_rect(surf, winsurf, FIX_MAP_SHOW + ROT_MAP_SHOW);
+		ret = blit_in_rect(surf, winsurf, FIX_MAP_SHOW + ROT_MAP_SHOW);
 	else
-		blit_in_rect(surf, winsurf, FIX_MAP_SHOW);
+		ret = blit_in_rect(surf, winsurf, FIX_MAP_SHOW);
+	return (ret);
 }

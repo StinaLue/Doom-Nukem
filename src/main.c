@@ -6,21 +6,12 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/10 21:21:48 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/11 15:06:01 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "doom.h"
-
-int is_in_map(t_vecdb *player)
-{
-	if (player->x < 0 || player->x >= MINIMAP_WIDTH)
-		return (0);
-	if (player->y < 0 || player->y >= MINIMAP_HEIGHT)
-		return (0);
-	return (1);
-}
 
 int game_loop(t_doom *doom, t_sdlmain *sdlmain)
 {
@@ -73,7 +64,8 @@ int game_loop(t_doom *doom, t_sdlmain *sdlmain)
 		draw_perspective_minimap(doom->surfs.perspective_mmap, &doom->player, walls);
 		if ((SDL_BlitScaled(doom->surfs.perspective_mmap, NULL, sdlmain->win_surf, &myrect_thirdmap)) < 0)
 			return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
-		draw_map(sdlmain, doom, walls, &doom->data.hud_flags);
+		if ((draw_map(sdlmain, doom, walls, &doom->data.hud_flags)) == 1)
+			return (error_return("error during map drawing\n", NULL));
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, &doom->sdl.surf->clip_rect)) < 0)
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, NULL)) < 0)
 		if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)

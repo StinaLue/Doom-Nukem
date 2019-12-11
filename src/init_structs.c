@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/10 20:00:00 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/11 15:21:37 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ int	init_gamesurfs_struct(t_gamesurfs *gamesurfs)
 	gamesurfs->fixed_mmap = NULL;
 	gamesurfs->rot_mmap = NULL;
 	gamesurfs->perspective_mmap = NULL;
-	if ((gamesurfs->rot_mmap = SDL_CreateRGBSurface(0, MINIMAP_WIDTH, MINIMAP_HEIGHT, 32, 0, 0, 0, 0)) == NULL)
+	if ((gamesurfs->rot_mmap = SDL_CreateRGBSurface(0, 100, 100, 32, 0, 0, 0, 0)) == NULL) //--> should be a square that can handle the size of a sector
 		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
-	if ((gamesurfs->fixed_mmap = SDL_CreateRGBSurface(0, MINIMAP_WIDTH, MINIMAP_HEIGHT, 32, 0, 0, 0, 0)) == NULL)
+	if ((gamesurfs->fixed_mmap = SDL_CreateRGBSurface(0, 100, 100, 32, 0, 0, 0, 0)) == NULL) //--> should be a square that can handle the size of the whole map
 		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
-	if ((gamesurfs->perspective_mmap = SDL_CreateRGBSurface(0, THIRD_MAP_WIDTH, THIRD_MAP_HEIGHT, 32, 0, 0, 0, 0)) == NULL)
+	if ((gamesurfs->perspective_mmap = SDL_CreateRGBSurface(0, WIN_W / 4, WIN_H / 4, 32, 0, 0, 0, 0)) == NULL)
 		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
 	return (0);
 }
