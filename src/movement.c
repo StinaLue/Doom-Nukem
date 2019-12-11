@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2019/12/09 17:47:16 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/11 14:23:55 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,57 +23,59 @@ double	wall_distance(t_vecdb point, t_vecdb a, t_vecdb b)
 	return (dist);
 }
 
+void	check_second_collision(t_vecdb *position, double col_angle, int i, t_wall *walls)
+{
+	double dist;
+	double col_angle2;
+
+	if (i >= NB_WALLS)
+		i = 0;
+	else if (i < 0)
+		i = NB_WALLS - 1;
+
+	if ((dist = wall_distance(*position, walls[i].start_wall, walls[i].end_wall)) >= 0.5)
+		return ;
+	dist = 0.5 - dist;
+	col_angle2 = atan2(walls[i].start_wall.y - walls[i].end_wall.y, walls[i].start_wall.x - walls[i].end_wall.x);
+	col_angle2 = col_angle - col_angle2;
+	dist = dist / sin(col_angle2);
+	position->x += dist * cos(col_angle);
+	position->y += dist * sin(col_angle);
+
+}
+
 void	move_player(t_vecdb *position, t_vecdb *move, t_wall *walls)
 {
 	int		i;
 	double	dist;
-	double	col_angle = 0;
-	int		count;
-	t_vecdb	A;
-	double	col_angle2 = 0;
-	int	save = -1;
+	double	smallest_dist;
+	int		iw;
+	double	col_angle;
 
 	position->x += move->x;
 	position->y += move->y;
-	count = 0;
-	i = 0;
-	//calculer l'angle directement de la perpendiculaire...
-	while (i < NB_WALLS)
+	i = -1;
+	smallest_dist = 0.5;
+	iw = -1;
+	while (++i < NB_WALLS)
 	{
-		if (i == save)
-		{
-			i++;
-			continue ;
-		}
-		
 		dist = wall_distance(*position, walls[i].start_wall, walls[i].end_wall);
-		if (dist < 0.5)
+		if (dist < smallest_dist)
 		{
-			if (count == 1)
-			{
-				dist = 0.5 - dist;
-				col_angle2 = atan2(walls[i].start_wall.y - walls[i].end_wall.y, walls[i].start_wall.x - walls[i].end_wall.x);
-				col_angle2 = col_angle - col_angle2;
-				dist = dist / sin(col_angle2);
-				position->x += dist * cos(col_angle);
-				position->y += dist * sin(col_angle);
-				return ;
-			}
-			else
-			{
-				dist = 0.5 - dist;
-				col_angle = atan2(walls[i].start_wall.y - walls[i].end_wall.y, walls[i].start_wall.x - walls[i].end_wall.x);
-				A.x = dist * -sin(col_angle);
-				A.y = dist * cos(col_angle);
-				position->x += dist * -sin(col_angle);
-				position->y += dist * cos(col_angle);
-				save = i;
-				i = 0;
-				count = 1;
-				continue ;
-			}
+			iw = i;
+			smallest_dist = dist;
 		}
-		i++;
+	}
+	if (iw == -1)
+		return ;
+	dist = 0.5 - smallest_dist;
+	col_angle = atan2(walls[iw].start_wall.y - walls[iw].end_wall.y, walls[iw].start_wall.x - walls[iw].end_wall.x);
+	position->x += dist * -sin(col_angle);
+	position->y += dist * cos(col_angle);
+	if (iw >= 0)
+	{
+		check_second_collision(position, col_angle, iw - 1, walls);
+		check_second_collision(position, col_angle, iw + 1, walls);
 	}
 }
 
