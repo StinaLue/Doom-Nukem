@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_keys.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/09 00:36:16 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/11 15:59:09 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,17 @@ void	basic_move(t_player *player, t_wall *walls, const Uint8 *keyboard_state)
 void	basic_look(t_player *player, const Uint8 *keyboard_state)
 {
 	if (keyboard_state[SDL_SCANCODE_UP])
-	{
 		player->view_z += 1;
-	}
 	if (keyboard_state[SDL_SCANCODE_DOWN])
-	{
 		player->view_z -= 1;
-	}
 	if (keyboard_state[SDL_SCANCODE_LEFT])
 		player->angle += 0.01;
 	if (keyboard_state[SDL_SCANCODE_RIGHT])
 		player->angle -= 0.01;
+	if (keyboard_state[SDL_SCANCODE_PAGEUP])
+		player->fov.x++;
+	if (keyboard_state[SDL_SCANCODE_PAGEDOWN] && player->fov.x > 1)
+		player->fov.x--;
 	player->direc.x = sin(player->angle) * -5 + player->pos.x;
 	player->direc.y = cos(player->angle) * 5 + player->pos.y;
 }

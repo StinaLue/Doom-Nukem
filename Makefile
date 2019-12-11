@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2019/12/06 11:42:55 by sluetzen         ###   ########.fr        #
+#    Updated: 2019/12/11 15:16:17 by phaydont         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,7 +66,7 @@ SOURCES_LIST = main.c \
 			draw_line.c \
 			fixed_minimap.c \
 			rot_minimap.c \
-			perspective_minimap.c \
+			perspective_view.c \
 			vector.c \
 			map_parser.c \
 			poll_event.c \
