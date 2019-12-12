@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/09 00:06:23 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/12 17:06:15 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ int		init_sdlmain(t_sdlmain *sdlmain)
 	return (EXIT_SUCCESS);
 }
 
-int	init_doom(t_doom *doom)
+int	init_game(t_game *game)
 {
-	if (init_gamesurfs_struct(&(doom->surfs)) == 1)
+	if (init_gamesurfs_struct(&(game->surfs)) == 1)
 		return (1);
-	init_data_struct(&(doom->data));
-	init_player_struct(&(doom->player));
+	init_data_struct(&(game->data));
+	init_player_struct(&(game->player));
 	return (0);
 }

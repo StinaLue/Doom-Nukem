@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:27:36 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/10 17:35:04 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/12 18:34:12 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 int init_menu(t_menu *menu)
 {
 	menu->current_option = 0;
-	menu->activate = 0;
+	menu->previous_state = QUIT_STATE;
 	//Load the background image
 	menu->background = NULL;
 
@@ -52,38 +52,39 @@ void	browse_options(SDL_Event *event, int *option)
 		*option -= 1;
 }
 
-int		launch_option(t_menu *menu, int *option_selected, t_sdlmain *sdlmain)
+void	launch_option(t_doom *doom)
 {
-	(void)sdlmain;
-	if (*option_selected == FIRST_OPTION_SELECT)
-		return (FIRST_OPT);
-	else if (*option_selected == SECOND_OPTION_SELECT)
-	{
-		menu->activate = 0;
-		return (SECOND_OPT);
-	}
-	else if (*option_selected == THIRD_OPTION_SELECT)
-		return (THIRD_OPT);
-	return (CONTINUE_MENU);
+	t_menu *menu;
+	t_sdlmain *sdlmain;
+
+	menu = &(doom->menu);
+	sdlmain = &(doom->sdlmain);
+	if (menu->current_option == FIRST_OPTION_SELECT)
+		doom->state = EDITOR_STATE;
+	else if (menu->current_option == SECOND_OPTION_SELECT)
+		doom->state = GAME_STATE;
+	else if (menu->current_option == THIRD_OPTION_SELECT)
+		doom->state = QUIT_STATE;
 }
 
-int		menu_events(t_menu *menu, t_sdlmain *sdlmain)
+int		menu_events(t_doom *doom)
 {
-	int state;
-	state = 0;
-	if (menu->event.type == SDL_KEYDOWN && menu->event.key.repeat == 0)
+	t_menu *menu;
+	t_sdlmain *sdlmain;
+
+	menu = &(doom->menu);
+	sdlmain = &(doom->sdlmain);
+	if (sdlmain->event.type == SDL_KEYDOWN && sdlmain->event.key.repeat == 0)
 	{
-		if (menu->event.key.keysym.sym == SDLK_TAB)
-		{
-			menu->activate = 0;
-			return (QUIT_MENU);
-		}
-		browse_options(&menu->event, &menu->current_option);
-		if (menu->event.key.keysym.sym == SDLK_RETURN)
-			if ((state = launch_option(menu, &menu->current_option, sdlmain)) != CONTINUE_MENU)
-				return (state);
+		if (sdlmain->event.key.keysym.sym == SDLK_TAB)
+			doom->state = menu->previous_state;
+		browse_options(&sdlmain->event, &menu->current_option);
+		if (sdlmain->event.key.keysym.sym == SDLK_RETURN)
+			launch_option(doom);
 	}
-	return (CONTINUE_MENU);
+	if (doom->state != MENU_STATE)
+		return (1);
+	return (0);
 }
 
 int	highlight_select(t_menu *menu)
@@ -119,21 +120,20 @@ int	highlight_select(t_menu *menu)
 	return (0);
 }
 
-int menu_loop(t_menu *menu, t_sdlmain *sdlmain)
+int menu_loop(t_doom *doom)
 {
-	//t_menu menu;
+	t_menu *menu;
+	t_sdlmain *sdlmain;
 
-	//if (init_menu(&menu) != 0)
-	//	return (error_return("Error in init_menu function\n", NULL));
-	int state;
-	state = 0;
-	while (menu->activate == 1)
+	menu = &(doom->menu);
+	sdlmain = &(doom->sdlmain);
+	while (doom->state == MENU_STATE)
 	{
 		ft_bzero(menu->background->pixels, menu->background->h * menu->background->pitch);
 		draw_border(menu->background, 0xFFFFFF);
-		while (SDL_PollEvent(&menu->event) != 0)
-			if ((state = menu_events(menu, sdlmain)) != CONTINUE_MENU)
-				return (state);
+		while (SDL_PollEvent(&sdlmain->event) != 0)
+			if (menu_events(doom) != 0)
+				break ;
 		
 		if ((SDL_BlitSurface(menu->menu_title, NULL, menu->background, &menu->menu_title_rect)) < 0)
 			return (error_return("BlitSurface error = %s\n", SDL_GetError()));
@@ -151,6 +151,5 @@ int menu_loop(t_menu *menu, t_sdlmain *sdlmain)
 		if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)
 			return (error_return("SDL_UpdateWindowSurface error = %{r}s\n", SDL_GetError()));
 	}
-	//menu->activate = 1;
-	return (QUIT_MENU);
+	return (0);
 }

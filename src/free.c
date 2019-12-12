@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/09 16:45:54 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/12 18:16:02 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@ int		free_sdlmain(t_sdlmain *sdlmain)
 	return (EXIT_FAILURE);
 }
 
-int		free_doom(t_doom *doom)
+int		free_game(t_game *game)
 {
-	SDL_FreeSurface(doom->surfs.fixed_mmap);
-	doom->surfs.fixed_mmap = NULL;
-	SDL_FreeSurface(doom->surfs.rot_mmap);
-	doom->surfs.rot_mmap = NULL;
-	SDL_FreeSurface(doom->surfs.perspective_mmap);
-	doom->surfs.perspective_mmap = NULL;
+	SDL_FreeSurface(game->surfs.fixed_mmap);
+	game->surfs.fixed_mmap = NULL;
+	SDL_FreeSurface(game->surfs.rot_mmap);
+	game->surfs.rot_mmap = NULL;
+	SDL_FreeSurface(game->surfs.perspective_view);
+	game->surfs.perspective_view = NULL;
 	return (EXIT_FAILURE);
 }
 

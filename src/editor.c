@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/10 17:43:53 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/12 18:43:01 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ int round_num(double num)
 }
 int	init_editor(t_editor *editor)
 {
-	editor->activate = 0;
 	if ((editor->editor_surf = SDL_CreateRGBSurface(0, WIN_W / 1.5, WIN_H, 32, 0, 0, 0, 0)) == NULL)
 		return (error_return("create surface error = %s\n", SDL_GetError()));
 	if ((editor->instruct_surf = SDL_CreateRGBSurface(0, WIN_W - (WIN_W / 1.5), WIN_H, 32, 0, 0, 0, 0)) == NULL)
@@ -84,17 +83,20 @@ void	draw_editor(SDL_Surface *editor_surf, t_editor *editor)
         editor->mouse_pos.y = 1;
 }
 
-int		editor_events(t_editor *editor, t_sdlmain *sdlmain)
+int		editor_events(t_doom *doom)
 {
+	t_editor *editor;
+	t_sdlmain *sdlmain;
+
+	editor = &(doom->editor);
+	sdlmain = &(doom->sdlmain);
 	if (sdlmain->event.type == SDL_KEYDOWN)
 	{
 		if (sdlmain->event.key.keysym.sym == SDLK_TAB)
-			return (MENU_EDITOR);
-			//editor->activate = 0;
-		//if (event.key.keysym.sym == SDLK_UP && offset < 100 / SIZE)
-		//	offset++;
-		//else if (event.key.keysym.sym == SDLK_DOWN && offset > 20 / SIZE)
-		//	offset--;
+		{
+			doom->menu.previous_state = EDITOR_STATE;
+			doom->state = MENU_STATE;
+		}
 	}
     if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
     {
@@ -119,30 +121,31 @@ int		editor_events(t_editor *editor, t_sdlmain *sdlmain)
 			}
 		}
 	}
-	return (CONTINUE_EDITOR);
+	if (doom->state != EDITOR_STATE)
+		return (1);
+	return (0);
 }
 
-int editor_loop(t_editor *editor, t_sdlmain *sdlmain)
+int editor_loop(t_doom *doom)
 {
+	t_editor *editor;
+	t_sdlmain *sdlmain;
+
+	editor = &(doom->editor);
+	sdlmain = &(doom->sdlmain);
 	SDL_WarpMouseInWindow(sdlmain->win, WIN_W / 2, WIN_H / 2);
 	//SDL_Rect editor_rect = {0, WIN_H, 0, WIN_W / 1.5};
-	int state;
-
-	state = 0;
-	while (editor->activate == 1)
+	while (doom->state == EDITOR_STATE)
 	{
-		//while (SDL_PollEvent(&sdlmain->event) != 0)
-		//	if ((state = editor_events(editor, sdlmain)) != 0)
-		//		return (state);
+		while (SDL_PollEvent(&sdlmain->event) != 0)
+			if (editor_events(doom) != 0)
+				break ;
         SDL_GetMouseState(&editor->mouse_pos.x, &editor->mouse_pos.y);
         editor->mouse_pos.x = round_num(editor->mouse_pos.x);
         editor->mouse_pos.y = round_num(editor->mouse_pos.y);
 		ft_bzero(editor->editor_surf->pixels, editor->editor_surf->h * editor->editor_surf->pitch);
 		ft_bzero(editor->instruct_surf->pixels, editor->instruct_surf->h * editor->instruct_surf->pitch);
 		draw_editor(editor->editor_surf, editor);
-		while (SDL_PollEvent(&sdlmain->event) != 0)
-			if ((state = editor_events(editor, sdlmain)) != CONTINUE_EDITOR)
-				return (state);
 		draw_lines(editor, editor->editor_surf);
 		//draw_lines(editor.mouse_pos.x, editor.mouse_pos.y, &editor);
 		if ((SDL_BlitScaled(editor->editor_surf, NULL, sdlmain->win_surf, &editor->editor_rect)) < 0)
@@ -154,6 +157,5 @@ int editor_loop(t_editor *editor, t_sdlmain *sdlmain)
 		if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)
 			return (error_return("SDL_UpdateWindowSurface error = %{r}s\n", SDL_GetError()));
 	}
-	//editor->activate = 0;
-	return (QUIT_EDITOR);
+	return (0);
 }

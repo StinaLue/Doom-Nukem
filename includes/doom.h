@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/12 15:35:48 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/12 18:22:58 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,38 +24,10 @@
 ** MAIN LOOP STATES
 */
 
-# define GAME_STATE 0
-# define MENU_STATE 1
-# define EDITOR_STATE 2
-
-/*
-** GAME LOOP STATE RETURNS
-*/
-
-# define QUIT_GAME 0
-# define ERROR_GAME 1
-# define MENU_GAME 2
-# define CONTINUE_GAME 3
-
-/*
-** MENU LOOP STATE RETURNS
-*/
-
-# define QUIT_MENU 0
-# define ERROR_MENU 1
-# define FIRST_OPT 2
-# define SECOND_OPT 3
-# define THIRD_OPT 4
-# define CONTINUE_MENU 5
-
-/*
-** EDITOR LOOP STATE RETURNS
-*/
-
-# define QUIT_EDITOR 0
-# define ERROR_EDITOR 1
-# define MENU_EDITOR 2
-# define CONTINUE_EDITOR 3
+# define QUIT_STATE 0
+# define GAME_STATE 1
+# define MENU_STATE 2
+# define EDITOR_STATE 3
 
 /*
 ** DIMENSIONS
@@ -118,12 +90,11 @@ typedef struct	s_gamesurfs
 {
 	SDL_Surface *fixed_mmap;
 	SDL_Surface *rot_mmap;
-	SDL_Surface *perspective_mmap;
+	SDL_Surface *perspective_view;
 }				t_gamesurfs;
 
 typedef struct	s_data
 {
-	int			activate;
 	char		hud_flags;
 }				t_data;
 
@@ -146,12 +117,12 @@ typedef struct	s_player
 	int			helper;
 }				t_player;
 
-typedef struct	s_doom
+typedef struct	s_game
 {
 	t_gamesurfs	surfs;
 	t_data		data;
 	t_player	player;
-}				t_doom;
+}				t_game;
 
 typedef struct 	s_editor
 {
@@ -165,7 +136,6 @@ typedef struct 	s_editor
     t_wall      walls[MAX_WALLS];
 	t_vec 		grid_values[NBPOINTS];
 	t_vec       mouse_pos;
-	int			activate;
 }				t_editor;
 
 typedef struct	s_menu
@@ -183,8 +153,6 @@ typedef struct	s_menu
 	SDL_Rect first_option_rect;
 	SDL_Rect second_option_rect;
 	SDL_Rect third_option_rect;
-	//The event structure
-	SDL_Event event;
 
 	//The font that's going to be used
 	TTF_Font *font;
@@ -192,16 +160,17 @@ typedef struct	s_menu
 	//The color of the font
 	SDL_Color textColor;
 	int		current_option;
-	int		activate;
+	int		previous_state;
 }				t_menu;
 
-typedef struct	s_game
+typedef struct	s_doom
 {
-	t_doom		doom;
+	t_game		game;
 	t_menu		menu;
 	t_editor	editor;
 	t_sdlmain	sdlmain;
-}				t_game;
+	int			state;
+}				t_doom;
 
 int 	check_collision(double pos_x, double pos_y, t_wall *walls);
 
@@ -240,7 +209,7 @@ t_vecdb			create_vecdb(double x, double y);
 
 int				init_sdl_and_ttf();
 
-int				init_doom(t_doom *doom);
+int				init_game(t_game *game);
 
 int				init_menu(t_menu *menu);
 
@@ -260,18 +229,18 @@ void			init_player_struct(t_player *player);
 /*
 ** POLL EVENT FUNCTIONS
 */
-int				handle_events(SDL_Event *event, t_data *data);
+int				handle_events(t_doom *doom);
 
 /*
 ** EVENT FUNCTIONS
 */
-void			handle_keys(t_doom *doom, t_wall *walls, const Uint8 *keyboard_state);
+void			handle_keys(t_game *game, t_wall *walls, const Uint8 *keyboard_state);
 
 /*
 ** PRINT MINIMAP FUNCTIONS
 */
 
-int				draw_map(t_sdlmain *sdlmain, t_doom *doom, t_wall *walls, char *hud_flags);
+int				draw_map(t_sdlmain *sdlmain, t_game *game, t_wall *walls, char *hud_flags);
 
 int				draw_full_fixedmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf);
 
@@ -307,7 +276,7 @@ void			quit_sdl_and_ttf();
 
 int				free_menu(t_menu *menu);
 
-int				free_doom(t_doom *doom);
+int				free_game(t_game *game);
 
 int				free_editor(t_editor *editor);
 
@@ -345,11 +314,11 @@ void			movement(t_player *player, t_vecdb move, t_wall *walls);
 ** LOOPS
 */
 
-int				game_loop(t_doom *doom, t_sdlmain *sdlmain);
+int				game_loop(t_doom *doom);
 
-int 			menu_loop(t_menu *menu, t_sdlmain *sdlmain);
+int 			menu_loop(t_doom *doom);
 
-int				editor_loop(t_editor *editor, t_sdlmain *sdlmain);
+int				editor_loop(t_doom *doom);
 
 /*
 ** ERROR FUNCTIONS

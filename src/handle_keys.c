@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_keys.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/12 15:23:59 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/12 18:07:43 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ void	basic_look(t_player *player, const Uint8 *keyboard_state)
 	player->direc.y = cos(player->angle) * 5 + player->pos.y;
 }
 
-void	handle_keys(t_doom *doom, t_wall *walls, const Uint8 *keyboard_state)
+void	handle_keys(t_game *game, t_wall *walls, const Uint8 *keyboard_state)
 {
 	//which order is the right one ?
-	basic_look(&doom->player, keyboard_state);
-	basic_move(&doom->player, walls, keyboard_state);
+	basic_look(&game->player, keyboard_state);
+	basic_move(&game->player, walls, keyboard_state);
 }
