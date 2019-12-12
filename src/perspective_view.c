@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/11 16:43:47 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/12 15:35:36 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,20 +126,23 @@ void	create_perspective_wall(t_wall3d *display_wall, t_wall wall, SDL_Surface *s
 	display_wall->bottom_right.y = surf->h / 2 - player->view_z - y;
 }
 
-void	draw_perspective_minimap(SDL_Surface *surf, t_player *player, t_wall *walls)
+void	draw_perspective_view(SDL_Surface *surf, t_player *player, t_wall *walls)
 {
 	t_wall wall_tmp;
 	int i = 0;
 	t_wall3d display_wall;
-
-	//draws 2d ui
 	t_vecdb map_center;
-	map_center.x = surf->w / 2 + 0.5;
-	map_center.y = surf->h / 2 + 0.5;
-	//fov hellper
-	draw_line(create_vec(map_center.x,map_center.y), create_vec(map_center.x+player->fov.x,map_center.y+player->fov.y), surf, 0x999999);
-	draw_line(create_vec(map_center.x,map_center.y), create_vec(map_center.x-player->fov.x,map_center.y+player->fov.y), surf, 0x999999);
-	fill_pix(surf, map_center.x, map_center.y, 0x8800FF);
+
+	if (player->helper)
+	{
+		//draws 2d ui
+		map_center.x = surf->w / 2 + 0.5;
+		map_center.y = surf->h / 2 + 0.5;
+		//fov hellper
+		draw_line(create_vec(map_center.x,map_center.y), create_vec(map_center.x+player->fov.x,map_center.y+player->fov.y), surf, 0x999999);
+		draw_line(create_vec(map_center.x,map_center.y), create_vec(map_center.x-player->fov.x,map_center.y+player->fov.y), surf, 0x999999);
+		fill_pix(surf, map_center.x, map_center.y, 0x8800FF);
+	}
 
 	while (i < NB_WALLS) // looping through each existing wall
 	{
@@ -159,14 +162,15 @@ void	draw_perspective_minimap(SDL_Surface *surf, t_player *player, t_wall *walls
 			draw_line(display_wall.bottom_right, display_wall.bottom_left, surf, walls[i].color);
 			draw_line(display_wall.bottom_left, display_wall.top_left, surf, walls[i].color);
 
-			//draws 2d map
-			wall_tmp.start_wall.x = map_center.x + wall_tmp.start_wall.x;
-			wall_tmp.start_wall.y = map_center.y + wall_tmp.start_wall.y;
-			wall_tmp.end_wall.x = map_center.x + wall_tmp.end_wall.x;
-			wall_tmp.end_wall.y = map_center.y + wall_tmp.end_wall.y;
-			draw_line(vecdb_to_vec(wall_tmp.start_wall), vecdb_to_vec(wall_tmp.end_wall), surf, walls[i].color);
-			
-			//draw_line(create_vec(x1, 5), create_vec(x2, 5), surf, walls[i].color);
+			if (player->helper)
+			{
+				//draws 2d map
+				wall_tmp.start_wall.x = map_center.x + wall_tmp.start_wall.x;
+				wall_tmp.start_wall.y = map_center.y + wall_tmp.start_wall.y;
+				wall_tmp.end_wall.x = map_center.x + wall_tmp.end_wall.x;
+				wall_tmp.end_wall.y = map_center.y + wall_tmp.end_wall.y;
+				draw_line(vecdb_to_vec(wall_tmp.start_wall), vecdb_to_vec(wall_tmp.end_wall), surf, walls[i].color);
+			}
 		}
 		i++;
 	}

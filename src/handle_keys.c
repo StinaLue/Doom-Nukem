@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/11 15:59:09 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/12 15:23:59 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ void	basic_move(t_player *player, t_wall *walls, const Uint8 *keyboard_state)
 		move.x -= 1;
 	if (keyboard_state[SDL_SCANCODE_D])
 		move.x += 1;
+	if (keyboard_state[SDL_SCANCODE_H])
+		player->helper = 1;
+	else
+		player->helper = 0;
 	movement(player, move, walls);
 }
 

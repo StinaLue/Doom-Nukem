@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/11 15:06:01 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/12 15:35:28 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int game_loop(t_doom *doom, t_sdlmain *sdlmain)
 			doom->surfs.perspective_mmap->userdata = "yescolor";
 		else
 			doom->surfs.perspective_mmap->userdata = "nocolor";
-		draw_perspective_minimap(doom->surfs.perspective_mmap, &doom->player, walls);
+		draw_perspective_view(doom->surfs.perspective_mmap, &doom->player, walls);
 		if ((SDL_BlitScaled(doom->surfs.perspective_mmap, NULL, sdlmain->win_surf, &myrect_thirdmap)) < 0)
 			return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
 		if ((draw_map(sdlmain, doom, walls, &doom->data.hud_flags)) == 1)

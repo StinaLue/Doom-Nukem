@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/11 17:36:33 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/12 15:35:48 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,7 @@ typedef struct	s_player
 	double		angle;
 	double		view_z;
 	t_vec		fov;
+	int			helper;
 }				t_player;
 
 typedef struct	s_doom
@@ -276,7 +277,7 @@ int				draw_full_fixedmap(SDL_Surface *surf, t_player *player, t_wall *walls, SD
 
 int				draw_full_rotmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf);
 
-void			draw_perspective_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);
+void			draw_perspective_view(SDL_Surface *surf, t_player *player, t_wall *walls);
 
 /*
 ** DRAWING FUNCTIONS
