@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   menu.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:27:36 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/09 00:12:45 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/09 12:54:08 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int init_menu(t_menu *menu)
 	menu->background = NULL;
 
 	//Open the font
-	if ((menu->font = TTF_OpenFont("assets/fonts/dukes-3d.ttf", 28)) == NULL)
+	if ((menu->font = TTF_OpenFont("assets/fonts/dukes-3d.ttf", 28 / SIZE)) == NULL)
 		return (error_return("TTF_OpenFont error = %s\n", TTF_GetError()));
 	assign_sdlcolor(&menu->textColor, 255, 0, 0);
 	assign_sdlrect(&menu->background_rect, create_vec((WIN_W / 8) / 2, (WIN_H / 4) / 2), create_vec(0, 0));//MENU_WIDTH, MENU_HEIGHT));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/09 00:05:28 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/11 07:49:15 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	draw_lines(t_editor editor, SDL_Surface *editor_surf)
 {
 	editor.mouse_pos.x = editor.mouse_pos.x * OFFSET;
 	editor.mouse_pos.y = editor.mouse_pos.y * OFFSET;
-	if (editor.clicked != 0 && editor.num_walls <= MAX_WALLS)
+	if (editor.walls[0].start_wall.x != 0 && editor.num_walls <= MAX_WALLS)
 		draw_line(editor.mouse_pos, vecdb_to_vec(editor.walls[editor.num_walls].start_wall), editor_surf, 0x00ABFF);
 	int i = 0;
 	while (i < editor.num_walls && editor.num_walls <= MAX_WALLS)
@@ -103,7 +103,7 @@ void editor(SDL_Window **win, SDL_Surface **win_surf, int *editor_flag)
 		{
 			if (event.type == SDL_KEYDOWN)
 			{
-				if (event.key.keysym.sym == SDLK_e)
+				if (event.key.keysym.sym == SDLK_TAB)
 					*editor_flag = 0;
 				//if (event.key.keysym.sym == SDLK_UP && offset < 100 / SIZE)
 				//	offset++;
@@ -112,7 +112,7 @@ void editor(SDL_Window **win, SDL_Surface **win_surf, int *editor_flag)
 			}
             if (event.type == SDL_MOUSEBUTTONDOWN)
             {
-                if (event.button.button == SDL_BUTTON_LEFT)
+                if (event.button.button == SDL_BUTTON_LEFT && editor.mouse_pos.x * OFFSET < editor_surf->w)
                 {
                     if (editor.clicked == 1)
                     {
