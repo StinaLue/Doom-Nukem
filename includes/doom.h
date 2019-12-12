@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/09 12:54:22 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/12/12 19:51:42 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,29 @@
 # define THIRD_MAP_WIDTH 1800 / 4//600
 # define THIRD_MAP_HEIGHT 1000 / 4//600
 
-# define SIZE 2
-# define WIN_W (1800 / SIZE)
-# define WIN_H (1000 / SIZE)
-# define OFFSET (20 / SIZE)
+//# define SIZE 2
+//# define WIN_W (1800 / SIZE)
+//# define WIN_H (1000 / SIZE)
+//# define OFFSET (20 / SIZE)
 
 # define MENU_WIDTH WIN_W - (WIN_W / 8)
 # define MENU_HEIGHT WIN_H - (WIN_H / 4)
 
-# define HFOV (0.5 * THIRD_MAP_HEIGHT)
-# define VFOV (0.2 * THIRD_MAP_HEIGHT)
+# define QUIT_EDITOR 0
+# define ERROR_EDITOR 1
+# define MENU_EDITOR 2
+# define CONTINUE_EDITOR 3
 
-# define NBPOINTS 2891 // map has 59 * 49 points
+/*
+** DIMENSIONS
+*/
+
+# define WIN_W 1920//1280
+# define WIN_H 1080//720
+# define OFFSET 10
+
+# define NBPOINTS 2500 // map has 50 * 50 points
+# define NBPOINTSROW 50 // NBPOINTS = NBPOINTSROW * NBPOINTSROW
 # define MAX_WALLS 30
 # define MAX_SECTORS 10
 /*
@@ -141,6 +152,7 @@ typedef struct 	s_editor
     int         clicked;
 	int			num_walls;
 	int			num_sectors;
+    int         offset;
     t_wall      walls[MAX_WALLS];
 	t_vec 		grid_values[NBPOINTS];
 	t_vec       mouse_pos;
