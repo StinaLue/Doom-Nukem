@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rot_minimap.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 16:22:14 by phaydont          #+#    #+#             */
-/*   Updated: 2019/12/03 13:37:18 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/11 15:05:10 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,26 +54,15 @@ void	draw_rot_minimap(SDL_Surface *surf, t_player *player, t_wall *walls)
 	fill_pix(surf, map_center.x, map_center.y, 0xFFFF00);
 }
 
-void	draw_full_rotmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf)
+int		draw_full_rotmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf)
 {
-	t_vec topleft_rotmap;
-	t_vec topright_rotmap;
-	t_vec bottomleft_rotmap;
-	t_vec bottomright_rotmap;
+	int ret;
 
+	ret = 0;
 	ft_bzero(surf->pixels, surf->h * surf->pitch);
-	
-	give_vec_values(&topleft_rotmap, 0, 0);
-	give_vec_values(&topright_rotmap, MINIMAP_WIDTH - 1, 0);
-	give_vec_values(&bottomleft_rotmap, 0, MINIMAP_HEIGHT - 1);
-	give_vec_values(&bottomright_rotmap, MINIMAP_WIDTH - 1, MINIMAP_HEIGHT - 1);
-
 	draw_rot_minimap(surf, player, walls);
+	draw_border(surf, 0xFFFFFF);
 
-	draw_line(topleft_rotmap, topright_rotmap, surf, 0xFFFFFF);
-	draw_line(bottomleft_rotmap, bottomright_rotmap, surf, 0xFFFFFF);
-	draw_line(topleft_rotmap, bottomleft_rotmap, surf, 0xFFFFFF);
-	draw_line(topright_rotmap, bottomright_rotmap, surf, 0xFFFFFF);
-
-	blit_in_rect(surf, winsurf, ROT_MAP_SHOW);
+	ret = blit_in_rect(surf, winsurf, ROT_MAP_SHOW);
+	return (ret);
 }

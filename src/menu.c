@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:27:36 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/09 12:54:08 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/12/13 01:49:38 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 int init_menu(t_menu *menu)
 {
 	menu->current_option = 0;
-	menu->activate = 1;
+	menu->previous_state = QUIT_STATE;
 	//Load the background image
 	menu->background = NULL;
 
 	//Open the font
-	if ((menu->font = TTF_OpenFont("assets/fonts/dukes-3d.ttf", 28 / SIZE)) == NULL)
+	if ((menu->font = TTF_OpenFont("assets/fonts/dukes-3d.ttf", 28)) == NULL)
 		return (error_return("TTF_OpenFont error = %s\n", TTF_GetError()));
 	assign_sdlcolor(&menu->textColor, 255, 0, 0);
 	assign_sdlrect(&menu->background_rect, create_vec((WIN_W / 8) / 2, (WIN_H / 4) / 2), create_vec(0, 0));//MENU_WIDTH, MENU_HEIGHT));
@@ -52,30 +52,39 @@ void	browse_options(SDL_Event *event, int *option)
 		*option -= 1;
 }
 
-void	launch_option(t_menu *menu, int *option_selected, SDL_Window **win, SDL_Surface **win_surf)
+void	launch_option(t_doom *doom)
 {
-	if (*option_selected == FIRST_OPTION_SELECT)
-	{
-		menu->editor_flag = 1;
-		editor(win, win_surf, &menu->editor_flag);
-		menu->editor_flag = 0;
-	}
-	else if (*option_selected == SECOND_OPTION_SELECT)
-		menu->activate = 0;
-	else if (*option_selected == THIRD_OPTION_SELECT)
-		menu->activate = 0;
+	t_menu *menu;
+	t_sdlmain *sdlmain;
+
+	menu = &(doom->menu);
+	sdlmain = &(doom->sdlmain);
+	if (menu->current_option == FIRST_OPTION_SELECT)
+		doom->state = EDITOR_STATE;
+	else if (menu->current_option == SECOND_OPTION_SELECT)
+		doom->state = GAME_STATE;
+	else if (menu->current_option == THIRD_OPTION_SELECT)
+		doom->state = QUIT_STATE;
 }
 
-void	menu_events(t_menu *menu, SDL_Window **win, SDL_Surface **win_surf)
+int		menu_events(t_doom *doom)
 {
-		if (menu->event.type == SDL_KEYDOWN && menu->event.key.repeat == 0)
-		{
-			if (menu->event.key.keysym.sym == SDLK_TAB)
-				menu->activate = 0;
-			browse_options(&menu->event, &menu->current_option);
-			if (menu->event.key.keysym.sym == SDLK_RETURN)
-				launch_option(menu, &menu->current_option, win, win_surf);
-		}
+	t_menu *menu;
+	t_sdlmain *sdlmain;
+
+	menu = &(doom->menu);
+	sdlmain = &(doom->sdlmain);
+	if (sdlmain->event.type == SDL_KEYDOWN && sdlmain->event.key.repeat == 0)
+	{
+		if (sdlmain->event.key.keysym.sym == SDLK_TAB)
+			doom->state = menu->previous_state;
+		browse_options(&sdlmain->event, &menu->current_option);
+		if (sdlmain->event.key.keysym.sym == SDLK_RETURN)
+			launch_option(doom);
+	}
+	if (doom->state != MENU_STATE)
+		return (1);
+	return (0);
 }
 
 int	highlight_select(t_menu *menu)
@@ -111,18 +120,20 @@ int	highlight_select(t_menu *menu)
 	return (0);
 }
 
-int menu_loop(t_menu *menu, t_sdlmain *sdlmain)
+int menu_loop(t_doom *doom)
 {
-	//t_menu menu;
+	t_menu *menu;
+	t_sdlmain *sdlmain;
 
-	//if (init_menu(&menu) != 0)
-	//	return (error_return("Error in init_menu function\n", NULL));
-	while (menu->activate == 1)
+	menu = &(doom->menu);
+	sdlmain = &(doom->sdlmain);
+	while (doom->state == MENU_STATE)
 	{
 		ft_bzero(menu->background->pixels, menu->background->h * menu->background->pitch);
 		draw_border(menu->background, 0xFFFFFF);
-		while (SDL_PollEvent(&menu->event) != 0)
-			menu_events(menu, &sdlmain->win, &sdlmain->win_surf);
+		while (SDL_PollEvent(&sdlmain->event) != 0)
+			if (menu_events(doom) != 0)
+				break ;
 		
 		if ((SDL_BlitSurface(menu->menu_title, NULL, menu->background, &menu->menu_title_rect)) < 0)
 			return (error_return("BlitSurface error = %s\n", SDL_GetError()));
@@ -140,6 +151,5 @@ int menu_loop(t_menu *menu, t_sdlmain *sdlmain)
 		if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)
 			return (error_return("SDL_UpdateWindowSurface error = %{r}s\n", SDL_GetError()));
 	}
-	menu->activate = 1;
 	return (0);
 }

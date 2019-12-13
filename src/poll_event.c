@@ -6,33 +6,26 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:22:12 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/09 00:09:39 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/12 18:24:54 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-void	check_quit(SDL_Event *event, int *quit)
+void	check_quit(SDL_Event *event, int *state)
 {
 	if (event->type == SDL_QUIT || (event->type == SDL_KEYDOWN && \
 		event->key.keysym.sym == SDLK_ESCAPE))
-		*quit = 1;
+		*state = QUIT_STATE;
 }
 
-void	check_editor(SDL_Event *event, int *editor_flag)
-{
-	if (event->type == SDL_KEYDOWN && event->key.repeat == 0)
-	{
-		if (event->key.keysym.sym == SDLK_e)
-			*editor_flag = 1;
-	}
-}
-
-int		check_menu(SDL_Event *event)
+void	check_menu(SDL_Event *event, int *state, int *previous_state)
 {
 		if (event->key.keysym.sym == SDLK_TAB)
-			return (1);
-		return (0);
+		{
+			*previous_state = GAME_STATE;
+			*state = MENU_STATE;
+		}
 }
 
 void	activate_map_flags(char *hud_flags)
@@ -53,7 +46,7 @@ void	activate_map_flags(char *hud_flags)
 	}
 }
 
-void	handle_hud(char *hud_flags, SDL_Event *event)
+void	handle_hud(SDL_Event *event, char *hud_flags)
 {
         if (event->key.keysym.sym == SDLK_m)
 			activate_map_flags(hud_flags);
@@ -66,15 +59,15 @@ void	handle_hud(char *hud_flags, SDL_Event *event)
 		}
 }
 
-int    handle_events(SDL_Event *event, t_data *data)
+int    handle_events(t_doom *doom)
 {
-    check_quit(event, &data->quit);
-	if (event->type == SDL_KEYDOWN && event->key.repeat == 0)
+    check_quit(&doom->sdlmain.event, &doom->state);
+	if (doom->sdlmain.event.type == SDL_KEYDOWN && doom->sdlmain.event.key.repeat == 0)
 	{
-		if (check_menu(event) == 1)
-			return (1);
-	//check_editor(event, &data->editor_flag);
-		handle_hud(&data->hud_flags, event);
+		check_menu(&doom->sdlmain.event, &doom->state, &doom->menu.previous_state);
+		handle_hud(&doom->sdlmain.event, &doom->game.data.hud_flags);
 	}
+	if (doom->state != GAME_STATE)
+		return (1);
 	return (0);
 }

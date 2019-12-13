@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/12 19:51:42 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/12/13 01:59:33 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,43 +21,20 @@
 # define SQRT2 1.4142135623730950488
 
 /*
-** LOOP LOGIC
+** MAIN LOOP STATES
 */
 
-# define ERROR_QUIT -1
-# define QUIT 0
-# define CONTINUE 1
+# define QUIT_STATE 0
+# define GAME_STATE 1
+# define MENU_STATE 2
+# define EDITOR_STATE 3
 
 /*
 ** DIMENSIONS
 */
 
-# define MINIMAP_WIDTH 200
-# define MINIMAP_HEIGHT 200
-
-# define THIRD_MAP_WIDTH 1800 / 4//600
-# define THIRD_MAP_HEIGHT 1000 / 4//600
-
-//# define SIZE 2
-//# define WIN_W (1800 / SIZE)
-//# define WIN_H (1000 / SIZE)
-//# define OFFSET (20 / SIZE)
-
-# define MENU_WIDTH WIN_W - (WIN_W / 8)
-# define MENU_HEIGHT WIN_H - (WIN_H / 4)
-
-# define QUIT_EDITOR 0
-# define ERROR_EDITOR 1
-# define MENU_EDITOR 2
-# define CONTINUE_EDITOR 3
-
-/*
-** DIMENSIONS
-*/
-
-# define WIN_W 1920//1280
-# define WIN_H 1080//720
-# define OFFSET 10
+# define WIN_W 1280
+# define WIN_H 720
 
 # define NBPOINTS 2500 // map has 50 * 50 points
 # define NBPOINTSROW 50 // NBPOINTS = NBPOINTSROW * NBPOINTSROW
@@ -113,13 +90,11 @@ typedef struct	s_gamesurfs
 {
 	SDL_Surface *fixed_mmap;
 	SDL_Surface *rot_mmap;
-	SDL_Surface *perspective_mmap;
+	SDL_Surface *perspective_view;
 }				t_gamesurfs;
 
 typedef struct	s_data
 {
-	int			quit;
-	//int			editor_flag;
 	char		hud_flags;
 }				t_data;
 
@@ -138,17 +113,23 @@ typedef struct	s_player
 	t_vecdb		inertia;
 	double		angle;
 	double		view_z;
+	t_vec		fov;
+	int			helper;
 }				t_player;
 
-typedef struct	s_doom
+typedef struct	s_game
 {
 	t_gamesurfs	surfs;
 	t_data		data;
 	t_player	player;
-}				t_doom;
+}				t_game;
 
 typedef struct 	s_editor
 {
+	SDL_Surface *editor_surf;
+	SDL_Surface *instruct_surf;
+	SDL_Rect	editor_rect;
+	SDL_Rect	instruct_rect;
     int         clicked;
 	int			num_walls;
 	int			num_sectors;
@@ -173,18 +154,24 @@ typedef struct	s_menu
 	SDL_Rect first_option_rect;
 	SDL_Rect second_option_rect;
 	SDL_Rect third_option_rect;
-	//The event structure
-	SDL_Event event;
 
 	//The font that's going to be used
 	TTF_Font *font;
 
 	//The color of the font
 	SDL_Color textColor;
-	int		editor_flag;
 	int		current_option;
-	int		activate;
+	int		previous_state;
 }				t_menu;
+
+typedef struct	s_doom
+{
+	t_game		game;
+	t_menu		menu;
+	t_editor	editor;
+	t_sdlmain	sdlmain;
+	int			state;
+}				t_doom;
 
 int 	check_collision(double pos_x, double pos_y, t_wall *walls);
 
@@ -223,9 +210,11 @@ t_vecdb			create_vecdb(double x, double y);
 
 int				init_sdl_and_ttf();
 
-int				init_doom(t_doom *doom);
+int				init_game(t_game *game);
 
 int				init_menu(t_menu *menu);
+
+int				init_editor(t_editor *editor);
 
 int				init_sdlmain(t_sdlmain *sdlmain);
 
@@ -241,32 +230,30 @@ void			init_player_struct(t_player *player);
 /*
 ** POLL EVENT FUNCTIONS
 */
-int				handle_events(SDL_Event *event, t_data *data);
+int				handle_events(t_doom *doom);
 
 /*
 ** EVENT FUNCTIONS
 */
-void			handle_keys(t_doom *doom, t_wall *walls, const Uint8 *keyboard_state);
+void			handle_keys(t_game *game, t_wall *walls, const Uint8 *keyboard_state);
 
 /*
 ** PRINT MINIMAP FUNCTIONS
 */
 
-void			draw_map(t_sdlmain *sdlmain, t_doom *doom, t_wall *walls, char *hud_flags);
+int				draw_map(t_sdlmain *sdlmain, t_game *game, t_wall *walls, char *hud_flags);
 
-void			draw_full_fixedmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf);
-//void			draw_fixed_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);
+int				draw_full_fixedmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf);
 
-void			draw_full_rotmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf);
-//void			draw_rot_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);
+int				draw_full_rotmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf);
 
-void			draw_perspective_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);
+void			draw_perspective_view(SDL_Surface *surf, t_player *player, t_wall *walls);
 
 /*
 ** DRAWING FUNCTIONS
 */
 
-void			blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf);
+int				blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf);
 
 void			fill_pix(SDL_Surface *surf, int x, int y, int color);
 
@@ -290,7 +277,9 @@ void			quit_sdl_and_ttf();
 
 int				free_menu(t_menu *menu);
 
-int				free_doom(t_doom *doom);
+int				free_game(t_game *game);
+
+int				free_editor(t_editor *editor);
 
 int				free_sdlmain(t_sdlmain *sdlmain);
 
@@ -326,9 +315,11 @@ void			movement(t_player *player, t_vecdb move, t_wall *walls);
 ** LOOPS
 */
 
-int				game_loop(t_doom *doom, t_sdlmain *sdlmain);
+int				game_loop(t_doom *doom);
 
-int 			menu_loop(t_menu *menu, t_sdlmain *sdlmain);
+int 			menu_loop(t_doom *doom);
+
+int				editor_loop(t_doom *doom);
 
 /*
 ** ERROR FUNCTIONS
@@ -341,5 +332,4 @@ int				error_return(const char *error_msg, const char *sdl_error);
 ** EDITOR FUNCTIONS
 */
 
-void	editor(SDL_Window **win, SDL_Surface **win_surf, int *editor_flag);
 #endif
