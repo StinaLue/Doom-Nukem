@@ -6,16 +6,16 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/13 15:24:09 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/13 16:17:34 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "doom.h"
 
-int round_num(double num)
+int round_num(double num, int offset)
 {
-	double result = num / OFFSET;
+	double result = num / offset;
 	return (num < 0 ? result - 0.5 : result + 0.5); 
 }
 int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
@@ -44,8 +44,8 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 
 void	draw_lines(t_editor *editor, SDL_Surface *editor_surf)
 {
-	editor->mouse_pos.x = editor->mouse_pos.x * OFFSET;
-	editor->mouse_pos.y = editor->mouse_pos.y * OFFSET;
+	editor->mouse_pos.x = editor->mouse_pos.x * editor->offset;
+	editor->mouse_pos.y = editor->mouse_pos.y * editor->offset;
 	if (editor->clicked != 0 && editor->num_walls <= MAX_WALLS)
 		draw_line(editor->mouse_pos, vecdb_to_vec(editor->walls[editor->num_walls].start_wall), editor_surf, 0x00ABFF);
 	int i = 0;
@@ -61,16 +61,16 @@ void	draw_editor(SDL_Surface *editor_surf, t_editor *editor)
 	int y = 0;
 	int x;
 	int i = 0;
-	while (y < editor_surf->h - OFFSET)
+	while (y < NBPOINTSROW * editor->offset)
 	{
-		y += OFFSET;
+		y += editor->offset;
 		x = 0;
-		while (x < editor_surf->w - OFFSET)
+		while (x < NBPOINTSROW * editor->offset)
 		{
-			x += OFFSET;
+			x += editor->offset;
 			fill_pix(editor_surf, x, y, 0xFFFFFF);
-			editor->grid_values[i].x = x / OFFSET;
-			editor->grid_values[i].y = y / OFFSET;
+			editor->grid_values[i].x = x / editor->offset;
+			editor->grid_values[i].y = y / editor->offset;
 			i++;
 		}
 	}
@@ -78,7 +78,7 @@ void	draw_editor(SDL_Surface *editor_surf, t_editor *editor)
         editor->mouse_pos.y = 1;
     if (editor->mouse_pos.x == 0)
         editor->mouse_pos.x = 1;
-    editor->mouse_pos.y = y / OFFSET - editor->mouse_pos.y + 1;
+    editor->mouse_pos.y = y / editor->offset - editor->mouse_pos.y + 1;
 	if (editor->mouse_pos.y == 0)
         editor->mouse_pos.y = 1;
 }
@@ -100,12 +100,12 @@ int		editor_events(t_doom *doom)
 	}
     if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
     {
-		if (sdlmain->event.button.button == SDL_BUTTON_LEFT)
+		if (sdlmain->event.button.button == SDL_BUTTON_LEFT && editor->mouse_pos.x < editor->editor_surf->h - editor->offset)
 		{
 			if (editor->clicked == 1)
 			{
-				editor->walls[editor->num_walls].end_wall.x = editor->mouse_pos.x * OFFSET;
-				editor->walls[editor->num_walls].end_wall.y = editor->mouse_pos.y * OFFSET;
+				editor->walls[editor->num_walls].end_wall.x = editor->mouse_pos.x;
+				editor->walls[editor->num_walls].end_wall.y = editor->mouse_pos.y;
 				editor->walls[editor->num_walls + 1].start_wall.x = editor->walls[editor->num_walls].end_wall.x;
 				editor->walls[editor->num_walls + 1].start_wall.y = editor->walls[editor->num_walls].end_wall.y;
 				editor->num_walls++;
@@ -114,8 +114,8 @@ int		editor_events(t_doom *doom)
 			{
 				if (editor->num_walls == 0)
 				{
-					editor->walls[editor->num_walls].start_wall.x = editor->mouse_pos.x * OFFSET;
-					editor->walls[editor->num_walls].start_wall.y = editor->mouse_pos.y * OFFSET;
+					editor->walls[editor->num_walls].start_wall.x = editor->mouse_pos.x;
+					editor->walls[editor->num_walls].start_wall.y = editor->mouse_pos.y;
 					editor->clicked = 1;
 				}
 			}
@@ -134,6 +134,10 @@ int editor_loop(t_doom *doom)
 	editor = &(doom->editor);
 	sdlmain = &(doom->sdlmain);
 	SDL_WarpMouseInWindow(sdlmain->win, doom->sdlmain.win_surf->w / 2, doom->sdlmain.win_surf->h / 2);
+    if (editor->editor_surf->w < editor->editor_surf->h)
+        editor->offset = editor->editor_surf->w / NBPOINTSROW;
+    else        
+        editor->offset = editor->editor_surf->h / NBPOINTSROW;
 	//SDL_Rect editor_rect = {0, WIN_H, 0, WIN_W / 1.5};
 	while (doom->state == EDITOR_STATE)
 	{
@@ -141,8 +145,12 @@ int editor_loop(t_doom *doom)
 			if (editor_events(doom) != 0)
 				break ;
         SDL_GetMouseState(&editor->mouse_pos.x, &editor->mouse_pos.y);
-        editor->mouse_pos.x = round_num(editor->mouse_pos.x);
-        editor->mouse_pos.y = round_num(editor->mouse_pos.y);
+
+		int offset_border = 0;
+		if (NBPOINTSROW * editor->offset < editor->editor_surf->h)
+			offset_border = editor->editor_surf->h - NBPOINTSROW * editor->offset;
+        editor->mouse_pos.x = round_num(editor->mouse_pos.x, editor->offset);
+        editor->mouse_pos.y = round_num(editor->mouse_pos.y - offset_border + editor->offset, editor->offset);
 		ft_bzero(editor->editor_surf->pixels, editor->editor_surf->h * editor->editor_surf->pitch);
 		ft_bzero(editor->instruct_surf->pixels, editor->instruct_surf->h * editor->instruct_surf->pitch);
 		draw_editor(editor->editor_surf, editor);

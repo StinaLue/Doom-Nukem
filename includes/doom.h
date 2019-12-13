@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/13 16:11:35 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/13 16:18:00 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@
 //# define WIN_H 1080
 # define OFFSET 20
 
-# define NBPOINTS 2891 // map has 59 * 49 points
+# define NBPOINTS 2501 // map has 50 * 50 points
+# define NBPOINTSROW 50 // NBPOINTS = NBPOINTSROW * NBPOINTSROW
 # define MAX_WALLS 30
 # define MAX_SECTORS 10
 /*
@@ -141,6 +142,7 @@ typedef struct 	s_editor
     int         clicked;
 	int			num_walls;
 	int			num_sectors;
+    int         offset;
     t_wall      walls[MAX_WALLS];
 	t_vec 		grid_values[NBPOINTS];
 	t_vec       mouse_pos;
