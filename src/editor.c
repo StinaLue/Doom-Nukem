@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/13 02:05:10 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/12/13 15:46:52 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,12 +100,12 @@ int		editor_events(t_doom *doom)
 	}
     if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
     {
-		if (sdlmain->event.button.button == SDL_BUTTON_LEFT && editor->mouse_pos.x * editor->offset < editor->editor_surf->w)
+		if (sdlmain->event.button.button == SDL_BUTTON_LEFT && editor->mouse_pos.x < editor->editor_surf->h - editor->offset)
 		{
 			if (editor->clicked == 1)
 			{
-				editor->walls[editor->num_walls].end_wall.x = editor->mouse_pos.x * editor->offset;
-				editor->walls[editor->num_walls].end_wall.y = editor->mouse_pos.y * editor->offset;
+				editor->walls[editor->num_walls].end_wall.x = editor->mouse_pos.x;
+				editor->walls[editor->num_walls].end_wall.y = editor->mouse_pos.y;
 				editor->walls[editor->num_walls + 1].start_wall.x = editor->walls[editor->num_walls].end_wall.x;
 				editor->walls[editor->num_walls + 1].start_wall.y = editor->walls[editor->num_walls].end_wall.y;
 				editor->num_walls++;
@@ -114,8 +114,8 @@ int		editor_events(t_doom *doom)
 			{
 				if (editor->num_walls == 0)
 				{
-					editor->walls[editor->num_walls].start_wall.x = editor->mouse_pos.x * editor->offset;
-					editor->walls[editor->num_walls].start_wall.y = editor->mouse_pos.y * editor->offset;
+					editor->walls[editor->num_walls].start_wall.x = editor->mouse_pos.x;
+					editor->walls[editor->num_walls].start_wall.y = editor->mouse_pos.y;
 					editor->clicked = 1;
 				}
 			}
@@ -145,8 +145,12 @@ int editor_loop(t_doom *doom)
 			if (editor_events(doom) != 0)
 				break ;
         SDL_GetMouseState(&editor->mouse_pos.x, &editor->mouse_pos.y);
+
+		int offset_border = 0;
+		if (NBPOINTSROW * editor->offset < editor->editor_surf->h)
+			offset_border = editor->editor_surf->h - NBPOINTSROW * editor->offset;
         editor->mouse_pos.x = round_num(editor->mouse_pos.x, editor->offset);
-        editor->mouse_pos.y = round_num(editor->mouse_pos.y, editor->offset);
+        editor->mouse_pos.y = round_num(editor->mouse_pos.y - offset_border + editor->offset, editor->offset);
 		ft_bzero(editor->editor_surf->pixels, editor->editor_surf->h * editor->editor_surf->pitch);
 		ft_bzero(editor->instruct_surf->pixels, editor->instruct_surf->h * editor->instruct_surf->pitch);
 		draw_editor(editor->editor_surf, editor);
