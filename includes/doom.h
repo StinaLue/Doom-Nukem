@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/12 18:22:58 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/13 16:11:35 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,13 @@
 ** DIMENSIONS
 */
 
-# define WIN_W 1920
-# define WIN_H 1080
+# define HD_W 1280
+# define HD_H 720
+
+# define FULLHD_W 1920
+# define FULLHD_H 1080
+//# define WIN_W 1920
+//# define WIN_H 1080
 # define OFFSET 20
 
 # define NBPOINTS 2891 // map has 59 * 49 points
@@ -55,6 +60,7 @@
 # define FIRST_OPTION_SELECT 1
 # define SECOND_OPTION_SELECT 2
 # define THIRD_OPTION_SELECT 3
+# define FOURTH_OPTION_SELECT 4
 
 /*
 ** VECTOR STRUCTS
@@ -84,6 +90,8 @@ typedef struct	s_sdlmain
 	SDL_Window	*win;
 	SDL_Surface	*win_surf;
 	SDL_Event	event;
+	int			win_w;
+	int			win_h;
 }				t_sdlmain;
 
 typedef struct	s_gamesurfs
@@ -146,6 +154,7 @@ typedef struct	s_menu
 	SDL_Surface *first_option;
 	SDL_Surface *second_option;
 	SDL_Surface *third_option;
+	SDL_Surface *fourth_option;
 
 	//Clip rectangles
 	SDL_Rect background_rect;
@@ -153,6 +162,7 @@ typedef struct	s_menu
 	SDL_Rect first_option_rect;
 	SDL_Rect second_option_rect;
 	SDL_Rect third_option_rect;
+	SDL_Rect fourth_option_rect;
 
 	//The font that's going to be used
 	TTF_Font *font;
@@ -209,18 +219,18 @@ t_vecdb			create_vecdb(double x, double y);
 
 int				init_sdl_and_ttf();
 
-int				init_game(t_game *game);
+int				init_game(t_game *game, t_sdlmain *sdlmain);
 
-int				init_menu(t_menu *menu);
+int				init_menu(t_menu *menu, t_sdlmain *sdlmain);
 
-int				init_editor(t_editor *editor);
+int				init_editor(t_editor *editor, t_sdlmain *sdlmain);
 
 int				init_sdlmain(t_sdlmain *sdlmain);
 
 /*
 ** INIT STRUCT FUNCTIONS
 */
-int				init_gamesurfs_struct(t_gamesurfs *gamesurfs);
+int				init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain);
 
 void			init_data_struct(t_data *data);
 

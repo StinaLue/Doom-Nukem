@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 03:35:35 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/12 18:42:38 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/13 15:05:54 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,15 +67,15 @@ int			blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf)
 
 	if (whichsurf == FIX_MAP_SHOW + ROT_MAP_SHOW)
 		//rect = create_sdlrect(WIN_W / 8, 0, 0, 0);
-		rect = create_sdlrect(WIN_W / 6, 0, WIN_W / 6, WIN_H / 3);
+		rect = create_sdlrect(winsurf->w / 6, 0, winsurf->w / 6, winsurf->h / 3);
 		//rect = create_sdlrect(MINIMAP_WIDTH * 2, 0, MINIMAP_WIDTH * 2, MINIMAP_HEIGHT * 2);
 	else if (whichsurf == ROT_MAP_SHOW || whichsurf == FIX_MAP_SHOW)
 		//rect = create_sdlrect(0, 0, 0, 0);
-		rect = create_sdlrect(0, 0, WIN_W / 6, WIN_H / 3);
+		rect = create_sdlrect(0, 0, winsurf->w / 6, winsurf->h / 3);
 		//rect = create_sdlrect(0, 0, MINIMAP_WIDTH * 2, MINIMAP_HEIGHT * 2);
 	else
 		//rect = create_sdlrect(0, 0, 0, 0);
-		rect = create_sdlrect(0, 0, WIN_W, WIN_H);
+		rect = create_sdlrect(0, 0, winsurf->w, winsurf->h);
 	if ((SDL_BlitScaled(surf, NULL, winsurf, &rect)) < 0)
 		return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
 	return (0);

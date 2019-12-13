@@ -6,14 +6,14 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/12 18:40:59 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/13 15:33:28 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "doom.h"
 
-int	init_gamesurfs_struct(t_gamesurfs *gamesurfs)
+int	init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain)
 {
 	gamesurfs->fixed_mmap = NULL;
 	gamesurfs->rot_mmap = NULL;
@@ -22,7 +22,7 @@ int	init_gamesurfs_struct(t_gamesurfs *gamesurfs)
 		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
 	if ((gamesurfs->fixed_mmap = SDL_CreateRGBSurface(0, 100, 100, 32, 0, 0, 0, 0)) == NULL) //--> should be a square that can handle the size of the whole map
 		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
-	if ((gamesurfs->perspective_view = SDL_CreateRGBSurface(0, WIN_W / 4, WIN_H / 4, 32, 0, 0, 0, 0)) == NULL)
+	if ((gamesurfs->perspective_view = SDL_CreateRGBSurface(0, sdlmain->win_surf->w / 4, sdlmain->win_surf->h / 4, 32, 0, 0, 0, 0)) == NULL)
 		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
 	return (0);
 }

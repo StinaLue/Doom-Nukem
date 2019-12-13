@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/12 18:35:05 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/13 15:46:59 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int game_loop(t_doom *doom)
 
 	SDL_Rect myrect_thirdmap;
 	
-	myrect_thirdmap = create_sdlrect(0, 0, WIN_W, WIN_H);
+	myrect_thirdmap = create_sdlrect(0, 0, doom->sdlmain.win_surf->w, doom->sdlmain.win_surf->h);
 	/*
 		When creating a surface, the last four parameters correspond to the RGBA masks for the created surface. They need to correspond
 		to the format of the surface we copy to (the window)
@@ -49,7 +49,7 @@ int game_loop(t_doom *doom)
 	//my_map = SDL_ConvertSurface(my_map, doom->sdl.surf->format, 0);
 
 	keyboard_state = SDL_GetKeyboardState(NULL);
-	SDL_WarpMouseInWindow(sdlmain->win, WIN_W / 2, WIN_H / 2);
+	SDL_WarpMouseInWindow(sdlmain->win, sdlmain->win_surf->w / 2, sdlmain->win_surf->h / 2);
 	while (doom->state == GAME_STATE)
 	{
 		ft_bzero(game->surfs.perspective_view->pixels, game->surfs.perspective_view->h * game->surfs.perspective_view->pitch);
@@ -81,8 +81,11 @@ int	main_loop()
 
 	ret = 0;
 	doom.state = GAME_STATE;
+	doom.sdlmain.win_w = HD_W;
+	doom.sdlmain.win_h = HD_H;
 	if (init_sdl_and_ttf() == 1 || init_sdlmain(&doom.sdlmain) == 1 \
-		|| init_game(&doom.game) || init_menu(&doom.menu) == 1 || init_editor(&doom.editor) == 1)
+		|| init_game(&doom.game, &doom.sdlmain) || init_menu(&doom.menu, &doom.sdlmain) == 1 \
+		|| init_editor(&doom.editor, &doom.sdlmain) == 1)
 	{
 		ret = 1;
 		doom.state = QUIT_STATE;
@@ -110,8 +113,8 @@ int	main_loop()
 
 int main(/*int argc, char *argv[]*/)
 {
-	if (WIN_W > 1920 || WIN_H > 1080 || WIN_W < 100 || WIN_H < 100)
-		return (1);
+	//if (WIN_W > 1920 || WIN_H > 1080 || WIN_W < 100 || WIN_H < 100)
+	//	return (1);
 	if (main_loop() == 1)
 	{
 		return (error_return("Error during main loop\n", NULL));

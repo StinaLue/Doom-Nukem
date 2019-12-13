@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/12 17:06:15 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/13 15:35:30 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int		init_sdl_and_ttf()
 int		init_sdlmain(t_sdlmain *sdlmain)
 {
 	if ((sdlmain->win = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, \
-		SDL_WINDOWPOS_UNDEFINED, WIN_W, WIN_H, SDL_WINDOW_SHOWN)) \
+		SDL_WINDOWPOS_UNDEFINED, sdlmain->win_w, sdlmain->win_h, SDL_WINDOW_SHOWN)) \
 		== NULL)
 	{
 		ft_dprintf(STDERR_FILENO, "SDL_CreateWindow Error: %{r}s\n", \
@@ -53,9 +53,9 @@ int		init_sdlmain(t_sdlmain *sdlmain)
 	return (EXIT_SUCCESS);
 }
 
-int	init_game(t_game *game)
+int	init_game(t_game *game, t_sdlmain *sdlmain)
 {
-	if (init_gamesurfs_struct(&(game->surfs)) == 1)
+	if (init_gamesurfs_struct(&(game->surfs), sdlmain) == 1)
 		return (1);
 	init_data_struct(&(game->data));
 	init_player_struct(&(game->player));

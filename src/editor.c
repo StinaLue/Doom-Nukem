@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/12 18:43:01 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/13 15:24:09 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,14 @@ int round_num(double num)
 	double result = num / OFFSET;
 	return (num < 0 ? result - 0.5 : result + 0.5); 
 }
-int	init_editor(t_editor *editor)
+int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 {
-	if ((editor->editor_surf = SDL_CreateRGBSurface(0, WIN_W / 1.5, WIN_H, 32, 0, 0, 0, 0)) == NULL)
+	if ((editor->editor_surf = SDL_CreateRGBSurface(0, sdlmain->win_surf->w / 1.5, sdlmain->win_surf->h, 32, 0, 0, 0, 0)) == NULL)
 		return (error_return("create surface error = %s\n", SDL_GetError()));
-	if ((editor->instruct_surf = SDL_CreateRGBSurface(0, WIN_W - (WIN_W / 1.5), WIN_H, 32, 0, 0, 0, 0)) == NULL)
+	if ((editor->instruct_surf = SDL_CreateRGBSurface(0, sdlmain->win_surf->w - (sdlmain->win_surf->w / 1.5), sdlmain->win_surf->h, 32, 0, 0, 0, 0)) == NULL)
 		return (error_return("create surface error = %s\n", SDL_GetError()));
-	assign_sdlrect(&editor->editor_rect, create_vec(0, 0), create_vec(WIN_W / 1.5, WIN_H));
-	assign_sdlrect(&editor->instruct_rect, create_vec(WIN_W / 1.5, 0), create_vec(WIN_W - (WIN_W / 1.5), WIN_H));
+	assign_sdlrect(&editor->editor_rect, create_vec(0, 0), create_vec(sdlmain->win_surf->w / 1.5, sdlmain->win_surf->h));
+	assign_sdlrect(&editor->instruct_rect, create_vec(sdlmain->win_surf->w / 1.5, 0), create_vec(sdlmain->win_surf->w - (sdlmain->win_surf->w / 1.5), sdlmain->win_surf->h));
 	int i = 0;
 	while (i < NBPOINTS)
 	{
@@ -133,7 +133,7 @@ int editor_loop(t_doom *doom)
 
 	editor = &(doom->editor);
 	sdlmain = &(doom->sdlmain);
-	SDL_WarpMouseInWindow(sdlmain->win, WIN_W / 2, WIN_H / 2);
+	SDL_WarpMouseInWindow(sdlmain->win, doom->sdlmain.win_surf->w / 2, doom->sdlmain.win_surf->h / 2);
 	//SDL_Rect editor_rect = {0, WIN_H, 0, WIN_W / 1.5};
 	while (doom->state == EDITOR_STATE)
 	{
