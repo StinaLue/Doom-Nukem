@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/13 16:18:00 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/17 14:38:39 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,8 @@ typedef struct	s_player
 	t_vecdb		inertia;
 	double		angle;
 	double		view_z;
-	t_vec		fov;
+	t_vecdb		fov;
+	double		true_fov;
 	int			helper;
 }				t_player;
 
