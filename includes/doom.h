@@ -36,10 +36,15 @@
 # define HD_W 1280
 # define HD_H 720
 
-# define FULLHD_W 1920
-# define FULLHD_H 1080
-//# define WIN_W 1920
-//# define WIN_H 1080
+# define WSXGA_W 1680
+# define WSXGA_H 1050
+
+# define FHD_W 1920
+# define FHD_H 1080
+
+# define QHD_W 2560
+# define QHD_H 1440
+
 # define OFFSET 20
 
 # define NBPOINTS 2501 // map has 50 * 50 points
