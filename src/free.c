@@ -15,6 +15,7 @@
 
 void	quit_sdl_and_ttf()
 {
+	Mix_Quit();
 	TTF_Quit();
 	SDL_Quit();
 	//TTF_Quit();
@@ -25,6 +26,8 @@ int		free_sdlmain(t_sdlmain *sdlmain)
 	SDL_DestroyWindow(sdlmain->win);
 	sdlmain->win = NULL;
 	sdlmain->win_surf = NULL;
+	Mix_FreeMusic(sdlmain->music);
+	sdlmain->music = NULL;
 	return (EXIT_FAILURE);
 }
 
@@ -49,6 +52,10 @@ int		free_menu(t_menu *menu)
 	menu->first_option = NULL;
     SDL_FreeSurface( menu->second_option );
     menu->second_option = NULL;
+    SDL_FreeSurface( menu->third_option );
+    menu->third_option = NULL;
+    SDL_FreeSurface( menu->fourth_option );
+    menu->fourth_option = NULL;
     
     //Close the font that was used
     TTF_CloseFont( menu->font );

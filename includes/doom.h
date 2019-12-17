@@ -15,6 +15,7 @@
 
 # include "SDL.h"
 # include "SDL_ttf.h"
+# include "SDL_mixer.h"
 # define TITLE "DOOM"
 
 # define NB_WALLS 4
@@ -96,6 +97,7 @@ typedef struct	s_sdlmain
 	SDL_Window	*win;
 	SDL_Surface	*win_surf;
 	SDL_Event	event;
+	Mix_Music	*music;
 	int			win_w;
 	int			win_h;
 }				t_sdlmain;
@@ -224,6 +226,8 @@ t_vecdb			create_vecdb(double x, double y);
 /*
 ** INIT FUNCTIONS
 */
+
+void			null_doom_pointers(t_doom *doom);
 
 int				init_sdl_and_ttf();
 
