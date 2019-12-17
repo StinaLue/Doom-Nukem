@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/13 15:33:28 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/17 15:30:30 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,5 @@ void	init_player_struct(t_player *player)
 	player->inertia.y = 0;
 	player->fov.x = 100;
 	player->fov.y = 100;
+	player->true_fov = 1.5708; //hardcoded 90deg
 }

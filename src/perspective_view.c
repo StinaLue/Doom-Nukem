@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/12 15:35:36 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/17 14:42:09 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_vecdb intersect(t_vecdb start, t_vecdb end, t_vecdb origin, t_vecdb cross)
 	return (intersection);
 }
 
-t_vecdb simple_intersect(t_vecdb start, t_vecdb end, t_vec cross)
+t_vecdb simple_intersect(t_vecdb start, t_vecdb end, t_vecdb cross)
 {
 	t_vecdb intersection;
 	intersection.x = vxs(start.x, start.y, end.x, end.y) * -cross.x / vxs(start.x - end.x, start.y - end.y, -cross.x, -cross.y);
@@ -74,7 +74,7 @@ void	fill_wall_color(SDL_Surface *surf, const t_wall3d *display_wall, int color)
 	}
 }
 
-int		intersect_fov(t_wall *wall, t_vec fov)
+int		intersect_fov(t_wall *wall, t_vecdb fov)
 {
 	if (wall->end_wall.x * fov.y - wall->end_wall.y * fov.x > 0)
 	{
@@ -106,7 +106,7 @@ void	create_perspective_wall(t_wall3d *display_wall, t_wall wall, SDL_Surface *s
 
 	surf_center = ((double)surf->w - 1) / 2;
 
-	fov_ratio = (double)player->fov.y / (double)player->fov.x / wall.start_wall.y;
+	fov_ratio = player->fov.y / player->fov.x / wall.start_wall.y;
 
 	x = surf->w / 2 + wall.start_wall.x* fov_ratio * surf_center;
 	y = fov_ratio * (double)surf->w;
@@ -116,7 +116,7 @@ void	create_perspective_wall(t_wall3d *display_wall, t_wall wall, SDL_Surface *s
 	display_wall->bottom_left.x = display_wall->top_left.x;
 	display_wall->bottom_left.y = surf->h / 2 - player->view_z - y;
 
-	fov_ratio = (double)player->fov.y / (double)player->fov.x / wall.end_wall.y;
+	fov_ratio = player->fov.y / player->fov.x / wall.end_wall.y;
 	x = surf->w / 2 + wall.end_wall.x * fov_ratio * surf_center;
 	y = fov_ratio * (double)surf->w;
 
