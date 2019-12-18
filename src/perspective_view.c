@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/17 14:42:09 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/18 12:07:19 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,12 +133,11 @@ void	draw_perspective_view(SDL_Surface *surf, t_player *player, t_wall *walls)
 	t_wall3d display_wall;
 	t_vecdb map_center;
 
+	map_center.x = surf->w / 2 + 0.5;
+	map_center.y = surf->h / 2 + 0.5;
 	if (player->helper)
 	{
-		//draws 2d ui
-		map_center.x = surf->w / 2 + 0.5;
-		map_center.y = surf->h / 2 + 0.5;
-		//fov hellper
+		//draws 2d fov helper
 		draw_line(create_vec(map_center.x,map_center.y), create_vec(map_center.x+player->fov.x,map_center.y+player->fov.y), surf, 0x999999);
 		draw_line(create_vec(map_center.x,map_center.y), create_vec(map_center.x-player->fov.x,map_center.y+player->fov.y), surf, 0x999999);
 		fill_pix(surf, map_center.x, map_center.y, 0x8800FF);
