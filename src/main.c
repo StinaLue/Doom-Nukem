@@ -74,6 +74,25 @@ int game_loop(t_doom *doom)
 	return (0);
 }
 
+void null_doom_pointers(t_doom *doom)
+{
+	doom->game.surfs.fixed_mmap = NULL;
+	doom->game.surfs.rot_mmap = NULL;
+	doom->game.surfs.perspective_view = NULL;
+	doom->menu.background = NULL;
+	doom->menu.menu_title = NULL;
+	doom->menu.first_option = NULL;
+	doom->menu.second_option = NULL;
+	doom->menu.third_option = NULL;
+	doom->menu.fourth_option = NULL;
+	doom->menu.font = NULL;
+	doom->editor.editor_surf = NULL;
+	doom->editor.instruct_surf = NULL;
+	doom->sdlmain.win = NULL;
+	doom->sdlmain.win_surf = NULL;
+	doom->sdlmain.music = NULL;
+}
+
 int	main_loop()
 {
 	t_doom	doom;
@@ -83,6 +102,7 @@ int	main_loop()
 	doom.state = GAME_STATE;
 	doom.sdlmain.win_w = HD_W;
 	doom.sdlmain.win_h = HD_H;
+	null_doom_pointers(&doom);
 	if (init_sdl_and_ttf() == 1 || init_sdlmain(&doom.sdlmain) == 1 \
 		|| init_game(&doom.game, &doom.sdlmain) || init_menu(&doom.menu, &doom.sdlmain) == 1 \
 		|| init_editor(&doom.editor, &doom.sdlmain) == 1)
@@ -117,7 +137,7 @@ int main(/*int argc, char *argv[]*/)
 	//	return (1);
 	if (main_loop() == 1)
 	{
-		return (error_return("Error during main loop\n", NULL));
+		return (error_return("The program %{r}s 😢\n", "FAILED"));
 	}
 	return (EXIT_SUCCESS);
 }
