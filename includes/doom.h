@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/17 16:20:10 by sluetzen         ###   ########.fr       */
+/*   Updated: 2019/12/18 12:31:54 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "SDL.h"
 # include "SDL_ttf.h"
+# include "SDL_mixer.h"
 # define TITLE "DOOM"
 
 # define NB_WALLS 4
@@ -36,10 +37,15 @@
 # define HD_W 1280
 # define HD_H 720
 
-# define FULLHD_W 1920
-# define FULLHD_H 1080
-//# define WIN_W 1920
-//# define WIN_H 1080
+# define WSXGA_W 1680
+# define WSXGA_H 1050
+
+# define FHD_W 1920
+# define FHD_H 1080
+
+# define QHD_W 2560
+# define QHD_H 1440
+
 # define OFFSET 20
 
 # define NBPOINTS 2501 // map has 50 * 50 points
@@ -91,6 +97,7 @@ typedef struct	s_sdlmain
 	SDL_Window	*win;
 	SDL_Surface	*win_surf;
 	SDL_Event	event;
+	Mix_Music	*music;
 	int			win_w;
 	int			win_h;
 }				t_sdlmain;
@@ -122,7 +129,8 @@ typedef struct	s_player
 	t_vecdb		inertia;
 	double		angle;
 	double		view_z;
-	t_vec		fov;
+	t_vecdb		fov;
+	double		true_fov;
 	int			helper;
 }				t_player;
 
@@ -220,6 +228,8 @@ t_vecdb			create_vecdb(double x, double y);
 /*
 ** INIT FUNCTIONS
 */
+
+void			null_doom_pointers(t_doom *doom);
 
 int				init_sdl_and_ttf();
 
