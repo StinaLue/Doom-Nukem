@@ -59,10 +59,20 @@ void	change_win_dimensions(int *width, int *height)
 {
 	if (*width == HD_W && *height == HD_H)
 	{
-		*width = FULLHD_W;
-		*height = FULLHD_H;
+		*width = WSXGA_W;
+		*height = WSXGA_H;
 	}
-	else if (*width == FULLHD_W && *height == FULLHD_H)
+	else if (*width == WSXGA_W && *height == WSXGA_H)
+	{
+		*width = FHD_W;
+		*height = FHD_H;
+	}
+	else if (*width == FHD_W && *height == FHD_H)
+	{
+		*width = QHD_W;
+		*height = QHD_H;
+	}
+	else if (*width == QHD_W && *height == QHD_H)
 	{
 		*width = HD_W;
 		*height = HD_H;
@@ -154,11 +164,12 @@ int	reset_doom(t_doom *doom)
 	free_menu(&doom->menu);
 	free_editor(&doom->editor);
 	free_sdlmain(&doom->sdlmain);
-	quit_sdl_and_ttf();
-	if (init_sdl_and_ttf() == 1 || init_sdlmain(&doom->sdlmain) == 1 \
-		|| init_game(&doom->game, &doom->sdlmain) || init_menu(&doom->menu, &doom->sdlmain) == 1 \
+	if (init_sdlmain(&doom->sdlmain) == 1 \
+		|| init_gamesurfs_struct(&doom->game.surfs, &doom->sdlmain) \
+		|| init_menu(&doom->menu, &doom->sdlmain) == 1 \
 		|| init_editor(&doom->editor, &doom->sdlmain) == 1)
 		return (1);
+	doom->state = GAME_STATE;
 	return (0);
 }
 
