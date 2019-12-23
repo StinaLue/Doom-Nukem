@@ -6,21 +6,32 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/13 15:46:59 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/20 00:28:55 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "doom.h"
+#include "libbmp.h"
 
 int game_loop(t_doom *doom)
 {
 	t_game *game;
 	t_sdlmain *sdlmain;
 	const Uint8 *keyboard_state;
+	Uint32 startclock = 0;
+	Uint32 deltaclock = 0;
+	Uint32 currentFPS = 0;
+	int frame = 0;
+
+	startclock = SDL_GetTicks();
 
 	game = &(doom->game);
+	if (SDL_SetColorKey(game->surfs.weapons, SDL_TRUE, SDL_MapRGB(game->surfs.weapons->format, 0, 128, 255)) != 0)
+		ft_dprintf(STDERR_FILENO, "ERROR SETCOLORKEY %{r}s", SDL_GetError());
 	sdlmain = &(doom->sdlmain);
+	SDL_Rect dstrect = { .x = sdlmain->win_surf->w / 3, .y = sdlmain->win_surf->h / 6, .w = sdlmain->win_surf->w - dstrect.x, .h = sdlmain->win_surf->h - dstrect.y };
+	game->surfs.weapons = SDL_ConvertSurface(game->surfs.weapons, sdlmain->win_surf->format, 0);
 	t_vecdb vec1 = {50, 20}; // start of "first" wall
 	t_vecdb vec2 = {50, 30}; // end of "first" wall
 	t_vecdb vec3 = {70, 100};
@@ -67,9 +78,19 @@ int game_loop(t_doom *doom)
 		if ((draw_map(sdlmain, game, walls, &game->data.hud_flags)) == 1)
 			return (error_return("error during map drawing\n", NULL));
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, &doom->sdl.surf->clip_rect)) < 0)
-		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, NULL)) < 0)
+		if ((SDL_BlitScaled(game->surfs.weapons, &game->surfs.katana[frame / 10], sdlmain->win_surf, &dstrect)) != 0)
+			printf("%s\n", SDL_GetError());
 		if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)
 			return (error_return("SDL_UpdateWindowSurface error = %{r}s\n", SDL_GetError()));
+		deltaclock = SDL_GetTicks() - startclock;
+		startclock = SDL_GetTicks();
+
+		if ( deltaclock != 0 )
+			currentFPS = 1000 / deltaclock;
+		frame++;
+		if (frame / 10 >= 4)
+			frame = 0;
+		//printf("currentfps = %d\n", currentFPS);
 	}
 	return (0);
 }
@@ -79,6 +100,7 @@ void null_doom_pointers(t_doom *doom)
 	doom->game.surfs.fixed_mmap = NULL;
 	doom->game.surfs.rot_mmap = NULL;
 	doom->game.surfs.perspective_view = NULL;
+	doom->game.surfs.weapons = NULL;
 	doom->menu.background = NULL;
 	doom->menu.menu_title = NULL;
 	doom->menu.first_option = NULL;

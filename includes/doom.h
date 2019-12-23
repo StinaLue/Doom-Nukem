@@ -107,6 +107,8 @@ typedef struct	s_gamesurfs
 	SDL_Surface *fixed_mmap;
 	SDL_Surface *rot_mmap;
 	SDL_Surface *perspective_view;
+	SDL_Surface *weapons;
+	SDL_Rect	katana[4];
 }				t_gamesurfs;
 
 typedef struct	s_data
