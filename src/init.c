@@ -21,7 +21,6 @@ int		init_sdl_and_ttf()
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
 	{
 		ft_dprintf(STDERR_FILENO, "SDL_Init Error: %{r}s\n", SDL_GetError());
-		SDL_Quit();
 		error = 1;
 	}
 	if (TTF_Init() != 0)
@@ -53,7 +52,8 @@ int		init_sdlmain(t_sdlmain *sdlmain)
 			SDL_GetError());
 		return (EXIT_FAILURE);
 	}
-	if ((sdlmain->music = Mix_LoadMUS("assets/sounds/Story Music.mid")) == NULL)
+	//if ((sdlmain->music = Mix_LoadMUS("assets/sounds/Story Music.mid")) == NULL)
+	if ((sdlmain->music = Mix_LoadMUS("assets/sounds/maybe-next-time.wav")) == NULL)
 		return (error_return("Mix_LoadMUS error: %{r}s\n", Mix_GetError()));
 	Mix_PlayMusic(sdlmain->music, -1);
 	return (EXIT_SUCCESS);

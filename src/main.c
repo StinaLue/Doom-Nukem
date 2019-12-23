@@ -27,11 +27,8 @@ int game_loop(t_doom *doom)
 	startclock = SDL_GetTicks();
 
 	game = &(doom->game);
-	if (SDL_SetColorKey(game->surfs.weapons, SDL_TRUE, SDL_MapRGB(game->surfs.weapons->format, 0, 128, 255)) != 0)
-		ft_dprintf(STDERR_FILENO, "ERROR SETCOLORKEY %{r}s", SDL_GetError());
 	sdlmain = &(doom->sdlmain);
 	SDL_Rect dstrect = { .x = sdlmain->win_surf->w / 3, .y = sdlmain->win_surf->h / 6, .w = sdlmain->win_surf->w - dstrect.x, .h = sdlmain->win_surf->h - dstrect.y };
-	game->surfs.weapons = SDL_ConvertSurface(game->surfs.weapons, sdlmain->win_surf->format, 0);
 	t_vecdb vec1 = {50, 20}; // start of "first" wall
 	t_vecdb vec2 = {50, 30}; // end of "first" wall
 	t_vecdb vec3 = {70, 100};
@@ -78,7 +75,7 @@ int game_loop(t_doom *doom)
 		if ((draw_map(sdlmain, game, walls, &game->data.hud_flags)) == 1)
 			return (error_return("error during map drawing\n", NULL));
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, &doom->sdl.surf->clip_rect)) < 0)
-		if ((SDL_BlitScaled(game->surfs.weapons, &game->surfs.katana[frame / 10], sdlmain->win_surf, &dstrect)) != 0)
+		if ((SDL_BlitScaled(game->surfs.weapons, &game->surfs.katana[frame / 50], sdlmain->win_surf, &dstrect)) != 0)
 			printf("%s\n", SDL_GetError());
 		if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)
 			return (error_return("SDL_UpdateWindowSurface error = %{r}s\n", SDL_GetError()));
@@ -88,7 +85,7 @@ int game_loop(t_doom *doom)
 		if ( deltaclock != 0 )
 			currentFPS = 1000 / deltaclock;
 		frame++;
-		if (frame / 10 >= 4)
+		if (frame / 50 >= 4)
 			frame = 0;
 		//printf("currentfps = %d\n", currentFPS);
 	}

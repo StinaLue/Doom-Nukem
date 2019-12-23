@@ -14,6 +14,31 @@
 #include "doom.h"
 #include "libbmp.h"
 
+SDL_Surface *load_opti_bmp(char *file, SDL_Surface *win_surf, Uint32 colorkey)
+{
+	SDL_Surface *opti_surf;
+	SDL_Surface *surf;
+
+	opti_surf = NULL;
+	surf = NULL;
+	if ((surf = load_bmp(file)) == NULL)
+		return (NULL);
+	if ((opti_surf = SDL_ConvertSurface(surf, win_surf->format, 0)) == NULL)
+	{
+		ft_dprintf(STDERR_FILENO, "ConvertSurf err = %{r}s\n", SDL_GetError());
+		SDL_FreeSurface(surf);
+		return (NULL);
+	}
+	SDL_FreeSurface(surf);
+	if ((SDL_SetColorKey(opti_surf, SDL_TRUE, colorkey)) != 0)
+	{
+		ft_dprintf(STDERR_FILENO, "SetColorKey err = %{r}s\n", SDL_GetError());
+		SDL_FreeSurface(opti_surf);
+		return (NULL);
+	}
+	return (opti_surf);
+}
+
 int	init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain)
 {
 	gamesurfs->fixed_mmap = NULL;
@@ -26,9 +51,10 @@ int	init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain)
 		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
 	if ((gamesurfs->perspective_view = SDL_CreateRGBSurface(0, sdlmain->win_surf->w / 4, sdlmain->win_surf->h / 4, 32, 0, 0, 0, 0)) == NULL)
 		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
-	if ((gamesurfs->weapons = load_bmp("assets/shadow.bmp")) == NULL)
+	//if ((gamesurfs->weapons = load_bmp("assets/shadow.bmp")) == NULL)
+	if ((gamesurfs->weapons = load_opti_bmp("assets/shadow.bmp", sdlmain->win_surf, 0x0080FF)) == NULL)
 		return (error_return("load weapon bmp surf error\n", NULL));
-	gamesurfs->katana[0] = create_sdlrect(9, 110, 229, 137);
+	gamesurfs->katana[0] = create_sdlrect(9, 113, 226, 135);
 	gamesurfs->katana[1] = create_sdlrect(236, 110, 147, 137);
 	gamesurfs->katana[2] = create_sdlrect(391, 45, 232, 202);
 	gamesurfs->katana[3] = create_sdlrect(628, 77, 152, 172);
