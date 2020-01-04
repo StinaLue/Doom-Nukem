@@ -53,7 +53,7 @@ int		init_sdlmain(t_sdlmain *sdlmain)
 		return (EXIT_FAILURE);
 	}
 	//if ((sdlmain->music = Mix_LoadMUS("assets/sounds/Story Music.mid")) == NULL)
-	if ((sdlmain->music = Mix_LoadMUS("assets/sounds/maybe-next-time.wav")) == NULL)
+	if ((sdlmain->music = Mix_LoadMUS("assets/sounds/Story Music.wav")) == NULL)
 		return (error_return("Mix_LoadMUS error: %{r}s\n", Mix_GetError()));
 	Mix_PlayMusic(sdlmain->music, -1);
 	return (EXIT_SUCCESS);
