@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   drawing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 03:35:35 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/13 15:05:54 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/06 16:38:15 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,23 +40,23 @@ void	draw_border(SDL_Surface *surf, int color)
 	draw_line(bottom_right, bottom_left, surf, color);
 }
 
-int		draw_map(t_sdlmain *sdlmain, t_game *game, t_wall *walls, char *hud_flags)
+int		draw_map(t_sdlmain *sdlmain, t_game *game, const t_map *map, char *hud_flags)
 {
 	int ret;
 
 	ret = 0;
 	game->surfs.fixed_mmap->userdata = "1map";
 	if ((*hud_flags & ROT_MAP_SHOW) && (*hud_flags & FIX_MAP_SHOW) == 0)
-		ret = draw_full_rotmap(game->surfs.rot_mmap, &game->player, walls, sdlmain->win_surf);
+		ret = draw_full_rotmap(game->surfs.rot_mmap, &game->player, map->sector[game->player.sector_pos].walls, sdlmain->win_surf);
 	else if ((*hud_flags & FIX_MAP_SHOW) && (*hud_flags & ROT_MAP_SHOW) == 0)
-		ret = draw_full_fixedmap(game->surfs.fixed_mmap, &game->player, walls, sdlmain->win_surf);
+		ret = draw_full_fixedmap(game->surfs.fixed_mmap, &game->player, map->sector[game->player.sector_pos].walls, sdlmain->win_surf);
 	else if ((*hud_flags & ROT_MAP_SHOW) && (*hud_flags & FIX_MAP_SHOW))
 	{
 		game->surfs.fixed_mmap->userdata = "2maps";
-		ret = draw_full_rotmap(game->surfs.rot_mmap, &game->player, walls, sdlmain->win_surf);
+		ret = draw_full_rotmap(game->surfs.rot_mmap, &game->player, map->sector[game->player.sector_pos].walls, sdlmain->win_surf);
 		if (ret == 1)
 			return (1);
-		ret = draw_full_fixedmap(game->surfs.fixed_mmap, &game->player, walls, sdlmain->win_surf);
+		ret = draw_full_fixedmap(game->surfs.fixed_mmap, &game->player, map->sector[game->player.sector_pos].walls, sdlmain->win_surf);
 	}
 	return (ret);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/13 15:46:59 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/06 16:40:38 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,19 @@ int game_loop(t_doom *doom)
 
 	game = &(doom->game);
 	sdlmain = &(doom->sdlmain);
-	t_vecdb vec1 = {50, 20}; // start of "first" wall
-	t_vecdb vec2 = {50, 30}; // end of "first" wall
-	t_vecdb vec3 = {70, 100};
-	t_vecdb vec4 = {90, 20};
+	//t_vecdb vec1 = {50, 20}; // start of "first" wall
+	//t_vecdb vec2 = {50, 30}; // end of "first" wall
+	//t_vecdb vec3 = {70, 100};
+	//t_vecdb vec4 = {90, 20};
 	/* t_vecdb vec1 = {60, 70}; 
 	t_vecdb vec2 = {70, 200}; 		<--COLLISION TEST MAP
 	t_vecdb vec3 = {80, 70};
 	t_vecdb vec4 = {70, -60};*/
-	t_wall walls[NB_WALLS] = {{vec1, vec2, 0xFF0000}, {vec2, vec3, 0x00FF00}, {vec3, vec4, 0x0000FF}, {vec4, vec1, 0x00FFFF}};
+	//t_wall walls[NB_WALLS] = {{vec1, vec2, 0xFF0000}, {vec2, vec3, 0x00FF00}, {vec3, vec4, 0x0000FF}, {vec4, vec1, 0x00FFFF}};
 	//t_wall walls[NB_WALLS] = {{vec1, vec2, 0xFF0000}};
 
-	if (parse_everything(walls) != 0)
-		return (error_return("parsing error\n", NULL));
+	//if (parse_everything(walls) != 0)
+	//	return (error_return("parsing error\n", NULL));
 
 	SDL_Rect myrect_thirdmap;
 	
@@ -56,15 +56,15 @@ int game_loop(t_doom *doom)
 		while (SDL_PollEvent(&(sdlmain->event)) != 0)
 			if (handle_events(doom) != 0)
 				break ;
-		handle_keys(game, walls, keyboard_state);
+		handle_keys(game, &doom->map.sector[game->player.sector_pos], keyboard_state);
 		if (game->data.hud_flags & COLORFLAG)
 			game->surfs.perspective_view->userdata = "yescolor";
 		else
 			game->surfs.perspective_view->userdata = "nocolor";
-		draw_perspective_view(game->surfs.perspective_view, &game->player, walls);
+		draw_perspective_view(game->surfs.perspective_view, &game->player, &doom->map);
 		if ((SDL_BlitScaled(game->surfs.perspective_view, NULL, sdlmain->win_surf, &myrect_thirdmap)) < 0)
 			return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
-		if ((draw_map(sdlmain, game, walls, &game->data.hud_flags)) == 1)
+		if ((draw_map(sdlmain, game, &doom->map, &game->data.hud_flags)) == 1)
 			return (error_return("error during map drawing\n", NULL));
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, &doom->sdl.surf->clip_rect)) < 0)
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, NULL)) < 0)
@@ -103,7 +103,7 @@ int	main_loop()
 	doom.sdlmain.win_w = HD_W;
 	doom.sdlmain.win_h = HD_H;
 	null_doom_pointers(&doom);
-	if (init_sdl_and_ttf() == 1 || init_sdlmain(&doom.sdlmain) == 1 \
+	if (init_map(&doom.map) == 1 || init_sdl_and_ttf() == 1 || init_sdlmain(&doom.sdlmain) == 1 \
 		|| init_game(&doom.game, &doom.sdlmain) || init_menu(&doom.menu, &doom.sdlmain) == 1 \
 		|| init_editor(&doom.editor, &doom.sdlmain) == 1)
 	{

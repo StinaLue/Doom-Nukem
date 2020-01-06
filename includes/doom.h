@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/06 13:16:47 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/06 18:20:32 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,8 @@ typedef struct	s_gamesurfs
 	SDL_Surface *fixed_mmap;
 	SDL_Surface *rot_mmap;
 	SDL_Surface *perspective_view;
+	SDL_Surface *weapons;
+	SDL_Rect	katana[4];
 }				t_gamesurfs;
 
 typedef struct	s_data
@@ -125,6 +127,7 @@ typedef	struct	s_wall
 typedef struct	s_player
 {
 	t_vecdb		pos;
+	int			sector_pos;
 	t_vecdb		direc;
 	t_vecdb		inertia;
 	double		angle;
@@ -141,6 +144,19 @@ typedef struct	s_game
 	t_player	player;
 }				t_game;
 
+typedef struct	s_sector
+{
+	int			num_walls;
+	t_wall 		*walls;
+    t_vec       start_sector;
+}				t_sector;
+
+typedef struct	s_map
+{
+	t_sector	sector[10];
+	int			num_sectors;
+}				t_map;
+
 typedef struct 	s_editor
 {
 	SDL_Surface *editor_surf;
@@ -148,14 +164,13 @@ typedef struct 	s_editor
 	SDL_Rect	editor_rect;
 	SDL_Rect	instruct_rect;
     int         clicked;
-	int			num_walls;
 	int			num_sectors;
     int         offset;
-    int         sectors[MAX_SECTORS];
-    t_wall      walls[MAX_WALLS];
+	t_map		edit_map;
+    //t_sector    sector[MAX_SECTORS];
+	//int			clockwise;
 	t_vec 		grid_values[NBPOINTS];
 	t_vec       mouse_pos;
-    t_vec       start_sector;
 }				t_editor;
 
 typedef struct	s_menu
@@ -191,6 +206,7 @@ typedef struct	s_doom
 	t_menu		menu;
 	t_editor	editor;
 	t_sdlmain	sdlmain;
+	t_map		map;
 	int			state;
 }				t_doom;
 
@@ -243,6 +259,8 @@ int				init_editor(t_editor *editor, t_sdlmain *sdlmain);
 
 int				init_sdlmain(t_sdlmain *sdlmain);
 
+int				init_map(t_map *map);
+
 /*
 ** INIT STRUCT FUNCTIONS
 */
@@ -264,19 +282,19 @@ void			check_menu(SDL_Event *event, int *state, int *prev_state_ptr, int prev_st
 /*
 ** EVENT FUNCTIONS
 */
-void			handle_keys(t_game *game, t_wall *walls, const Uint8 *keyboard_state);
 
+void			handle_keys(t_game *game, const t_sector *sector, const Uint8 *keyboard_state);
 /*
 ** PRINT MINIMAP FUNCTIONS
 */
 
-int				draw_map(t_sdlmain *sdlmain, t_game *game, t_wall *walls, char *hud_flags);
+int				draw_map(t_sdlmain *sdlmain, t_game *game, const t_map *map, char *hud_flags);
 
 int				draw_full_fixedmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf);
 
 int				draw_full_rotmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf);
 
-void			draw_perspective_view(SDL_Surface *surf, t_player *player, t_wall *walls);
+void			draw_perspective_view(SDL_Surface *surf, t_player *player, const t_map *map);
 
 /*
 ** DRAWING FUNCTIONS
@@ -333,7 +351,7 @@ void			assign_sdlrect(SDL_Rect *rect, t_vec origin, t_vec size);
 ** MOVEMENT
 */
 
-void			movement(t_player *player, t_vecdb move, t_wall *walls);
+void			movement(t_player *player, t_vecdb move, const t_sector *sector);
 
 /*
 ** MENU FUNCTIONS
