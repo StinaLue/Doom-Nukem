@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/17 16:21:42 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/06 16:49:24 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,14 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	}
     editor->mouse_pos.x = 0;
     editor->mouse_pos.y = 0;
-	editor->walls[0].start_wall.x = 0;
-	editor->walls[0].start_wall.y = 0;
-	editor->walls[0].end_wall.x = 0;
-	editor->walls[0].end_wall.y = 0;
-    editor->num_walls = 0;
-    editor->num_sectors = 0;
-    editor->start_sector.x = 0;
+	editor->edit_map.sector[0].walls[0].start_wall.x = 0;
+	editor->edit_map.sector[0].walls[0].start_wall.y = 0;
+	editor->edit_map.sector[0].walls[0].end_wall.x = 0;
+	editor->edit_map.sector[0].walls[0].end_wall.y = 0;
+    editor->edit_map.sector[0].num_walls = 0;
+    editor->edit_map.num_sectors = 0;
+    editor->edit_map.sector[0].start_sector.x = 0;
+	editor->edit_map.sector[0].start_sector.y = 0;
 	return (0);
 };
 
@@ -49,7 +50,7 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf)
 {
 	editor->mouse_pos.x = editor->mouse_pos.x * editor->offset;
 	editor->mouse_pos.y = editor->mouse_pos.y * editor->offset;
-	if (editor->clicked != 0 && editor->num_walls <= MAX_WALLS)
+	if (editor->clicked != 0 && editor->num_walls <= MAX_WALLS && editor->walls[0].start_wall.x != 0)
 		draw_line(editor->mouse_pos, vecdb_to_vec(editor->walls[editor->num_walls].start_wall), editor_surf, 0x00ABFF);
 	int i = 0;
 	while (i < editor->num_walls && editor->num_walls <= MAX_WALLS)

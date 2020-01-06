@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   perspective_view.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/18 12:50:24 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/06 16:36:39 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ void	draw_3dwall(t_wall3d display_wall, SDL_Surface *surf, t_wall wall)
 	draw_line(display_wall.bottom_left, display_wall.top_left, surf, wall.color);
 }
 
-void	draw_perspective_view(SDL_Surface *surf, t_player *player, t_wall *walls)
+void	draw_perspective_view(SDL_Surface *surf, t_player *player, const t_map *map)
 {
 	t_wall wall_tmp;
 	int i = 0;
@@ -155,15 +155,15 @@ void	draw_perspective_view(SDL_Surface *surf, t_player *player, t_wall *walls)
 		fill_pix(surf, map_center.x, map_center.y, 0x8800FF);
 	}
 
-	while (i < NB_WALLS) // looping through each existing wall
+	while (i < map->sector[player->sector_pos].num_walls) // looping through each existing wall
 	{
-		init_rotate_wall(&wall_tmp, &walls[i], player);
+		init_rotate_wall(&wall_tmp, &map->sector[player->sector_pos].walls[i], player);
 		if ((wall_tmp.start_wall.y > 0 || wall_tmp.end_wall.y > 0) && intersect_fov(&wall_tmp, player->fov)) //wall is at least partly in front of us && crosses the field of view
 		{
 			//printf("pos:%.50f,%.50f\n",player->pos.x, player->pos.y);
 			//printf("fov:%d,%d\n",player->fov.x, player->fov.y);
 			create_perspective_wall(&display_wall, wall_tmp, surf, player);
-			draw_3dwall(display_wall, surf, walls[i]);
+			draw_3dwall(display_wall, surf, map->sector[player->sector_pos].walls[i]);
 
 			if (player->helper)
 			{
@@ -172,7 +172,7 @@ void	draw_perspective_view(SDL_Surface *surf, t_player *player, t_wall *walls)
 				wall_tmp.start_wall.y = map_center.y + wall_tmp.start_wall.y;
 				wall_tmp.end_wall.x = map_center.x + wall_tmp.end_wall.x;
 				wall_tmp.end_wall.y = map_center.y + wall_tmp.end_wall.y;
-				draw_line(vecdb_to_vec(wall_tmp.start_wall), vecdb_to_vec(wall_tmp.end_wall), surf, walls[i].color);
+				draw_line(vecdb_to_vec(wall_tmp.start_wall), vecdb_to_vec(wall_tmp.end_wall), surf, map->sector[player->sector_pos].walls[i].color);
 			}
 		}
 		i++;
