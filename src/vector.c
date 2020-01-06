@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:06:54 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/06 16:07:20 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/18 12:49:47 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 double	dot_product(t_vecdb a, t_vecdb b)
 {
 	return (a.x * b.x + a.y * b.y);
+}
+
+double	cross_product(t_vecdb a, t_vecdb b)
+{
+	return (a.x * b.y - a.y * b.x);
 }
 
 double	get_magnitude(t_vecdb a, t_vecdb b)

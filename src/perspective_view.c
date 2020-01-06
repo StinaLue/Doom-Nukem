@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/17 14:42:09 by phaydont         ###   ########.fr       */
+/*   Updated: 2019/12/18 12:50:24 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,15 @@ void	fill_wall_color(SDL_Surface *surf, const t_wall3d *display_wall, int color)
 
 int		intersect_fov(t_wall *wall, t_vecdb fov)
 {
-	if (wall->end_wall.x * fov.y - wall->end_wall.y * fov.x > 0)
+	if (cross_product(wall->end_wall, fov) > 0)
 	{
-		if (wall->start_wall.x * fov.y - wall->start_wall.y * fov.x > 0)
+		if (cross_product(wall->start_wall, fov) > 0)
 			return (0);
 		wall->end_wall = simple_intersect(wall->start_wall, wall->end_wall, fov);
 	}
 	else if (wall->end_wall.y < 0)
 		return (0);
+
 	fov.x *= -1;
 	if (wall->start_wall.x * fov.y - wall->start_wall.y * fov.x < 0)
 	{
@@ -126,6 +127,17 @@ void	create_perspective_wall(t_wall3d *display_wall, t_wall wall, SDL_Surface *s
 	display_wall->bottom_right.y = surf->h / 2 - player->view_z - y;
 }
 
+void	draw_3dwall(t_wall3d display_wall, SDL_Surface *surf, t_wall wall)
+{
+	if (ft_strncmp(surf->userdata, "yescolor", 8) == 0)
+		fill_wall_color(surf, &display_wall, wall.color);
+
+	draw_line(display_wall.top_left, display_wall.top_right, surf, wall.color); // drawing a line for each line around wall
+	draw_line(display_wall.top_right, display_wall.bottom_right, surf, wall.color);
+	draw_line(display_wall.bottom_right, display_wall.bottom_left, surf, wall.color);
+	draw_line(display_wall.bottom_left, display_wall.top_left, surf, wall.color);
+}
+
 void	draw_perspective_view(SDL_Surface *surf, t_player *player, t_wall *walls)
 {
 	t_wall wall_tmp;
@@ -133,12 +145,11 @@ void	draw_perspective_view(SDL_Surface *surf, t_player *player, t_wall *walls)
 	t_wall3d display_wall;
 	t_vecdb map_center;
 
+	map_center.x = surf->w / 2 + 0.5;
+	map_center.y = surf->h / 2 + 0.5;
 	if (player->helper)
 	{
-		//draws 2d ui
-		map_center.x = surf->w / 2 + 0.5;
-		map_center.y = surf->h / 2 + 0.5;
-		//fov hellper
+		//draws 2d fov helper
 		draw_line(create_vec(map_center.x,map_center.y), create_vec(map_center.x+player->fov.x,map_center.y+player->fov.y), surf, 0x999999);
 		draw_line(create_vec(map_center.x,map_center.y), create_vec(map_center.x-player->fov.x,map_center.y+player->fov.y), surf, 0x999999);
 		fill_pix(surf, map_center.x, map_center.y, 0x8800FF);
@@ -147,20 +158,12 @@ void	draw_perspective_view(SDL_Surface *surf, t_player *player, t_wall *walls)
 	while (i < NB_WALLS) // looping through each existing wall
 	{
 		init_rotate_wall(&wall_tmp, &walls[i], player);
-		if ((wall_tmp.start_wall.y > 0 || wall_tmp.end_wall.y > 0) && intersect_fov(&wall_tmp, player->fov)) //wall is at least partly in front of us && crosses the filed of view
+		if ((wall_tmp.start_wall.y > 0 || wall_tmp.end_wall.y > 0) && intersect_fov(&wall_tmp, player->fov)) //wall is at least partly in front of us && crosses the field of view
 		{
 			//printf("pos:%.50f,%.50f\n",player->pos.x, player->pos.y);
 			//printf("fov:%d,%d\n",player->fov.x, player->fov.y);
 			create_perspective_wall(&display_wall, wall_tmp, surf, player);
-			//display_perspective_wall(display_wall);
-			
-			if (ft_strncmp(surf->userdata, "yescolor", 8) == 0)
-				fill_wall_color(surf, &display_wall, walls[i].color);
-
-			draw_line(display_wall.top_left, display_wall.top_right, surf, walls[i].color); // drawing a line for each line around wall
-			draw_line(display_wall.top_right, display_wall.bottom_right, surf, walls[i].color);
-			draw_line(display_wall.bottom_right, display_wall.bottom_left, surf, walls[i].color);
-			draw_line(display_wall.bottom_left, display_wall.top_left, surf, walls[i].color);
+			draw_3dwall(display_wall, surf, walls[i]);
 
 			if (player->helper)
 			{
