@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/06 11:20:48 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/06 13:16:47 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,6 +256,10 @@ void			init_player_struct(t_player *player);
 ** POLL EVENT FUNCTIONS
 */
 int				handle_events(t_doom *doom);
+
+void			check_quit(SDL_Event *event, int *state);
+
+void			check_menu(SDL_Event *event, int *state, int *prev_state_ptr, int prev_state);
 
 /*
 ** EVENT FUNCTIONS

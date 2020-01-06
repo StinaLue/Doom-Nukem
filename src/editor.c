@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/17 16:21:42 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/06 13:19:51 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,13 +103,11 @@ int		editor_events(t_doom *doom)
 
 	editor = &(doom->editor);
 	sdlmain = &(doom->sdlmain);
+	check_quit(&doom->sdlmain.event, &doom->state);
 	if (sdlmain->event.type == SDL_KEYDOWN)
 	{
-		if (sdlmain->event.key.keysym.sym == SDLK_TAB)
-		{
-			doom->menu.previous_state = EDITOR_STATE;
-			doom->state = MENU_STATE;
-		}
+		if (sdlmain->event.key.repeat == 0)
+			check_menu(&doom->sdlmain.event, &doom->state, &doom->menu.previous_state, EDITOR_STATE);
         if (sdlmain->event.key.keysym.sym == SDLK_u && editor->num_walls > 0)
 			editor->num_walls--;
 	}
