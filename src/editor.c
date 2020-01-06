@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/13 16:17:34 by afonck           ###   ########.fr       */
+/*   Updated: 2019/12/17 16:21:42 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	editor->walls[0].start_wall.y = 0;
 	editor->walls[0].end_wall.x = 0;
 	editor->walls[0].end_wall.y = 0;
+    editor->num_walls = 0;
+    editor->num_sectors = 0;
+    editor->start_sector.x = 0;
 	return (0);
 };
 
@@ -54,6 +57,16 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf)
 		draw_line(vecdb_to_vec(editor->walls[i].end_wall), vecdb_to_vec(editor->walls[i].start_wall), editor_surf, 0x00ABFF);
 		i++;
 	}
+}
+
+void	save_sectors(t_editor *editor)
+{
+    if ((editor->start_sector.x == editor->walls[editor->num_walls].end_wall.x) && (editor->start_sector.y == editor->walls[editor->num_walls].end_wall.y))
+        {
+            editor->clicked = 0;
+            editor->start_sector.x = 0;
+            editor->num_sectors++;
+        }
 }
 
 void	draw_editor(SDL_Surface *editor_surf, t_editor *editor)
@@ -97,6 +110,8 @@ int		editor_events(t_doom *doom)
 			doom->menu.previous_state = EDITOR_STATE;
 			doom->state = MENU_STATE;
 		}
+        if (sdlmain->event.key.keysym.sym == SDLK_u && editor->num_walls > 0)
+			editor->num_walls--;
 	}
     if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
     {
@@ -108,14 +123,17 @@ int		editor_events(t_doom *doom)
 				editor->walls[editor->num_walls].end_wall.y = editor->mouse_pos.y;
 				editor->walls[editor->num_walls + 1].start_wall.x = editor->walls[editor->num_walls].end_wall.x;
 				editor->walls[editor->num_walls + 1].start_wall.y = editor->walls[editor->num_walls].end_wall.y;
+                save_sectors(editor);
 				editor->num_walls++;
 			}
 			else
 			{
-				if (editor->num_walls == 0)
+				if (editor->start_sector.x == 0)
 				{
 					editor->walls[editor->num_walls].start_wall.x = editor->mouse_pos.x;
 					editor->walls[editor->num_walls].start_wall.y = editor->mouse_pos.y;
+                    editor->start_sector.x = editor->mouse_pos.x;
+                    editor->start_sector.y = editor->mouse_pos.y;
 					editor->clicked = 1;
 				}
 			}

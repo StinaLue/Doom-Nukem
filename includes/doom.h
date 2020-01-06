@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/18 12:50:09 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/06 11:20:48 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@
 
 # define NBPOINTS 2501 // map has 50 * 50 points
 # define NBPOINTSROW 50 // NBPOINTS = NBPOINTSROW * NBPOINTSROW
-# define MAX_WALLS 30
+# define MAX_WALLS 50
 # define MAX_SECTORS 10
 /*
 ** HUD FLAGS
@@ -119,7 +119,7 @@ typedef struct	s_data
 typedef	struct	s_wall
 {
 	t_vecdb		start_wall;
-	t_vecdb		end_wall;
+	t_vecdb 	end_wall;
 	int			color;
 	//int		flags; BIT FLAGS for walls specifications?
 }				t_wall;
@@ -153,9 +153,11 @@ typedef struct 	s_editor
 	int			num_walls;
 	int			num_sectors;
     int         offset;
+    int         sectors[MAX_SECTORS];
     t_wall      walls[MAX_WALLS];
 	t_vec 		grid_values[NBPOINTS];
 	t_vec       mouse_pos;
+    t_vec       start_sector;
 }				t_editor;
 
 typedef struct	s_menu
