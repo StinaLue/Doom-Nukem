@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/07 15:12:32 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/07 16:40:12 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,28 +61,18 @@ int		init_sdlmain(t_sdlmain *sdlmain)
 
 int		init_map(t_map *map)
 {
-	t_vecdb vec1 = {50, 20}; // start of "first" wall
-	t_vecdb vec2 = {50, 30}; // end of "first" wall
-	t_vecdb vec3 = {70, 100};
+	t_vecdb vec1 = {60, 20}; 
+	t_vecdb vec2 = {60, 40};
+	t_vecdb vec3 = {70, 90};
 	t_vecdb vec4 = {90, 20};
-	map->sector[0].num_walls = 4;
-	if ((map->sector[0].walls = (t_wall *)malloc(sizeof(t_wall) * map->sector[0].num_walls)) == NULL)
-		return (1);
-	map->sector[0].walls[0].start_wall = vec1;
-	map->sector[0].walls[0].end_wall = vec2;
-	map->sector[0].walls[0].color = 0xFF0000;
-	map->sector[0].walls[1].start_wall = vec2;
-	map->sector[0].walls[1].end_wall = vec3;
-	map->sector[0].walls[1].color = 0xFF8800;
-	map->sector[0].walls[2].start_wall = vec3;
-	map->sector[0].walls[2].end_wall = vec4;
-	map->sector[0].walls[2].color = 0x00ff00;
-	map->sector[0].walls[3].start_wall = vec4;
-	map->sector[0].walls[3].end_wall = vec1;
-	map->sector[0].walls[3].color = 0x0088ff;
 
+	add_sector_node(&map->sector_head);
 
-	map->num_sectors = 0; //NOT USED FOR NOW
+	create_wall_node(&map->sector_head->wall_head, vec1, vec2, 0xff0000);
+	create_wall_node(&map->sector_head->wall_head, vec2, vec3, 0xffbb00);
+	create_wall_node(&map->sector_head->wall_head, vec3, vec4, 0x00ff00);
+	create_wall_node(&map->sector_head->wall_head, vec4, vec1, 0x0088ff);
+
 	return (0);
 }
 

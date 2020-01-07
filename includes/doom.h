@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/07 15:12:35 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/07 16:25:37 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ typedef struct	s_sector
 
 typedef struct	s_map
 {
-	t_sector	sector[10];
+	t_sector_node	*sector_head;
 	int			num_sectors;
 }				t_map;
 
@@ -234,7 +234,7 @@ typedef struct	s_doom
 
 int 	check_collision(double pos_x, double pos_y, t_wall *walls);
 
-void	init_rotate_wall(t_wall *new_wall, const t_wall *old_wall, const t_player *player);
+void	init_rotate_wall(t_wall *new_wall, const t_wall_node *current_wall, const t_player *player);
 
 int		is_in_map(t_vecdb *player);
 
@@ -277,7 +277,7 @@ int				init_game(t_game *game, t_sdlmain *sdlmain);
 
 int				init_menu(t_menu *menu, t_sdlmain *sdlmain);
 
-int				init_editor(t_editor *editor, t_sdlmain *sdlmain);
+//int				init_editor(t_editor *editor, t_sdlmain *sdlmain);
 
 int				init_sdlmain(t_sdlmain *sdlmain);
 
@@ -305,16 +305,16 @@ void			check_menu(SDL_Event *event, int *state, int *prev_state_ptr, int prev_st
 ** EVENT FUNCTIONS
 */
 
-void			handle_keys(t_game *game, const t_sector *sector, const Uint8 *keyboard_state);
+void			handle_keys(t_game *game, const t_map *map, const Uint8 *keyboard_state);
 /*
 ** PRINT MINIMAP FUNCTIONS
 */
 
 int				draw_map(t_sdlmain *sdlmain, t_game *game, const t_map *map, char *hud_flags);
 
-int				draw_full_fixedmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf);
+int				draw_full_fixedmap(SDL_Surface *surf, t_player *player, const t_map *map, SDL_Surface *winsurf);
 
-int				draw_full_rotmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf);
+int				draw_full_rotmap(SDL_Surface *surf, t_player *player, const t_map *map, SDL_Surface *winsurf);
 
 void			draw_perspective_view(SDL_Surface *surf, t_player *player, const t_map *map);
 
@@ -373,7 +373,7 @@ void			assign_sdlrect(SDL_Rect *rect, t_vec origin, t_vec size);
 ** MOVEMENT
 */
 
-void			movement(t_player *player, t_vecdb move, const t_sector *sector);
+void			movement(t_player *player, t_vecdb move, const t_sector_node *sector);
 
 /*
 ** MENU FUNCTIONS
@@ -400,5 +400,16 @@ int				error_return(const char *error_msg, const char *sdl_error);
 /*
 ** EDITOR FUNCTIONS
 */
+
+/*
+** LINKED LIST FUNCTIONS
+*/
+
+t_sector_node		*add_sector_node(t_sector_node **sector_head);
+
+t_wall_node			*add_wall_node(t_wall_node **wall_head, const t_wall_node *node);
+
+t_wall_node			*create_wall_node(t_wall_node **wall_head, t_vecdb a, t_vecdb b, int color);
+
 
 #endif

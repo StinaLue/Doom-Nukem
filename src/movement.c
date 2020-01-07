@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/06 15:43:41 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/07 16:22:20 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,35 @@ void	check_second_collision(t_vecdb *position, double col_angle, int i, const t_
 
 }
 
-void	move_player(t_vecdb *position, t_vecdb *move, const t_sector *sector)
+void	move_player(t_vecdb *position, t_vecdb *move, const t_sector_node *sector)
 {
+	t_wall_node	*current_wall;
+	current_wall = sector->wall_head;
+
+	position->x += move->x;
+	while (current_wall != NULL)
+	{
+		if (wall_distance(*position, current_wall->start_wall, current_wall->end_wall) < 0.5)
+		{
+			position->x -= move->x;
+			return ;
+		}
+		current_wall = current_wall->next;
+	}
+
+	position->y += move->y;
+	while (current_wall != NULL)
+	{
+		if (wall_distance(*position, current_wall->start_wall, current_wall->end_wall) < 0.5)
+		{
+			position->y -= move->y;
+			return ;
+		}
+		current_wall = current_wall->next;
+	}
+
+
+	/*
 	int		i;
 	double	dist;
 	double	smallest_dist;
@@ -76,12 +103,12 @@ void	move_player(t_vecdb *position, t_vecdb *move, const t_sector *sector)
 	{
 		check_second_collision(position, col_angle, iw - 1, sector);
 		check_second_collision(position, col_angle, iw + 1, sector);
-	}
+	}*/
 }
 
-void	movement(t_player *player, t_vecdb move, const t_sector *sector)
+void	movement(t_player *player, t_vecdb move, const t_sector_node *sector)
 {	
-	double	movespeed = 0.02;
+	double	movespeed = 0.006;
 	t_vecdb	old_position;
 
 	if (fabs(move.x) + fabs(move.y) > 1)
@@ -93,6 +120,6 @@ void	movement(t_player *player, t_vecdb move, const t_sector *sector)
 	move.y += player->inertia.y;
 	move_player(&player->pos, &move, sector);
 	//printf("Px:%f\nPy:%f\n", player->pos.x, player->pos.y);
-	player->inertia.x = (player->pos.x - old_position.x) * 0.9;
-	player->inertia.y = (player->pos.y - old_position.y) * 0.9;
+	player->inertia.x = (player->pos.x - old_position.x) * 0.95;
+	player->inertia.y = (player->pos.y - old_position.y) * 0.95;
 }

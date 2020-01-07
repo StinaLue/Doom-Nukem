@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/07 15:12:31 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/07 16:49:45 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,6 @@ int game_loop(t_doom *doom)
 
 	game = &(doom->game);
 	sdlmain = &(doom->sdlmain);
-	//t_vecdb vec1 = {50, 20}; // start of "first" wall
-	//t_vecdb vec2 = {50, 30}; // end of "first" wall
-	//t_vecdb vec3 = {70, 100};
-	//t_vecdb vec4 = {90, 20};
-	/* t_vecdb vec1 = {60, 70}; 
-	t_vecdb vec2 = {70, 200}; 		<--COLLISION TEST MAP
-	t_vecdb vec3 = {80, 70};
-	t_vecdb vec4 = {70, -60};*/
-	//t_wall walls[NB_WALLS] = {{vec1, vec2, 0xFF0000}, {vec2, vec3, 0x00FF00}, {vec3, vec4, 0x0000FF}, {vec4, vec1, 0x00FFFF}};
-	//t_wall walls[NB_WALLS] = {{vec1, vec2, 0xFF0000}};
 
 	//if (parse_everything(walls) != 0)
 	//	return (error_return("parsing error\n", NULL));
@@ -65,7 +55,7 @@ int game_loop(t_doom *doom)
 		while (SDL_PollEvent(&(sdlmain->event)) != 0)
 			if (handle_events(doom) != 0)
 				break ;
-		handle_keys(game, &doom->map.sector[game->player.sector_pos], keyboard_state);
+		handle_keys(game, &doom->map, keyboard_state);
 		if (game->data.hud_flags & COLORFLAG)
 			game->surfs.perspective_view->userdata = "yescolor";
 		else
@@ -76,7 +66,7 @@ int game_loop(t_doom *doom)
 		if ((draw_map(sdlmain, game, &doom->map, &game->data.hud_flags)) == 1)
 			return (error_return("error during map drawing\n", NULL));
 		//if ((SDL_BlitScaled(my_map, NULL, doom->sdl.surf, &doom->sdl.surf->clip_rect)) < 0)
-		if ((SDL_BlitScaled(game->surfs.weapons, &game->surfs.katana[(int)((float)SDL_GetTicks() / 400) % 4], sdlmain->win_surf, &dstrect)) != 0)
+		if ((SDL_BlitScaled(game->surfs.weapons, &game->surfs.katana[(int)((float)SDL_GetTicks() / 400) % 4], sdlmain->win_surf, NULL)) != 0)
 			printf("%s\n", SDL_GetError());
 		if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)
 			return (error_return("SDL_UpdateWindowSurface error = %{r}s\n", SDL_GetError()));
@@ -109,6 +99,8 @@ void null_doom_pointers(t_doom *doom)
 	doom->sdlmain.win = NULL;
 	doom->sdlmain.win_surf = NULL;
 	doom->sdlmain.music = NULL;
+	doom->map.sector_head = NULL;
+	doom->editor.edit_map.sector_head = NULL;
 }
 
 int	main_loop()
@@ -122,8 +114,8 @@ int	main_loop()
 	doom.sdlmain.win_h = HD_H;
 	null_doom_pointers(&doom);
 	if (init_map(&doom.map) == 1 || init_sdl_and_ttf() == 1 || init_sdlmain(&doom.sdlmain) == 1 \
-		|| init_game(&doom.game, &doom.sdlmain) || init_menu(&doom.menu, &doom.sdlmain) == 1 \
-		|| init_editor(&doom.editor, &doom.sdlmain) == 1)
+		|| init_game(&doom.game, &doom.sdlmain) || init_menu(&doom.menu, &doom.sdlmain) == 1)/* \
+		|| init_editor(&doom.editor, &doom.sdlmain) == 1)*/
 	{
 		ret = 1;
 		doom.state = QUIT_STATE;
@@ -135,7 +127,7 @@ int	main_loop()
 		else if (doom.state == MENU_STATE)
 			ret = menu_loop(&doom);
 		else if (doom.state == EDITOR_STATE)
-			ret = editor_loop(&doom);
+			//ret = editor_loop(&doom);
 		if (ret == 1)
 			doom.state = QUIT_STATE;
 	}
