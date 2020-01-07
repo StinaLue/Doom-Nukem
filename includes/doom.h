@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/07 14:42:17 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/07 18:55:25 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,32 @@ typedef struct	s_game
 	t_player	player;
 }				t_game;
 
+typedef struct s_editor_menu
+{
+	//The surfaces
+	SDL_Surface *background;
+	SDL_Surface *title;
+	SDL_Surface *first_option;
+	//SDL_Surface *second_option;
+	//SDL_Surface *third_option;
+	//SDL_Surface *fourth_option;
+	//SDL_Surface *fifth_option;
+
+	//Clip rectangles
+	SDL_Rect background_rect;
+	SDL_Rect title_rect;
+	SDL_Rect first_option_rect;
+	//SDL_Rect second_option_rect;
+	//SDL_Rect third_option_rect;
+	//SDL_Rect fourth_option_rect;
+
+	//The font that's going to be used
+	TTF_Font *font;
+
+	//The color of the font
+	SDL_Color textColor;
+}				t_editor_menu;
+
 typedef struct 	s_editor
 {
 	SDL_Surface *editor_surf;
@@ -158,6 +184,7 @@ typedef struct 	s_editor
 	t_vec 		grid_values[NBPOINTS];
 	t_vec       mouse_pos;
     t_vec       start_sector;
+	t_editor_menu editor_menu;
 }				t_editor;
 
 typedef struct	s_menu
@@ -244,6 +271,8 @@ int				init_menu(t_menu *menu, t_sdlmain *sdlmain);
 int				init_editor(t_editor *editor, t_sdlmain *sdlmain);
 
 int				init_sdlmain(t_sdlmain *sdlmain);
+
+int				init_editor_menu(t_editor *editor);
 
 /*
 ** INIT STRUCT FUNCTIONS

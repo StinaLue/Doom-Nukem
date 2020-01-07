@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/07 16:16:36 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/07 19:01:30 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,17 @@ int round_num(double num, int offset)
 	double result = num / offset;
 	return (num < 0 ? result - 0.5 : result + 0.5); 
 }
+
 int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 {
-	if ((editor->editor_surf = SDL_CreateRGBSurface(0, sdlmain->win_surf->w / 1.5, sdlmain->win_surf->h, 32, 0, 0, 0, 0)) == NULL)
+	if ((editor->editor_surf = SDL_CreateRGBSurface(0, sdlmain->win_surf->w / 1.79, sdlmain->win_surf->h, 32, 0, 0, 0, 0)) == NULL)
 		return (error_return("create surface error = %s\n", SDL_GetError()));
-	if ((editor->instruct_surf = SDL_CreateRGBSurface(0, sdlmain->win_surf->w - (sdlmain->win_surf->w / 1.5), sdlmain->win_surf->h, 32, 0, 0, 0, 0)) == NULL)
+	if ((editor->instruct_surf = SDL_CreateRGBSurface(0, sdlmain->win_surf->w - (sdlmain->win_surf->w / 1.79), sdlmain->win_surf->h, 32, 0, 0, 0, 0)) == NULL)
 		return (error_return("create surface error = %s\n", SDL_GetError()));
-	assign_sdlrect(&editor->editor_rect, create_vec(0, 0), create_vec(sdlmain->win_surf->w / 1.5, sdlmain->win_surf->h));
-	assign_sdlrect(&editor->instruct_rect, create_vec(sdlmain->win_surf->w / 1.5, 0), create_vec(sdlmain->win_surf->w - (sdlmain->win_surf->w / 1.5), sdlmain->win_surf->h));
+	assign_sdlrect(&editor->editor_rect, create_vec(0, 0), create_vec(sdlmain->win_surf->w / 1.79, sdlmain->win_surf->h));
+	assign_sdlrect(&editor->instruct_rect, create_vec(sdlmain->win_surf->w / 1.79, 0), create_vec(sdlmain->win_surf->w - (sdlmain->win_surf->w / 1.79), sdlmain->win_surf->h));
+	if (init_editor_menu(editor) != 0)
+		return(1);
 	int i = 0;
 	while (i < NBPOINTS)
 	{
@@ -177,6 +180,19 @@ int		editor_events(t_doom *doom)
 	return (0);
 }
 
+int blit_editor(t_editor *editor, t_sdlmain *sdlmain)
+{
+	if ((SDL_BlitSurface(editor->editor_menu.title, NULL, editor->instruct_surf, &editor->editor_menu.title_rect)) < 0)
+		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
+	if ((SDL_BlitScaled(editor->editor_surf, NULL, sdlmain->win_surf, &editor->editor_rect)) < 0)
+		return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
+	if ((SDL_BlitScaled(editor->instruct_surf, NULL, sdlmain->win_surf, &editor->instruct_rect)) < 0)
+		return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
+	if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)
+		return (error_return("SDL_UpdateWindowSurface error = %{r}s\n", SDL_GetError()));
+	return(0);
+}
+
 int editor_loop(t_doom *doom)
 {
 	t_editor *editor;
@@ -204,16 +220,13 @@ int editor_loop(t_doom *doom)
         editor->mouse_pos.y = round_num(editor->mouse_pos.y - offset_border + editor->offset, editor->offset);
 		ft_bzero(editor->editor_surf->pixels, editor->editor_surf->h * editor->editor_surf->pitch);
 		ft_bzero(editor->instruct_surf->pixels, editor->instruct_surf->h * editor->instruct_surf->pitch);
+		ft_bzero(editor->instruct_surf->pixels, editor->instruct_surf->h * editor->instruct_surf->pitch);
 		draw_editor(editor->editor_surf, editor);
+		draw_border(editor->editor_surf, 0xB12211);
+		draw_border(editor->instruct_surf, 0xB12211);
 		draw_lines(editor, editor->editor_surf);
-		if ((SDL_BlitScaled(editor->editor_surf, NULL, sdlmain->win_surf, &editor->editor_rect)) < 0)
-			return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
-
-		if ((SDL_BlitScaled(editor->instruct_surf, NULL, sdlmain->win_surf, &editor->instruct_rect)) < 0)
-			return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
-
-		if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)
-			return (error_return("SDL_UpdateWindowSurface error = %{r}s\n", SDL_GetError()));
+		if (blit_editor(editor, sdlmain) != 0)
+			return(1);
 	}
 	return (0);
 }
