@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/07 16:22:20 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/07 17:06:31 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,22 +55,23 @@ void	move_player(t_vecdb *position, t_vecdb *move, const t_sector_node *sector)
 		if (wall_distance(*position, current_wall->start_wall, current_wall->end_wall) < 0.5)
 		{
 			position->x -= move->x;
-			return ;
+			break ;
 		}
 		current_wall = current_wall->next;
 	}
 
+	current_wall = sector->wall_head;
 	position->y += move->y;
 	while (current_wall != NULL)
 	{
 		if (wall_distance(*position, current_wall->start_wall, current_wall->end_wall) < 0.5)
 		{
 			position->y -= move->y;
-			return ;
+			break ;
 		}
 		current_wall = current_wall->next;
 	}
-
+	return ;
 
 	/*
 	int		i;
@@ -108,7 +109,7 @@ void	move_player(t_vecdb *position, t_vecdb *move, const t_sector_node *sector)
 
 void	movement(t_player *player, t_vecdb move, const t_sector_node *sector)
 {	
-	double	movespeed = 0.006;
+	double	movespeed = 0.01;
 	t_vecdb	old_position;
 
 	if (fabs(move.x) + fabs(move.y) > 1)
