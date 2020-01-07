@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/06 11:20:48 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/07 14:52:49 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@
 /*
 ** VECTOR STRUCTS
 */
+
+
 typedef struct	s_vec
 {
 	int			x;
@@ -83,6 +85,26 @@ typedef struct	s_vecdb
 	double		x;
 	double		y;
 }				t_vecdb;
+
+typedef struct	s_wall_node
+{
+	struct s_wall_node	*next;
+	struct s_wall_node	*previous;
+	t_vecdb		start_wall;
+	t_vecdb		end_wall;
+	int			color;
+	int			sector_index;
+	int			neighbor_sector;
+}				t_wall_node;
+
+typedef struct	s_sector_node
+{
+	struct s_sector_node	*next;
+	t_wall_node	*wall_head;
+	int			wall_num;
+	//sector center?
+	
+}				t_sector_node;
 
 typedef struct	s_wall3d
 {

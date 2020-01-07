@@ -6,7 +6,7 @@
 #    By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2019/12/11 15:16:17 by phaydont         ###   ########.fr        #
+#    Updated: 2020/01/07 15:01:28 by phaydont         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,7 +75,9 @@ SOURCES_LIST = main.c \
 			menu.c \
 			text.c \
 			editor.c \
-			SDL_sub_functions.c#\
+			SDL_sub_functions.c \
+			ll_sector.c \
+			ll_wall.c #\
 	       multithreading.c \
 		   texture.c \
 		   parsing.c \
