@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/06 11:20:48 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/07 14:42:17 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,8 @@ typedef struct 	s_editor
 	int			num_sectors;
     int         offset;
     int         sectors[MAX_SECTORS];
+	int			start_sector_reached;
+	int 		color_change;
     t_wall      walls[MAX_WALLS];
 	t_vec 		grid_values[NBPOINTS];
 	t_vec       mouse_pos;

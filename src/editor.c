@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/17 16:21:42 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/07 16:16:36 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,21 +41,53 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	editor->walls[0].end_wall.y = 0;
     editor->num_walls = 0;
     editor->num_sectors = 0;
-    editor->start_sector.x = 0;
+	editor->start_sector_reached = 1;
+	editor->color_change = 0;
 	return (0);
-};
+}
+
+void 	fill_area(SDL_Surface *surf, int x, int y, int j)
+{
+	int color;
+
+	color = 0XB11226;
+	fill_pix(surf, x + j, y, color);
+	fill_pix(surf, x, y + j, color);
+	fill_pix(surf, x + j, y - j, color);
+	fill_pix(surf, x + j, y + j, color);
+
+}
 
 void	draw_lines(t_editor *editor, SDL_Surface *editor_surf)
 {
 	editor->mouse_pos.x = editor->mouse_pos.x * editor->offset;
 	editor->mouse_pos.y = editor->mouse_pos.y * editor->offset;
-	if (editor->clicked != 0 && editor->num_walls <= MAX_WALLS)
+	if (editor->clicked != 0 && editor->num_walls <= MAX_WALLS && editor->walls[0].start_wall.x != 0)
+	{
 		draw_line(editor->mouse_pos, vecdb_to_vec(editor->walls[editor->num_walls].start_wall), editor_surf, 0x00ABFF);
+		int j = 0;
+		while (j < 4)
+		{
+			fill_area(editor_surf, editor->walls[0].start_wall.x, editor->walls[0].start_wall.y, j);
+			fill_area(editor_surf, editor->walls[0].start_wall.x, editor->walls[0].start_wall.y, -j);
+			j++;
+		}
+	}
 	int i = 0;
 	while (i < editor->num_walls && editor->num_walls <= MAX_WALLS)
 	{
-		draw_line(vecdb_to_vec(editor->walls[i].end_wall), vecdb_to_vec(editor->walls[i].start_wall), editor_surf, 0x00ABFF);
+		if (i % 2 == 0)
+			draw_line(vecdb_to_vec(editor->walls[i].end_wall), vecdb_to_vec(editor->walls[i].start_wall), editor_surf, 0x00ABFF);
+		else
+			draw_line(vecdb_to_vec(editor->walls[i].end_wall), vecdb_to_vec(editor->walls[i].start_wall), editor_surf, 0xABABFF);
 		i++;
+		int j = 0;
+		while (j < 4)
+		{
+			fill_area(editor_surf, editor->walls[i].start_wall.x, editor->walls[i].start_wall.y, j);
+			fill_area(editor_surf, editor->walls[i].start_wall.x, editor->walls[i].start_wall.y, -j);
+			j++;
+		}
 	}
 }
 
@@ -64,7 +96,7 @@ void	save_sectors(t_editor *editor)
     if ((editor->start_sector.x == editor->walls[editor->num_walls].end_wall.x) && (editor->start_sector.y == editor->walls[editor->num_walls].end_wall.y))
         {
             editor->clicked = 0;
-            editor->start_sector.x = 0;
+            editor->start_sector_reached = 1;
             editor->num_sectors++;
         }
 }
@@ -128,13 +160,14 @@ int		editor_events(t_doom *doom)
 			}
 			else
 			{
-				if (editor->start_sector.x == 0)
+				if (editor->start_sector_reached == 1)
 				{
 					editor->walls[editor->num_walls].start_wall.x = editor->mouse_pos.x;
 					editor->walls[editor->num_walls].start_wall.y = editor->mouse_pos.y;
                     editor->start_sector.x = editor->mouse_pos.x;
                     editor->start_sector.y = editor->mouse_pos.y;
 					editor->clicked = 1;
+					editor->start_sector_reached = 0;
 				}
 			}
 		}
@@ -173,7 +206,6 @@ int editor_loop(t_doom *doom)
 		ft_bzero(editor->instruct_surf->pixels, editor->instruct_surf->h * editor->instruct_surf->pitch);
 		draw_editor(editor->editor_surf, editor);
 		draw_lines(editor, editor->editor_surf);
-		//draw_lines(editor.mouse_pos.x, editor.mouse_pos.y, &editor);
 		if ((SDL_BlitScaled(editor->editor_surf, NULL, sdlmain->win_surf, &editor->editor_rect)) < 0)
 			return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
 
