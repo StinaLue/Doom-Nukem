@@ -6,12 +6,13 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/18 17:00:43 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/07 15:13:27 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "doom.h"
+
 double vxs(double xstart, double ystart, double xtwo, double ytwo)
 {
 	return (xstart * ytwo - ystart * xtwo);

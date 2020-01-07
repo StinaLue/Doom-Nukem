@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:22:12 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/12 18:24:54 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/06 13:16:21 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ void	check_quit(SDL_Event *event, int *state)
 		*state = QUIT_STATE;
 }
 
-void	check_menu(SDL_Event *event, int *state, int *previous_state)
+void	check_menu(SDL_Event *event, int *state, int *prev_state_ptr, int prev_state)
 {
 		if (event->key.keysym.sym == SDLK_TAB)
 		{
-			*previous_state = GAME_STATE;
+			*prev_state_ptr = prev_state;
 			*state = MENU_STATE;
 		}
 }
@@ -64,7 +64,7 @@ int    handle_events(t_doom *doom)
     check_quit(&doom->sdlmain.event, &doom->state);
 	if (doom->sdlmain.event.type == SDL_KEYDOWN && doom->sdlmain.event.key.repeat == 0)
 	{
-		check_menu(&doom->sdlmain.event, &doom->state, &doom->menu.previous_state);
+		check_menu(&doom->sdlmain.event, &doom->state, &doom->menu.previous_state, GAME_STATE);
 		handle_hud(&doom->sdlmain.event, &doom->game.data.hud_flags);
 	}
 	if (doom->state != GAME_STATE)
