@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/08 14:32:19 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/08 17:56:16 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,11 @@ typedef struct 	s_editor
     int         sectors[MAX_SECTORS];
 	int			start_sector_reached;
 	int 		color_change;
+	int 		sign_pos;
+	int 		point;
+	t_vec 		A;
+	t_vec 		B;
+	t_vec 		C;
     t_wall      walls[MAX_WALLS];
 	t_vec 		grid_values[NBPOINTS];
 	t_vec       mouse_pos;
@@ -259,6 +264,8 @@ double			dot_product(t_vecdb a, t_vecdb b);
 double			cross_product(t_vecdb a, t_vecdb b);
 
 t_vecdb			create_vecdb(double x, double y);
+
+double			cross_product_len(t_vec a, t_vec b, t_vec c); // can be removed again
 
 /*
 ** INIT FUNCTIONS

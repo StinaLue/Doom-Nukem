@@ -6,13 +6,13 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/08 14:42:27 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/08 16:10:35 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-int init_instruct_menu(t_editor *editor)
+int	init_instruct_menu(t_editor *editor)
 {
 	if ((editor->editor_menu.title_inst = TTF_RenderText_Solid(editor->editor_menu.font, "Instructions", editor->editor_menu.textColor)) == NULL)
 		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
@@ -20,7 +20,7 @@ int init_instruct_menu(t_editor *editor)
 	return (0);
 }
 
-int init_options_menu(t_editor *editor)
+int	init_options_menu(t_editor *editor)
 {
 	if ((editor->editor_menu.title = TTF_RenderText_Solid(editor->editor_menu.font, "Options", editor->editor_menu.textColor)) == NULL)
 		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
