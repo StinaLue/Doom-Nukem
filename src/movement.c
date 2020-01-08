@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/07 17:06:31 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/08 12:54:27 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,88 +23,29 @@ double	wall_distance(t_vecdb point, t_vecdb a, t_vecdb b)
 	return (dist);
 }
 
-void	check_second_collision(t_vecdb *position, double col_angle, int i, const t_sector *sector)
-{
-	double dist;
-	double col_angle2;
-
-	if (i >= sector->num_walls)
-		i = 0;
-	else if (i < 0)
-		i = sector->num_walls - 1;
-
-	if ((dist = wall_distance(*position, sector->walls[i].start_wall, sector->walls[i].end_wall)) >= 0.5)
-		return ;
-	dist = 0.5 - dist;
-	col_angle2 = atan2(sector->walls[i].start_wall.y - sector->walls[i].end_wall.y, sector->walls[i].start_wall.x - sector->walls[i].end_wall.x);
-	col_angle2 = col_angle - col_angle2;
-	dist = dist / sin(col_angle2);
-	position->x += dist * cos(col_angle);
-	position->y += dist * sin(col_angle);
-
-}
-
 void	move_player(t_vecdb *position, t_vecdb *move, const t_sector_node *sector)
 {
 	t_wall_node	*current_wall;
-	current_wall = sector->wall_head;
+	double	col_angle;
+	double	dist;
 
+	current_wall = sector->wall_head;
 	position->x += move->x;
-	while (current_wall != NULL)
-	{
-		if (wall_distance(*position, current_wall->start_wall, current_wall->end_wall) < 0.5)
-		{
-			position->x -= move->x;
-			break ;
-		}
-		current_wall = current_wall->next;
-	}
-
-	current_wall = sector->wall_head;
 	position->y += move->y;
 	while (current_wall != NULL)
 	{
-		if (wall_distance(*position, current_wall->start_wall, current_wall->end_wall) < 0.5)
+		dist = wall_distance(*position, current_wall->start_wall, current_wall->end_wall);
+		if (dist < 0.5)
 		{
-			position->y -= move->y;
-			break ;
+			dist = 0.5000000001 - dist;
+			col_angle = atan2(current_wall->start_wall.y - current_wall->end_wall.y, current_wall->start_wall.x - current_wall->end_wall.x);
+			position->x += dist * -sin(col_angle);
+			position->y += dist * cos(col_angle);
+			current_wall = sector->wall_head;
 		}
 		current_wall = current_wall->next;
 	}
 	return ;
-
-	/*
-	int		i;
-	double	dist;
-	double	smallest_dist;
-	int		iw;
-	double	col_angle;
-
-	position->x += move->x;
-	position->y += move->y;
-	i = -1;
-	smallest_dist = 0.5;
-	iw = -1;
-	while (++i < sector->num_walls)
-	{
-		dist = wall_distance(*position, sector->walls[i].start_wall, sector->walls[i].end_wall);
-		if (dist < smallest_dist)
-		{
-			iw = i;
-			smallest_dist = dist;
-		}
-	}
-	if (iw == -1)
-		return ;
-	dist = 0.5 - smallest_dist;
-	col_angle = atan2(sector->walls[iw].start_wall.y - sector->walls[iw].end_wall.y, sector->walls[iw].start_wall.x - sector->walls[iw].end_wall.x);
-	position->x += dist * -sin(col_angle);
-	position->y += dist * cos(col_angle);
-	if (iw >= 0)
-	{
-		check_second_collision(position, col_angle, iw - 1, sector);
-		check_second_collision(position, col_angle, iw + 1, sector);
-	}*/
 }
 
 void	movement(t_player *player, t_vecdb move, const t_sector_node *sector)

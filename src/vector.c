@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:06:54 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/18 12:49:47 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/08 15:18:54 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,4 +102,9 @@ t_vecdb	vec_to_vecdb(t_vec vector)
 	vectordb.x = vector.x;
 	vectordb.y = vector.y;
 	return (vectordb);
+}
+
+double	get_point_distance(t_vecdb a, t_vecdb b)
+{
+	return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
 }

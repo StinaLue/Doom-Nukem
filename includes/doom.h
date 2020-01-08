@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/07 16:25:37 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/08 15:32:39 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,16 +102,15 @@ typedef struct	s_sector_node
 	struct s_sector_node	*next;
 	t_wall_node	*wall_head;
 	int			wall_num;
-	//sector center?
-	
+	t_vecdb		sector_center;
 }				t_sector_node;
 
 typedef struct	s_wall3d
 {
-	t_vec	 	top_left;
-	t_vec	 	top_right;
-	t_vec	 	bottom_left;
-	t_vec	 	bottom_right;
+	t_vec		top_left;
+	t_vec		top_right;
+	t_vec		bottom_left;
+	t_vec		bottom_right;
 }				t_wall3d;
 
 typedef struct	s_sdlmain
@@ -265,6 +264,8 @@ double			cross_product(t_vecdb a, t_vecdb b);
 
 t_vecdb			create_vecdb(double x, double y);
 
+double			get_point_distance(t_vecdb a, t_vecdb b);
+
 /*
 ** INIT FUNCTIONS
 */
@@ -405,11 +406,21 @@ int				error_return(const char *error_msg, const char *sdl_error);
 ** LINKED LIST FUNCTIONS
 */
 
+/*SECTORS*/
+
 t_sector_node		*add_sector_node(t_sector_node **sector_head);
+
+void				set_sector_position(t_sector_node *sector_list);
+
+/*WALLS*/
 
 t_wall_node			*add_wall_node(t_wall_node **wall_head, const t_wall_node *node);
 
 t_wall_node			*create_wall_node(t_wall_node **wall_head, t_vecdb a, t_vecdb b, int color);
+
+void				free_wall_list(t_wall_node **wall_list);
+
+t_vecdb				point_average_position(t_wall_node *wall_head);
 
 
 #endif
