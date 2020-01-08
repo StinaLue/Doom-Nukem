@@ -6,12 +6,29 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:27:36 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/13 16:16:51 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/07 19:07:00 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 #include "libft.h"
+
+int init_menu_surfs(t_menu *menu, t_sdlmain *sdlmain)
+{
+	if ((menu->menu_title = TTF_RenderText_Solid(menu->font, "MENU", menu->textColor)) == NULL)
+		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
+	if ((menu->first_option = TTF_RenderText_Solid(menu->font, "editor", menu->textColor)) == NULL)
+		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
+	if ((menu->second_option = TTF_RenderText_Solid(menu->font, "return to game", menu->textColor)) == NULL)
+		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
+	if ((menu->third_option = TTF_RenderText_Solid(menu->font, "resize window", menu->textColor)) == NULL)
+		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
+	if ((menu->fourth_option = TTF_RenderText_Solid(menu->font, "quit game", menu->textColor)) == NULL)
+		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
+	if ((menu->background = SDL_CreateRGBSurface(0, sdlmain->win_surf->w - (sdlmain->win_surf->w / 8), sdlmain->win_surf->h - (sdlmain->win_surf->h / 4), 32, 0, 0, 0, 0)) == NULL)
+		return (error_return("SDL_CreateRGBSurface error = %s\n", SDL_GetError()));
+	return (0);
+}
 
 int init_menu(t_menu *menu, t_sdlmain *sdlmain)
 {
@@ -25,18 +42,8 @@ int init_menu(t_menu *menu, t_sdlmain *sdlmain)
 		return (error_return("TTF_OpenFont error = %s\n", TTF_GetError()));
 	assign_sdlcolor(&menu->textColor, 255, 0, 0);
 	assign_sdlrect(&menu->background_rect, create_vec((sdlmain->win_surf->w / 8) / 2, (sdlmain->win_surf->h / 4) / 2), create_vec(0, 0));//MENU_WIDTH, MENU_HEIGHT));
-	if ((menu->menu_title = TTF_RenderText_Solid(menu->font, "MENU", menu->textColor)) == NULL)
-		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
-	if ((menu->first_option = TTF_RenderText_Solid(menu->font, "editor", menu->textColor)) == NULL)
-		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
-	if ((menu->second_option = TTF_RenderText_Solid(menu->font, "return to game", menu->textColor)) == NULL)
-		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
-	if ((menu->third_option = TTF_RenderText_Solid(menu->font, "resize window", menu->textColor)) == NULL)
-		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
-	if ((menu->fourth_option = TTF_RenderText_Solid(menu->font, "quit game", menu->textColor)) == NULL)
-		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
-	if ((menu->background = SDL_CreateRGBSurface(0, sdlmain->win_surf->w - (sdlmain->win_surf->w / 8), sdlmain->win_surf->h - (sdlmain->win_surf->h / 4), 32, 0, 0, 0, 0)) == NULL)
-		return (error_return("SDL_CreateRGBSurface error = %s\n", SDL_GetError()));
+	if (init_menu_surfs(menu, sdlmain) != 0)	
+		return (1);
 	assign_sdlrect(&menu->menu_title_rect, create_vec((menu->background->w - menu->menu_title->w) / 2, (menu->background->h - menu->menu_title->h) / 8), create_vec(0, 0));
 	assign_sdlrect(&menu->first_option_rect, create_vec((menu->background->w - menu->first_option->w) / 2, menu->second_option_rect.y - menu->second_option->h), create_vec(0, 0));
 	assign_sdlrect(&menu->second_option_rect, create_vec((menu->background->w - menu->second_option->w) / 2, (menu->background->h - menu->second_option->h) / 2), create_vec(0, 0));
@@ -173,6 +180,28 @@ int	reset_doom(t_doom *doom)
 	return (0);
 }
 
+int blit_menu_surfs(t_menu *menu, t_sdlmain *sdlmain)
+{
+	if ((SDL_BlitSurface(menu->menu_title, NULL, menu->background, &menu->menu_title_rect)) < 0)
+		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
+	if (highlight_select(menu) == 1)
+		return (error_return("Error in highlight selection function\n", NULL));
+	if ((SDL_BlitSurface(menu->first_option, NULL, menu->background, &menu->first_option_rect)) < 0)
+		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
+	if ((SDL_BlitSurface(menu->second_option, NULL, menu->background, &menu->second_option_rect)) < 0)
+		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
+	if ((SDL_BlitSurface(menu->third_option, NULL, menu->background, &menu->third_option_rect)) < 0)
+		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
+	if ((SDL_BlitSurface(menu->fourth_option, NULL, menu->background, &menu->fourth_option_rect)) < 0)
+		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
+	if ((SDL_BlitSurface(menu->background, NULL, sdlmain->win_surf, &menu->background_rect)) < 0)
+		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
+
+	if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)
+		return (error_return("SDL_UpdateWindowSurface error = %{r}s\n", SDL_GetError()));
+	return (0);
+}
+
 int menu_loop(t_doom *doom)
 {
 	t_menu *menu;
@@ -191,23 +220,8 @@ int menu_loop(t_doom *doom)
 		if (sdlmain->win_w != sdlmain->win_surf->w && sdlmain->win_h != sdlmain->win_surf->h)
 			if (reset_doom(doom))
 				return (error_return("reset doom error\n", NULL));
-		if ((SDL_BlitSurface(menu->menu_title, NULL, menu->background, &menu->menu_title_rect)) < 0)
-			return (error_return("BlitSurface error = %s\n", SDL_GetError()));
-		if (highlight_select(menu) == 1)
-			return (error_return("Error in highlight selection function\n", NULL));
-		if ((SDL_BlitSurface(menu->first_option, NULL, menu->background, &menu->first_option_rect)) < 0)
-			return (error_return("BlitSurface error = %s\n", SDL_GetError()));
-		if ((SDL_BlitSurface(menu->second_option, NULL, menu->background, &menu->second_option_rect)) < 0)
-			return (error_return("BlitSurface error = %s\n", SDL_GetError()));
-		if ((SDL_BlitSurface(menu->third_option, NULL, menu->background, &menu->third_option_rect)) < 0)
-			return (error_return("BlitSurface error = %s\n", SDL_GetError()));
-		if ((SDL_BlitSurface(menu->fourth_option, NULL, menu->background, &menu->fourth_option_rect)) < 0)
-			return (error_return("BlitSurface error = %s\n", SDL_GetError()));
-		if ((SDL_BlitSurface(menu->background, NULL, sdlmain->win_surf, &menu->background_rect)) < 0)
-			return (error_return("BlitSurface error = %s\n", SDL_GetError()));
-
-		if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)
-			return (error_return("SDL_UpdateWindowSurface error = %{r}s\n", SDL_GetError()));
+		if (blit_menu_surfs(menu, sdlmain) != 0)
+			return (1);
 	}
 	return (0);
 }
