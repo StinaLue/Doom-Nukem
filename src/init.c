@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/13 15:35:30 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/08 14:10:19 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ int		init_sdlmain(t_sdlmain *sdlmain)
 			SDL_GetError());
 		return (EXIT_FAILURE);
 	}
-	if ((sdlmain->music = Mix_LoadMUS("assets/sounds/Story Music.mid")) == NULL)
-		return (error_return("Mix_LoadMUS error: %{r}s\n", Mix_GetError()));
+	//if ((sdlmain->music = Mix_LoadMUS("assets/sounds/Story Music.mid")) == NULL)
+	//	return (error_return("Mix_LoadMUS error: %{r}s\n", Mix_GetError()));
 	Mix_PlayMusic(sdlmain->music, -1);
 	return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/07 18:55:25 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/08 14:32:19 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,7 @@ typedef struct s_editor_menu
 	//The surfaces
 	SDL_Surface *background;
 	SDL_Surface *title;
+	SDL_Surface *title_inst;
 	SDL_Surface *first_option;
 	//SDL_Surface *second_option;
 	//SDL_Surface *third_option;
@@ -155,6 +156,7 @@ typedef struct s_editor_menu
 	//Clip rectangles
 	SDL_Rect background_rect;
 	SDL_Rect title_rect;
+	SDL_Rect title_inst_rect;
 	SDL_Rect first_option_rect;
 	//SDL_Rect second_option_rect;
 	//SDL_Rect third_option_rect;
@@ -170,8 +172,10 @@ typedef struct s_editor_menu
 typedef struct 	s_editor
 {
 	SDL_Surface *editor_surf;
+	SDL_Surface *options_surf;
 	SDL_Surface *instruct_surf;
 	SDL_Rect	editor_rect;
+	SDL_Rect	options_rect;
 	SDL_Rect	instruct_rect;
     int         clicked;
 	int			num_walls;
