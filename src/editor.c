@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/17 16:21:42 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/08 13:00:39 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 		editor->grid_values[i].y = 0;
 		i++;
 	}
-    editor->mouse_pos.x = 0;
-    editor->mouse_pos.y = 0;
+    //editor->mouse_pos.x = 0;
+    //editor->mouse_pos.y = 0;
 	editor->walls[0].start_wall.x = 0;
 	editor->walls[0].start_wall.y = 0;
 	editor->walls[0].end_wall.x = 0;
@@ -45,12 +45,12 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	return (0);
 };
 
-void	draw_lines(t_editor *editor, SDL_Surface *editor_surf)
+void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 {
-	editor->mouse_pos.x = editor->mouse_pos.x * editor->offset;
-	editor->mouse_pos.y = editor->mouse_pos.y * editor->offset;
+	sdlmain->mouse_pos.x = sdlmain->mouse_pos.x * editor->offset;
+	sdlmain->mouse_pos.y = sdlmain->mouse_pos.y * editor->offset;
 	if (editor->clicked != 0 && editor->num_walls <= MAX_WALLS)
-		draw_line(editor->mouse_pos, vecdb_to_vec(editor->walls[editor->num_walls].start_wall), editor_surf, 0x00ABFF);
+		draw_line(sdlmain->mouse_pos, vecdb_to_vec(editor->walls[editor->num_walls].start_wall), editor_surf, 0x00ABFF);
 	int i = 0;
 	while (i < editor->num_walls && editor->num_walls <= MAX_WALLS)
 	{
@@ -69,7 +69,7 @@ void	save_sectors(t_editor *editor)
         }
 }
 
-void	draw_editor(SDL_Surface *editor_surf, t_editor *editor)
+void	draw_editor(SDL_Surface *editor_surf, t_editor *editor, t_sdlmain *sdlmain)
 {
 	int y = 0;
 	int x;
@@ -87,13 +87,13 @@ void	draw_editor(SDL_Surface *editor_surf, t_editor *editor)
 			i++;
 		}
 	}
-    if (editor->mouse_pos.y == 0)
-        editor->mouse_pos.y = 1;
-    if (editor->mouse_pos.x == 0)
-        editor->mouse_pos.x = 1;
-    editor->mouse_pos.y = y / editor->offset - editor->mouse_pos.y + 1;
-	if (editor->mouse_pos.y == 0)
-        editor->mouse_pos.y = 1;
+    if (sdlmain->mouse_pos.y == 0)
+        sdlmain->mouse_pos.y = 1;
+    if (sdlmain->mouse_pos.x == 0)
+        sdlmain->mouse_pos.x = 1;
+    sdlmain->mouse_pos.y = y / editor->offset - sdlmain->mouse_pos.y + 1;
+	if (sdlmain->mouse_pos.y == 0)
+        sdlmain->mouse_pos.y = 1;
 }
 
 int		editor_events(t_doom *doom)
@@ -115,12 +115,12 @@ int		editor_events(t_doom *doom)
 	}
     if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
     {
-		if (sdlmain->event.button.button == SDL_BUTTON_LEFT && editor->mouse_pos.x < editor->editor_surf->h - editor->offset)
+		if (sdlmain->event.button.button == SDL_BUTTON_LEFT && sdlmain->mouse_pos.x < editor->editor_surf->h - editor->offset)
 		{
 			if (editor->clicked == 1)
 			{
-				editor->walls[editor->num_walls].end_wall.x = editor->mouse_pos.x;
-				editor->walls[editor->num_walls].end_wall.y = editor->mouse_pos.y;
+				editor->walls[editor->num_walls].end_wall.x = sdlmain->mouse_pos.x;
+				editor->walls[editor->num_walls].end_wall.y = sdlmain->mouse_pos.y;
 				editor->walls[editor->num_walls + 1].start_wall.x = editor->walls[editor->num_walls].end_wall.x;
 				editor->walls[editor->num_walls + 1].start_wall.y = editor->walls[editor->num_walls].end_wall.y;
                 save_sectors(editor);
@@ -130,10 +130,10 @@ int		editor_events(t_doom *doom)
 			{
 				if (editor->start_sector.x == 0)
 				{
-					editor->walls[editor->num_walls].start_wall.x = editor->mouse_pos.x;
-					editor->walls[editor->num_walls].start_wall.y = editor->mouse_pos.y;
-                    editor->start_sector.x = editor->mouse_pos.x;
-                    editor->start_sector.y = editor->mouse_pos.y;
+					editor->walls[editor->num_walls].start_wall.x = sdlmain->mouse_pos.x;
+					editor->walls[editor->num_walls].start_wall.y = sdlmain->mouse_pos.y;
+                    editor->start_sector.x = sdlmain->mouse_pos.x;
+                    editor->start_sector.y = sdlmain->mouse_pos.y;
 					editor->clicked = 1;
 				}
 			}
@@ -162,17 +162,17 @@ int editor_loop(t_doom *doom)
 		while (SDL_PollEvent(&sdlmain->event) != 0)
 			if (editor_events(doom) != 0)
 				break ;
-        SDL_GetMouseState(&editor->mouse_pos.x, &editor->mouse_pos.y);
+        SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
 
 		int offset_border = 0;
 		if (NBPOINTSROW * editor->offset < editor->editor_surf->h)
 			offset_border = editor->editor_surf->h - NBPOINTSROW * editor->offset;
-        editor->mouse_pos.x = round_num(editor->mouse_pos.x, editor->offset);
-        editor->mouse_pos.y = round_num(editor->mouse_pos.y - offset_border + editor->offset, editor->offset);
+        sdlmain->mouse_pos.x = round_num(sdlmain->mouse_pos.x, editor->offset);
+        sdlmain->mouse_pos.y = round_num(sdlmain->mouse_pos.y - offset_border + editor->offset, editor->offset);
 		ft_bzero(editor->editor_surf->pixels, editor->editor_surf->h * editor->editor_surf->pitch);
 		ft_bzero(editor->instruct_surf->pixels, editor->instruct_surf->h * editor->instruct_surf->pitch);
-		draw_editor(editor->editor_surf, editor);
-		draw_lines(editor, editor->editor_surf);
+		draw_editor(editor->editor_surf, editor, sdlmain);
+		draw_lines(editor, editor->editor_surf, sdlmain);
 		//draw_lines(editor.mouse_pos.x, editor.mouse_pos.y, &editor);
 		if ((SDL_BlitScaled(editor->editor_surf, NULL, sdlmain->win_surf, &editor->editor_rect)) < 0)
 			return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));

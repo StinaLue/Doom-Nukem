@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/06 12:24:06 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/08 12:59:56 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ int		init_sdlmain(t_sdlmain *sdlmain)
 	if ((sdlmain->music = Mix_LoadMUS("assets/sounds/beet.wav")) == NULL)
 		return (error_return("Mix_LoadMUS error: %{r}s\n", Mix_GetError()));
 	Mix_PlayMusic(sdlmain->music, -1);
+	sdlmain->mouse_pos.x = 0;
+	sdlmain->mouse_pos.y = 0;
 	return (EXIT_SUCCESS);
 }
 

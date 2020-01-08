@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:27:36 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/07 19:07:00 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/08 13:31:07 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void	browse_options(SDL_Event *event, int *option)
 		*option += 1;
 	if (event->key.keysym.sym == SDLK_UP && *option > 1)
 		*option -= 1;
+	if (is_mouse_collide())
 }
 
 void	change_win_dimensions(int *width, int *height)
@@ -110,12 +111,12 @@ int		menu_events(t_doom *doom)
 
 	menu = &(doom->menu);
 	sdlmain = &(doom->sdlmain);
-	if (sdlmain->event.type == SDL_KEYDOWN && sdlmain->event.key.repeat == 0)
+	if ((sdlmain->event.type == SDL_KEYDOWN && sdlmain->event.key.repeat == 0) || sdlmain->event.type == SDL_MOUSEMOTION || sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
 	{
 		if (sdlmain->event.key.keysym.sym == SDLK_TAB)
 			doom->state = menu->previous_state;
 		browse_options(&sdlmain->event, &menu->current_option);
-		if (sdlmain->event.key.keysym.sym == SDLK_RETURN)
+		if (sdlmain->event.key.keysym.sym == SDLK_RETURN || sdlmain->event.button.button == SDL_BUTTON_LEFT)
 			launch_option(doom);
 	}
 	if (doom->state != MENU_STATE)
@@ -211,6 +212,8 @@ int menu_loop(t_doom *doom)
 	sdlmain = &(doom->sdlmain);
 	while (doom->state == MENU_STATE)
 	{
+		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
+		//printf("mouse x %d mouse y %d\n", sdlmain->mouse_pos.x, sdlmain->mouse_pos.y);
 		ft_bzero(menu->background->pixels, menu->background->h * menu->background->pitch);
 		draw_border(menu->background, 0xFFFFFF);
 		while (SDL_PollEvent(&sdlmain->event) != 0)

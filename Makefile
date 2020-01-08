@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+         #
+#    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2019/12/11 15:16:17 by phaydont         ###   ########.fr        #
+#    Updated: 2020/01/08 13:30:01 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,6 +75,7 @@ SOURCES_LIST = main.c \
 			menu.c \
 			text.c \
 			editor.c \
+			mouse.c \
 			SDL_sub_functions.c#\
 	       multithreading.c \
 		   texture.c \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/06 11:20:48 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/08 13:29:31 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ typedef struct	s_sdlmain
 	SDL_Surface	*win_surf;
 	SDL_Event	event;
 	Mix_Music	*music;
+	t_vec       mouse_pos;
 	int			win_w;
 	int			win_h;
 }				t_sdlmain;
@@ -156,7 +157,6 @@ typedef struct 	s_editor
     int         sectors[MAX_SECTORS];
     t_wall      walls[MAX_WALLS];
 	t_vec 		grid_values[NBPOINTS];
-	t_vec       mouse_pos;
     t_vec       start_sector;
 }				t_editor;
 
@@ -195,6 +195,8 @@ typedef struct	s_doom
 	t_sdlmain	sdlmain;
 	int			state;
 }				t_doom;
+
+int		is_mouse_collide(t_vec mouse_pos, SDL_Rect collide_rect);
 
 int 	check_collision(double pos_x, double pos_y, t_wall *walls);
 
