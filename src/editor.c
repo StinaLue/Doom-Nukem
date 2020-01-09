@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/08 18:35:16 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/09 14:38:28 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int is_convex(t_vec a, t_vec b, t_vec c, t_editor *editor)
 	{
 		ft_printf("NOT CONVEX\n");
 		editor->num_walls--;
-		editor->point--;
+		editor->point--; // maybe not the best way to do this
 		return (0);
 	}
 	ft_printf("CONVEX\n");
@@ -84,14 +84,14 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	editor->num_sectors = 0;
 	editor->start_sector_reached = 1;
 	editor->color_change = 0;
-	editor->sign_pos = 0;
+	/* editor->sign_pos = 0;
 	editor->point = 0;
 	editor->A.x = 0;
 	editor->A.y = 0;
 	editor->B.x = 0;
 	editor->B.y = 0;
 	editor->C.x = 0;
-	editor->C.y = 0;
+	editor->C.y = 0; */
 	return (0);
 }
 
@@ -147,7 +147,7 @@ void	save_sectors(t_editor *editor)
 		editor->clicked = 0;
 		editor->start_sector_reached = 1;
 		editor->num_sectors++;
-		editor->point = 0;
+		//editor->point = 0;
 	}
 }
 
@@ -202,8 +202,12 @@ int	editor_events(t_doom *doom)
 	{
 		if (sdlmain->event.button.button == SDL_BUTTON_LEFT && editor->mouse_pos.x < editor->editor_surf->h - editor->offset)
 		{
-			if (editor->clicked == 1 && is_convex(editor->A, editor->B, editor->C, editor))
+			if (editor->point > 3)
 			{
+				is_convex(editor->A, editor->B, editor->C, editor);
+			}
+			if (editor->clicked == 1/*  && is_convex(editor->A, editor->B, editor->C, editor) */)
+			{/* 
 				if (editor->C.x == 0 && editor->point == 1)
 				{
 					editor->B.x = editor->mouse_pos.x;
@@ -231,12 +235,8 @@ int	editor_events(t_doom *doom)
 						else if (cross_product > 0)
 							editor->sign_pos = 1;
 					}
-				}/* 
-				if (editor->point > 3)
-				{
-					is_convex(editor->A, editor->B, editor->C, editor);
-				} */
-				editor->point++;
+				}
+				editor->point++; */
 				editor->walls[editor->num_walls].end_wall.x = editor->mouse_pos.x;
 				editor->walls[editor->num_walls].end_wall.y = editor->mouse_pos.y;
 				editor->walls[editor->num_walls + 1].start_wall.x = editor->walls[editor->num_walls].end_wall.x;
@@ -254,13 +254,13 @@ int	editor_events(t_doom *doom)
 					editor->start_sector.y = editor->mouse_pos.y;
 					editor->clicked = 1;
 					editor->start_sector_reached = 0;
-					editor->A.x = editor->mouse_pos.x;
+					/* editor->A.x = editor->mouse_pos.x;
 					editor->A.y = editor->mouse_pos.y;
-					editor->point++;
+					editor->point++; */
 				}
 			}
-			ft_printf("point %d\n", editor->point);
-			ft_printf("sign: %d\n", editor->sign_pos);
+			//ft_printf("point %d\n", editor->point);
+			//ft_printf("sign: %d\n", editor->sign_pos);
 			//ft_printf("Ax = %d, Ay = %d, Bx = %d, By = %d, Cx = %d, Cy = %d\n", editor->A.x, editor->A.y, editor->B.x, editor->B.y, editor->C.x, editor->C.y);
 		}
 	}
