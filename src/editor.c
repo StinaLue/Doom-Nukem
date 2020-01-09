@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/09 15:13:45 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/09 18:13:19 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,14 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	editor->num_sectors = 0;
 	editor->start_sector_reached = 1;
 	editor->color_change = 0;
-	/* editor->sign_pos = 0;
+	editor->sign_pos = 0;
 	editor->point = 0;
 	editor->A.x = 0;
 	editor->A.y = 0;
 	editor->B.x = 0;
 	editor->B.y = 0;
 	editor->C.x = 0;
-	editor->C.y = 0; */
+	editor->C.y = 0;
 	return (0);
 }
 
@@ -147,7 +147,7 @@ void	save_sectors(t_editor *editor)
 		editor->clicked = 0;
 		editor->start_sector_reached = 1;
 		editor->num_sectors++;
-		//editor->point = 0;
+		editor->point = 0;
 	}
 }
 
@@ -205,7 +205,7 @@ int	editor_events(t_doom *doom)
 				is_convex(editor->A, editor->B, editor->C, editor);
 			} */
 			if (editor->clicked == 1/*  && is_convex(editor->A, editor->B, editor->C, editor) */)
-			{/* 
+			{
 				if (editor->C.x == 0 && editor->point == 1)
 				{
 					editor->B.x = editor->mouse_pos.x;
@@ -227,14 +227,16 @@ int	editor_events(t_doom *doom)
 					editor->C.y = editor->mouse_pos.y;
 					if (editor->point == 3)
 					{
+						ft_printf("HOLA\n");
 						double cross_product = cross_product_len(editor->A, editor->B, editor->C);
+						ft_printf("croos %f\n", cross_product);
 						if (cross_product < 0)
 							editor->sign_pos = 0;
 						else if (cross_product > 0)
 							editor->sign_pos = 1;
 					}
 				}
-				editor->point++; */
+				editor->point++;
 				editor->walls[editor->sector.num_walls].end_wall.x = editor->mouse_pos.x;
 				editor->walls[editor->sector.num_walls].end_wall.y = editor->mouse_pos.y;
 				editor->walls[editor->sector.num_walls + 1].start_wall.x = editor->walls[editor->sector.num_walls].end_wall.x;
@@ -252,14 +254,14 @@ int	editor_events(t_doom *doom)
 					editor->start_sector.y = editor->mouse_pos.y;
 					editor->clicked = 1;
 					editor->start_sector_reached = 0;
-					/* editor->A.x = editor->mouse_pos.x;
+					editor->A.x = editor->mouse_pos.x;
 					editor->A.y = editor->mouse_pos.y;
-					editor->point++; */
+					editor->point++;
 				}
 			}
-			//ft_printf("point %d\n", editor->point);
-			//ft_printf("sign: %d\n", editor->sign_pos);
-			//ft_printf("Ax = %d, Ay = %d, Bx = %d, By = %d, Cx = %d, Cy = %d\n", editor->A.x, editor->A.y, editor->B.x, editor->B.y, editor->C.x, editor->C.y);
+			ft_printf("Ax = %d, Ay = %d, Bx = %d, By = %d, Cx = %d, Cy = %d\n", editor->A.x, editor->A.y, editor->B.x, editor->B.y, editor->C.x, editor->C.y);
+			ft_printf("point %d\n", editor->point);
+			ft_printf("sign: %d\n", editor->sign_pos);
 		}
 	}
 	if (doom->state != EDITOR_STATE)
