@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/09 14:38:28 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/09 15:13:45 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int is_convex(t_vec a, t_vec b, t_vec c, t_editor *editor)
 	if (safe_sign != editor->sign_pos)
 	{
 		ft_printf("NOT CONVEX\n");
-		editor->num_walls--;
+		editor->sector.num_walls--;
 		editor->point--; // maybe not the best way to do this
 		return (0);
 	}
@@ -80,7 +80,7 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	editor->walls[0].start_wall.y = 0;
 	editor->walls[0].end_wall.x = 0;
 	editor->walls[0].end_wall.y = 0;
-	editor->num_walls = 0;
+	editor->sector.num_walls = 0;
 	editor->num_sectors = 0;
 	editor->start_sector_reached = 1;
 	editor->color_change = 0;
@@ -112,9 +112,9 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf)
 
 	editor->mouse_pos.x = editor->mouse_pos.x * editor->offset;
 	editor->mouse_pos.y = editor->mouse_pos.y * editor->offset;
-	if (editor->clicked != 0 && editor->num_walls <= MAX_WALLS && editor->walls[0].start_wall.x != 0)
+	if (editor->clicked != 0 && editor->sector.num_walls <= MAX_WALLS && editor->walls[0].start_wall.x != 0)
 	{
-		draw_line(editor->mouse_pos, vecdb_to_vec(editor->walls[editor->num_walls].start_wall), editor_surf, 0x00ABFF);
+		draw_line(editor->mouse_pos, vecdb_to_vec(editor->walls[editor->sector.num_walls].start_wall), editor_surf, 0x00ABFF);
 		int j = 0;
 		while (j < 4)
 		{
@@ -123,7 +123,7 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf)
 			j++;
 		}
 	}
-	while (i < editor->num_walls && editor->num_walls <= MAX_WALLS)
+	while (i < editor->sector.num_walls && editor->sector.num_walls <= MAX_WALLS)
 	{
 		if (i % 2 == 0)
 			draw_line(vecdb_to_vec(editor->walls[i].end_wall), vecdb_to_vec(editor->walls[i].start_wall), editor_surf, 0x00ABFF);
@@ -142,7 +142,7 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf)
 
 void	save_sectors(t_editor *editor)
 {
-	if ((editor->start_sector.x == editor->walls[editor->num_walls].end_wall.x) && (editor->start_sector.y == editor->walls[editor->num_walls].end_wall.y))
+	if ((editor->start_sector.x == editor->walls[editor->sector.num_walls].end_wall.x) && (editor->start_sector.y == editor->walls[editor->sector.num_walls].end_wall.y))
 	{
 		editor->clicked = 0;
 		editor->start_sector_reached = 1;
@@ -188,24 +188,22 @@ int	editor_events(t_doom *doom)
 
 	editor = &(doom->editor);
 	sdlmain = &(doom->sdlmain);
+	check_quit(&doom->sdlmain.event, &doom->state);
 	if (sdlmain->event.type == SDL_KEYDOWN)
 	{
-		if (sdlmain->event.key.keysym.sym == SDLK_TAB)
-		{
-			doom->menu.previous_state = EDITOR_STATE;
-			doom->state = MENU_STATE;
-		}
-		if (sdlmain->event.key.keysym.sym == SDLK_u && editor->num_walls > 0)
-			editor->num_walls--;
+		if (sdlmain->event.key.repeat == 0)
+			check_menu(&doom->sdlmain.event, &doom->state, &doom->menu.previous_state, EDITOR_STATE);
+        if (sdlmain->event.key.keysym.sym == SDLK_u && editor->sector.num_walls > 0)
+			editor->sector.num_walls--;
 	}
 	if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
 	{
 		if (sdlmain->event.button.button == SDL_BUTTON_LEFT && editor->mouse_pos.x < editor->editor_surf->h - editor->offset)
 		{
-			if (editor->point > 3)
+			/* if (editor->point > 3)
 			{
 				is_convex(editor->A, editor->B, editor->C, editor);
-			}
+			} */
 			if (editor->clicked == 1/*  && is_convex(editor->A, editor->B, editor->C, editor) */)
 			{/* 
 				if (editor->C.x == 0 && editor->point == 1)
@@ -237,19 +235,19 @@ int	editor_events(t_doom *doom)
 					}
 				}
 				editor->point++; */
-				editor->walls[editor->num_walls].end_wall.x = editor->mouse_pos.x;
-				editor->walls[editor->num_walls].end_wall.y = editor->mouse_pos.y;
-				editor->walls[editor->num_walls + 1].start_wall.x = editor->walls[editor->num_walls].end_wall.x;
-				editor->walls[editor->num_walls + 1].start_wall.y = editor->walls[editor->num_walls].end_wall.y;
+				editor->walls[editor->sector.num_walls].end_wall.x = editor->mouse_pos.x;
+				editor->walls[editor->sector.num_walls].end_wall.y = editor->mouse_pos.y;
+				editor->walls[editor->sector.num_walls + 1].start_wall.x = editor->walls[editor->sector.num_walls].end_wall.x;
+				editor->walls[editor->sector.num_walls + 1].start_wall.y = editor->walls[editor->sector.num_walls].end_wall.y;
 				save_sectors(editor);
-				editor->num_walls++;
+				editor->sector.num_walls++;
 			}
 			else
 			{
 				if (editor->start_sector_reached == 1)
 				{
-					editor->walls[editor->num_walls].start_wall.x = editor->mouse_pos.x;
-					editor->walls[editor->num_walls].start_wall.y = editor->mouse_pos.y;
+					editor->walls[editor->sector.num_walls].start_wall.x = editor->mouse_pos.x;
+					editor->walls[editor->sector.num_walls].start_wall.y = editor->mouse_pos.y;
 					editor->start_sector.x = editor->mouse_pos.x;
 					editor->start_sector.y = editor->mouse_pos.y;
 					editor->clicked = 1;

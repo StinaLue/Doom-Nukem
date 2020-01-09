@@ -6,7 +6,7 @@
 #    By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/01/07 18:54:28 by sluetzen         ###   ########.fr        #
+#    Updated: 2020/01/09 15:01:44 by sluetzen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,8 +74,10 @@ SOURCES_LIST = main.c \
 			movement.c \
 			menu.c \
 			text.c \
+			SDL_sub_functions.c \
+			ll_sector.c \
+			ll_wall.c \
 			editor.c \
-			SDL_sub_functions.c\
 			editor_menu.c#\
 	       multithreading.c \
 		   texture.c \

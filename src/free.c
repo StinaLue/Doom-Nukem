@@ -15,10 +15,10 @@
 
 void	quit_sdl_and_ttf()
 {
+	Mix_CloseAudio();
 	Mix_Quit();
 	TTF_Quit();
 	SDL_Quit();
-	//TTF_Quit();
 }
 
 int		free_sdlmain(t_sdlmain *sdlmain)
@@ -39,6 +39,8 @@ int		free_game(t_game *game)
 	game->surfs.rot_mmap = NULL;
 	SDL_FreeSurface(game->surfs.perspective_view);
 	game->surfs.perspective_view = NULL;
+	SDL_FreeSurface(game->surfs.weapons);
+	game->surfs.weapons = NULL;
 	return (EXIT_FAILURE);
 }
 

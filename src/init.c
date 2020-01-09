@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/08 15:25:22 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/09 14:56:01 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int		init_sdl_and_ttf()
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
 	{
 		ft_dprintf(STDERR_FILENO, "SDL_Init Error: %{r}s\n", SDL_GetError());
-		SDL_Quit();
 		error = 1;
 	}
 	if (TTF_Init() != 0)
@@ -53,10 +52,27 @@ int		init_sdlmain(t_sdlmain *sdlmain)
 			SDL_GetError());
 		return (EXIT_FAILURE);
 	}
-	//if ((sdlmain->music = Mix_LoadMUS("assets/sounds/Story Music.mid")) == NULL)
-	//	return (error_return("Mix_LoadMUS error: %{r}s\n", Mix_GetError()));
+	if ((sdlmain->music = Mix_LoadMUS("assets/sounds/beet.wav")) == NULL)
+		return (error_return("Mix_LoadMUS error: %{r}s\n", Mix_GetError()));
 	Mix_PlayMusic(sdlmain->music, -1);
 	return (EXIT_SUCCESS);
+}
+
+int		init_map(t_map *map)
+{
+	t_vecdb vec1 = {60, 20}; 
+	t_vecdb vec2 = {60, 40};
+	t_vecdb vec3 = {70, 90};
+	t_vecdb vec4 = {90, 20};
+
+	add_sector_node(&map->sector_head);
+
+	create_wall_node(&map->sector_head->wall_head, vec1, vec2, 0xff0000);
+	create_wall_node(&map->sector_head->wall_head, vec2, vec3, 0xffbb00);
+	create_wall_node(&map->sector_head->wall_head, vec3, vec4, 0x00ff00);
+	create_wall_node(&map->sector_head->wall_head, vec4, vec1, 0x0088ff);
+
+	return (0);
 }
 
 int	init_game(t_game *game, t_sdlmain *sdlmain)

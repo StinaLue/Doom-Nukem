@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   menu.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:27:36 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/13 16:16:51 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/07 16:26:07 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,8 +166,8 @@ int	reset_doom(t_doom *doom)
 	free_sdlmain(&doom->sdlmain);
 	if (init_sdlmain(&doom->sdlmain) == 1 \
 		|| init_gamesurfs_struct(&doom->game.surfs, &doom->sdlmain) \
-		|| init_menu(&doom->menu, &doom->sdlmain) == 1 \
-		|| init_editor(&doom->editor, &doom->sdlmain) == 1)
+		|| init_menu(&doom->menu, &doom->sdlmain) == 1)/* \
+		|| init_editor(&doom->editor, &doom->sdlmain) == 1)*/
 		return (1);
 	doom->state = GAME_STATE;
 	return (0);
