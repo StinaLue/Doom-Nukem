@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:27:36 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/08 13:31:07 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/09 18:21:53 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,22 +45,31 @@ int init_menu(t_menu *menu, t_sdlmain *sdlmain)
 	if (init_menu_surfs(menu, sdlmain) != 0)	
 		return (1);
 	assign_sdlrect(&menu->menu_title_rect, create_vec((menu->background->w - menu->menu_title->w) / 2, (menu->background->h - menu->menu_title->h) / 8), create_vec(0, 0));
-	assign_sdlrect(&menu->first_option_rect, create_vec((menu->background->w - menu->first_option->w) / 2, menu->second_option_rect.y - menu->second_option->h), create_vec(0, 0));
-	assign_sdlrect(&menu->second_option_rect, create_vec((menu->background->w - menu->second_option->w) / 2, (menu->background->h - menu->second_option->h) / 2), create_vec(0, 0));
-	assign_sdlrect(&menu->third_option_rect, create_vec((menu->background->w - menu->third_option->w) / 2, menu->second_option_rect.y + menu->second_option->h), create_vec(0, 0));
-	assign_sdlrect(&menu->fourth_option_rect, create_vec((menu->background->w - menu->fourth_option->w) / 2, menu->third_option_rect.y + menu->third_option->h), create_vec(0, 0));
+	assign_sdlrect(&menu->options_rects[0], create_vec((menu->background->w - menu->first_option->w) / 2, menu->options_rects[1].y - menu->second_option->h), create_vec(0, 0));
+	assign_sdlrect(&menu->options_rects[1], create_vec((menu->background->w - menu->second_option->w) / 2, (menu->background->h - menu->second_option->h) / 2), create_vec(0, 0));
+	assign_sdlrect(&menu->options_rects[2], create_vec((menu->background->w - menu->third_option->w) / 2, menu->options_rects[1].y + menu->second_option->h), create_vec(0, 0));
+	assign_sdlrect(&menu->options_rects[3], create_vec((menu->background->w - menu->fourth_option->w) / 2, menu->options_rects[2].y + menu->third_option->h), create_vec(0, 0));
 	draw_border(menu->background, 0xFFFFFF);
 
 	return (0);
 }
 
-void	browse_options(SDL_Event *event, int *option)
+void	browse_options(t_sdlmain *sdlmain, int *option, SDL_Rect *rects, SDL_Rect *bg_rect)
 {
-	if (event->key.keysym.sym == SDLK_DOWN && *option < 4)
+	if (sdlmain->event.key.keysym.sym == SDLK_DOWN && *option < 4)
 		*option += 1;
-	if (event->key.keysym.sym == SDLK_UP && *option > 1)
+	else if (sdlmain->event.key.keysym.sym == SDLK_UP && *option > 1)
 		*option -= 1;
-	if (is_mouse_collide())
+	sdlmain->mouse_pos.x -= bg_rect->x;
+	sdlmain->mouse_pos.y -= bg_rect->y;
+	if (is_mouse_collide(sdlmain->mouse_pos, rects[0]))
+		*option = FIRST_OPTION_SELECT;
+	else if (is_mouse_collide(sdlmain->mouse_pos, rects[1]))
+		*option = SECOND_OPTION_SELECT;
+	else if (is_mouse_collide(sdlmain->mouse_pos, rects[2]))
+		*option = THIRD_OPTION_SELECT;
+	else if (is_mouse_collide(sdlmain->mouse_pos, rects[3]))
+		*option = FOURTH_OPTION_SELECT;
 }
 
 void	change_win_dimensions(int *width, int *height)
@@ -111,12 +120,18 @@ int		menu_events(t_doom *doom)
 
 	menu = &(doom->menu);
 	sdlmain = &(doom->sdlmain);
-	if ((sdlmain->event.type == SDL_KEYDOWN && sdlmain->event.key.repeat == 0) || sdlmain->event.type == SDL_MOUSEMOTION || sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
+	if (sdlmain->event.type == SDL_KEYDOWN && sdlmain->event.key.repeat == 0)
 	{
 		if (sdlmain->event.key.keysym.sym == SDLK_TAB)
 			doom->state = menu->previous_state;
-		browse_options(&sdlmain->event, &menu->current_option);
-		if (sdlmain->event.key.keysym.sym == SDLK_RETURN || sdlmain->event.button.button == SDL_BUTTON_LEFT)
+		browse_options(sdlmain, &menu->current_option, menu->options_rects, &menu->background_rect);
+		if (sdlmain->event.key.keysym.sym == SDLK_RETURN)
+			launch_option(doom);
+	}
+	else if (sdlmain->event.type == SDL_MOUSEMOTION || sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
+	{
+		browse_options(sdlmain, &menu->current_option, menu->options_rects, &menu->background_rect);
+		if (sdlmain->event.button.button == SDL_BUTTON_LEFT && sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
 			launch_option(doom);
 	}
 	if (doom->state != MENU_STATE)
@@ -134,34 +149,34 @@ int	highlight_select(t_menu *menu)
 		return (1);
 	if (reset_text(&menu->font, &menu->fourth_option, &menu->textColor, "quit game") == -1)
 		return (1);
-	assign_sdlrect(&menu->first_option_rect, create_vec((menu->background->w - menu->first_option->w) / 2, menu->second_option_rect.y - menu->second_option->h), create_vec(0, 0));
-	assign_sdlrect(&menu->second_option_rect, create_vec((menu->background->w - menu->second_option->w) / 2, (menu->background->h - menu->second_option->h) / 2), create_vec(0, 0));
-	assign_sdlrect(&menu->third_option_rect, create_vec((menu->background->w - menu->third_option->w) / 2, menu->second_option_rect.y + menu->second_option->h), create_vec(0, 0));
-	assign_sdlrect(&menu->fourth_option_rect, create_vec((menu->background->w - menu->fourth_option->w) / 2, menu->third_option_rect.y + menu->third_option->h), create_vec(0, 0));
+	assign_sdlrect(&menu->options_rects[0], create_vec((menu->background->w - menu->first_option->w) / 2, menu->options_rects[1].y - menu->second_option->h), create_vec(0, 0));
+	assign_sdlrect(&menu->options_rects[1], create_vec((menu->background->w - menu->second_option->w) / 2, (menu->background->h - menu->second_option->h) / 2), create_vec(0, 0));
+	assign_sdlrect(&menu->options_rects[2], create_vec((menu->background->w - menu->third_option->w) / 2, menu->options_rects[1].y + menu->second_option->h), create_vec(0, 0));
+	assign_sdlrect(&menu->options_rects[3], create_vec((menu->background->w - menu->fourth_option->w) / 2, menu->options_rects[2].y + menu->third_option->h), create_vec(0, 0));
 	if (menu->current_option == FIRST_OPTION_SELECT)
 	{
 		if (highlight_text(&menu->font, &menu->first_option, &menu->textColor, "/ editor \\") == -1)
 			return (1);
-		assign_sdlrect(&menu->first_option_rect, create_vec((menu->background->w - menu->first_option->w) / 2, menu->second_option_rect.y - menu->second_option->h), create_vec(0, 0));
+		assign_sdlrect(&menu->options_rects[0], create_vec((menu->background->w - menu->first_option->w) / 2, menu->options_rects[1].y - menu->second_option->h), create_vec(0, 0));
 	}
 	else if (menu->current_option == SECOND_OPTION_SELECT)
 	{
 		if (highlight_text(&menu->font, &menu->second_option, &menu->textColor, "/ return to game \\") == -1)
 			return (1);
 		//assign_sdlrect(&menu->second_option_rect, create_vec((menu->background->w - menu->second_option->w) / 2, menu->first_option_rect.y + menu->first_option->h), create_vec(0, 0));
-		assign_sdlrect(&menu->second_option_rect, create_vec((menu->background->w - menu->second_option->w) / 2, (menu->background->h - menu->second_option->h) / 2), create_vec(0, 0));
+		assign_sdlrect(&menu->options_rects[1], create_vec((menu->background->w - menu->second_option->w) / 2, (menu->background->h - menu->second_option->h) / 2), create_vec(0, 0));
 	}
 	else if (menu->current_option == THIRD_OPTION_SELECT)
 	{
 		if (highlight_text(&menu->font, &menu->third_option, &menu->textColor, "/ resize window \\") == -1)
 			return (1);
-		assign_sdlrect(&menu->third_option_rect, create_vec((menu->background->w - menu->third_option->w) / 2, menu->second_option_rect.y + menu->second_option->h), create_vec(0, 0));
+		assign_sdlrect(&menu->options_rects[2], create_vec((menu->background->w - menu->third_option->w) / 2, menu->options_rects[1].y + menu->second_option->h), create_vec(0, 0));
 	}
 	else if (menu->current_option == FOURTH_OPTION_SELECT)
 	{
 		if (highlight_text(&menu->font, &menu->fourth_option, &menu->textColor, "/ quit game \\") == -1)
 			return (1);
-		assign_sdlrect(&menu->fourth_option_rect, create_vec((menu->background->w - menu->fourth_option->w) / 2, menu->third_option_rect.y + menu->third_option->h), create_vec(0, 0));
+		assign_sdlrect(&menu->options_rects[3], create_vec((menu->background->w - menu->fourth_option->w) / 2, menu->options_rects[2].y + menu->third_option->h), create_vec(0, 0));
 	}
 	return (0);
 }
@@ -187,13 +202,13 @@ int blit_menu_surfs(t_menu *menu, t_sdlmain *sdlmain)
 		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
 	if (highlight_select(menu) == 1)
 		return (error_return("Error in highlight selection function\n", NULL));
-	if ((SDL_BlitSurface(menu->first_option, NULL, menu->background, &menu->first_option_rect)) < 0)
+	if ((SDL_BlitSurface(menu->first_option, NULL, menu->background, &menu->options_rects[0])) < 0)
 		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
-	if ((SDL_BlitSurface(menu->second_option, NULL, menu->background, &menu->second_option_rect)) < 0)
+	if ((SDL_BlitSurface(menu->second_option, NULL, menu->background, &menu->options_rects[1])) < 0)
 		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
-	if ((SDL_BlitSurface(menu->third_option, NULL, menu->background, &menu->third_option_rect)) < 0)
+	if ((SDL_BlitSurface(menu->third_option, NULL, menu->background, &menu->options_rects[2])) < 0)
 		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
-	if ((SDL_BlitSurface(menu->fourth_option, NULL, menu->background, &menu->fourth_option_rect)) < 0)
+	if ((SDL_BlitSurface(menu->fourth_option, NULL, menu->background, &menu->options_rects[3])) < 0)
 		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
 	if ((SDL_BlitSurface(menu->background, NULL, sdlmain->win_surf, &menu->background_rect)) < 0)
 		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
@@ -213,13 +228,11 @@ int menu_loop(t_doom *doom)
 	while (doom->state == MENU_STATE)
 	{
 		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
-		//printf("mouse x %d mouse y %d\n", sdlmain->mouse_pos.x, sdlmain->mouse_pos.y);
 		ft_bzero(menu->background->pixels, menu->background->h * menu->background->pitch);
 		draw_border(menu->background, 0xFFFFFF);
 		while (SDL_PollEvent(&sdlmain->event) != 0)
 			if (menu_events(doom) != 0)
 				break ;
-		//printf("winw %d winh %d surf w %d surf h %d\n", sdlmain->win_w, sdlmain->win_h, sdlmain->win_surf->w, sdlmain->win_surf->h);
 		if (sdlmain->win_w != sdlmain->win_surf->w && sdlmain->win_h != sdlmain->win_surf->h)
 			if (reset_doom(doom))
 				return (error_return("reset doom error\n", NULL));
