@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/12 18:16:02 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/09 21:03:14 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,14 @@ int		free_menu(t_menu *menu)
 	menu->background = NULL;
     SDL_FreeSurface( menu->menu_title );
 	menu->menu_title = NULL;
-    SDL_FreeSurface( menu->first_option );
-	menu->first_option = NULL;
-    SDL_FreeSurface( menu->second_option );
-    menu->second_option = NULL;
-    SDL_FreeSurface( menu->third_option );
-    menu->third_option = NULL;
-    SDL_FreeSurface( menu->fourth_option );
-    menu->fourth_option = NULL;
+    SDL_FreeSurface( menu->options[0] );
+	menu->options[0] = NULL;
+    SDL_FreeSurface( menu->options[1] );
+    menu->options[1] = NULL;
+    SDL_FreeSurface( menu->options[2] );
+    menu->options[2] = NULL;
+    SDL_FreeSurface( menu->options[3] );
+    menu->options[3] = NULL;
     
     //Close the font that was used
     TTF_CloseFont( menu->font );

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/09 14:15:11 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/09 20:59:06 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,21 +165,16 @@ typedef struct	s_menu
 	//The surfaces
 	SDL_Surface *background;
 	SDL_Surface *menu_title;
-	SDL_Surface *first_option;
+	SDL_Surface *options[4];
+	/* SDL_Surface *first_option;
 	SDL_Surface *second_option;
 	SDL_Surface *third_option;
-	SDL_Surface *fourth_option;
+	SDL_Surface *fourth_option;*/
 
 	//Clip rectangles
 	SDL_Rect background_rect;
 	SDL_Rect menu_title_rect;
 	SDL_Rect options_rects[4];
-	/*
-	SDL_Rect first_option_rect;
-	SDL_Rect second_option_rect;
-	SDL_Rect third_option_rect;
-	SDL_Rect fourth_option_rect;
-	*/
 
 	//The font that's going to be used
 	TTF_Font *font;
@@ -301,6 +296,17 @@ int				highlight_text(TTF_Font **font, SDL_Surface **surf, SDL_Color *color, cha
 
 int				reset_text(TTF_Font **font, SDL_Surface **surf, SDL_Color *color, char *text);
 
+/*
+** NULL INIT FUNCTIONS
+*/
+
+void			null_game_pointers(t_game *game);
+
+void			null_menu_pointers(t_menu *menu);
+
+void			null_editor_pointers(t_editor *editor);
+
+void			null_sdlmain_pointers(t_sdlmain *sdlmain);
 /*
 ** FREE FUNCTIONS
 */

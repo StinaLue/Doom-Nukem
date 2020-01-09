@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/01/08 13:30:01 by afonck           ###   ########.fr        #
+#    Updated: 2020/01/09 20:53:22 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,6 +61,7 @@ SOURCES_DIRECTORY = ./src/
 SOURCES_LIST = main.c \
 			init.c \
 			init_structs.c \
+			null_pointers.c \
 			free.c \
 			drawing.c \
 			draw_line.c \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/06 14:59:42 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/09 20:59:55 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,22 +94,26 @@ int game_loop(t_doom *doom)
 
 void null_doom_pointers(t_doom *doom)
 {
-	doom->game.surfs.fixed_mmap = NULL;
+	null_game_pointers(&doom->game);
+	null_menu_pointers(&doom->menu);
+	null_editor_pointers(&doom->editor);
+	null_sdlmain_pointers(&doom->sdlmain);
+	/* doom->game.surfs.fixed_mmap = NULL;
 	doom->game.surfs.rot_mmap = NULL;
 	doom->game.surfs.perspective_view = NULL;
 	doom->game.surfs.weapons = NULL;
 	doom->menu.background = NULL;
 	doom->menu.menu_title = NULL;
-	doom->menu.first_option = NULL;
-	doom->menu.second_option = NULL;
-	doom->menu.third_option = NULL;
-	doom->menu.fourth_option = NULL;
+	doom->menu.options[0] = NULL;
+	doom->menu.options[1] = NULL;
+	doom->menu.options[2] = NULL;
+	doom->menu.options[3] = NULL;
 	doom->menu.font = NULL;
 	doom->editor.editor_surf = NULL;
 	doom->editor.instruct_surf = NULL;
 	doom->sdlmain.win = NULL;
 	doom->sdlmain.win_surf = NULL;
-	doom->sdlmain.music = NULL;
+	doom->sdlmain.music = NULL; */
 }
 
 int	main_loop()
