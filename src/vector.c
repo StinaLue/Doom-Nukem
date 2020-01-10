@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:06:54 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/18 12:49:47 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/09 14:55:40 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,22 @@ double	dot_product(t_vecdb a, t_vecdb b)
 double	cross_product(t_vecdb a, t_vecdb b)
 {
 	return (a.x * b.y - a.y * b.x);
+}
+
+double	cross_product_len(t_vec a, t_vec b, t_vec c)
+{
+	double bax;
+	double bay;
+	double bcx;
+	double bcy;
+
+	bax = a.x - b.x;
+	bay = a.y - b.y;
+	bcx = c.x - b.x;
+	bcy = c.y - b.y;
+	// Got the vectors' coordinates.
+	// calculate the Z coordinate of the cross product.
+	return (bax * bcy - bay * bcx);
 }
 
 double	get_magnitude(t_vecdb a, t_vecdb b)
@@ -102,4 +118,9 @@ t_vecdb	vec_to_vecdb(t_vec vector)
 	vectordb.x = vector.x;
 	vectordb.y = vector.y;
 	return (vectordb);
+}
+
+double	get_point_distance(t_vecdb a, t_vecdb b)
+{
+	return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
 }

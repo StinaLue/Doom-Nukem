@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/10 00:26:23 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/10 15:17:00 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,9 @@ void null_sdlmain_pointers(t_sdlmain *sdlmain)
     sdlmain->win_surf = NULL;
     sdlmain->font = NULL;
     sdlmain->music = NULL;
+}
+
+void null_map_pointers(t_map *map)
+{
+	map->sector_head = NULL;
 }

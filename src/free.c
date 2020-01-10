@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/10 00:28:24 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/10 14:06:11 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,10 @@ int		free_game(t_game *game)
 	game->surfs.weapons = NULL;
 	return (EXIT_FAILURE);
 }
+
+/*
+--------------- FREE EDITOR MENU ? ---------------
+*/
 
 int		free_menu(t_menu *menu)
 {

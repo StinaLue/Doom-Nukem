@@ -6,13 +6,13 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/17 15:27:37 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/07 15:58:15 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-void	basic_move(t_player *player, t_wall *walls, const Uint8 *keyboard_state)
+void	basic_move(t_player *player, const t_sector_node *sector, const Uint8 *keyboard_state)
 {
 	t_vecdb	move;
 
@@ -26,7 +26,7 @@ void	basic_move(t_player *player, t_wall *walls, const Uint8 *keyboard_state)
 		move.x -= 1;
 	if (keyboard_state[SDL_SCANCODE_D])
 		move.x += 1;
-	movement(player, move, walls);
+	movement(player, move, sector);
 }
 
 void	basic_look(t_player *player, const Uint8 *keyboard_state)
@@ -53,9 +53,9 @@ void	basic_look(t_player *player, const Uint8 *keyboard_state)
 		player->helper = 0;
 }
 
-void	handle_keys(t_game *game, t_wall *walls, const Uint8 *keyboard_state)
+void	handle_keys(t_game *game, const t_map *map, const Uint8 *keyboard_state)
 {
 	//which order is the right one ?
 	basic_look(&game->player, keyboard_state);
-	basic_move(&game->player, walls, keyboard_state);
+	basic_move(&game->player, map->sector_head, keyboard_state);
 }

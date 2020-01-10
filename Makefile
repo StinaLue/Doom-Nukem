@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/01/09 20:53:22 by afonck           ###   ########.fr        #
+#    Updated: 2020/01/10 14:22:59 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,9 +75,12 @@ SOURCES_LIST = main.c \
 			movement.c \
 			menu.c \
 			text.c \
+			SDL_sub_functions.c \
+			ll_sector.c \
+			ll_wall.c \
 			editor.c \
 			mouse.c \
-			SDL_sub_functions.c#\
+			editor_menu.c#\
 	       multithreading.c \
 		   texture.c \
 		   parsing.c \
