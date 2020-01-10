@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/10 14:28:43 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/10 16:57:24 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 {
 	int i = 0;
 
+	editor->edit_map.sector_head = NULL;
+
 	if (create_surfaces_editor(editor, sdlmain) != 0)
 		return (1);
 	if (init_editor_menu(editor) != 0)
@@ -84,14 +86,14 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	editor->num_sectors = 0;
 	editor->start_sector_reached = 1;
 	editor->color_change = 0;
-	editor->sign_pos = 0;
+	/* editor->sign_pos = 0;
 	editor->point = 0;
 	editor->A.x = 0;
 	editor->A.y = 0;
 	editor->B.x = 0;
 	editor->B.y = 0;
 	editor->C.x = 0;
-	editor->C.y = 0;
+	editor->C.y = 0; */	
 	return (0);
 }
 
@@ -142,12 +144,12 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 
 void	save_sectors(t_editor *editor)
 {
-	if ((editor->start_sector.x == editor->walls[editor->sector.num_walls].end_wall.x) && (editor->start_sector.y == editor->walls[editor->sector.num_walls].end_wall.y))
+	if ((editor->start_sector.x == editor->wall_tmp.end_wall.x) && (editor->start_sector.y == editor->wall_tmp.end_wall.y))
 	{
 		editor->clicked = 0;
 		editor->start_sector_reached = 1;
 		editor->num_sectors++;
-		editor->point = 0;
+		//editor->point = 0;
 	}
 }
 
@@ -193,8 +195,9 @@ int	editor_events(t_doom *doom)
 	{
 		if (sdlmain->event.key.repeat == 0)
 			check_menu(&doom->sdlmain.event, &doom->state, &doom->menu.previous_state, EDITOR_STATE);
-        if (sdlmain->event.key.keysym.sym == SDLK_u && editor->sector.num_walls > 0)
-			editor->sector.num_walls--;
+        if (sdlmain->event.key.keysym.sym == SDLK_u)
+			undo_wall(editor->edit_map.sector_head);
+			//editor->sector.num_walls--;
 	}
     if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
     {
@@ -237,10 +240,13 @@ int	editor_events(t_doom *doom)
 					}
 				}
 				editor->point++; */
-				editor->walls[editor->sector.num_walls].end_wall.x = sdlmain->mouse_pos.x;
-				editor->walls[editor->sector.num_walls].end_wall.y = sdlmain->mouse_pos.y;
-				editor->walls[editor->sector.num_walls + 1].start_wall.x = editor->walls[editor->sector.num_walls].end_wall.x;
-				editor->walls[editor->sector.num_walls + 1].start_wall.y = editor->walls[editor->sector.num_walls].end_wall.y;
+				//editor->walls[editor->sector.num_walls].end_wall.x = sdlmain->mouse_pos.x;
+				//editor->walls[editor->sector.num_walls].end_wall.y = sdlmain->mouse_pos.y;
+				editor->wall_tmp.end_wall.x = sdlmain->mouse_pos.x; // can maybe be put into create_wall_node directly
+				editor->wall_tmp.end_wall.y = sdlmain->mouse_pos.y;
+				create_wall_node(&editor->edit_map.sector_head->wall_head, editor->wall_tmp.start_wall, editor->wall_tmp.end_wall, 0x00ABFF);
+				editor->wall_tmp.start_wall.x = editor->wall_tmp.end_wall.x;
+				editor->wall_tmp.start_wall.y = editor->wall_tmp.end_wall.y;
 				save_sectors(editor);
 				editor->sector.num_walls++;
 			}
@@ -248,15 +254,18 @@ int	editor_events(t_doom *doom)
 			{
 				if (editor->start_sector_reached == 1)
 				{
-					editor->walls[editor->sector.num_walls].start_wall.x = sdlmain->mouse_pos.x;
-					editor->walls[editor->sector.num_walls].start_wall.y = sdlmain->mouse_pos.y;
+					add_sector_node(&editor->edit_map.sector_head);
+					//editor->walls[editor->sector.num_walls].start_wall.x = sdlmain->mouse_pos.x;
+					//editor->walls[editor->sector.num_walls].start_wall.y = sdlmain->mouse_pos.y;
 					editor->start_sector.x = sdlmain->mouse_pos.x;
 					editor->start_sector.y = sdlmain->mouse_pos.y;
+					editor->wall_tmp.start_wall.x = sdlmain->mouse_pos.x;
+					editor->wall_tmp.start_wall.y = sdlmain->mouse_pos.y;
 					editor->clicked = 1;
 					editor->start_sector_reached = 0;
 					//editor->A.x = sdlmain->mouse_pos.x;
 					//editor->A.y = sdlmain->mouse_pos.y;
-					editor->point++;
+					//editor->point++;
 				}
 			}
 			//ft_printf("Ax = %d, Ay = %d, Bx = %d, By = %d, Cx = %d, Cy = %d\n", editor->A.x, editor->A.y, editor->B.x, editor->B.y, editor->C.x, editor->C.y);

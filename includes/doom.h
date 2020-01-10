@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/10 15:17:31 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/10 16:57:05 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,12 +195,12 @@ typedef struct s_editor_menu
 	SDL_Color textColor;
 }				t_editor_menu;
 
-typedef struct	s_sector
+/* typedef struct	s_sector
 {
 	int			num_walls;
 	t_wall 		*walls;
     t_vec       start_sector;
-}				t_sector;
+}				t_sector; */
 
 typedef struct	s_map
 {
@@ -222,17 +222,18 @@ typedef struct 	s_editor
     //int         sectors[MAX_SECTORS];
 	int			start_sector_reached;
 	int 		color_change;
-	int 		sign_pos;
-	int 		point;
-	t_vec 		A; // used for convex
+	//int 		sign_pos;
+	//int 		point;
+	/* t_vec 		A; // used for convex
 	t_vec 		B;
-	t_vec 		C;
-    t_wall      walls[MAX_WALLS];
+	t_vec 		C; */
+    //t_wall      walls[MAX_WALLS];
 	t_vec 		grid_values[NBPOINTS];
     t_vec       start_sector;
+	t_wall_node wall_tmp;
 	t_editor_menu editor_menu;
 	t_map		edit_map;
-    t_sector    sector;
+    //t_sector    sector;
 }				t_editor;
 
 typedef struct	s_menu
@@ -481,6 +482,8 @@ t_wall_node			*create_wall_node(t_wall_node **wall_head, t_vecdb a, t_vecdb b, i
 void				free_wall_list(t_wall_node **wall_list);
 
 t_vecdb				point_average_position(t_wall_node *wall_head);
+
+t_wall_node			*delete_last_wall(t_wall_node **wall_list);
 
 
 #endif
