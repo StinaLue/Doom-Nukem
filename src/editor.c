@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/09 18:13:19 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/10 13:58:02 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,7 +206,7 @@ int	editor_events(t_doom *doom)
 			} */
 			if (editor->clicked == 1/*  && is_convex(editor->A, editor->B, editor->C, editor) */)
 			{
-				if (editor->C.x == 0 && editor->point == 1)
+				/* if (editor->C.x == 0 && editor->point == 1)
 				{
 					editor->B.x = editor->mouse_pos.x;
 					editor->B.y = editor->mouse_pos.y;
@@ -236,7 +236,7 @@ int	editor_events(t_doom *doom)
 							editor->sign_pos = 1;
 					}
 				}
-				editor->point++;
+				editor->point++; */
 				editor->walls[editor->sector.num_walls].end_wall.x = editor->mouse_pos.x;
 				editor->walls[editor->sector.num_walls].end_wall.y = editor->mouse_pos.y;
 				editor->walls[editor->sector.num_walls + 1].start_wall.x = editor->walls[editor->sector.num_walls].end_wall.x;
@@ -259,9 +259,9 @@ int	editor_events(t_doom *doom)
 					editor->point++;
 				}
 			}
-			ft_printf("Ax = %d, Ay = %d, Bx = %d, By = %d, Cx = %d, Cy = %d\n", editor->A.x, editor->A.y, editor->B.x, editor->B.y, editor->C.x, editor->C.y);
-			ft_printf("point %d\n", editor->point);
-			ft_printf("sign: %d\n", editor->sign_pos);
+			//ft_printf("Ax = %d, Ay = %d, Bx = %d, By = %d, Cx = %d, Cy = %d\n", editor->A.x, editor->A.y, editor->B.x, editor->B.y, editor->C.x, editor->C.y);
+			//ft_printf("point %d\n", editor->point);
+			//ft_printf("sign: %d\n", editor->sign_pos);
 		}
 	}
 	if (doom->state != EDITOR_STATE)
