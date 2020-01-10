@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/09 21:03:14 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/10 00:28:24 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int		free_sdlmain(t_sdlmain *sdlmain)
 	SDL_DestroyWindow(sdlmain->win);
 	sdlmain->win = NULL;
 	sdlmain->win_surf = NULL;
+    TTF_CloseFont( sdlmain->font );
+	sdlmain->font = NULL;
 	Mix_FreeMusic(sdlmain->music);
 	sdlmain->music = NULL;
 	return (EXIT_FAILURE);
@@ -59,9 +61,6 @@ int		free_menu(t_menu *menu)
     SDL_FreeSurface( menu->options[3] );
     menu->options[3] = NULL;
     
-    //Close the font that was used
-    TTF_CloseFont( menu->font );
-	menu->font = NULL;
 	return (EXIT_FAILURE);
 }
 

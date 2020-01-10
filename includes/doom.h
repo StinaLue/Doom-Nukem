@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/09 20:59:06 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/10 00:24:47 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ typedef struct	s_sdlmain
 	SDL_Window	*win;
 	SDL_Surface	*win_surf;
 	SDL_Event	event;
+	TTF_Font	*font;
 	Mix_Music	*music;
 	t_vec       mouse_pos;
 	int			win_w;
@@ -177,7 +178,7 @@ typedef struct	s_menu
 	SDL_Rect options_rects[4];
 
 	//The font that's going to be used
-	TTF_Font *font;
+//	TTF_Font *font;
 
 	//The color of the font
 	SDL_Color textColor;

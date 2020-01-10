@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/08 12:59:56 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/10 00:25:50 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ int		init_sdlmain(t_sdlmain *sdlmain)
 			SDL_GetError());
 		return (EXIT_FAILURE);
 	}
-	//if ((sdlmain->music = Mix_LoadMUS("assets/sounds/Story Music.mid")) == NULL)
+	if ((sdlmain->font = TTF_OpenFont("assets/fonts/dukes-3d.ttf", 28)) == NULL)
+		return (error_return("TTF_OpenFont error = %s\n", TTF_GetError()));
 	if ((sdlmain->music = Mix_LoadMUS("assets/sounds/beet.wav")) == NULL)
 		return (error_return("Mix_LoadMUS error: %{r}s\n", Mix_GetError()));
 	Mix_PlayMusic(sdlmain->music, -1);
