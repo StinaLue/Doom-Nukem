@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:06:54 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/08 15:18:54 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/09 14:55:40 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,22 @@ double	dot_product(t_vecdb a, t_vecdb b)
 double	cross_product(t_vecdb a, t_vecdb b)
 {
 	return (a.x * b.y - a.y * b.x);
+}
+
+double	cross_product_len(t_vec a, t_vec b, t_vec c)
+{
+	double bax;
+	double bay;
+	double bcx;
+	double bcy;
+
+	bax = a.x - b.x;
+	bay = a.y - b.y;
+	bcx = c.x - b.x;
+	bcy = c.y - b.y;
+	// Got the vectors' coordinates.
+	// calculate the Z coordinate of the cross product.
+	return (bax * bcy - bay * bcx);
 }
 
 double	get_magnitude(t_vecdb a, t_vecdb b)

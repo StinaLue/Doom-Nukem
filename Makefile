@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+         #
+#    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/01/07 16:24:05 by phaydont         ###   ########.fr        #
+#    Updated: 2020/01/10 14:22:59 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,6 +61,7 @@ SOURCES_DIRECTORY = ./src/
 SOURCES_LIST = main.c \
 			init.c \
 			init_structs.c \
+			null_pointers.c \
 			free.c \
 			drawing.c \
 			draw_line.c \
@@ -76,8 +77,10 @@ SOURCES_LIST = main.c \
 			text.c \
 			SDL_sub_functions.c \
 			ll_sector.c \
-			ll_wall.c #\
+			ll_wall.c \
 			editor.c \
+			mouse.c \
+			editor_menu.c#\
 	       multithreading.c \
 		   texture.c \
 		   parsing.c \

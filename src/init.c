@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2020/01/08 16:48:56 by phaydont         ###   ########.fr       */
+=======
+/*   Updated: 2020/01/10 15:15:11 by afonck           ###   ########.fr       */
+>>>>>>> master
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +56,13 @@ int		init_sdlmain(t_sdlmain *sdlmain)
 			SDL_GetError());
 		return (EXIT_FAILURE);
 	}
-	//if ((sdlmain->music = Mix_LoadMUS("assets/sounds/Story Music.mid")) == NULL)
+	if ((sdlmain->font = TTF_OpenFont("assets/fonts/dukes-3d.ttf", 28)) == NULL)
+		return (error_return("TTF_OpenFont error = %s\n", TTF_GetError()));
 	if ((sdlmain->music = Mix_LoadMUS("assets/sounds/beet.wav")) == NULL)
 		return (error_return("Mix_LoadMUS error: %{r}s\n", Mix_GetError()));
 	Mix_PlayMusic(sdlmain->music, -1);
+	sdlmain->mouse_pos.x = 0;
+	sdlmain->mouse_pos.y = 0;
 	return (EXIT_SUCCESS);
 }
 
@@ -70,6 +77,7 @@ int		init_map(t_map *map)
 	t_vecdb vec7 = {40, 20};
 	t_vecdb vec8 = {20, 40};
 
+	//map->sector_head = NULL;
 	add_sector_node(&map->sector_head);
 	create_wall_node(&map->sector_head->wall_head, vec1, vec2, 0xff0000);
 	create_wall_node(&map->sector_head->wall_head, vec2, vec3, 0xffbb00);

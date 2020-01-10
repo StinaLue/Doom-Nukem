@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/08 15:32:39 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/10 15:17:31 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,9 @@ typedef struct	s_sdlmain
 	SDL_Window	*win;
 	SDL_Surface	*win_surf;
 	SDL_Event	event;
+	TTF_Font	*font;
 	Mix_Music	*music;
+	t_vec       mouse_pos;
 	int			win_w;
 	int			win_h;
 }				t_sdlmain;
@@ -165,6 +167,34 @@ typedef struct	s_game
 	t_player	player;
 }				t_game;
 
+typedef struct s_editor_menu
+{
+	//The surfaces
+	SDL_Surface *background;
+	SDL_Surface *title;
+	SDL_Surface *title_inst;
+	SDL_Surface *first_option;
+	//SDL_Surface *second_option;
+	//SDL_Surface *third_option;
+	//SDL_Surface *fourth_option;
+	//SDL_Surface *fifth_option;
+
+	//Clip rectangles
+	SDL_Rect background_rect;
+	SDL_Rect title_rect;
+	SDL_Rect title_inst_rect;
+	SDL_Rect first_option_rect;
+	//SDL_Rect second_option_rect;
+	//SDL_Rect third_option_rect;
+	//SDL_Rect fourth_option_rect;
+
+	//The font that's going to be used
+	TTF_Font *font;
+
+	//The color of the font
+	SDL_Color textColor;
+}				t_editor_menu;
+
 typedef struct	s_sector
 {
 	int			num_walls;
@@ -181,17 +211,28 @@ typedef struct	s_map
 typedef struct 	s_editor
 {
 	SDL_Surface *editor_surf;
+	SDL_Surface *options_surf;
 	SDL_Surface *instruct_surf;
 	SDL_Rect	editor_rect;
+	SDL_Rect	options_rect;
 	SDL_Rect	instruct_rect;
     int         clicked;
 	int			num_sectors;
     int         offset;
-	t_map		edit_map;
-    //t_sector    sector[MAX_SECTORS];
-	//int			clockwise;
+    //int         sectors[MAX_SECTORS];
+	int			start_sector_reached;
+	int 		color_change;
+	int 		sign_pos;
+	int 		point;
+	t_vec 		A; // used for convex
+	t_vec 		B;
+	t_vec 		C;
+    t_wall      walls[MAX_WALLS];
 	t_vec 		grid_values[NBPOINTS];
-	t_vec       mouse_pos;
+    t_vec       start_sector;
+	t_editor_menu editor_menu;
+	t_map		edit_map;
+    t_sector    sector;
 }				t_editor;
 
 typedef struct	s_menu
@@ -199,25 +240,24 @@ typedef struct	s_menu
 	//The surfaces
 	SDL_Surface *background;
 	SDL_Surface *menu_title;
-	SDL_Surface *first_option;
+	SDL_Surface *options[4];
+	/* SDL_Surface *first_option;
 	SDL_Surface *second_option;
 	SDL_Surface *third_option;
-	SDL_Surface *fourth_option;
+	SDL_Surface *fourth_option;*/
 
 	//Clip rectangles
 	SDL_Rect background_rect;
 	SDL_Rect menu_title_rect;
-	SDL_Rect first_option_rect;
-	SDL_Rect second_option_rect;
-	SDL_Rect third_option_rect;
-	SDL_Rect fourth_option_rect;
+	SDL_Rect options_rects[4];
 
 	//The font that's going to be used
-	TTF_Font *font;
+//	TTF_Font *font;
 
 	//The color of the font
 	SDL_Color textColor;
 	int		current_option;
+	int		prev_option;
 	int		previous_state;
 }				t_menu;
 
@@ -230,6 +270,8 @@ typedef struct	s_doom
 	t_map		map;
 	int			state;
 }				t_doom;
+
+int		is_mouse_collide(t_vec mouse_pos, SDL_Rect collide_rect);
 
 int 	check_collision(double pos_x, double pos_y, t_wall *walls);
 
@@ -264,6 +306,8 @@ double			cross_product(t_vecdb a, t_vecdb b);
 
 t_vecdb			create_vecdb(double x, double y);
 
+double			cross_product_len(t_vec a, t_vec b, t_vec c);
+
 double			get_point_distance(t_vecdb a, t_vecdb b);
 
 /*
@@ -278,9 +322,11 @@ int				init_game(t_game *game, t_sdlmain *sdlmain);
 
 int				init_menu(t_menu *menu, t_sdlmain *sdlmain);
 
-//int				init_editor(t_editor *editor, t_sdlmain *sdlmain);
+int				init_editor(t_editor *editor, t_sdlmain *sdlmain);
 
 int				init_sdlmain(t_sdlmain *sdlmain);
+
+int				init_editor_menu(t_editor *editor);
 
 int				init_map(t_map *map);
 
@@ -338,6 +384,20 @@ void			draw_border(SDL_Surface *surf, int color);
 int				highlight_text(TTF_Font **font, SDL_Surface **surf, SDL_Color *color, char *text);
 
 int				reset_text(TTF_Font **font, SDL_Surface **surf, SDL_Color *color, char *text);
+
+/*
+** NULL INIT FUNCTIONS
+*/
+
+void			null_game_pointers(t_game *game);
+
+void			null_menu_pointers(t_menu *menu);
+
+void			null_editor_pointers(t_editor *editor);
+
+void			null_sdlmain_pointers(t_sdlmain *sdlmain);
+
+void			null_map_pointers(t_map *map);
 
 /*
 ** FREE FUNCTIONS
