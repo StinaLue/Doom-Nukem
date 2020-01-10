@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/10 00:24:47 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/10 01:40:42 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,6 +183,7 @@ typedef struct	s_menu
 	//The color of the font
 	SDL_Color textColor;
 	int		current_option;
+	int		prev_option;
 	int		previous_state;
 }				t_menu;
 

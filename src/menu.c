@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:27:36 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/10 00:48:17 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/10 02:44:09 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int init_menu_surfs(t_menu *menu, t_sdlmain *sdlmain)
 int init_menu(t_menu *menu, t_sdlmain *sdlmain)
 {
 	menu->current_option = 0;
+	menu->prev_option = 0;
 	menu->previous_state = QUIT_STATE;
 	//Load the background image
 	menu->background = NULL;
@@ -45,8 +46,8 @@ int init_menu(t_menu *menu, t_sdlmain *sdlmain)
 	if (init_menu_surfs(menu, sdlmain) != 0)	
 		return (1);
 	assign_sdlrect(&menu->menu_title_rect, create_vec((menu->background->w - menu->menu_title->w) / 2, (menu->background->h - menu->menu_title->h) / 8), create_vec(0, 0));
-	assign_sdlrect(&menu->options_rects[0], create_vec((menu->background->w - menu->options[0]->w) / 2, menu->options_rects[1].y - menu->options[1]->h), create_vec(0, 0));
 	assign_sdlrect(&menu->options_rects[1], create_vec((menu->background->w - menu->options[1]->w) / 2, (menu->background->h - menu->options[1]->h) / 2), create_vec(0, 0));
+	assign_sdlrect(&menu->options_rects[0], create_vec((menu->background->w - menu->options[0]->w) / 2, menu->options_rects[1].y - menu->options[1]->h), create_vec(0, 0));
 	assign_sdlrect(&menu->options_rects[2], create_vec((menu->background->w - menu->options[2]->w) / 2, menu->options_rects[1].y + menu->options[1]->h), create_vec(0, 0));
 	assign_sdlrect(&menu->options_rects[3], create_vec((menu->background->w - menu->options[3]->w) / 2, menu->options_rects[2].y + menu->options[2]->h), create_vec(0, 0));
 	draw_border(menu->background, 0xFFFFFF);
@@ -54,22 +55,26 @@ int init_menu(t_menu *menu, t_sdlmain *sdlmain)
 	return (0);
 }
 
-void	browse_options(t_sdlmain *sdlmain, int *option, SDL_Rect *rects, SDL_Rect *bg_rect)
+void	browse_options(t_sdlmain *sdlmain, t_menu *menu, SDL_Rect *rects)
 {
-	if (sdlmain->event.key.keysym.sym == SDLK_DOWN && *option < 4)
-		*option += 1;
-	else if (sdlmain->event.key.keysym.sym == SDLK_UP && *option > 1)
-		*option -= 1;
-	sdlmain->mouse_pos.x -= bg_rect->x;
-	sdlmain->mouse_pos.y -= bg_rect->y;
-	if (is_mouse_collide(sdlmain->mouse_pos, rects[0]))
-		*option = FIRST_OPTION_SELECT;
+	int prev_opt;
+
+	prev_opt = menu->current_option;
+	SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
+	sdlmain->mouse_pos.x -= menu->background_rect.x;
+	sdlmain->mouse_pos.y -= menu->background_rect.y;
+	if (sdlmain->event.key.keysym.sym == SDLK_DOWN && menu->current_option < 4)
+		menu->current_option += 1;
+	else if (sdlmain->event.key.keysym.sym == SDLK_UP && menu->current_option > 1)
+		menu->current_option -= 1;
+	else if (is_mouse_collide(sdlmain->mouse_pos, rects[0]))
+		menu->current_option = FIRST_OPTION_SELECT;
 	else if (is_mouse_collide(sdlmain->mouse_pos, rects[1]))
-		*option = SECOND_OPTION_SELECT;
+		menu->current_option = SECOND_OPTION_SELECT;
 	else if (is_mouse_collide(sdlmain->mouse_pos, rects[2]))
-		*option = THIRD_OPTION_SELECT;
+		menu->current_option = THIRD_OPTION_SELECT;
 	else if (is_mouse_collide(sdlmain->mouse_pos, rects[3]))
-		*option = FOURTH_OPTION_SELECT;
+		menu->current_option = FOURTH_OPTION_SELECT;
 }
 
 void	change_win_dimensions(int *width, int *height)
@@ -124,14 +129,14 @@ int		menu_events(t_doom *doom)
 	{
 		if (sdlmain->event.key.keysym.sym == SDLK_TAB)
 			doom->state = menu->previous_state;
-		browse_options(sdlmain, &menu->current_option, menu->options_rects, &menu->background_rect);
+		browse_options(sdlmain, menu, menu->options_rects);
 		if (sdlmain->event.key.keysym.sym == SDLK_RETURN)
 			launch_option(doom);
 	}
 	else if (sdlmain->event.type == SDL_MOUSEMOTION || sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
 	{
-		browse_options(sdlmain, &menu->current_option, menu->options_rects, &menu->background_rect);
-		if (sdlmain->event.button.button == SDL_BUTTON_LEFT && sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
+		browse_options(sdlmain, menu, menu->options_rects);
+		if (sdlmain->event.button.button == SDL_BUTTON_LEFT)
 			launch_option(doom);
 	}
 	if (doom->state != MENU_STATE)
@@ -139,8 +144,10 @@ int		menu_events(t_doom *doom)
 	return (0);
 }
 
-int	highlight_select(t_menu *menu, t_sdlmain *sdlmain)
+int reset_menu_text(t_menu *menu, t_sdlmain *sdlmain)
 {
+	if (menu->prev_option == menu->current_option)
+		return (0);
 	if (reset_text(&sdlmain->font, &menu->options[0], &menu->textColor, "editor") == -1)
 		return (1);
 	if (reset_text(&sdlmain->font, &menu->options[1], &menu->textColor, "return to game") == -1)
@@ -153,6 +160,13 @@ int	highlight_select(t_menu *menu, t_sdlmain *sdlmain)
 	assign_sdlrect(&menu->options_rects[1], create_vec((menu->background->w - menu->options[1]->w) / 2, (menu->background->h - menu->options[1]->h) / 2), create_vec(0, 0));
 	assign_sdlrect(&menu->options_rects[2], create_vec((menu->background->w - menu->options[2]->w) / 2, menu->options_rects[1].y + menu->options[1]->h), create_vec(0, 0));
 	assign_sdlrect(&menu->options_rects[3], create_vec((menu->background->w - menu->options[3]->w) / 2, menu->options_rects[2].y + menu->options[2]->h), create_vec(0, 0));
+	return (0);
+}
+
+int	highlight_select(t_menu *menu, t_sdlmain *sdlmain)
+{
+	if (menu->prev_option == menu->current_option)
+		return (0);
 	if (menu->current_option == FIRST_OPTION_SELECT)
 	{
 		if (highlight_text(&sdlmain->font, &menu->options[0], &menu->textColor, "/ editor \\") == -1)
@@ -187,7 +201,9 @@ int	reset_doom(t_doom *doom)
 	free_menu(&doom->menu);
 	free_editor(&doom->editor);
 	free_sdlmain(&doom->sdlmain);
-	if (init_sdlmain(&doom->sdlmain) == 1 \
+	quit_sdl_and_ttf();
+	if (init_sdl_and_ttf() == 1 \
+		|| init_sdlmain(&doom->sdlmain) == 1 \
 		|| init_gamesurfs_struct(&doom->game.surfs, &doom->sdlmain) \
 		|| init_menu(&doom->menu, &doom->sdlmain) == 1 \
 		|| init_editor(&doom->editor, &doom->sdlmain) == 1)
@@ -200,7 +216,7 @@ int blit_menu_surfs(t_menu *menu, t_sdlmain *sdlmain)
 {
 	if ((SDL_BlitSurface(menu->menu_title, NULL, menu->background, &menu->menu_title_rect)) < 0)
 		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
-	if (highlight_select(menu, sdlmain) == 1)
+	if (reset_menu_text(menu, sdlmain) == 1 || highlight_select(menu, sdlmain) == 1)
 		return (error_return("Error in highlight selection function\n", NULL));
 	if ((SDL_BlitSurface(menu->options[0], NULL, menu->background, &menu->options_rects[0])) < 0)
 		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
@@ -227,7 +243,7 @@ int menu_loop(t_doom *doom)
 	sdlmain = &(doom->sdlmain);
 	while (doom->state == MENU_STATE)
 	{
-		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
+		//SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
 		ft_bzero(menu->background->pixels, menu->background->h * menu->background->pitch);
 		draw_border(menu->background, 0xFFFFFF);
 		while (SDL_PollEvent(&sdlmain->event) != 0)
