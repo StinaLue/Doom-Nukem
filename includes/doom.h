@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/10 16:57:05 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/12 16:51:43 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -473,6 +473,8 @@ t_sector_node		*add_sector_node(t_sector_node **sector_head);
 
 void				set_sector_position(t_sector_node *sector_list);
 
+t_sector_node		*get_last_sector_node(t_sector_node *sector_list);
+
 /*WALLS*/
 
 t_wall_node			*add_wall_node(t_wall_node **wall_head, const t_wall_node *node);
@@ -485,5 +487,13 @@ t_vecdb				point_average_position(t_wall_node *wall_head);
 
 t_wall_node			*delete_last_wall(t_wall_node **wall_list);
 
+t_wall_node			*get_last_wall_node(t_wall_node *wall_list);
+
+t_wall_node 		*undo_wall(t_sector_node *node);
+
+/*
+** DEBUG FUNCTIONS
+*/
+void				print_map_contents(const t_map *map);
 
 #endif

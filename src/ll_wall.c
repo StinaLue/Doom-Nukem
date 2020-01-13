@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_wall.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:25:24 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/08 16:59:42 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/11 02:09:33 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,15 @@ t_vecdb		point_average_position(t_wall_node *wall_head)
 		average.y /= count;
 	}
 	return (average);
+}
+
+t_wall_node		*get_last_wall_node(t_wall_node *wall_list)
+{
+	if (wall_list == NULL)
+		return (NULL);
+	while (wall_list->next != NULL)
+		wall_list = wall_list->next;
+	return (wall_list);
 }
 
 //removewall(int index)

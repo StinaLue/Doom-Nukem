@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/10 15:17:00 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/11 16:38:38 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void null_editor_pointers(t_editor *editor)
 {
     editor->editor_surf = NULL;
     editor->instruct_surf = NULL;
+    null_map_pointers(&editor->edit_map);
 }
 
 void null_sdlmain_pointers(t_sdlmain *sdlmain)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_sector.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:02:35 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/10 15:58:59 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/11 01:53:57 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,4 +114,13 @@ t_sector_node	*get_sector_by_pos(t_sector_node *sector_list, t_vecdb point, doub
 		return (sector_list);
 	else
 		return (get_sector_by_pos(sector_list->next, point, dist));
+}
+
+t_sector_node	*get_last_sector_node(t_sector_node *sector_list)
+{
+	if (sector_list == NULL)
+		return (NULL);
+	while (sector_list->next != NULL)
+		sector_list = sector_list->next;
+	return (sector_list);
 }
