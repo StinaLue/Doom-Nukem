@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_wall.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:25:24 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/11 02:09:33 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/13 15:46:00 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ t_wall_node	*add_wall_node(t_wall_node **wall_head, const t_wall_node *node)
 	new_node->sector_index = node->sector_index;
 	new_node->neighbor_sector = node->neighbor_sector;
 	new_node->next = NULL;
-	new_node->previous = NULL;
 	return (new_node);
 }
 
@@ -97,7 +96,6 @@ t_wall_node	*create_wall_node(t_wall_node **wall_head, t_vecdb a, t_vecdb b, int
 	new_node->sector_index = -1;
 	new_node->neighbor_sector = -1;
 	new_node->next = NULL;
-	new_node->previous = NULL;
 	return (new_node);
 }
 
@@ -181,3 +179,43 @@ t_wall_node		*get_last_wall_node(t_wall_node *wall_list)
 
 //removewall(int index)
 //removewall(t_vecdb position)
+
+//mallocs and copies a list of walls on a new list adress
+//returns the number of walls mallocs or -1 if malloc error
+int			copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list)
+{
+	int	ret;
+
+	if (wall_list == NULL)
+		return (0);
+	*new_list = malloc(sizeof(t_wall_node));
+	if (*new_list == NULL)
+		return (-1);
+	(*new_list)->start_wall = wall_list->start_wall;
+	(*new_list)->end_wall = wall_list->end_wall;
+	(*new_list)->color = wall_list->color;
+	(*new_list)->sector_index = wall_list->sector_index;
+	(*new_list)->neighbor_sector = wall_list->neighbor_sector;
+	ret = copy_wall_list(wall_list->next, &(*new_list)->next);
+	if (ret == -1)
+		return (-1);
+	return (ret + 1);
+}
+
+//checks if the list of walls is closed (loop)
+//returns 1 if it is 0 if not
+int			wall_loop(t_wall_node *node)
+{
+	int		loop;
+	t_vecdb	*start;
+
+	if (node == NULL)
+		return (-1);
+	loop = 0;
+	start = &node->start_wall;
+	while (node->next != NULL)
+		node = node->next;
+	if (node->end_wall.x == start->x && node->end_wall.y == start->y && &node->start_wall != start)
+		loop = 1;
+	return (loop);
+}
