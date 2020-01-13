@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:27:36 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/10 15:07:21 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/13 13:59:14 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,26 +55,29 @@ int init_menu(t_menu *menu, t_sdlmain *sdlmain)
 	return (0);
 }
 
-void	browse_options(t_sdlmain *sdlmain, t_menu *menu, SDL_Rect *rects)
+void	browse_options(t_sdlmain *sdlmain, t_menu *menu, SDL_Rect *rects, int key_or_mouse)
 {
-	int prev_opt;
-
-	prev_opt = menu->current_option;
 	SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
 	sdlmain->mouse_pos.x -= menu->background_rect.x;
 	sdlmain->mouse_pos.y -= menu->background_rect.y;
-	if (sdlmain->event.key.keysym.sym == SDLK_DOWN && menu->current_option < 4)
-		menu->current_option += 1;
-	else if (sdlmain->event.key.keysym.sym == SDLK_UP && menu->current_option > 1)
-		menu->current_option -= 1;
-	else if (is_mouse_collide(sdlmain->mouse_pos, rects[0]))
-		menu->current_option = FIRST_OPTION_SELECT;
-	else if (is_mouse_collide(sdlmain->mouse_pos, rects[1]))
-		menu->current_option = SECOND_OPTION_SELECT;
-	else if (is_mouse_collide(sdlmain->mouse_pos, rects[2]))
-		menu->current_option = THIRD_OPTION_SELECT;
-	else if (is_mouse_collide(sdlmain->mouse_pos, rects[3]))
-		menu->current_option = FOURTH_OPTION_SELECT;
+	if (key_or_mouse == 1)
+	{
+		if (sdlmain->event.key.keysym.sym == SDLK_DOWN && menu->current_option < 4)
+			menu->current_option += 1;
+		else if (sdlmain->event.key.keysym.sym == SDLK_UP && menu->current_option > 1)
+			menu->current_option -= 1;
+	}
+	else if (key_or_mouse == 2)
+	{
+		if (is_mouse_collide(sdlmain->mouse_pos, rects[0]))
+			menu->current_option = FIRST_OPTION_SELECT;
+		else if (is_mouse_collide(sdlmain->mouse_pos, rects[1]))
+			menu->current_option = SECOND_OPTION_SELECT;
+		else if (is_mouse_collide(sdlmain->mouse_pos, rects[2]))
+			menu->current_option = THIRD_OPTION_SELECT;
+		else if (is_mouse_collide(sdlmain->mouse_pos, rects[3]))
+			menu->current_option = FOURTH_OPTION_SELECT;
+	}
 }
 
 void	change_win_dimensions(int *width, int *height)
@@ -120,8 +123,8 @@ void	launch_option(t_doom *doom)
 
 int		menu_events(t_doom *doom)
 {
-	t_menu *menu;
-	t_sdlmain *sdlmain;
+	t_menu		*menu;
+	t_sdlmain	*sdlmain;
 
 	menu = &(doom->menu);
 	sdlmain = &(doom->sdlmain);
@@ -129,13 +132,14 @@ int		menu_events(t_doom *doom)
 	{
 		if (sdlmain->event.key.keysym.sym == SDLK_TAB)
 			doom->state = menu->previous_state;
-		browse_options(sdlmain, menu, menu->options_rects);
+		browse_options(sdlmain, menu, menu->options_rects, 1);
 		if (sdlmain->event.key.keysym.sym == SDLK_RETURN)
 			launch_option(doom);
 	}
-	else if (sdlmain->event.type == SDL_MOUSEMOTION || sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
+	else if (sdlmain->event.type == SDL_MOUSEMOTION \
+	|| sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
 	{
-		browse_options(sdlmain, menu, menu->options_rects);
+		browse_options(sdlmain, menu, menu->options_rects, 2);
 		if (sdlmain->event.button.button == SDL_BUTTON_LEFT)
 			launch_option(doom);
 	}
