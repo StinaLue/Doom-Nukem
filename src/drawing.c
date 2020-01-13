@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   drawing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 03:35:35 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/09 00:33:59 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/07 15:59:13 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,38 +40,45 @@ void	draw_border(SDL_Surface *surf, int color)
 	draw_line(bottom_right, bottom_left, surf, color);
 }
 
-void		draw_map(t_sdlmain *sdlmain, t_doom *doom, t_wall *walls, char *hud_flags)
+int		draw_map(t_sdlmain *sdlmain, t_game *game, const t_map *map, char *hud_flags)
 {
-	doom->surfs.fixed_mmap->userdata = "1map";
+	int ret;
+
+	ret = 0;
+	game->surfs.fixed_mmap->userdata = "1map";
 	if ((*hud_flags & ROT_MAP_SHOW) && (*hud_flags & FIX_MAP_SHOW) == 0)
-		draw_full_rotmap(doom->surfs.rot_mmap, &doom->player, walls, sdlmain->win_surf);
+		ret = draw_full_rotmap(game->surfs.rot_mmap, &game->player, map, sdlmain->win_surf);
 	else if ((*hud_flags & FIX_MAP_SHOW) && (*hud_flags & ROT_MAP_SHOW) == 0)
-		draw_full_fixedmap(doom->surfs.fixed_mmap, &doom->player, walls, sdlmain->win_surf);
-	if ((*hud_flags & ROT_MAP_SHOW) && (*hud_flags & FIX_MAP_SHOW))
+		ret = draw_full_fixedmap(game->surfs.fixed_mmap, &game->player, map, sdlmain->win_surf);
+	else if ((*hud_flags & ROT_MAP_SHOW) && (*hud_flags & FIX_MAP_SHOW))
 	{
-		doom->surfs.fixed_mmap->userdata = "2maps";
-		draw_full_rotmap(doom->surfs.rot_mmap, &doom->player, walls, sdlmain->win_surf);
-		draw_full_fixedmap(doom->surfs.fixed_mmap, &doom->player, walls, sdlmain->win_surf);
+		game->surfs.fixed_mmap->userdata = "2maps";
+		ret = draw_full_rotmap(game->surfs.rot_mmap, &game->player, map, sdlmain->win_surf);
+		if (ret == 1)
+			return (1);
+		ret = draw_full_fixedmap(game->surfs.fixed_mmap, &game->player, map, sdlmain->win_surf);
 	}
+	return (ret);
 }
 
-void		blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf)
+int			blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf)
 {
 	SDL_Rect rect;
 
 	if (whichsurf == FIX_MAP_SHOW + ROT_MAP_SHOW)
-		//rect = create_sdlrect(WIN_W / 8, 0, WIN_W / 8, WIN_H / 4);
-		rect = create_sdlrect(MINIMAP_WIDTH * 2, 0, MINIMAP_WIDTH * 2, MINIMAP_HEIGHT * 2);
+		//rect = create_sdlrect(WIN_W / 8, 0, 0, 0);
+		rect = create_sdlrect(winsurf->w / 6, 0, winsurf->w / 6, winsurf->h / 3);
+		//rect = create_sdlrect(MINIMAP_WIDTH * 2, 0, MINIMAP_WIDTH * 2, MINIMAP_HEIGHT * 2);
 	else if (whichsurf == ROT_MAP_SHOW || whichsurf == FIX_MAP_SHOW)
-		//rect = create_sdlrect(0, 0, WIN_W / 8, WIN_H / 4);
-		rect = create_sdlrect(0, 0, MINIMAP_WIDTH * 2, MINIMAP_HEIGHT * 2);
+		//rect = create_sdlrect(0, 0, 0, 0);
+		rect = create_sdlrect(0, 0, winsurf->w / 6, winsurf->h / 3);
+		//rect = create_sdlrect(0, 0, MINIMAP_WIDTH * 2, MINIMAP_HEIGHT * 2);
 	else
-		rect = create_sdlrect(0, 0, WIN_W, WIN_H);
+		//rect = create_sdlrect(0, 0, 0, 0);
+		rect = create_sdlrect(0, 0, winsurf->w, winsurf->h);
 	if ((SDL_BlitScaled(surf, NULL, winsurf, &rect)) < 0)
-	{
-		printf("BlitScale error = %s\n", SDL_GetError());
-		exit(EXIT_FAILURE);
-	}
+		return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
+	return (0);
 }
 
 void		fill_pix(SDL_Surface *surf, int x, int y, int color)

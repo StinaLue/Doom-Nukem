@@ -6,22 +6,16 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2019/12/11 15:59:09 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/07 15:58:15 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-void	basic_move(t_player *player, t_wall *walls, const Uint8 *keyboard_state)
+void	basic_move(t_player *player, const t_sector_node *sector, const Uint8 *keyboard_state)
 {
 	t_vecdb	move;
-	
 
-	/* if (!is_in_map(&player->pos))
-	{
-		player->pos.x = 70;
-		player->pos.y = 70;
-	}*/
 	move.x = 0;
 	move.y = 0;
 	if (keyboard_state[SDL_SCANCODE_W])
@@ -32,7 +26,7 @@ void	basic_move(t_player *player, t_wall *walls, const Uint8 *keyboard_state)
 		move.x -= 1;
 	if (keyboard_state[SDL_SCANCODE_D])
 		move.x += 1;
-	movement(player, move, walls);
+	movement(player, move, sector);
 }
 
 void	basic_look(t_player *player, const Uint8 *keyboard_state)
@@ -45,17 +39,23 @@ void	basic_look(t_player *player, const Uint8 *keyboard_state)
 		player->angle += 0.01;
 	if (keyboard_state[SDL_SCANCODE_RIGHT])
 		player->angle -= 0.01;
-	if (keyboard_state[SDL_SCANCODE_PAGEUP])
-		player->fov.x++;
-	if (keyboard_state[SDL_SCANCODE_PAGEDOWN] && player->fov.x > 1)
-		player->fov.x--;
 	player->direc.x = sin(player->angle) * -5 + player->pos.x;
 	player->direc.y = cos(player->angle) * 5 + player->pos.y;
+	if (keyboard_state[SDL_SCANCODE_PAGEUP] && player->true_fov > 1.06)//hardcoded 60deg
+		player->true_fov -= 0.01;
+	if (keyboard_state[SDL_SCANCODE_PAGEDOWN] && player->true_fov < 2.27)//hardcoded 130deg
+		player->true_fov += 0.01;
+	player->fov.x = 100 * sin(player->true_fov / 2);
+	player->fov.y = 100 * cos(player->true_fov / 2);
+	if (keyboard_state[SDL_SCANCODE_H])
+		player->helper = 1;
+	else
+		player->helper = 0;
 }
 
-void	handle_keys(t_doom *doom, t_wall *walls, const Uint8 *keyboard_state)
+void	handle_keys(t_game *game, const t_map *map, const Uint8 *keyboard_state)
 {
 	//which order is the right one ?
-	basic_look(&doom->player, keyboard_state);
-	basic_move(&doom->player, walls, keyboard_state);
+	basic_look(&game->player, keyboard_state);
+	basic_move(&game->player, map->sector_head, keyboard_state);
 }

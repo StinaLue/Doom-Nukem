@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2019/12/11 16:10:33 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/13 15:26:20 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,42 +15,42 @@
 
 # include "SDL.h"
 # include "SDL_ttf.h"
+# include "SDL_mixer.h"
 # define TITLE "DOOM"
 
 # define NB_WALLS 4
 # define SQRT2 1.4142135623730950488
 
 /*
-** LOOP LOGIC
+** MAIN LOOP STATES
 */
 
-# define ERROR_QUIT -1
-# define QUIT 0
-# define CONTINUE 1
+# define QUIT_STATE 0
+# define GAME_STATE 1
+# define MENU_STATE 2
+# define EDITOR_STATE 3
 
 /*
 ** DIMENSIONS
 */
 
-# define MINIMAP_WIDTH 200
-# define MINIMAP_HEIGHT 200
+# define HD_W 1280
+# define HD_H 720
 
-# define THIRD_MAP_WIDTH 1800 / 4//600
-# define THIRD_MAP_HEIGHT 1000 / 4//600
+# define WSXGA_W 1680
+# define WSXGA_H 1050
 
-# define SIZE 1
-# define WIN_W (1800 / SIZE)
-# define WIN_H (1000 / SIZE)
-# define OFFSET (20 / SIZE)
+# define FHD_W 1920
+# define FHD_H 1080
 
-# define MENU_WIDTH WIN_W - (WIN_W / 8)
-# define MENU_HEIGHT WIN_H - (WIN_H / 4)
+# define QHD_W 2560
+# define QHD_H 1440
 
-# define HFOV (0.5 * THIRD_MAP_HEIGHT)
-# define VFOV (0.2 * THIRD_MAP_HEIGHT)
+# define OFFSET 20
 
-# define NBPOINTS 2891 // map has 59 * 49 points
-# define MAX_WALLS 30
+# define NBPOINTS 2501 // map has 50 * 50 points
+# define NBPOINTSROW 50 // NBPOINTS = NBPOINTSROW * NBPOINTSROW
+# define MAX_WALLS 50
 # define MAX_SECTORS 10
 /*
 ** HUD FLAGS
@@ -67,10 +67,13 @@
 # define FIRST_OPTION_SELECT 1
 # define SECOND_OPTION_SELECT 2
 # define THIRD_OPTION_SELECT 3
+# define FOURTH_OPTION_SELECT 4
 
 /*
 ** VECTOR STRUCTS
 */
+
+
 typedef struct	s_vec
 {
 	int			x;
@@ -83,12 +86,31 @@ typedef struct	s_vecdb
 	double		y;
 }				t_vecdb;
 
+typedef struct	s_wall_node
+{
+	struct s_wall_node	*next;
+	//struct s_wall_node	*previous;
+	t_vecdb		start_wall;
+	t_vecdb		end_wall;
+	int			color;
+	int			sector_index;
+	int			neighbor_sector;
+}				t_wall_node;
+
+typedef struct	s_sector_node
+{
+	struct s_sector_node	*next;
+	t_wall_node	*wall_head;
+	int			wall_num;
+	t_vecdb		sector_center;
+}				t_sector_node;
+
 typedef struct	s_wall3d
 {
-	t_vec	 	top_left;
-	t_vec	 	top_right;
-	t_vec	 	bottom_left;
-	t_vec	 	bottom_right;
+	t_vec		top_left;
+	t_vec		top_right;
+	t_vec		bottom_left;
+	t_vec		bottom_right;
 }				t_wall3d;
 
 typedef struct	s_sdlmain
@@ -96,26 +118,31 @@ typedef struct	s_sdlmain
 	SDL_Window	*win;
 	SDL_Surface	*win_surf;
 	SDL_Event	event;
+	TTF_Font	*font;
+	Mix_Music	*music;
+	t_vec       mouse_pos;
+	int			win_w;
+	int			win_h;
 }				t_sdlmain;
 
 typedef struct	s_gamesurfs
 {
 	SDL_Surface *fixed_mmap;
 	SDL_Surface *rot_mmap;
-	SDL_Surface *perspective_mmap;
+	SDL_Surface *perspective_view;
+	SDL_Surface *weapons;
+	SDL_Rect	katana[4];
 }				t_gamesurfs;
 
 typedef struct	s_data
 {
-	int			quit;
-	//int			editor_flag;
 	char		hud_flags;
 }				t_data;
 
 typedef	struct	s_wall
 {
 	t_vecdb		start_wall;
-	t_vecdb		end_wall;
+	t_vecdb 	end_wall;
 	int			color;
 	//int		flags; BIT FLAGS for walls specifications?
 }				t_wall;
@@ -123,28 +150,89 @@ typedef	struct	s_wall
 typedef struct	s_player
 {
 	t_vecdb		pos;
+	int			sector_pos;
 	t_vecdb		direc;
 	t_vecdb		inertia;
 	double		angle;
 	double		view_z;
-	t_vec		fov;
+	t_vecdb		fov;
+	double		true_fov;
+	int			helper;
 }				t_player;
 
-typedef struct	s_doom
+typedef struct	s_game
 {
 	t_gamesurfs	surfs;
 	t_data		data;
 	t_player	player;
-}				t_doom;
+}				t_game;
+
+typedef struct s_editor_menu
+{
+	//The surfaces
+	SDL_Surface *background;
+	SDL_Surface *title;
+	SDL_Surface *title_inst;
+	SDL_Surface *first_option;
+	//SDL_Surface *second_option;
+	//SDL_Surface *third_option;
+	//SDL_Surface *fourth_option;
+	//SDL_Surface *fifth_option;
+
+	//Clip rectangles
+	SDL_Rect background_rect;
+	SDL_Rect title_rect;
+	SDL_Rect title_inst_rect;
+	SDL_Rect first_option_rect;
+	//SDL_Rect second_option_rect;
+	//SDL_Rect third_option_rect;
+	//SDL_Rect fourth_option_rect;
+
+	//The font that's going to be used
+	TTF_Font *font;
+
+	//The color of the font
+	SDL_Color textColor;
+}				t_editor_menu;
+
+typedef struct	s_sector
+{
+	int			num_walls;
+	t_wall 		*walls;
+    t_vec       start_sector;
+}				t_sector;
+
+typedef struct	s_map
+{
+	t_sector_node	*sector_head;
+	int			num_sectors;
+}				t_map;
 
 typedef struct 	s_editor
 {
+	SDL_Surface *editor_surf;
+	SDL_Surface *options_surf;
+	SDL_Surface *instruct_surf;
+	SDL_Rect	editor_rect;
+	SDL_Rect	options_rect;
+	SDL_Rect	instruct_rect;
     int         clicked;
-	int			num_walls;
 	int			num_sectors;
+    int         offset;
+    //int         sectors[MAX_SECTORS];
+	int			start_sector_reached;
+	int 		color_change;
+	int 		sign_pos;
+	int 		point;
+	t_vec 		A; // used for convex
+	t_vec 		B;
+	t_vec 		C;
     t_wall      walls[MAX_WALLS];
 	t_vec 		grid_values[NBPOINTS];
-	t_vec       mouse_pos;
+    t_vec       start_sector;
+	t_editor_menu editor_menu;
+	t_map		edit_map;
+    t_sector    sector;
 }				t_editor;
 
 typedef struct	s_menu
@@ -152,32 +240,42 @@ typedef struct	s_menu
 	//The surfaces
 	SDL_Surface *background;
 	SDL_Surface *menu_title;
-	SDL_Surface *first_option;
+	SDL_Surface *options[4];
+	/* SDL_Surface *first_option;
 	SDL_Surface *second_option;
 	SDL_Surface *third_option;
+	SDL_Surface *fourth_option;*/
 
 	//Clip rectangles
 	SDL_Rect background_rect;
 	SDL_Rect menu_title_rect;
-	SDL_Rect first_option_rect;
-	SDL_Rect second_option_rect;
-	SDL_Rect third_option_rect;
-	//The event structure
-	SDL_Event event;
+	SDL_Rect options_rects[4];
 
 	//The font that's going to be used
-	TTF_Font *font;
+//	TTF_Font *font;
 
 	//The color of the font
 	SDL_Color textColor;
-	int		editor_flag;
 	int		current_option;
-	int		activate;
+	int		prev_option;
+	int		previous_state;
 }				t_menu;
+
+typedef struct	s_doom
+{
+	t_game		game;
+	t_menu		menu;
+	t_editor	editor;
+	t_sdlmain	sdlmain;
+	t_map		map;
+	int			state;
+}				t_doom;
+
+int		is_mouse_collide(t_vec mouse_pos, SDL_Rect collide_rect);
 
 int 	check_collision(double pos_x, double pos_y, t_wall *walls);
 
-void	init_rotate_wall(t_wall *new_wall, const t_wall *old_wall, const t_player *player);
+void	init_rotate_wall(t_wall *new_wall, const t_wall_node *current_wall, const t_player *player);
 
 int		is_in_map(t_vecdb *player);
 
@@ -204,24 +302,38 @@ t_vecdb			rotate2dcc(t_vecdb vector, double angle);
 
 double			dot_product(t_vecdb a, t_vecdb b);
 
+double			cross_product(t_vecdb a, t_vecdb b);
+
 t_vecdb			create_vecdb(double x, double y);
+
+double			cross_product_len(t_vec a, t_vec b, t_vec c);
+
+double			get_point_distance(t_vecdb a, t_vecdb b);
 
 /*
 ** INIT FUNCTIONS
 */
 
+void			null_doom_pointers(t_doom *doom);
+
 int				init_sdl_and_ttf();
 
-int				init_doom(t_doom *doom);
+int				init_game(t_game *game, t_sdlmain *sdlmain);
 
-int				init_menu(t_menu *menu);
+int				init_menu(t_menu *menu, t_sdlmain *sdlmain);
+
+int				init_editor(t_editor *editor, t_sdlmain *sdlmain);
 
 int				init_sdlmain(t_sdlmain *sdlmain);
+
+int				init_editor_menu(t_editor *editor);
+
+int				init_map(t_map *map);
 
 /*
 ** INIT STRUCT FUNCTIONS
 */
-int				init_gamesurfs_struct(t_gamesurfs *gamesurfs);
+int				init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain);
 
 void			init_data_struct(t_data *data);
 
@@ -230,32 +342,34 @@ void			init_player_struct(t_player *player);
 /*
 ** POLL EVENT FUNCTIONS
 */
-int				handle_events(SDL_Event *event, t_data *data);
+int				handle_events(t_doom *doom);
+
+void			check_quit(SDL_Event *event, int *state);
+
+void			check_menu(SDL_Event *event, int *state, int *prev_state_ptr, int prev_state);
 
 /*
 ** EVENT FUNCTIONS
 */
-void			handle_keys(t_doom *doom, t_wall *walls, const Uint8 *keyboard_state);
 
+void			handle_keys(t_game *game, const t_map *map, const Uint8 *keyboard_state);
 /*
 ** PRINT MINIMAP FUNCTIONS
 */
 
-void			draw_map(t_sdlmain *sdlmain, t_doom *doom, t_wall *walls, char *hud_flags);
+int				draw_map(t_sdlmain *sdlmain, t_game *game, const t_map *map, char *hud_flags);
 
-void			draw_full_fixedmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf);
-//void			draw_fixed_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);
+int				draw_full_fixedmap(SDL_Surface *surf, t_player *player, const t_map *map, SDL_Surface *winsurf);
 
-void			draw_full_rotmap(SDL_Surface *surf, t_player *player, t_wall *walls, SDL_Surface *winsurf);
-//void			draw_rot_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);
+int				draw_full_rotmap(SDL_Surface *surf, t_player *player, const t_map *map, SDL_Surface *winsurf);
 
-void			draw_perspective_minimap(SDL_Surface *surf, t_player *player, t_wall *walls);
+void			draw_perspective_view(SDL_Surface *surf, t_player *player, const t_map *map);
 
 /*
 ** DRAWING FUNCTIONS
 */
 
-void			blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf);
+int				blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf);
 
 void			fill_pix(SDL_Surface *surf, int x, int y, int color);
 
@@ -272,6 +386,20 @@ int				highlight_text(TTF_Font **font, SDL_Surface **surf, SDL_Color *color, cha
 int				reset_text(TTF_Font **font, SDL_Surface **surf, SDL_Color *color, char *text);
 
 /*
+** NULL INIT FUNCTIONS
+*/
+
+void			null_game_pointers(t_game *game);
+
+void			null_menu_pointers(t_menu *menu);
+
+void			null_editor_pointers(t_editor *editor);
+
+void			null_sdlmain_pointers(t_sdlmain *sdlmain);
+
+void			null_map_pointers(t_map *map);
+
+/*
 ** FREE FUNCTIONS
 */
 
@@ -279,7 +407,9 @@ void			quit_sdl_and_ttf();
 
 int				free_menu(t_menu *menu);
 
-int				free_doom(t_doom *doom);
+int				free_game(t_game *game);
+
+int				free_editor(t_editor *editor);
 
 int				free_sdlmain(t_sdlmain *sdlmain);
 
@@ -304,7 +434,7 @@ void			assign_sdlrect(SDL_Rect *rect, t_vec origin, t_vec size);
 ** MOVEMENT
 */
 
-void			movement(t_player *player, t_vecdb move, t_wall *walls);
+void			movement(t_player *player, t_vecdb move, const t_sector_node *sector);
 
 /*
 ** MENU FUNCTIONS
@@ -315,9 +445,11 @@ void			movement(t_player *player, t_vecdb move, t_wall *walls);
 ** LOOPS
 */
 
-int				game_loop(t_doom *doom, t_sdlmain *sdlmain);
+int				game_loop(t_doom *doom);
 
-int 			menu_loop(t_menu *menu, t_sdlmain *sdlmain);
+int 			menu_loop(t_doom *doom);
+
+int				editor_loop(t_doom *doom);
 
 /*
 ** ERROR FUNCTIONS
@@ -330,5 +462,38 @@ int				error_return(const char *error_msg, const char *sdl_error);
 ** EDITOR FUNCTIONS
 */
 
-void	editor(SDL_Window **win, SDL_Surface **win_surf, int *editor_flag);
+/*
+** LINKED LIST FUNCTIONS
+*/
+
+/*SECTORS*/
+
+t_sector_node		*add_sector_node(t_sector_node **sector_head);
+
+void				set_sector_position(t_sector_node *sector_list);
+
+t_sector_node		*get_sector_by_pos(t_sector_node *sector_list, t_vecdb point, double dist);
+
+void				delete_sector(t_sector_node **node);
+
+void				delete_sector_by_index(t_sector_node **sector_list,unsigned int index);
+
+t_sector_node		*get_last_sector(t_sector_node *node);
+
+int					copy_sector_list(t_sector_node *sector_list, t_sector_node **new_list);
+
+/*WALLS*/
+
+t_wall_node			*add_wall_node(t_wall_node **wall_head, const t_wall_node *node);
+
+t_wall_node			*create_wall_node(t_wall_node **wall_head, t_vecdb a, t_vecdb b, int color);
+
+void				free_wall_list(t_wall_node **wall_list);
+
+t_vecdb				point_average_position(t_wall_node *wall_head);
+
+int					copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list);
+
+int					wall_loop(t_wall_node *node);
+
 #endif
