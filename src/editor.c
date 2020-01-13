@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/13 01:50:19 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/13 15:25:57 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,12 +113,10 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 {
 	int i = 0;
 
-	sdlmain->mouse_pos.x = sdlmain->mouse_pos.x * editor->offset;
-	sdlmain->mouse_pos.y = sdlmain->mouse_pos.y * editor->offset;
 	if (editor->clicked != 0/* && editor->sector.num_walls <= MAX_WALLS && editor->walls[0].start_wall.x != 0*//* && editor->edit_map.sector_head->wall_head->start_wall.x != -1*/)
 	{
 		//draw_line(sdlmain->mouse_pos, vecdb_to_vec(editor->walls[editor->sector.num_walls].start_wall), editor_surf, 0x00ABFF);
-		t_sector_node *tmpsect = get_last_sector_node(editor->edit_map.sector_head);
+		t_sector_node	*tmpsect = get_last_sector_node(editor->edit_map.sector_head);
 		t_wall_node		*tmpwall = get_last_wall_node(tmpsect->wall_head);
 		draw_line(sdlmain->mouse_pos, vecdb_to_vec(tmpwall->end_wall), editor_surf, 0x00ABFF);
 		/* 
@@ -246,7 +244,6 @@ int	editor_events(t_doom *doom)
 					editor->C.y = editor->mouse_pos.y;
 					if (editor->point == 3)
 					{
-						ft_printf("HOLA\n");
 						double cross_product = cross_product_len(editor->A, editor->B, editor->C);
 						ft_printf("croos %f\n", cross_product);
 						if (cross_product < 0)
@@ -278,6 +275,7 @@ int	editor_events(t_doom *doom)
 					add_sector_node(&editor->edit_map.sector_head);
 					//editor->walls[editor->sector.num_walls].start_wall.x = sdlmain->mouse_pos.x;
 					//editor->walls[editor->sector.num_walls].start_wall.y = sdlmain->mouse_pos.y;
+
 					editor->start_sector.x = sdlmain->mouse_pos.x;
 					editor->start_sector.y = sdlmain->mouse_pos.y;
 					editor->wall_tmp.start_wall.x = sdlmain->mouse_pos.x;
@@ -296,7 +294,7 @@ int	editor_events(t_doom *doom)
 	}
 	if (doom->state != EDITOR_STATE)
 		return (1);
-	print_map_contents(&editor->edit_map);
+	//print_map_contents(&editor->edit_map);
 	return (0);
 }
 
@@ -348,8 +346,16 @@ int editor_loop(t_doom *doom)
 		draw_border(editor->editor_surf, 0xB12211);
 		draw_border(editor->options_surf, 0xB12211);
 		draw_border(editor->instruct_surf, 0xB12211);
+		sdlmain->mouse_pos.x = sdlmain->mouse_pos.x * editor->offset;
+		sdlmain->mouse_pos.y = sdlmain->mouse_pos.y * editor->offset;
 		if (editor->edit_map.sector_head != NULL && editor->edit_map.sector_head->wall_head != NULL)
 			draw_lines(editor, editor->editor_surf, sdlmain);
+		
+		//else if (editor->edit_map.sector_head/*  == NULL && editor->edit_map.sector_head->wall_head == NULL */)
+		//{
+		//	draw_line(sdlmain->mouse_pos, editor->start_sector, editor->editor_surf, 0x00ABFF);
+		//	ft_printf("start_sec.y: %d, start_sec.y: %d\n", editor->start_sector.x, editor->start_sector.y);
+		//}
 		if (blit_editor(editor, sdlmain) != 0)
 			return (1);
 	}
