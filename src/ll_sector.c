@@ -6,12 +6,14 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:02:35 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/08 15:33:09 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/08 16:56:52 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
+//recursively mallocs a node at the end of the sector list
+//returns its adress
 t_sector_node	*insert_sector_node(t_sector_node **sector_list)
 {
 	if(*sector_list == NULL)
@@ -83,6 +85,7 @@ t_sector_node	*get_sector_by_index(t_sector_node *sector_list,unsigned int index
 		return (get_sector_by_index(sector_list->next, index - 1));
 }
 
+//sets the sector position of each sector in the sector list from the average position of the walls in the sector
 void		set_sector_position(t_sector_node *sector_list)
 {
 	if (sector_list == NULL)

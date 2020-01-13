@@ -6,12 +6,14 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:25:24 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/08 15:32:24 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/08 16:59:42 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
+//recursively mallocs a node at the end of the wall list
+//returns malloced adress
 t_wall_node	*insert_wall_node(t_wall_node **wall_list)
 {
 	if(*wall_list == NULL)
@@ -35,7 +37,7 @@ void		free_wall_list(t_wall_node **wall_list)
 }
 
 //deletes the last wall node and sets it to NULL
-//return the new last node adress
+//return the new last node adress or NULL of none left
 t_wall_node	*delete_last_wall(t_wall_node **wall_list)
 {
 	t_wall_node	*tmp;
