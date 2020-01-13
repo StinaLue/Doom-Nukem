@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/10 15:17:31 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/13 15:26:20 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ typedef struct	s_vecdb
 typedef struct	s_wall_node
 {
 	struct s_wall_node	*next;
-	struct s_wall_node	*previous;
+	//struct s_wall_node	*previous;
 	t_vecdb		start_wall;
 	t_vecdb		end_wall;
 	int			color;
@@ -472,6 +472,16 @@ t_sector_node		*add_sector_node(t_sector_node **sector_head);
 
 void				set_sector_position(t_sector_node *sector_list);
 
+t_sector_node		*get_sector_by_pos(t_sector_node *sector_list, t_vecdb point, double dist);
+
+void				delete_sector(t_sector_node **node);
+
+void				delete_sector_by_index(t_sector_node **sector_list,unsigned int index);
+
+t_sector_node		*get_last_sector(t_sector_node *node);
+
+int					copy_sector_list(t_sector_node *sector_list, t_sector_node **new_list);
+
 /*WALLS*/
 
 t_wall_node			*add_wall_node(t_wall_node **wall_head, const t_wall_node *node);
@@ -482,5 +492,8 @@ void				free_wall_list(t_wall_node **wall_list);
 
 t_vecdb				point_average_position(t_wall_node *wall_head);
 
+int					copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list);
+
+int					wall_loop(t_wall_node *node);
 
 #endif
