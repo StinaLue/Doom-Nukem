@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/13 15:25:57 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/13 18:30:04 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,14 +77,10 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 		editor->grid_values[i].y = 0;
 		i++;
 	}
-    //editor->mouse_pos.x = 0;
-    //editor->mouse_pos.y = 0;
-	/* editor->walls[0].start_wall.x = 0;
-	editor->walls[0].start_wall.y = 0;
-	editor->walls[0].end_wall.x = 0;
-	editor->walls[0].end_wall.y = 0;
-	editor->sector.num_walls = 0;
-	editor->num_sectors = 0;*/
+	editor->wall_tmp.start_wall.x = -1;
+	editor->wall_tmp.start_wall.y = -1;
+	editor->wall_tmp.end_wall.x = -1;
+	editor->wall_tmp.end_wall.y = -1;
 	editor->start_sector_reached = 1;
 	editor->color_change = 0;
 	/* editor->sign_pos = 0;
@@ -98,7 +94,7 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	return (0);
 }
 
-void	fill_area(SDL_Surface *surf, int x, int y, int j)
+void	fill_area2(SDL_Surface *surf, int x, int y, int j)
 {
 	int color;
 
@@ -109,60 +105,60 @@ void	fill_area(SDL_Surface *surf, int x, int y, int j)
 	fill_pix(surf, x + j, y + j, color);
 }
 
+void fill_area(SDL_Surface *surf, t_wall_node *wall, t_editor *editor)
+{
+	int j = 0;
+	while (j < 4)
+	{
+		fill_area2(surf, wall->end_wall.x * editor->offset, wall->end_wall.y * editor->offset, j);
+		fill_area2(surf, wall->end_wall.x * editor->offset, wall->end_wall.y * editor->offset, -j);
+		j++;
+	}
+
+}
+
+t_vec	mult_vec(t_vec vec, int mult)
+{
+	vec.x *= mult;
+	vec.y *= mult;
+	return (vec);
+}
+
 void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 {
 	int i = 0;
 
-	if (editor->clicked != 0/* && editor->sector.num_walls <= MAX_WALLS && editor->walls[0].start_wall.x != 0*//* && editor->edit_map.sector_head->wall_head->start_wall.x != -1*/)
-	{
-		//draw_line(sdlmain->mouse_pos, vecdb_to_vec(editor->walls[editor->sector.num_walls].start_wall), editor_surf, 0x00ABFF);
-		t_sector_node	*tmpsect = get_last_sector_node(editor->edit_map.sector_head);
-		t_wall_node		*tmpwall = get_last_wall_node(tmpsect->wall_head);
-		draw_line(sdlmain->mouse_pos, vecdb_to_vec(tmpwall->end_wall), editor_surf, 0x00ABFF);
-		/* 
-		int j = 0;
-		while (j < 4)
-		{
-			fill_area(editor_surf, editor->walls[0].start_wall.x, editor->walls[0].start_wall.y, j);
-			fill_area(editor_surf, editor->walls[0].start_wall.x, editor->walls[0].start_wall.y, -j);
-			j++;
-		}*/
-	}
-	//while (i < editor->sector.num_walls && editor->sector.num_walls <= MAX_WALLS)
+	if (editor->edit_map.sector_head == NULL)
+		return ;
 	t_sector_node *tmp_sect = editor->edit_map.sector_head;
+	if (editor->start_sector_reached != 1)
+		draw_line(mult_vec(sdlmain->mouse_pos, editor->offset), mult_vec(vecdb_to_vec(editor->wall_tmp.end_wall), editor->offset), editor_surf, 0x00ABFF);
 	while (tmp_sect != NULL)
 	{
 		t_wall_node *tmp_wall = tmp_sect->wall_head;
 		while (tmp_wall != NULL)
 		{
+			fill_area(editor_surf, tmp_wall, editor);
 			if (i % 2 == 0)
-				draw_line(vecdb_to_vec(tmp_wall->end_wall), vecdb_to_vec(tmp_wall->start_wall), editor_surf, 0x00ABFF);
-				//draw_line(vecdb_to_vec(editor->walls[i].end_wall), vecdb_to_vec(editor->walls[i].start_wall), editor_surf, 0x00ABFF);
+				draw_line(mult_vec(vecdb_to_vec(tmp_wall->end_wall), editor->offset), mult_vec(vecdb_to_vec(tmp_wall->start_wall), editor->offset), editor_surf, 0x00ABFF);
 			else
-				draw_line(vecdb_to_vec(tmp_wall->end_wall), vecdb_to_vec(tmp_wall->start_wall), editor_surf, 0xABABFF);
-				//draw_line(vecdb_to_vec(editor->walls[i].end_wall), vecdb_to_vec(editor->walls[i].start_wall), editor_surf, 0xABABFF);
+				draw_line(mult_vec(vecdb_to_vec(tmp_wall->end_wall), editor->offset), mult_vec(vecdb_to_vec(tmp_wall->start_wall), editor->offset), editor_surf, 0xABABFF);
 			i++;
-			/*
-			int j = 0;
-			while (j < 4)
-			{
-				//fill_area(editor_surf, editor->walls[i].start_wall.x, editor->walls[i].start_wall.y, j);
-				//fill_area(editor_surf, editor->walls[i].start_wall.x, editor->walls[i].start_wall.y, -j);
-				j++;
-			}*/
 			tmp_wall = tmp_wall->next;
 		}
 		tmp_sect = tmp_sect->next;
 	}
 }
 
-void	check_finished_sect(t_editor *editor)//save_sectors(t_editor *editor)
+void	check_finished_sect(t_editor *editor)
 {
 	if ((editor->start_sector.x == editor->wall_tmp.end_wall.x) && (editor->start_sector.y == editor->wall_tmp.end_wall.y))
 	{
 		editor->clicked = 0;
 		editor->start_sector_reached = 1;
 		editor->num_sectors++;
+		editor->wall_tmp.start_wall.x = -1;
+		editor->wall_tmp.start_wall.y = -1;
 		//editor->point = 0;
 	}
 }
@@ -197,6 +193,23 @@ void	draw_editor(SDL_Surface *editor_surf, t_editor *editor, t_sdlmain *sdlmain)
         sdlmain->mouse_pos.y = 1;
 }
 
+int is_pos_wall(t_wall_node *wall)
+{
+	if (wall->start_wall.x > 0 && wall->start_wall.y > 0)
+	{
+		if (wall->end_wall.x > 0 && wall->end_wall.y > 0)
+			return (1);
+	}
+	return (0);
+}
+
+int start_wall_exists(t_wall_node *wall)
+{
+	if (wall->start_wall.x > 0 && wall->start_wall.y > 0)
+			return (1);
+	return (0);
+}
+
 int	editor_events(t_doom *doom)
 {
 	t_editor *editor;
@@ -215,53 +228,16 @@ int	editor_events(t_doom *doom)
 	}
     if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
     {
-		if (sdlmain->event.button.button == SDL_BUTTON_LEFT && sdlmain->mouse_pos.x < editor->editor_surf->h - editor->offset)
+		if (sdlmain->event.button.button == SDL_BUTTON_LEFT && sdlmain->mouse_pos.x <= NBPOINTSROW)
 		{
-			/* if (editor->point > 3)
+			if (start_wall_exists(&editor->wall_tmp) && !(sdlmain->mouse_pos.x == editor->wall_tmp.end_wall.x && sdlmain->mouse_pos.y == editor->wall_tmp.end_wall.y)/*  && is_convex(editor->A, editor->B, editor->C, editor) */)
 			{
-				is_convex(editor->A, editor->B, editor->C, editor);
-			} */
-			if (editor->clicked == 1 && sdlmain->mouse_pos.x != editor->wall_tmp.start_wall.x && sdlmain->mouse_pos.y != editor->wall_tmp.start_wall.y/*  && is_convex(editor->A, editor->B, editor->C, editor) */)
-			{
-				/* if (editor->C.x == 0 && editor->point == 1)
-				{
-					editor->B.x = editor->mouse_pos.x;
-					editor->B.y = editor->mouse_pos.y;
-				}
-				else
-				{
-					if (editor->C.x != 0)
-					{
-						editor->A.x = editor->B.x;
-						editor->A.y = editor->B.y;
-						editor->B.x = editor->C.x;
-						editor->B.y = editor->C.y;
-					}
-				}
-				if (editor->point != 1)
-				{
-					editor->C.x = editor->mouse_pos.x;
-					editor->C.y = editor->mouse_pos.y;
-					if (editor->point == 3)
-					{
-						double cross_product = cross_product_len(editor->A, editor->B, editor->C);
-						ft_printf("croos %f\n", cross_product);
-						if (cross_product < 0)
-							editor->sign_pos = 0;
-						else if (cross_product > 0)
-							editor->sign_pos = 1;
-					}
-				}
-				editor->point++; */
-				//editor->walls[editor->sector.num_walls].end_wall.x = sdlmain->mouse_pos.x;
-				//editor->walls[editor->sector.num_walls].end_wall.y = sdlmain->mouse_pos.y;
 				editor->wall_tmp.end_wall.x = sdlmain->mouse_pos.x; // can maybe be put into create_wall_node directly
 				editor->wall_tmp.end_wall.y = sdlmain->mouse_pos.y;
 
-				t_sector_node *tmp;
-				tmp = get_last_sector_node(editor->edit_map.sector_head);
+				editor->current_sector = get_last_sector(editor->edit_map.sector_head);
 				//create_wall_node(&editor->edit_map.sector_head->wall_head, editor->wall_tmp.start_wall, editor->wall_tmp.end_wall, 0x00ABFF);
-				create_wall_node(&tmp->wall_head, editor->wall_tmp.start_wall, editor->wall_tmp.end_wall, 0x00ABFF);
+				create_wall_node(&editor->current_sector->wall_head, editor->wall_tmp.start_wall, editor->wall_tmp.end_wall, 0x00ABFF);
 				editor->wall_tmp.start_wall.x = editor->wall_tmp.end_wall.x;
 				editor->wall_tmp.start_wall.y = editor->wall_tmp.end_wall.y;
 				check_finished_sect(editor);
@@ -273,17 +249,14 @@ int	editor_events(t_doom *doom)
 				if (editor->start_sector_reached == 1)
 				{
 					add_sector_node(&editor->edit_map.sector_head);
-					//editor->walls[editor->sector.num_walls].start_wall.x = sdlmain->mouse_pos.x;
-					//editor->walls[editor->sector.num_walls].start_wall.y = sdlmain->mouse_pos.y;
 
 					editor->start_sector.x = sdlmain->mouse_pos.x;
 					editor->start_sector.y = sdlmain->mouse_pos.y;
 					editor->wall_tmp.start_wall.x = sdlmain->mouse_pos.x;
 					editor->wall_tmp.start_wall.y = sdlmain->mouse_pos.y;
-					editor->clicked = 1;
+					editor->wall_tmp.end_wall.x = sdlmain->mouse_pos.x;
+					editor->wall_tmp.end_wall.y = sdlmain->mouse_pos.y;
 					editor->start_sector_reached = 0;
-					//editor->A.x = sdlmain->mouse_pos.x;
-					//editor->A.y = sdlmain->mouse_pos.y;
 					//editor->point++;
 				}
 			}
@@ -346,10 +319,9 @@ int editor_loop(t_doom *doom)
 		draw_border(editor->editor_surf, 0xB12211);
 		draw_border(editor->options_surf, 0xB12211);
 		draw_border(editor->instruct_surf, 0xB12211);
-		sdlmain->mouse_pos.x = sdlmain->mouse_pos.x * editor->offset;
-		sdlmain->mouse_pos.y = sdlmain->mouse_pos.y * editor->offset;
-		if (editor->edit_map.sector_head != NULL && editor->edit_map.sector_head->wall_head != NULL)
-			draw_lines(editor, editor->editor_surf, sdlmain);
+		//sdlmain->mouse_pos.x = sdlmain->mouse_pos.x * editor->offset;
+		//sdlmain->mouse_pos.y = sdlmain->mouse_pos.y * editor->offset;
+		draw_lines(editor, editor->editor_surf, sdlmain);
 		
 		//else if (editor->edit_map.sector_head/*  == NULL && editor->edit_map.sector_head->wall_head == NULL */)
 		//{

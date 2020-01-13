@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/13 15:48:25 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/13 17:24:20 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,6 +216,8 @@ typedef struct 	s_editor
 	SDL_Rect	editor_rect;
 	SDL_Rect	options_rect;
 	SDL_Rect	instruct_rect;
+	t_sector_node	*current_sector;
+	t_wall_node		*current_wall;
     int         clicked;
 	int			num_sectors;
     int         offset;
