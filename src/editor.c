@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/13 18:30:04 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/13 19:07:55 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,6 @@ void fill_area(SDL_Surface *surf, t_wall_node *wall, t_editor *editor)
 		fill_area2(surf, wall->end_wall.x * editor->offset, wall->end_wall.y * editor->offset, -j);
 		j++;
 	}
-
 }
 
 t_vec	mult_vec(t_vec vec, int mult)
@@ -131,8 +130,12 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 	if (editor->edit_map.sector_head == NULL)
 		return ;
 	t_sector_node *tmp_sect = editor->edit_map.sector_head;
-	if (editor->start_sector_reached != 1)
-		draw_line(mult_vec(sdlmain->mouse_pos, editor->offset), mult_vec(vecdb_to_vec(editor->wall_tmp.end_wall), editor->offset), editor_surf, 0x00ABFF);
+	if (editor->start_sector_reached == 0)
+	{
+		draw_line(mult_vec(sdlmain->mouse_pos, editor->offset),
+			mult_vec(vecdb_to_vec(editor->wall_tmp.end_wall), editor->offset), editor_surf, 0x00ABFF);
+		fill_area(editor_surf, &editor->wall_tmp, editor);
+	}
 	while (tmp_sect != NULL)
 	{
 		t_wall_node *tmp_wall = tmp_sect->wall_head;
@@ -140,9 +143,11 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 		{
 			fill_area(editor_surf, tmp_wall, editor);
 			if (i % 2 == 0)
-				draw_line(mult_vec(vecdb_to_vec(tmp_wall->end_wall), editor->offset), mult_vec(vecdb_to_vec(tmp_wall->start_wall), editor->offset), editor_surf, 0x00ABFF);
+				draw_line(mult_vec(vecdb_to_vec(tmp_wall->end_wall), editor->offset),
+				mult_vec(vecdb_to_vec(tmp_wall->start_wall), editor->offset), editor_surf, 0x00ABFF);
 			else
-				draw_line(mult_vec(vecdb_to_vec(tmp_wall->end_wall), editor->offset), mult_vec(vecdb_to_vec(tmp_wall->start_wall), editor->offset), editor_surf, 0xABABFF);
+				draw_line(mult_vec(vecdb_to_vec(tmp_wall->end_wall), editor->offset),
+				mult_vec(vecdb_to_vec(tmp_wall->start_wall), editor->offset), editor_surf, 0xABABFF);
 			i++;
 			tmp_wall = tmp_wall->next;
 		}
@@ -184,16 +189,16 @@ void	draw_editor(SDL_Surface *editor_surf, t_editor *editor, t_sdlmain *sdlmain)
 			i++;
 		}
 	}
-    if (sdlmain->mouse_pos.y == 0)
-        sdlmain->mouse_pos.y = 1;
-    if (sdlmain->mouse_pos.x == 0)
-        sdlmain->mouse_pos.x = 1;
-    sdlmain->mouse_pos.y = y / editor->offset - sdlmain->mouse_pos.y + 1;
 	if (sdlmain->mouse_pos.y == 0)
-        sdlmain->mouse_pos.y = 1;
+		sdlmain->mouse_pos.y = 1;
+	if (sdlmain->mouse_pos.x == 0)
+		sdlmain->mouse_pos.x = 1;
+	sdlmain->mouse_pos.y = y / editor->offset - sdlmain->mouse_pos.y + 1;
+	if (sdlmain->mouse_pos.y == 0)
+		sdlmain->mouse_pos.y = 1;
 }
 
-int is_pos_wall(t_wall_node *wall)
+int	is_pos_wall(t_wall_node *wall)
 {
 	if (wall->start_wall.x > 0 && wall->start_wall.y > 0)
 	{
@@ -206,7 +211,7 @@ int is_pos_wall(t_wall_node *wall)
 int start_wall_exists(t_wall_node *wall)
 {
 	if (wall->start_wall.x > 0 && wall->start_wall.y > 0)
-			return (1);
+		return (1);
 	return (0);
 }
 
@@ -222,12 +227,12 @@ int	editor_events(t_doom *doom)
 	{
 		if (sdlmain->event.key.repeat == 0)
 			check_menu(&doom->sdlmain.event, &doom->state, &doom->menu.previous_state, EDITOR_STATE);
-        if (sdlmain->event.key.keysym.sym == SDLK_u)
+		if (sdlmain->event.key.keysym.sym == SDLK_u)
 			undo_wall(editor->edit_map.sector_head);
 			//editor->sector.num_walls--;
 	}
-    if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
-    {
+	if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
+	{
 		if (sdlmain->event.button.button == SDL_BUTTON_LEFT && sdlmain->mouse_pos.x <= NBPOINTSROW)
 		{
 			if (start_wall_exists(&editor->wall_tmp) && !(sdlmain->mouse_pos.x == editor->wall_tmp.end_wall.x && sdlmain->mouse_pos.y == editor->wall_tmp.end_wall.y)/*  && is_convex(editor->A, editor->B, editor->C, editor) */)
@@ -241,8 +246,6 @@ int	editor_events(t_doom *doom)
 				editor->wall_tmp.start_wall.x = editor->wall_tmp.end_wall.x;
 				editor->wall_tmp.start_wall.y = editor->wall_tmp.end_wall.y;
 				check_finished_sect(editor);
-				//save_sectors(editor);
-				//editor->sector.num_walls++;
 			}
 			else
 			{
@@ -273,18 +276,26 @@ int	editor_events(t_doom *doom)
 
 int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 {
-	if ((SDL_BlitSurface(editor->editor_menu.title, NULL, editor->options_surf, &editor->editor_menu.title_rect)) < 0)
+	if ((SDL_BlitSurface(editor->editor_menu.title, NULL,
+			editor->options_surf, &editor->editor_menu.title_rect)) < 0)
 		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
-	if ((SDL_BlitSurface(editor->editor_menu.title_inst, NULL, editor->instruct_surf, &editor->editor_menu.title_inst_rect)) < 0)
+	if ((SDL_BlitSurface(editor->editor_menu.title_inst, NULL,
+			editor->instruct_surf, &editor->editor_menu.title_inst_rect)) < 0)
 		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
-	if ((SDL_BlitScaled(editor->editor_surf, NULL, sdlmain->win_surf, &editor->editor_rect)) < 0)
-		return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
-	if ((SDL_BlitScaled(editor->options_surf, NULL, sdlmain->win_surf, &editor->options_rect)) < 0)
-		return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
-	if ((SDL_BlitScaled(editor->instruct_surf, NULL, sdlmain->win_surf, &editor->instruct_rect)) < 0)
+	if ((SDL_BlitScaled(editor->editor_surf, NULL,
+			sdlmain->win_surf, &editor->editor_rect)) < 0)
+		return (error_return("SDL_BlitScaled error = %{r}s\n",
+				SDL_GetError()));
+	if ((SDL_BlitScaled(editor->options_surf, NULL,
+			sdlmain->win_surf, &editor->options_rect)) < 0)
+		return (error_return("SDL_BlitScaled error = %{r}s\n",
+				SDL_GetError()));
+	if ((SDL_BlitScaled(editor->instruct_surf, NULL,
+			sdlmain->win_surf, &editor->instruct_rect)) < 0)
 		return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
 	if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)
-		return (error_return("SDL_UpdateWindowSurface error = %{r}s\n", SDL_GetError()));
+		return (error_return("SDL_UpdateWindowSurface error = %{r}s\n",
+			SDL_GetError()));
 	return (0);
 }
 
@@ -296,10 +307,10 @@ int editor_loop(t_doom *doom)
 	editor = &(doom->editor);
 	sdlmain = &(doom->sdlmain);
 	SDL_WarpMouseInWindow(sdlmain->win, doom->sdlmain.win_surf->w / 2, doom->sdlmain.win_surf->h / 2);
-    if (editor->editor_surf->w < editor->editor_surf->h)
-        editor->offset = editor->editor_surf->w / NBPOINTSROW;
-    else        
-        editor->offset = editor->editor_surf->h / NBPOINTSROW;
+	if (editor->editor_surf->w < editor->editor_surf->h)
+		editor->offset = editor->editor_surf->w / NBPOINTSROW;
+	else        
+		editor->offset = editor->editor_surf->h / NBPOINTSROW;
 	while (doom->state == EDITOR_STATE)
 	{
 		while (SDL_PollEvent(&sdlmain->event) != 0)
