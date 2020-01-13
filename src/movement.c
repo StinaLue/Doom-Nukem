@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2019/12/11 16:29:47 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/13 16:57:56 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,11 @@ void	move_player(t_vecdb *position, t_vecdb *move, t_wall *walls)
 		dist = wall_distance(*position, walls[i].start_wall, walls[i].end_wall);
 		if (dist < smallest_dist)
 		{
-			iw = i;
-			smallest_dist = dist;
+			dist = 0.501 - dist;
+			col_angle = atan2(current_wall->start_wall.y - current_wall->end_wall.y, current_wall->start_wall.x - current_wall->end_wall.x);
+			position->x += dist * -sin(col_angle);
+			position->y += dist * cos(col_angle);
+			current_wall = sector->wall_head;
 		}
 	}
 	if (iw == -1)
@@ -91,8 +94,8 @@ void	movement(t_player *player, t_vecdb move, t_wall *walls)
 	old_position = player->pos;
 	move.x += player->inertia.x;
 	move.y += player->inertia.y;
-	move_player(&player->pos, &move, walls);
-	//printf("Px:%f\nPy:%f\n", player->pos.x, player->pos.y);
-	player->inertia.x = (player->pos.x - old_position.x) * 0.9;
-	player->inertia.y = (player->pos.y - old_position.y) * 0.9;
+	move_player(&player->pos, &move, sector);
+	printf("Px:%f\nPy:%f\n", player->pos.x, player->pos.y);
+	player->inertia.x = (player->pos.x - old_position.x) * 0.95;
+	player->inertia.y = (player->pos.y - old_position.y) * 0.95;
 }
