@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/14 18:17:07 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/14 23:00:06 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define TITLE "DOOM"
 
 # define SQRT2 1.4142135623730950488
-# define PLAYER_RADIUS 0.5
+# define PLAYER_RADIUS 1
 
 /*
 ** MAIN LOOP STATES
@@ -495,6 +495,9 @@ int					copy_sector_list(t_sector_node *sector_list, t_sector_node **new_list);
 int					count_sectors(t_sector_node *sector_list);
 
 void		itt_sector_wall_heads(t_sector_node *sector_node, void (*f)(t_wall_node *wall_node));
+
+
+void		free_sector_list(t_sector_node **sector_list);
 
 /*
 ** WALL NODE FUNCTIONS

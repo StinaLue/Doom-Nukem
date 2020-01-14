@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/10 14:06:11 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/14 17:03:12 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,19 +52,19 @@ int		free_game(t_game *game)
 
 int		free_menu(t_menu *menu)
 {
-    SDL_FreeSurface( menu->background );
+	SDL_FreeSurface( menu->background );
 	menu->background = NULL;
-    SDL_FreeSurface( menu->menu_title );
+	SDL_FreeSurface( menu->menu_title );
 	menu->menu_title = NULL;
-    SDL_FreeSurface( menu->options[0] );
+	SDL_FreeSurface( menu->options[0] );
 	menu->options[0] = NULL;
-    SDL_FreeSurface( menu->options[1] );
-    menu->options[1] = NULL;
-    SDL_FreeSurface( menu->options[2] );
-    menu->options[2] = NULL;
-    SDL_FreeSurface( menu->options[3] );
-    menu->options[3] = NULL;
-    
+	SDL_FreeSurface( menu->options[1] );
+	menu->options[1] = NULL;
+	SDL_FreeSurface( menu->options[2] );
+	menu->options[2] = NULL;
+	SDL_FreeSurface( menu->options[3] );
+	menu->options[3] = NULL;
+	
 	return (EXIT_FAILURE);
 }
 
@@ -74,5 +74,14 @@ int		free_editor(t_editor *editor)
 	editor->editor_surf = NULL;
 	SDL_FreeSurface(editor->instruct_surf);
 	editor->instruct_surf = NULL;
+	SDL_FreeSurface(editor->options_surf);
+	editor->options_surf = NULL;
+
+	SDL_FreeSurface(editor->editor_menu.title_inst);
+	editor->editor_menu.title_inst = NULL;
+	SDL_FreeSurface(editor->editor_menu.title);
+	editor->editor_menu.title = NULL;
+	TTF_CloseFont(editor->editor_menu.font);
+	editor->editor_menu.font=NULL;
 	return (EXIT_FAILURE);
 }

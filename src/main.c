@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/14 15:59:43 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/14 23:00:57 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ int	main_loop()
 	free_menu(&doom.menu);
 	free_editor(&doom.editor);
 	free_sdlmain(&doom.sdlmain);
+	free_sector_list(&doom.map.sector_head);
 	quit_sdl_and_ttf();
 	if (ret == 1)
 		return (error_return("Error during main loop\n", NULL));
@@ -147,5 +148,7 @@ int main(/*int argc, char *argv[]*/)
 	{
 		return (error_return("The program %{r}s 😢\n", "FAILED"));
 	}
+	while (1)
+		;
 	return (EXIT_SUCCESS);
 }
