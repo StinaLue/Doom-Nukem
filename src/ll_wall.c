@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_wall.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:25:24 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/08 16:59:42 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/14 21:55:42 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ t_wall_node	*create_wall_node(t_wall_node **wall_head, t_vecdb a, t_vecdb b, int
 	new_node->neighbor_sector = -1;
 	new_node->next = NULL;
 	new_node->previous = NULL;
+	new_node->tex_index = 0;
 	return (new_node);
 }
 

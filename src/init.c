@@ -3,15 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/10 15:27:51 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/14 18:21:18 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "doom.h"
+#include "libbmp.h"
+
+int		init_wall_textures(SDL_Surface **wall_textures, SDL_Surface *winsurf)
+{
+	if ((wall_textures[0] = load_opti_bmp("assets/wall_textures/chippedbrick.bmp", winsurf, 0)) == NULL)
+		return (error_return("load chippedbrick bmp error = %{r}s\n", SDL_GetError()));
+	if ((wall_textures[1] = load_opti_bmp("assets/wall_textures/grittybrick.bmp", winsurf, 0)) == NULL)
+		return (error_return("load grittybrick bmp error = %{r}s\n", SDL_GetError()));
+	if ((wall_textures[2] = load_opti_bmp("assets/wall_textures/mudbrick.bmp", winsurf, 0)) == NULL)
+		return (error_return("load mudbrick bmp error = %{r}s\n", SDL_GetError()));
+	return (0);
+}
+
+int		init_doom(t_doom *doom)
+{
+	if (init_map(&doom->map) == 1 || init_sdl_and_ttf() == 1 || init_sdlmain(&doom->sdlmain) == 1 \
+			|| init_game(&doom->game, &doom->sdlmain) || init_menu(&doom->menu, &doom->sdlmain) == 1 \
+			|| init_editor(&doom->editor, &doom->sdlmain) == 1)
+		return (1);
+	if (init_wall_textures(doom->wall_textures, doom->sdlmain.win_surf) == 1)
+		return (1);
+	return (0);
+}
 
 int		init_sdl_and_ttf()
 {

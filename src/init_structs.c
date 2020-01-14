@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/06 16:34:58 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/14 18:21:06 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,14 @@ SDL_Surface *load_opti_bmp(char *file, SDL_Surface *win_surf, Uint32 colorkey)
 		return (NULL);
 	}
 	SDL_FreeSurface(surf);
-	if ((SDL_SetColorKey(opti_surf, SDL_TRUE, colorkey)) != 0)
+	if (colorkey != 0)
 	{
-		ft_dprintf(STDERR_FILENO, "SetColorKey err = %{r}s\n", SDL_GetError());
-		SDL_FreeSurface(opti_surf);
-		return (NULL);
+		if ((SDL_SetColorKey(opti_surf, SDL_TRUE, colorkey)) != 0)
+		{
+			ft_dprintf(STDERR_FILENO, "SetColorKey err = %{r}s\n", SDL_GetError());
+			SDL_FreeSurface(opti_surf);
+			return (NULL);
+		}
 	}
 	return (opti_surf);
 }

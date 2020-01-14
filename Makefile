@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/01/10 14:22:59 by afonck           ###   ########.fr        #
+#    Updated: 2020/01/14 16:47:53 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,6 +59,7 @@ HEADERS = $(addprefix $(HEADERS_DIRECTORY), $(HEADERS_LIST))
 
 SOURCES_DIRECTORY = ./src/
 SOURCES_LIST = main.c \
+			game.c \
 			init.c \
 			init_structs.c \
 			null_pointers.c \

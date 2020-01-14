@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/10 15:17:31 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/14 18:31:36 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ typedef struct	s_wall_node
 	t_vecdb		start_wall;
 	t_vecdb		end_wall;
 	int			color;
+	int			tex_index;
 	int			sector_index;
 	int			neighbor_sector;
 }				t_wall_node;
@@ -268,6 +269,7 @@ typedef struct	s_doom
 	t_editor	editor;
 	t_sdlmain	sdlmain;
 	t_map		map;
+	SDL_Surface	*wall_textures[10];
 	int			state;
 }				t_doom;
 
@@ -279,6 +281,7 @@ void	init_rotate_wall(t_wall *new_wall, const t_wall_node *current_wall, const t
 
 int		is_in_map(t_vecdb *player);
 
+SDL_Surface		*load_opti_bmp(char *file, SDL_Surface *win_surf, Uint32 colorkey);
 /*
 ** VECTOR FUNCTIONS
 */
@@ -313,8 +316,7 @@ double			get_point_distance(t_vecdb a, t_vecdb b);
 /*
 ** INIT FUNCTIONS
 */
-
-void			null_doom_pointers(t_doom *doom);
+int				init_doom(t_doom *doom);
 
 int				init_sdl_and_ttf();
 
@@ -363,7 +365,7 @@ int				draw_full_fixedmap(SDL_Surface *surf, t_player *player, const t_map *map,
 
 int				draw_full_rotmap(SDL_Surface *surf, t_player *player, const t_map *map, SDL_Surface *winsurf);
 
-void			draw_perspective_view(SDL_Surface *surf, t_player *player, const t_map *map);
+void			draw_perspective_view(SDL_Surface *surf, t_player *player, const t_map *map, SDL_Surface **wall_textures);
 
 /*
 ** DRAWING FUNCTIONS
@@ -388,6 +390,8 @@ int				reset_text(TTF_Font **font, SDL_Surface **surf, SDL_Color *color, char *t
 /*
 ** NULL INIT FUNCTIONS
 */
+
+void			null_doom_pointers(t_doom *doom);
 
 void			null_game_pointers(t_game *game);
 
