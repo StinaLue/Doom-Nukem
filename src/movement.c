@@ -6,19 +6,19 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/14 12:09:58 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/14 13:15:22 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-double	wall_distance(t_vecdb point, t_vecdb a, t_vecdb b)
+double	wall_distance(t_vecdb point, t_wall_node *wall)
 {
 	double dist;
 
-	dist = (point.x - b.x) * (b.y - a.y) + (point.y - b.y) * (a.x - b.x);
+	dist = (point.x - wall->end_wall.x) * (wall->end_wall.y - wall->start_wall.y) + (point.y - wall->end_wall.y) * (wall->start_wall.x - wall->end_wall.x);
 	//could be stored to avoid making long sqrt() operations in real time
-	dist /= sqrt((b.y - a.y) * (b.y - a.y) + (a.x - b.x) * (a.x - b.x));
+	dist /= wall->length;
 
 	return (dist);
 }
@@ -31,7 +31,7 @@ t_wall_node	*get_deepest_wall(t_vecdb position, t_wall_node *wall, double *min_d
 	deepest_wall = NULL;
 	while (wall != NULL)
 	{
-		dist = wall_distance(position, wall->start_wall, wall->end_wall);
+		dist = wall_distance(position, wall);
 		if (dist < *min_dist && wall != tmp_wall)
 		{
 			deepest_wall = wall;

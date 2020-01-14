@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:25:24 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/13 15:26:40 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/14 13:01:00 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,20 +190,16 @@ int			copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list)
 	return (ret + 1);
 }
 
-//checks if the list of walls is closed (loop)
-//returns 1 if it is 0 if not
-int			wall_loop(t_wall_node *node)
+//returns wall count
+int			count_walls(t_wall_node *wall_list)
 {
-	int		loop;
-	t_vecdb	*start;
+	int i;
 
-	if (node == NULL)
-		return (-1);
-	loop = 0;
-	start = &node->start_wall;
-	while (node->next != NULL)
-		node = node->next;
-	if (node->end_wall.x == start->x && node->end_wall.y == start->y && &node->start_wall != start)
-		loop = 1;
-	return (loop);
+	i = 0;
+	while (wall_list != NULL)
+	{
+		wall_list = wall_list->next;
+		i++;
+	}
+	return (i);
 }

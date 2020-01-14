@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/13 17:01:44 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/14 13:11:33 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ typedef struct	s_wall_node
 	int			color;
 	int			sector_index;
 	int			neighbor_sector;
+	double		length;
 }				t_wall_node;
 
 typedef struct	s_sector_node
@@ -120,7 +121,7 @@ typedef struct	s_sdlmain
 	SDL_Event	event;
 	TTF_Font	*font;
 	Mix_Music	*music;
-	t_vec       mouse_pos;
+	t_vec		mouse_pos;
 	int			win_w;
 	int			win_h;
 }				t_sdlmain;
@@ -482,6 +483,10 @@ t_sector_node		*get_last_sector(t_sector_node *node);
 
 int					copy_sector_list(t_sector_node *sector_list, t_sector_node **new_list);
 
+int					count_sectors(t_sector_node *sector_list);
+
+void		itt_sector_wall_heads(t_sector_node *sector_node, void (*f)(t_wall_node *wall_node));
+
 /*WALLS*/
 
 t_wall_node			*add_wall_node(t_wall_node **wall_head, const t_wall_node *node);
@@ -496,4 +501,7 @@ int					copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list);
 
 int					wall_loop(t_wall_node *node);
 
+int					count_walls(t_wall_node *wall_list);
+
+void				set_wall_length(t_wall_node *head);
 #endif

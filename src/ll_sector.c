@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:02:35 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/13 15:25:36 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/14 13:21:56 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,4 +140,28 @@ t_sector_node	*get_last_sector(t_sector_node *node)
 	if (node->next == NULL)
 		return (node);
 	return (get_last_sector(node->next));
+}
+
+//returns sector count
+int			count_sectors(t_sector_node *sector_list)
+{
+	int i;
+
+	i = 0;
+	while (sector_list != NULL)
+	{
+		i++;
+		sector_list = sector_list->next;
+	}
+	return (i);
+}
+
+//applies a given function to every sector in the list
+void		itt_sector_wall_heads(t_sector_node *sector_node, void (*f)(t_wall_node *wall_node))
+{
+	while (sector_node)
+	{
+		f(sector_node->wall_head);
+		sector_node = sector_node->next;
+	}
 }
