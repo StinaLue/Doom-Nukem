@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/14 13:15:22 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/14 15:36:54 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,7 @@ double	wall_distance(t_vecdb point, t_wall_node *wall)
 	double dist;
 
 	dist = (point.x - wall->end_wall.x) * (wall->end_wall.y - wall->start_wall.y) + (point.y - wall->end_wall.y) * (wall->start_wall.x - wall->end_wall.x);
-	//could be stored to avoid making long sqrt() operations in real time
 	dist /= wall->length;
-
 	return (dist);
 }
 

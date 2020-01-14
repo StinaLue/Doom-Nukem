@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/13 01:54:31 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/14 16:16:04 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,7 @@ int	main_loop()
 	free_menu(&doom.menu);
 	free_editor(&doom.editor);
 	free_sdlmain(&doom.sdlmain);
+	free_sector_list(&doom.map.sector_head);
 	quit_sdl_and_ttf();
 	if (ret == 1)
 		return (error_return("Error during main loop\n", NULL));
@@ -170,5 +171,7 @@ int main(/*int argc, char *argv[]*/)
 	{
 		return (error_return("The program %{r}s 😢\n", "FAILED"));
 	}
+	while (1)
+		;
 	return (EXIT_SUCCESS);
 }
