@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_parser.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 13:02:54 by phaydont          #+#    #+#             */
-/*   Updated: 2019/12/06 16:12:04 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/13 17:04:42 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int		parse_everything(t_wall *walls)
 	if (fd < 3)
 		return (1);
 	write_map_header(fd);
-	write_map_walls(fd, walls, NB_WALLS);
+	//write_map_walls(fd, walls, NB_WALLS);
 	close(fd);
 	fd = open("mapfile.DOOM", O_RDONLY);
 	if (fd < 3)

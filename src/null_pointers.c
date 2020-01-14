@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   null_pointers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/10 15:17:00 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/14 23:19:24 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,35 @@ void null_game_pointers(t_game *game)
 
 void null_menu_pointers(t_menu *menu)
 {
+    int i;
+
+    i = 0;
     menu->background = NULL;
     menu->menu_title = NULL;
-    menu->options[0] = NULL;
-    menu->options[1] = NULL;
-    menu->options[2] = NULL;
-    menu->options[3] = NULL;
+    while (i < 4)
+    {
+        menu->options[i] = NULL;
+        i++;
+    }
 }
 
 void null_editor_pointers(t_editor *editor)
 {
+    int i;
+
+    i = 0;
     editor->editor_surf = NULL;
+    editor->options_surf = NULL;
     editor->instruct_surf = NULL;
+    editor->options_surf = NULL;
+    editor->current_sector = NULL;
+    editor->current_wall = NULL;
+    while (i < 5)
+    {
+        editor->instruct_menu.instructions[i] = NULL;
+        i++;
+    }
+    null_map_pointers(&editor->edit_map);
 }
 
 void null_sdlmain_pointers(t_sdlmain *sdlmain)

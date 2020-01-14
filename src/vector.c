@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:06:54 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/09 14:55:40 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/14 18:16:36 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,13 @@ void	multvec(t_vecdb *vecdb, double n)
 {
 	vecdb->x *= n;
 	vecdb->y *= n;
+}
+
+t_vec	mult_vec(t_vec vec, int mult)
+{
+	vec.x *= mult;
+	vec.y *= mult;
+	return (vec);
 }
 
 t_vecdb	rotate2dcc(t_vecdb vector, double angle)

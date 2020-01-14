@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:25:24 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/14 21:55:42 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/14 23:44:33 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ t_wall_node	*add_wall_node(t_wall_node **wall_head, const t_wall_node *node)
 	new_node->sector_index = node->sector_index;
 	new_node->neighbor_sector = node->neighbor_sector;
 	new_node->next = NULL;
-	new_node->previous = NULL;
 	return (new_node);
 }
 
@@ -97,7 +96,6 @@ t_wall_node	*create_wall_node(t_wall_node **wall_head, t_vecdb a, t_vecdb b, int
 	new_node->sector_index = -1;
 	new_node->neighbor_sector = -1;
 	new_node->next = NULL;
-	new_node->previous = NULL;
 	new_node->tex_index = 0;
 	return (new_node);
 }
@@ -171,5 +169,50 @@ t_vecdb		point_average_position(t_wall_node *wall_head)
 	return (average);
 }
 
+t_wall_node		*get_last_wall_node(t_wall_node *wall_list)
+{
+	if (wall_list == NULL)
+		return (NULL);
+	while (wall_list->next != NULL)
+		wall_list = wall_list->next;
+	return (wall_list);
+}
+
 //removewall(int index)
 //removewall(t_vecdb position)
+
+//mallocs and copies a list of walls on a new list adress
+//returns the number of walls mallocs or -1 if malloc error
+int			copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list)
+{
+	int	ret;
+
+	if (wall_list == NULL)
+		return (0);
+	*new_list = malloc(sizeof(t_wall_node));
+	if (*new_list == NULL)
+		return (-1);
+	(*new_list)->start_wall = wall_list->start_wall;
+	(*new_list)->end_wall = wall_list->end_wall;
+	(*new_list)->color = wall_list->color;
+	(*new_list)->sector_index = wall_list->sector_index;
+	(*new_list)->neighbor_sector = wall_list->neighbor_sector;
+	ret = copy_wall_list(wall_list->next, &(*new_list)->next);
+	if (ret == -1)
+		return (-1);
+	return (ret + 1);
+}
+
+//returns wall count
+int			count_walls(t_wall_node *wall_list)
+{
+	int i;
+
+	i = 0;
+	while (wall_list != NULL)
+	{
+		wall_list = wall_list->next;
+		i++;
+	}
+	return (i);
+}

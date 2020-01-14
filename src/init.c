@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/14 18:21:18 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/14 23:45:04 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ int		init_map(t_map *map)
 {
 	t_vecdb vec1 = {20, 60}; 
 	t_vecdb vec2 = {40, 80};
-	t_vecdb vec3 = {60, 80};
-	t_vecdb vec4 = {80, 60};
+	t_vecdb vec3 = {100, 100};
+	//t_vecdb vec4 = {80, 60};
 	t_vecdb vec5 = {80, 40};
 	t_vecdb vec6 = {60, 20};
 	t_vecdb vec7 = {40, 20};
@@ -100,12 +100,13 @@ int		init_map(t_map *map)
 	add_sector_node(&map->sector_head);
 	create_wall_node(&map->sector_head->wall_head, vec1, vec2, 0xff0000);
 	create_wall_node(&map->sector_head->wall_head, vec2, vec3, 0xffbb00);
-	create_wall_node(&map->sector_head->wall_head, vec3, vec4, 0x00ff00);
-	create_wall_node(&map->sector_head->wall_head, vec4, vec5, 0x0088ff);
+	create_wall_node(&map->sector_head->wall_head, vec3, vec5, 0x00ff00);
+	//create_wall_node(&map->sector_head->wall_head, vec4, vec5, 0x0088ff);
 	create_wall_node(&map->sector_head->wall_head, vec5, vec6, 0xff0000);
 	create_wall_node(&map->sector_head->wall_head, vec6, vec7, 0xffbb00);
 	create_wall_node(&map->sector_head->wall_head, vec7, vec8, 0x00ff00);
 	create_wall_node(&map->sector_head->wall_head, vec8, vec1, 0x0088ff);
+	itt_sector_wall_heads(map->sector_head, &set_wall_length);
 
 	return (0);
 }

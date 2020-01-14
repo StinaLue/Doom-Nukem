@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/14 18:31:36 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/14 23:45:16 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 # include "SDL_mixer.h"
 # define TITLE "DOOM"
 
-# define NB_WALLS 4
 # define SQRT2 1.4142135623730950488
+# define PLAYER_RADIUS 1
 
 /*
 ** MAIN LOOP STATES
@@ -89,13 +89,14 @@ typedef struct	s_vecdb
 typedef struct	s_wall_node
 {
 	struct s_wall_node	*next;
-	struct s_wall_node	*previous;
+	//struct s_wall_node	*previous;
 	t_vecdb		start_wall;
 	t_vecdb		end_wall;
 	int			color;
 	int			tex_index;
 	int			sector_index;
 	int			neighbor_sector;
+	double		length;
 }				t_wall_node;
 
 typedef struct	s_sector_node
@@ -121,7 +122,7 @@ typedef struct	s_sdlmain
 	SDL_Event	event;
 	TTF_Font	*font;
 	Mix_Music	*music;
-	t_vec       mouse_pos;
+	t_vec		mouse_pos;
 	int			win_w;
 	int			win_h;
 }				t_sdlmain;
@@ -168,40 +169,29 @@ typedef struct	s_game
 	t_player	player;
 }				t_game;
 
-typedef struct s_editor_menu
+typedef struct s_instruct_menu
 {
-	//The surfaces
-	SDL_Surface *background;
 	SDL_Surface *title;
-	SDL_Surface *title_inst;
-	SDL_Surface *first_option;
-	//SDL_Surface *second_option;
-	//SDL_Surface *third_option;
-	//SDL_Surface *fourth_option;
-	//SDL_Surface *fifth_option;
+	SDL_Surface *instructions[5];
 
-	//Clip rectangles
-	SDL_Rect background_rect;
 	SDL_Rect title_rect;
-	SDL_Rect title_inst_rect;
-	SDL_Rect first_option_rect;
-	//SDL_Rect second_option_rect;
-	//SDL_Rect third_option_rect;
-	//SDL_Rect fourth_option_rect;
-
-	//The font that's going to be used
+	SDL_Rect instruct_rect[5];
+	TTF_Font *font_title;
 	TTF_Font *font;
-
-	//The color of the font
 	SDL_Color textColor;
-}				t_editor_menu;
+}				t_instruct_menu;
 
-typedef struct	s_sector
+typedef struct 	s_options_menu
 {
-	int			num_walls;
-	t_wall 		*walls;
-    t_vec       start_sector;
-}				t_sector;
+	SDL_Surface *title;
+	SDL_Surface *options[4];
+
+	SDL_Rect title_rect;
+	SDL_Rect options_rect[4];
+	TTF_Font *font_title;
+	TTF_Font *font;
+	SDL_Color textColor;
+}				t_options_menu;
 
 typedef struct	s_map
 {
@@ -217,23 +207,27 @@ typedef struct 	s_editor
 	SDL_Rect	editor_rect;
 	SDL_Rect	options_rect;
 	SDL_Rect	instruct_rect;
+	t_sector_node	*current_sector;
+	t_wall_node		*current_wall;
     int         clicked;
 	int			num_sectors;
     int         offset;
     //int         sectors[MAX_SECTORS];
 	int			start_sector_reached;
 	int 		color_change;
-	int 		sign_pos;
-	int 		point;
-	t_vec 		A; // used for convex
+	//int 		sign_pos;
+	//int 		point;
+	/* t_vec 		A; // used for convex
 	t_vec 		B;
-	t_vec 		C;
-    t_wall      walls[MAX_WALLS];
+	t_vec 		C; */
+    //t_wall      walls[MAX_WALLS];
 	t_vec 		grid_values[NBPOINTS];
     t_vec       start_sector;
-	t_editor_menu editor_menu;
+	t_wall_node wall_tmp;
+	t_instruct_menu instruct_menu;
+	t_options_menu options_menu;
 	t_map		edit_map;
-    t_sector    sector;
+    //t_sector    sector;
 }				t_editor;
 
 typedef struct	s_menu
@@ -288,6 +282,8 @@ SDL_Surface		*load_opti_bmp(char *file, SDL_Surface *win_surf, Uint32 colorkey);
 double			get_magnitude(t_vecdb a, t_vecdb b);
 
 void			multvec(t_vecdb *vecdb, double n);
+
+t_vec			mult_vec(t_vec vec, int mult);
 
 t_vec			create_vec(int x, int y);
 
@@ -371,13 +367,20 @@ void			draw_perspective_view(SDL_Surface *surf, t_player *player, const t_map *m
 ** DRAWING FUNCTIONS
 */
 
-int				blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf);
-
 void			fill_pix(SDL_Surface *surf, int x, int y, int color);
 
 void			draw_line(const t_vec a, const t_vec b, SDL_Surface *surf, int color);
 
 void			draw_border(SDL_Surface *surf, int color);
+
+/*
+**	BLIT FUNCTIONS
+*/
+
+int				blit_editor(t_editor *editor, t_sdlmain *sdlmain);
+
+int				blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf);
+
 
 /*
 ** TEXT FUNCTIONS
@@ -444,6 +447,11 @@ void			movement(t_player *player, t_vecdb move, const t_sector_node *sector);
 ** MENU FUNCTIONS
 */
 
+/*
+** CREATE SURFACES
+*/
+
+int				create_surfaces_editor(t_editor *editor, t_sdlmain *sdlmain);
 
 /*
 ** LOOPS
@@ -470,13 +478,34 @@ int				error_return(const char *error_msg, const char *sdl_error);
 ** LINKED LIST FUNCTIONS
 */
 
-/*SECTORS*/
+/*
+** SECTORS NODE FUNCTIONS
+*/
 
 t_sector_node		*add_sector_node(t_sector_node **sector_head);
 
 void				set_sector_position(t_sector_node *sector_list);
 
-/*WALLS*/
+t_sector_node		*get_sector_by_pos(t_sector_node *sector_list, t_vecdb point, double dist);
+
+void				delete_sector(t_sector_node **node);
+
+void				delete_sector_by_index(t_sector_node **sector_list,unsigned int index);
+
+t_sector_node		*get_last_sector(t_sector_node *node);
+
+int					copy_sector_list(t_sector_node *sector_list, t_sector_node **new_list);
+
+int					count_sectors(t_sector_node *sector_list);
+
+void		itt_sector_wall_heads(t_sector_node *sector_node, void (*f)(t_wall_node *wall_node));
+
+
+void		free_sector_list(t_sector_node **sector_list);
+
+/*
+** WALL NODE FUNCTIONS
+*/
 
 t_wall_node			*add_wall_node(t_wall_node **wall_head, const t_wall_node *node);
 
@@ -486,5 +515,23 @@ void				free_wall_list(t_wall_node **wall_list);
 
 t_vecdb				point_average_position(t_wall_node *wall_head);
 
+t_wall_node			*delete_last_wall(t_wall_node **wall_list);
 
+t_wall_node			*get_last_wall_node(t_wall_node *wall_list);
+
+t_wall_node 		*undo_wall(t_sector_node *node);
+
+/*
+** DEBUG FUNCTIONS
+*/
+
+void				print_map_contents(const t_map *map);
+
+int					copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list);
+
+int					wall_loop(t_wall_node *node);
+
+int					count_walls(t_wall_node *wall_list);
+
+void				set_wall_length(t_wall_node *head);
 #endif

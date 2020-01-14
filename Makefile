@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/01/14 16:47:53 by afonck           ###   ########.fr        #
+#    Updated: 2020/01/14 23:45:25 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,7 +81,11 @@ SOURCES_LIST = main.c \
 			ll_wall.c \
 			editor.c \
 			mouse.c \
-			editor_menu.c#\
+			editor_menu.c \
+			debug.c \
+			create_surfaces.c\
+			editor_check.c \
+			blit.c#\
 	       multithreading.c \
 		   texture.c \
 		   parsing.c \

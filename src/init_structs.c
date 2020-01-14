@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/14 18:21:06 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/14 23:44:53 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ void	init_player_struct(t_player *player)
 {
 	player->sector_pos = 0;
 
-	player->pos.x = 70;
-	player->pos.y = 70;
+	player->pos.x = 50;
+	player->pos.y = 50;
 	player->angle = 0;
 	player->view_z = 0;
 	player->inertia.x = 0;
