@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/14 17:03:12 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/14 23:18:09 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,13 @@ int		free_editor(t_editor *editor)
 	SDL_FreeSurface(editor->options_surf);
 	editor->options_surf = NULL;
 
-	SDL_FreeSurface(editor->editor_menu.title_inst);
-	editor->editor_menu.title_inst = NULL;
-	SDL_FreeSurface(editor->editor_menu.title);
-	editor->editor_menu.title = NULL;
-	TTF_CloseFont(editor->editor_menu.font);
-	editor->editor_menu.font=NULL;
+	SDL_FreeSurface(editor->instruct_menu.title);
+	editor->instruct_menu.title = NULL;
+	SDL_FreeSurface(editor->options_menu.title);
+	editor->options_menu.title = NULL;
+	TTF_CloseFont(editor->options_menu.font);
+	editor->options_menu.font=NULL;
+	TTF_CloseFont(editor->instruct_menu.font);
+	editor->instruct_menu.font=NULL;
 	return (EXIT_FAILURE);
 }

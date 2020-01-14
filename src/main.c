@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/14 23:00:57 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/14 23:25:09 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,5 @@ int main(/*int argc, char *argv[]*/)
 	{
 		return (error_return("The program %{r}s 😢\n", "FAILED"));
 	}
-	while (1)
-		;
 	return (EXIT_SUCCESS);
 }
