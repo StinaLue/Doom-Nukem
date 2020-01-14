@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/13 15:26:20 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/13 17:01:44 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 # include "SDL_mixer.h"
 # define TITLE "DOOM"
 
-# define NB_WALLS 4
 # define SQRT2 1.4142135623730950488
+# define PLAYER_RADIUS 0.5
 
 /*
 ** MAIN LOOP STATES
