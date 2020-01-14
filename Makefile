@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+         #
+#    By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/01/14 14:31:57 by phaydont         ###   ########.fr        #
+#    Updated: 2020/01/14 15:15:31 by sluetzen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,8 +81,9 @@ SOURCES_LIST = main.c \
 			editor.c \
 			mouse.c \
 			editor_menu.c \
-			editor_check.c \
-			debug.c #\
+			debug.c \
+			create_surfaces.c\
+			editor_check.c #\
 	       multithreading.c \
 		   texture.c \
 		   parsing.c \

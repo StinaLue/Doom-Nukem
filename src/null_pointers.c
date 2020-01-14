@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/13 19:14:16 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/14 16:06:15 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,20 @@ void null_menu_pointers(t_menu *menu)
 
 void null_editor_pointers(t_editor *editor)
 {
+    int i;
+
+    i = 0;
     editor->editor_surf = NULL;
     editor->options_surf = NULL;
     editor->instruct_surf = NULL;
     editor->options_surf = NULL;
     editor->current_sector = NULL;
     editor->current_wall = NULL;
+    while (i < 4)
+    {
+        editor->instruct_menu.instructions[i] = NULL;
+        i++;
+    }
     null_map_pointers(&editor->edit_map);
 }
 

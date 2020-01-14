@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/13 19:14:45 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/14 16:06:15 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,6 @@ int round_num(double num, int offset)
 
 	result = num / offset;
 	return (num < 0 ? result - 0.5 : result + 0.5);
-}
-
-int create_surfaces_editor(t_editor *editor, t_sdlmain *sdlmain)
-{
-	if ((editor->editor_surf = SDL_CreateRGBSurface(0, sdlmain->win_surf->w / 1.79, sdlmain->win_surf->h, 32, 0, 0, 0, 0)) == NULL)
-		return (error_return("create surface error = %s\n", SDL_GetError()));
-	if ((editor->options_surf = SDL_CreateRGBSurface(0, sdlmain->win_surf->w - (sdlmain->win_surf->w / 1.79), sdlmain->win_surf->h / 2, 32, 0, 0, 0, 0)) == NULL)
-		return (error_return("create surface error = %s\n", SDL_GetError())); // remove bug color from game shining through editor on right side
-	if ((editor->instruct_surf = SDL_CreateRGBSurface(0, sdlmain->win_surf->w - (sdlmain->win_surf->w / 1.79), sdlmain->win_surf->h - (sdlmain->win_surf->h / 2), 32, 0, 0, 0, 0)) == NULL)
-		return (error_return("create surface error = %s\n", SDL_GetError()));
-	assign_sdlrect(&editor->editor_rect, create_vec(0, 0), create_vec(sdlmain->win_surf->w / 1.79, sdlmain->win_surf->h));
-	assign_sdlrect(&editor->options_rect, create_vec(sdlmain->win_surf->w / 1.79, 0), create_vec(sdlmain->win_surf->w - (sdlmain->win_surf->w / 1.79), sdlmain->win_surf->h / 2));
-	assign_sdlrect(&editor->instruct_rect, create_vec(sdlmain->win_surf->w / 1.79, sdlmain->win_surf->h / 2), create_vec(sdlmain->win_surf->w - (sdlmain->win_surf->w / 1.79), sdlmain->win_surf->h - (sdlmain->win_surf->h / 2)));
-	return(0);
 }
 
 int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
@@ -215,7 +201,7 @@ int start_wall_exists(t_wall_node *wall)
 	return (0);
 }
 
-int is_valid_wall(t_wall_node *wall)
+/* int is_valid_wall(t_wall_node *wall)
 {
 	if (wall->start_wall.x > 0 && wall->start_wall.y > 0)
 	{
@@ -223,7 +209,7 @@ int is_valid_wall(t_wall_node *wall)
 			return (1);
 	}
 	return (0);
-}
+} */
 
 int	editor_events(t_doom *doom)
 {
@@ -290,11 +276,14 @@ int	editor_events(t_doom *doom)
 
 int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 {
-	if ((SDL_BlitSurface(editor->editor_menu.title, NULL,
-			editor->options_surf, &editor->editor_menu.title_rect)) < 0)
+	if ((SDL_BlitSurface(editor->options_menu.title, NULL,
+			editor->options_surf, &editor->options_menu.title_rect)) < 0)
 		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
-	if ((SDL_BlitSurface(editor->editor_menu.title_inst, NULL,
-			editor->instruct_surf, &editor->editor_menu.title_inst_rect)) < 0)
+	if ((SDL_BlitSurface(editor->instruct_menu.title, NULL,
+			editor->instruct_surf, &editor->instruct_menu.title_rect)) < 0)
+		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
+	if ((SDL_BlitSurface(editor->instruct_menu.instructions[0], NULL,
+			editor->instruct_surf, &editor->instruct_menu.instruct_rect[0])) < 0)
 		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
 	if ((SDL_BlitScaled(editor->editor_surf, NULL,
 			sdlmain->win_surf, &editor->editor_rect)) < 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/13 01:54:31 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/14 15:59:43 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,29 +100,6 @@ void null_doom_pointers(t_doom *doom)
 	doom->menu.options[3] = NULL;
 	doom->menu.font = NULL;*/
 }
-/*
-void null_doom_pointers_editor_menu(t_doom *doom)
-{
-	doom->editor.editor_surf = NULL;
-	doom->editor.options_surf = NULL;
-	doom->editor.instruct_surf = NULL;
-	doom->editor.editor_menu.title = NULL;
-	doom->editor.editor_menu.title_inst = NULL;
-}
-void null_doom_pointers(t_doom *doom)
-{
-	doom->game.surfs.fixed_mmap = NULL;
-	doom->game.surfs.rot_mmap = NULL;
-	doom->game.surfs.perspective_view = NULL;
-	doom->sdlmain.win = NULL;
-	doom->sdlmain.win_surf = NULL;
-	doom->sdlmain.music = NULL; */
-	/*doom->sdlmain.music = NULL;
-	null_doom_pointers_menu(doom);
-	null_doom_pointers_editor_menu(doom);
-	doom->map.sector_head = NULL;
-	doom->editor.edit_map.sector_head = NULL;
-}*/
 
 int	main_loop()
 {

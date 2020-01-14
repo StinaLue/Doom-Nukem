@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/14 14:31:53 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/14 16:14:47 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,40 +168,27 @@ typedef struct	s_game
 	t_player	player;
 }				t_game;
 
-typedef struct s_editor_menu
+typedef struct s_instruct_menu
 {
-	//The surfaces
-	SDL_Surface *background;
 	SDL_Surface *title;
-	SDL_Surface *title_inst;
-	SDL_Surface *first_option;
-	//SDL_Surface *second_option;
-	//SDL_Surface *third_option;
-	//SDL_Surface *fourth_option;
-	//SDL_Surface *fifth_option;
+	SDL_Surface *instructions[4];
 
-	//Clip rectangles
-	SDL_Rect background_rect;
 	SDL_Rect title_rect;
-	SDL_Rect title_inst_rect;
-	SDL_Rect first_option_rect;
-	//SDL_Rect second_option_rect;
-	//SDL_Rect third_option_rect;
-	//SDL_Rect fourth_option_rect;
-
-	//The font that's going to be used
+	SDL_Rect instruct_rect[4];
 	TTF_Font *font;
-
-	//The color of the font
 	SDL_Color textColor;
-}				t_editor_menu;
+}				t_instruct_menu;
 
-/* typedef struct	s_sector
+typedef struct 	s_options_menu
 {
-	int			num_walls;
-	t_wall 		*walls;
-    t_vec       start_sector;
-}				t_sector; */
+	SDL_Surface *title;
+	SDL_Surface *options[4];
+
+	SDL_Rect title_rect;
+	SDL_Rect options_rect[4];
+	TTF_Font *font;
+	SDL_Color textColor;
+}				t_options_menu;
 
 typedef struct	s_map
 {
@@ -234,7 +221,8 @@ typedef struct 	s_editor
 	t_vec 		grid_values[NBPOINTS];
     t_vec       start_sector;
 	t_wall_node wall_tmp;
-	t_editor_menu editor_menu;
+	t_instruct_menu instruct_menu;
+	t_options_menu options_menu;
 	t_map		edit_map;
     //t_sector    sector;
 }				t_editor;
@@ -444,6 +432,11 @@ void			movement(t_player *player, t_vecdb move, const t_sector_node *sector);
 ** MENU FUNCTIONS
 */
 
+/*
+** CREATE SURFACES
+*/
+
+int				create_surfaces_editor(t_editor *editor, t_sdlmain *sdlmain);
 
 /*
 ** LOOPS
