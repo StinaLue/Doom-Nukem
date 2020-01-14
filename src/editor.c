@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/13 19:07:55 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/13 19:14:45 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,6 +215,16 @@ int start_wall_exists(t_wall_node *wall)
 	return (0);
 }
 
+int is_valid_wall(t_wall_node *wall)
+{
+	if (wall->start_wall.x > 0 && wall->start_wall.y > 0)
+	{
+		if (wall->end_wall.x > 0 && wall->end_wall.y > 0)
+			return (1);
+	}
+	return (0);
+}
+
 int	editor_events(t_doom *doom)
 {
 	t_editor *editor;
@@ -236,6 +246,10 @@ int	editor_events(t_doom *doom)
 		if (sdlmain->event.button.button == SDL_BUTTON_LEFT && sdlmain->mouse_pos.x <= NBPOINTSROW)
 		{
 			if (start_wall_exists(&editor->wall_tmp) && !(sdlmain->mouse_pos.x == editor->wall_tmp.end_wall.x && sdlmain->mouse_pos.y == editor->wall_tmp.end_wall.y)/*  && is_convex(editor->A, editor->B, editor->C, editor) */)
+			/* if (editor->point > 3)
+			{
+				is_convex(editor->A, editor->B, editor->C, editor);
+			} */
 			{
 				editor->wall_tmp.end_wall.x = sdlmain->mouse_pos.x; // can maybe be put into create_wall_node directly
 				editor->wall_tmp.end_wall.y = sdlmain->mouse_pos.y;
