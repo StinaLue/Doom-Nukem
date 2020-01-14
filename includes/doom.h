@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/13 19:13:59 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/14 14:24:12 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 # include "SDL_mixer.h"
 # define TITLE "DOOM"
 
-# define NB_WALLS 4
 # define SQRT2 1.4142135623730950488
+# define PLAYER_RADIUS 0.5
 
 /*
 ** MAIN LOOP STATES
