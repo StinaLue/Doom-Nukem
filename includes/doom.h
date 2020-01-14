@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/14 13:11:33 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/14 14:31:53 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,12 +196,12 @@ typedef struct s_editor_menu
 	SDL_Color textColor;
 }				t_editor_menu;
 
-typedef struct	s_sector
+/* typedef struct	s_sector
 {
 	int			num_walls;
 	t_wall 		*walls;
     t_vec       start_sector;
-}				t_sector;
+}				t_sector; */
 
 typedef struct	s_map
 {
@@ -217,23 +217,26 @@ typedef struct 	s_editor
 	SDL_Rect	editor_rect;
 	SDL_Rect	options_rect;
 	SDL_Rect	instruct_rect;
+	t_sector_node	*current_sector;
+	t_wall_node		*current_wall;
     int         clicked;
 	int			num_sectors;
     int         offset;
     //int         sectors[MAX_SECTORS];
 	int			start_sector_reached;
 	int 		color_change;
-	int 		sign_pos;
-	int 		point;
-	t_vec 		A; // used for convex
+	//int 		sign_pos;
+	//int 		point;
+	/* t_vec 		A; // used for convex
 	t_vec 		B;
-	t_vec 		C;
-    t_wall      walls[MAX_WALLS];
+	t_vec 		C; */
+    //t_wall      walls[MAX_WALLS];
 	t_vec 		grid_values[NBPOINTS];
     t_vec       start_sector;
+	t_wall_node wall_tmp;
 	t_editor_menu editor_menu;
 	t_map		edit_map;
-    t_sector    sector;
+    //t_sector    sector;
 }				t_editor;
 
 typedef struct	s_menu
@@ -467,7 +470,9 @@ int				error_return(const char *error_msg, const char *sdl_error);
 ** LINKED LIST FUNCTIONS
 */
 
-/*SECTORS*/
+/*
+** SECTORS NODE FUNCTIONS
+*/
 
 t_sector_node		*add_sector_node(t_sector_node **sector_head);
 
@@ -487,7 +492,9 @@ int					count_sectors(t_sector_node *sector_list);
 
 void		itt_sector_wall_heads(t_sector_node *sector_node, void (*f)(t_wall_node *wall_node));
 
-/*WALLS*/
+/*
+** WALL NODE FUNCTIONS
+*/
 
 t_wall_node			*add_wall_node(t_wall_node **wall_head, const t_wall_node *node);
 
@@ -496,6 +503,18 @@ t_wall_node			*create_wall_node(t_wall_node **wall_head, t_vecdb a, t_vecdb b, i
 void				free_wall_list(t_wall_node **wall_list);
 
 t_vecdb				point_average_position(t_wall_node *wall_head);
+
+t_wall_node			*delete_last_wall(t_wall_node **wall_list);
+
+t_wall_node			*get_last_wall_node(t_wall_node *wall_list);
+
+t_wall_node 		*undo_wall(t_sector_node *node);
+
+/*
+** DEBUG FUNCTIONS
+*/
+
+void				print_map_contents(const t_map *map);
 
 int					copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list);
 

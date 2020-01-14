@@ -6,11 +6,21 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:02:35 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/14 13:21:56 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/14 14:31:26 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
+
+
+t_wall_node 		*undo_wall(t_sector_node *node)
+{
+	if (node == NULL)
+		return (NULL);
+	while(node->next != NULL)
+		node = node->next;
+	return (delete_last_wall(&node->wall_head));
+}
 
 //recursively mallocs a node at the end of the sector list
 //returns its adress

@@ -6,7 +6,7 @@
 #    By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/01/14 13:12:28 by phaydont         ###   ########.fr        #
+#    Updated: 2020/01/14 14:31:57 by phaydont         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,7 +81,8 @@ SOURCES_LIST = main.c \
 			editor.c \
 			mouse.c \
 			editor_menu.c \
-			editor_check.c #\
+			editor_check.c \
+			debug.c #\
 	       multithreading.c \
 		   texture.c \
 		   parsing.c \

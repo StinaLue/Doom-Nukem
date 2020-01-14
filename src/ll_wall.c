@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:25:24 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/14 13:01:00 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/14 14:31:26 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,18 @@ t_vecdb		point_average_position(t_wall_node *wall_head)
 	}
 	return (average);
 }
+
+t_wall_node		*get_last_wall_node(t_wall_node *wall_list)
+{
+	if (wall_list == NULL)
+		return (NULL);
+	while (wall_list->next != NULL)
+		wall_list = wall_list->next;
+	return (wall_list);
+}
+
+//removewall(int index)
+//removewall(t_vecdb position)
 
 //mallocs and copies a list of walls on a new list adress
 //returns the number of walls mallocs or -1 if malloc error
