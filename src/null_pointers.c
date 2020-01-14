@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/14 16:06:15 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/14 17:12:24 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void null_editor_pointers(t_editor *editor)
     editor->options_surf = NULL;
     editor->current_sector = NULL;
     editor->current_wall = NULL;
-    while (i < 4)
+    while (i < 5)
     {
         editor->instruct_menu.instructions[i] = NULL;
         i++;

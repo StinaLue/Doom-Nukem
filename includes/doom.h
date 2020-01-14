@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/14 16:14:47 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/14 18:17:07 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,10 +171,11 @@ typedef struct	s_game
 typedef struct s_instruct_menu
 {
 	SDL_Surface *title;
-	SDL_Surface *instructions[4];
+	SDL_Surface *instructions[5];
 
 	SDL_Rect title_rect;
-	SDL_Rect instruct_rect[4];
+	SDL_Rect instruct_rect[5];
+	TTF_Font *font_title;
 	TTF_Font *font;
 	SDL_Color textColor;
 }				t_instruct_menu;
@@ -186,6 +187,7 @@ typedef struct 	s_options_menu
 
 	SDL_Rect title_rect;
 	SDL_Rect options_rect[4];
+	TTF_Font *font_title;
 	TTF_Font *font;
 	SDL_Color textColor;
 }				t_options_menu;
@@ -278,6 +280,8 @@ double			get_magnitude(t_vecdb a, t_vecdb b);
 
 void			multvec(t_vecdb *vecdb, double n);
 
+t_vec			mult_vec(t_vec vec, int mult);
+
 t_vec			create_vec(int x, int y);
 
 void			give_vec_values(t_vec *vec, int x, int y);
@@ -361,13 +365,20 @@ void			draw_perspective_view(SDL_Surface *surf, t_player *player, const t_map *m
 ** DRAWING FUNCTIONS
 */
 
-int				blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf);
-
 void			fill_pix(SDL_Surface *surf, int x, int y, int color);
 
 void			draw_line(const t_vec a, const t_vec b, SDL_Surface *surf, int color);
 
 void			draw_border(SDL_Surface *surf, int color);
+
+/*
+**	BLIT FUNCTIONS
+*/
+
+int				blit_editor(t_editor *editor, t_sdlmain *sdlmain);
+
+int				blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf);
+
 
 /*
 ** TEXT FUNCTIONS
