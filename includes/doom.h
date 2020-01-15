@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/15 11:50:42 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/15 15:04:52 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define TITLE "DOOM"
 
 # define SQRT2 1.4142135623730950488
-# define PLAYER_RADIUS 1
+# define PLAYER_RADIUS 0.5
 
 /*
 ** MAIN LOOP STATES
@@ -152,7 +152,7 @@ typedef	struct	s_wall
 typedef struct	s_player
 {
 	t_vecdb		pos;
-	int			sector_pos;
+	int			sector;
 	t_vecdb		direc;
 	t_vecdb		inertia;
 	double		angle;
@@ -441,7 +441,7 @@ void			assign_sdlrect(SDL_Rect *rect, t_vec origin, t_vec size);
 ** MOVEMENT
 */
 
-void			movement(t_player *player, t_vecdb move, const t_sector_node *sector);
+void			movement(t_player *player, t_vecdb move, t_sector_node *head);
 
 /*
 ** MENU FUNCTIONS
@@ -488,6 +488,8 @@ void				set_sector_position(t_sector_node *sector_list);
 
 t_sector_node		*get_sector_by_pos(t_sector_node *sector_list, t_vecdb point, double dist);
 
+t_sector_node		*get_sector_by_index(t_sector_node *sector_list,unsigned int index);
+
 void				delete_sector(t_sector_node **node);
 
 void				delete_sector_by_index(t_sector_node **sector_list,unsigned int index);
@@ -498,10 +500,10 @@ int					copy_sector_list(t_sector_node *sector_list, t_sector_node **new_list);
 
 int					count_sectors(t_sector_node *sector_list);
 
-void		itt_sector_wall_heads(t_sector_node *sector_node, void (*f)(t_wall_node *wall_node));
+void				itt_sector_wall_heads(t_sector_node *sector_node, void (*f)(t_wall_node *wall_node));
 
 
-void		free_sector_list(t_sector_node **sector_list);
+void				free_sector_list(t_sector_node **sector_list);
 
 /*
 ** WALL NODE FUNCTIONS

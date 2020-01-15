@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/15 11:49:29 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/15 14:30:22 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,7 +223,7 @@ void	draw_perspective_view(SDL_Surface *surf, t_player *player, const t_map *map
 		draw_line(create_vec(map_center.x,map_center.y), create_vec(map_center.x-player->fov.x,map_center.y+player->fov.y), surf, 0x999999);
 		fill_pix(surf, map_center.x, map_center.y, 0x8800FF);
 	}
-	current_wall = map->sector_head->wall_head;
+	current_wall = get_sector_by_index(map->sector_head, player->sector)->wall_head;
 
 	while (current_wall != NULL)
 	{
