@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/14 23:19:24 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/15 11:26:36 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,16 @@ void null_editor_pointers(t_editor *editor)
         editor->instruct_menu.instructions[i] = NULL;
         i++;
     }
+    i = 0;
+    while (i < 4)
+    {
+        editor->options_menu.options[i] = NULL;
+        i++;
+    }
     null_map_pointers(&editor->edit_map);
 }
 
-void null_sdlmain_pointers(t_sdlmain *sdlmain)
+void    null_sdlmain_pointers(t_sdlmain *sdlmain)
 {
     sdlmain->win = NULL;
     sdlmain->win_surf = NULL;
@@ -61,7 +67,7 @@ void null_sdlmain_pointers(t_sdlmain *sdlmain)
     sdlmain->music = NULL;
 }
 
-void null_map_pointers(t_map *map)
+void    null_map_pointers(t_map *map)
 {
 	map->sector_head = NULL;
 }
