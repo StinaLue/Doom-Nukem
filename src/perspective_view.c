@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   perspective_view.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/15 11:49:29 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/15 13:46:21 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ void draw_vertical_tex(t_vec top, t_vec bottom, SDL_Surface *surf, SDL_Surface *
 	top.y = limit_value(top.y, 0, surf->h - 1);
 	bottom.y = limit_value(bottom.y, 0, surf->h - 1);
 	double step = 1.0 * tex->h / (top.y - bottom.y);
+	if (step < 1)
+		step = 1;
 	//printf("current step %f\n", step);
 	while (top.y >= bottom.y)
 	{
@@ -125,17 +127,17 @@ void	fill_wall_texture(SDL_Surface *surf, const t_wall3d *display_wall, SDL_Surf
 	//printf("step %f\n", step);
 	//printf("display_wall x %d bottom right | x %d bottom left\n", display_wall->bottom_left.x, display_wall->bottom_right.x);
 
-	if (display_wall->top_right.x > display_wall->top_left.x)
+	if (display_wall->top_left.x < display_wall->top_right.x)
 	{
-		x = display_wall->top_right.x;
-		while (x > display_wall->top_left.x)
+		x = display_wall->top_left.x;
+		while (x < display_wall->top_right.x)
 		{
-			current_top.y = display_wall->top_right.y + (x - display_wall->top_right.x) * (long)(display_wall->top_left.y - display_wall->top_right.y) / (abs(display_wall->top_left.x - display_wall->top_right.x) == 0 ? 1 : (display_wall->top_left.x - display_wall->top_right.x));
-			current_bottom.y = display_wall->bottom_right.y + (x - display_wall->top_right.x) * (long)(display_wall->bottom_left.y - display_wall->bottom_right.y) / (abs(display_wall->top_left.x - display_wall->top_right.x) ==0 ? 1 : (display_wall->top_left.x - display_wall->top_right.x));
+			current_top.y = display_wall->top_left.y + (x - display_wall->top_left.x) * (long)(display_wall->top_right.y - display_wall->top_left.y) / (abs(display_wall->top_right.x - display_wall->top_left.x) == 0 ? 1 : (display_wall->top_right.x - display_wall->top_left.x));
+			current_bottom.y = display_wall->bottom_left.y + (x - display_wall->top_left.x) * (long)(display_wall->bottom_right.y - display_wall->bottom_left.y) / (abs(display_wall->top_right.x - display_wall->top_left.x) ==0 ? 1 : (display_wall->top_right.x - display_wall->top_left.x));
 			current_top.x = x;
 			current_bottom.x = x;
 			draw_vertical_tex(current_top, current_bottom, surf, tex, current_xtex * tex->h);
-			x--;
+			x++;
 			//current_xtex++;
 			current_xtex += step;
 			if (current_xtex > tex->w)

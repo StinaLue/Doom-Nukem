@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/15 11:50:42 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/15 15:10:58 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,6 +274,8 @@ int 	check_collision(double pos_x, double pos_y, t_wall *walls);
 void	init_rotate_wall(t_wall *new_wall, const t_wall_node *current_wall, const t_player *player);
 
 int		is_in_map(t_vecdb *player);
+
+int		blit(SDL_Surface *src, SDL_Rect *src_rect, SDL_Surface *dst, SDL_Rect *dst_rect);
 
 SDL_Surface		*load_opti_bmp(char *file, SDL_Surface *win_surf, Uint32 colorkey);
 /*
