@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/15 11:21:46 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/15 13:54:14 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int		free_fonts_surf(t_editor *editor)
 	editor->instruct_menu.title = NULL;
 	SDL_FreeSurface(editor->options_menu.title);
 	editor->options_menu.title = NULL;
-	while (i < 4)
+	while (i < 5)
 	{
 		SDL_FreeSurface(editor->options_menu.options[i]);
 		editor->options_menu.options[i] = NULL;

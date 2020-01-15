@@ -6,7 +6,7 @@
 #    By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/01/15 12:53:36 by sluetzen         ###   ########.fr        #
+#    Updated: 2020/01/15 15:09:18 by sluetzen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -84,7 +84,7 @@ SOURCES_LIST = main.c \
 			debug.c \
 			create_surfaces.c\
 			editor_check.c \
-			blit.c\
+			blit_editor.c\
 			map_parser.c #\
 	       multithreading.c \
 		   texture.c \

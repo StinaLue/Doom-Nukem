@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/15 11:26:36 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/15 14:32:30 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,12 @@ void null_editor_pointers(t_editor *editor)
         i++;
     }
     i = 0;
-    while (i < 4)
+    while (i < 5)
     {
         editor->options_menu.options[i] = NULL;
         i++;
     }
+    i = 0;
     null_map_pointers(&editor->edit_map);
 }
 
