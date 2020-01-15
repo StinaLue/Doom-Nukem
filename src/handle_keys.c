@@ -6,13 +6,13 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/07 15:58:15 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/15 15:05:22 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-void	basic_move(t_player *player, const t_sector_node *sector, const Uint8 *keyboard_state)
+void	basic_move(t_player *player, t_sector_node *sector, const Uint8 *keyboard_state)
 {
 	t_vecdb	move;
 

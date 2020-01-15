@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/15 11:51:53 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/15 15:51:49 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,33 @@ double	wall_distance(t_vecdb point, t_wall_node *wall)
 	return (dist);
 }
 
-t_wall_node	*get_deepest_wall(t_vecdb position, t_wall_node *wall, double *min_dist, t_wall_node *tmp_wall)
+void		get_movement_sector(t_vecdb position, t_sector_node *sector, int *sector_index)
+{
+	double			dist;
+	t_wall_node		*wall;
+
+	wall = sector->wall_head;
+	while (wall != NULL)
+	{
+		dist = wall_distance(position, wall);
+		if (dist < 0 && wall->neighbor_sector != -1)
+			*sector_index = wall->neighbor_sector;
+		wall = wall->next;
+	}
+}
+
+t_wall_node	*get_collision_wall(t_vecdb position, t_sector_node *sector, double *min_dist, t_wall_node *tmp_wall)
 {
 	double dist;
+	t_wall_node	*wall;
 	t_wall_node	*deepest_wall;
 
+	wall = sector->wall_head;
 	deepest_wall = NULL;
 	while (wall != NULL)
 	{
 		dist = wall_distance(position, wall);
-		if (dist < *min_dist && wall != tmp_wall)
+		if (dist < *min_dist && wall->neighbor_sector == -1 && wall != tmp_wall)
 		{
 			deepest_wall = wall;
 			*min_dist = dist;
@@ -71,35 +88,44 @@ t_vecdb	move_hyp_length(t_wall_node *wall, double distance, double angle)
 	return (move);
 }
 
-void	move_player(t_vecdb *position, t_vecdb move, const t_sector_node *sector)
+void	move_player(t_player *player, t_vecdb move, t_sector_node *head)
 {
 	t_wall_node	*tmp_wall;
 	double	tmp_distance;
 	double	col_angle;
+	t_sector_node	*current_sector;
 
 	tmp_wall = NULL;
 
-	position->x += move.x;
-	position->y += move.y;
+	player->pos.x += move.x;
+	player->pos.y += move.y;
 	tmp_distance = PLAYER_RADIUS;
 	col_angle = 0;
-	tmp_wall = get_deepest_wall(*position, sector->wall_head, &tmp_distance, tmp_wall);
+	current_sector = get_sector_by_index(head, player->sector);
+	tmp_wall = get_collision_wall(player->pos, current_sector, &tmp_distance, tmp_wall);
 	if (tmp_wall == NULL)
+	{
+		get_movement_sector(player->pos, current_sector, &player->sector);
+		current_sector = get_sector_by_index(head, player->sector);
 		return ;
+	}
 	move = collide(tmp_wall, tmp_distance, &col_angle);
-	position->x += move.x;
-	position->y += move.y;
+	player->pos.x += move.x;
+	player->pos.y += move.y;
+
+	get_movement_sector(player->pos, current_sector, &player->sector);
+	current_sector = get_sector_by_index(head, player->sector);
 
 	tmp_distance = PLAYER_RADIUS;
-	tmp_wall = get_deepest_wall(*position, sector->wall_head, &tmp_distance, tmp_wall);
+	tmp_wall = get_collision_wall(player->pos, current_sector, &tmp_distance, tmp_wall);
 	if (tmp_wall == NULL)
 		return ;
 	move = move_hyp_length(tmp_wall, tmp_distance, col_angle);
-	position->x += move.x;
-	position->y += move.y;
+	player->pos.x += move.x;
+	player->pos.y += move.y;
 }
 
-void	movement(t_player *player, t_vecdb move, const t_sector_node *sector)
+void	movement(t_player *player, t_vecdb move, t_sector_node *head)
 {
 	double	movespeed = 0.005;
 	t_vecdb	old_position;
@@ -108,11 +134,13 @@ void	movement(t_player *player, t_vecdb move, const t_sector_node *sector)
 		multvec(&move, 1 / SQRT2);//change later to actually calculate velocity
 	move = rotate2d(move, player->angle);
 	multvec(&move, movespeed);
+
 	old_position = player->pos;
 	move.x += player->inertia.x;
 	move.y += player->inertia.y;
-	move_player(&player->pos, move, sector);
-	//printf("Px:%f\nPy:%f\n", player->pos.x, player->pos.y);
+	move_player(player, move, head);
+
+	//printf("Px:%.15f\nPy:%.15f\n", player->pos.x, player->pos.y);
 	player->inertia.x = (player->pos.x - old_position.x) * 0.96;
 	player->inertia.y = (player->pos.y - old_position.y) * 0.96;
 }

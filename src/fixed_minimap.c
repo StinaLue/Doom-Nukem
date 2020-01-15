@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 16:23:32 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/15 11:48:16 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/15 12:15:36 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	draw_fixed_minimap(SDL_Surface *surf, t_player *player, const t_map *map)
 
 	while (current_wall != NULL)
 	{
-		draw_line(vecdb_to_vec(current_wall->start), vecdb_to_vec(current_wall->start), surf, current_wall->color);
+		draw_line(vecdb_to_vec(current_wall->start), vecdb_to_vec(current_wall->end), surf, current_wall->color);
 		current_wall = current_wall->next;
 	}
 	draw_line(vecdb_to_vec(player->pos), vecdb_to_vec(player->direc), surf, 0xFF0000);

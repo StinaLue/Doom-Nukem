@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/14 23:44:14 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/15 11:41:59 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,6 @@ int main(/*int argc, char *argv[]*/)
 	//if (WIN_W > 1920 || WIN_H > 1080 || WIN_W < 100 || WIN_H < 100)
 	//	return (1);
 	if (main_loop() == 1)
-	{
 		return (error_return("The program %{r}s 😢\n", "FAILED"));
-	}
 	return (EXIT_SUCCESS);
 }

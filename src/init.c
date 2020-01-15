@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/14 23:45:04 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/15 16:52:45 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,19 @@ int		init_wall_textures(SDL_Surface **wall_textures, SDL_Surface *winsurf)
 
 int		init_doom(t_doom *doom)
 {
-	if (init_map(&doom->map) == 1 || init_sdl_and_ttf() == 1 || init_sdlmain(&doom->sdlmain) == 1 \
-			|| init_game(&doom->game, &doom->sdlmain) || init_menu(&doom->menu, &doom->sdlmain) == 1 \
-			|| init_editor(&doom->editor, &doom->sdlmain) == 1)
+	if (init_map(&doom->map) == 1 || init_sdl_and_ttf() == 1 \
+		|| init_sdlmain(&doom->sdlmain) == 1 \
+		|| init_game(&doom->game, &doom->sdlmain) == 1 \
+		|| init_menu(&doom->menu, &doom->sdlmain) == 1 \
+		|| init_wall_textures(doom->wall_textures, doom->sdlmain.win_surf) == 1)
 		return (1);
-	if (init_wall_textures(doom->wall_textures, doom->sdlmain.win_surf) == 1)
+	doom->editor.options_menu.wall_textures = doom->wall_textures;
+	if (init_editor(&doom->editor, &doom->sdlmain) == 1)
 		return (1);
 	return (0);
 }
 
-int		init_sdl_and_ttf()
+int		init_sdl_and_ttf(void)
 {
 	int error;
 
@@ -53,7 +56,8 @@ int		init_sdl_and_ttf()
 	}
 	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024) != 0)
 	{
-		ft_dprintf(STDERR_FILENO, "Mix_OpenAudio Error: %{r}s\n", Mix_GetError());
+		ft_dprintf(STDERR_FILENO, "Mix_OpenAudio Error: %{r}s\n", \
+					Mix_GetError());
 		error = 1;
 	}
 	return (error);
@@ -62,8 +66,8 @@ int		init_sdl_and_ttf()
 int		init_sdlmain(t_sdlmain *sdlmain)
 {
 	if ((sdlmain->win = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, \
-		SDL_WINDOWPOS_UNDEFINED, sdlmain->win_w, sdlmain->win_h, SDL_WINDOW_SHOWN)) \
-		== NULL)
+		SDL_WINDOWPOS_UNDEFINED, sdlmain->win_w, sdlmain->win_h, \
+		SDL_WINDOW_SHOWN)) == NULL)
 	{
 		ft_dprintf(STDERR_FILENO, "SDL_CreateWindow Error: %{r}s\n", \
 			SDL_GetError());
@@ -87,7 +91,7 @@ int		init_sdlmain(t_sdlmain *sdlmain)
 
 int		init_map(t_map *map)
 {
-	t_vecdb vec1 = {20, 60}; 
+	t_vecdb vec1 = {20, 60};
 	t_vecdb vec2 = {40, 80};
 	t_vecdb vec3 = {100, 100};
 	//t_vecdb vec4 = {80, 60};
@@ -95,6 +99,11 @@ int		init_map(t_map *map)
 	t_vecdb vec6 = {60, 20};
 	t_vecdb vec7 = {40, 20};
 	t_vecdb vec8 = {20, 40};
+
+	t_vecdb vec9 = {10, 100};
+	t_vecdb vec10 = {10, 140};
+	t_vecdb vec11 = {50, 130};
+
 
 	//map->sector_head = NULL;
 	add_sector_node(&map->sector_head);
@@ -106,6 +115,16 @@ int		init_map(t_map *map)
 	create_wall_node(&map->sector_head->wall_head, vec6, vec7, 0xffbb00);
 	create_wall_node(&map->sector_head->wall_head, vec7, vec8, 0x00ff00);
 	create_wall_node(&map->sector_head->wall_head, vec8, vec1, 0x0088ff);
+	map->sector_head->wall_head->next->neighbor_sector = 1;
+
+	add_sector_node(&map->sector_head);
+	create_wall_node(&map->sector_head->next->wall_head, vec3, vec2, 0xff0000);
+	create_wall_node(&map->sector_head->next->wall_head, vec2, vec9, 0xff0000);
+	create_wall_node(&map->sector_head->next->wall_head, vec9, vec10, 0xff0000);
+	create_wall_node(&map->sector_head->next->wall_head, vec10, vec11, 0xff0000);
+	create_wall_node(&map->sector_head->next->wall_head, vec11, vec3, 0xff0000);
+	map->sector_head->next->wall_head->neighbor_sector = 0;
+
 	itt_sector_wall_heads(map->sector_head, &set_wall_length);
 
 	return (0);
