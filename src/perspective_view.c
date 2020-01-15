@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   perspective_view.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/14 23:02:18 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/15 11:49:29 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,23 +146,23 @@ void	fill_wall_texture(SDL_Surface *surf, const t_wall3d *display_wall, SDL_Surf
 
 int		intersect_fov(t_wall *wall, t_vecdb fov)
 {
-	if (cross_product(wall->end_wall, fov) > 0)
+	if (cross_product(wall->end, fov) > 0)
 	{
-		if (cross_product(wall->start_wall, fov) > 0)
+		if (cross_product(wall->start, fov) > 0)
 			return (0);
-		wall->end_wall = simple_intersect(wall->start_wall, wall->end_wall, fov);
+		wall->end = simple_intersect(wall->start, wall->end, fov);
 	}
-	else if (wall->end_wall.y < 0)
+	else if (wall->end.y < 0)
 		return (0);
 
 	fov.x *= -1;
-	if (cross_product(wall->start_wall, fov) < 0)
+	if (cross_product(wall->start, fov) < 0)
 	{
-		if (cross_product(wall->end_wall, fov) < 0)
+		if (cross_product(wall->end, fov) < 0)
 			return (0);
-		wall->start_wall = simple_intersect(wall->start_wall, wall->end_wall, fov);
+		wall->start = simple_intersect(wall->start, wall->end, fov);
 	}
-	else if (wall->start_wall.y < 0)
+	else if (wall->start.y < 0)
 		return (0);
 
 	return (1);
@@ -177,8 +177,8 @@ void	create_perspective_wall(t_wall3d *display_wall, t_wall wall, SDL_Surface *s
 
 	surf_center = ((double)surf->w - 1) / 2;
 
-	fov_ratio = player->fov.y / player->fov.x / wall.start_wall.y;
-	x = surf->w / 2 + wall.start_wall.x * fov_ratio * surf_center;
+	fov_ratio = player->fov.y / player->fov.x / wall.start.y;
+	x = surf->w / 2 + wall.start.x * fov_ratio * surf_center;
 	y = fov_ratio * surf->w;
 
 	display_wall->top_left.x = x;
@@ -186,8 +186,8 @@ void	create_perspective_wall(t_wall3d *display_wall, t_wall wall, SDL_Surface *s
 	display_wall->bottom_left.x = display_wall->top_left.x;
 	display_wall->bottom_left.y = surf->h / 2 - player->view_z - y;
 
-	fov_ratio = player->fov.y / player->fov.x / wall.end_wall.y;
-	x = surf->w / 2 + wall.end_wall.x * fov_ratio * surf_center;
+	fov_ratio = player->fov.y / player->fov.x / wall.end.y;
+	x = surf->w / 2 + wall.end.x * fov_ratio * surf_center;
 	y = fov_ratio * surf->w;
 
 	display_wall->top_right.x = x;
@@ -208,10 +208,11 @@ void	draw_3dwall(t_wall3d display_wall, SDL_Surface *surf, const t_wall_node *wa
 
 void	draw_perspective_view(SDL_Surface *surf, t_player *player, const t_map *map, SDL_Surface **wall_textures)
 {
-	t_wall wall_tmp;
-	t_wall3d display_wall;
-	t_vecdb map_center;
-	t_wall_node *current_wall;
+	t_wall		wall;
+	t_wall3d	display_wall;
+	t_vecdb		map_center;
+	t_wall_node	*current_wall;
+	t_vecdb		tmp_wall;
 
 	map_center.x = surf->w / 2 + 0.5;
 	map_center.y = surf->h / 2 + 0.5;
@@ -226,22 +227,26 @@ void	draw_perspective_view(SDL_Surface *surf, t_player *player, const t_map *map
 
 	while (current_wall != NULL)
 	{
-		init_rotate_wall(&wall_tmp, current_wall, player);
-		if ((wall_tmp.start_wall.y > 0 || wall_tmp.end_wall.y > 0) && intersect_fov(&wall_tmp, player->fov)) //wall is at least partly in front of us && crosses the field of view
+		init_rotate_wall(&wall, current_wall, player);
+		tmp_wall.x = wall.start.x;
+		tmp_wall.y = wall.end.x;
+		if ((wall.start.y > 0 || wall.end.y > 0) && intersect_fov(&wall, player->fov)) //wall is at least partly in front of us && crosses the field of view
 		{
 			//printf("pos:%.50f,%.50f\n",player->pos.x, player->pos.y);
 			//printf("fov:%d,%d\n",player->fov.x, player->fov.y);
-			create_perspective_wall(&display_wall, wall_tmp, surf, player);
+			create_perspective_wall(&display_wall, wall, surf, player);
+			display_wall.start_pos = 1 - (tmp_wall.y - wall.start.x) / (tmp_wall.y - tmp_wall.x);
+			display_wall.end_pos = (wall.end.x - tmp_wall.x) / (tmp_wall.y - tmp_wall.x);
 			draw_3dwall(display_wall, surf, current_wall, wall_textures);
 
 			if (player->helper)
 			{
 				//draws 2d map
-				wall_tmp.start_wall.x = map_center.x + wall_tmp.start_wall.x;
-				wall_tmp.start_wall.y = map_center.y + wall_tmp.start_wall.y;
-				wall_tmp.end_wall.x = map_center.x + wall_tmp.end_wall.x;
-				wall_tmp.end_wall.y = map_center.y + wall_tmp.end_wall.y;
-				draw_line(vecdb_to_vec(wall_tmp.start_wall), vecdb_to_vec(wall_tmp.end_wall), surf, current_wall->color / 2);
+				wall.start.x = map_center.x + wall.start.x;
+				wall.start.y = map_center.y + wall.start.y;
+				wall.end.x = map_center.x + wall.end.x;
+				wall.end.y = map_center.y + wall.end.y;
+				draw_line(vecdb_to_vec(wall.start), vecdb_to_vec(wall.end), surf, current_wall->color / 2);
 			}
 		}
 		current_wall = current_wall->next;

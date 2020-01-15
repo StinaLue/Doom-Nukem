@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   menu.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:27:36 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/13 13:59:14 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/15 12:19:24 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 
 int init_menu_surfs(t_menu *menu, t_sdlmain *sdlmain)
 {
-	if ((menu->menu_title = TTF_RenderText_Solid(sdlmain->font, "MENU", menu->textColor)) == NULL)
+	if ((menu->menu_title = TTF_RenderText_Solid(sdlmain->font, "MENU", menu->text_color)) == NULL)
 		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
-	if ((menu->options[0] = TTF_RenderText_Solid(sdlmain->font, "editor", menu->textColor)) == NULL)
+	if ((menu->options[0] = TTF_RenderText_Solid(sdlmain->font, "editor", menu->text_color)) == NULL)
 		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
-	if ((menu->options[1] = TTF_RenderText_Solid(sdlmain->font, "return to game", menu->textColor)) == NULL)
+	if ((menu->options[1] = TTF_RenderText_Solid(sdlmain->font, "return to game", menu->text_color)) == NULL)
 		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
-	if ((menu->options[2] = TTF_RenderText_Solid(sdlmain->font, "resize window", menu->textColor)) == NULL)
+	if ((menu->options[2] = TTF_RenderText_Solid(sdlmain->font, "resize window", menu->text_color)) == NULL)
 		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
-	if ((menu->options[3] = TTF_RenderText_Solid(sdlmain->font, "quit game", menu->textColor)) == NULL)
+	if ((menu->options[3] = TTF_RenderText_Solid(sdlmain->font, "quit game", menu->text_color)) == NULL)
 		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
 	if ((menu->background = SDL_CreateRGBSurface(0, sdlmain->win_surf->w - (sdlmain->win_surf->w / 8), sdlmain->win_surf->h - (sdlmain->win_surf->h / 4), 32, 0, 0, 0, 0)) == NULL)
 		return (error_return("SDL_CreateRGBSurface error = %s\n", SDL_GetError()));
@@ -41,7 +41,7 @@ int init_menu(t_menu *menu, t_sdlmain *sdlmain)
 	//Open the font
 	//if ((menu->font = TTF_OpenFont("assets/fonts/dukes-3d.ttf", 28)) == NULL)
 	//	return (error_return("TTF_OpenFont error = %s\n", TTF_GetError()));
-	assign_sdlcolor(&menu->textColor, 255, 0, 0);
+	assign_sdlcolor(&menu->text_color, 255, 0, 0);
 	assign_sdlrect(&menu->background_rect, create_vec((sdlmain->win_surf->w / 8) / 2, (sdlmain->win_surf->h / 4) / 2), create_vec(0, 0));//MENU_WIDTH, MENU_HEIGHT));
 	if (init_menu_surfs(menu, sdlmain) != 0)	
 		return (1);
@@ -152,13 +152,13 @@ int reset_menu_text(t_menu *menu, t_sdlmain *sdlmain)
 {
 	if (menu->prev_option == menu->current_option)
 		return (0);
-	if (reset_text(&sdlmain->font, &menu->options[0], &menu->textColor, "editor") == -1)
+	if (reset_text(&sdlmain->font, &menu->options[0], &menu->text_color, "editor") == -1)
 		return (1);
-	if (reset_text(&sdlmain->font, &menu->options[1], &menu->textColor, "return to game") == -1)
+	if (reset_text(&sdlmain->font, &menu->options[1], &menu->text_color, "return to game") == -1)
 		return (1);
-	if (reset_text(&sdlmain->font, &menu->options[2], &menu->textColor, "resize window") == -1)
+	if (reset_text(&sdlmain->font, &menu->options[2], &menu->text_color, "resize window") == -1)
 		return (1);
-	if (reset_text(&sdlmain->font, &menu->options[3], &menu->textColor, "quit game") == -1)
+	if (reset_text(&sdlmain->font, &menu->options[3], &menu->text_color, "quit game") == -1)
 		return (1);
 	assign_sdlrect(&menu->options_rects[0], create_vec((menu->background->w - menu->options[0]->w) / 2, menu->options_rects[1].y - menu->options[1]->h), create_vec(0, 0));
 	assign_sdlrect(&menu->options_rects[1], create_vec((menu->background->w - menu->options[1]->w) / 2, (menu->background->h - menu->options[1]->h) / 2), create_vec(0, 0));
@@ -173,26 +173,26 @@ int	highlight_select(t_menu *menu, t_sdlmain *sdlmain)
 		return (0);
 	if (menu->current_option == FIRST_OPTION_SELECT)
 	{
-		if (highlight_text(&sdlmain->font, &menu->options[0], &menu->textColor, "/ editor \\") == -1)
+		if (highlight_text(&sdlmain->font, &menu->options[0], &menu->text_color, "/ editor \\") == -1)
 			return (1);
 		assign_sdlrect(&menu->options_rects[0], create_vec((menu->background->w - menu->options[0]->w) / 2, menu->options_rects[1].y - menu->options[1]->h), create_vec(0, 0));
 	}
 	else if (menu->current_option == SECOND_OPTION_SELECT)
 	{
-		if (highlight_text(&sdlmain->font, &menu->options[1], &menu->textColor, "/ return to game \\") == -1)
+		if (highlight_text(&sdlmain->font, &menu->options[1], &menu->text_color, "/ return to game \\") == -1)
 			return (1);
 		//assign_sdlrect(&menu->second_option_rect, create_vec((menu->background->w - menu->second_option->w) / 2, menu->first_option_rect.y + menu->first_option->h), create_vec(0, 0));
 		assign_sdlrect(&menu->options_rects[1], create_vec((menu->background->w - menu->options[1]->w) / 2, (menu->background->h - menu->options[1]->h) / 2), create_vec(0, 0));
 	}
 	else if (menu->current_option == THIRD_OPTION_SELECT)
 	{
-		if (highlight_text(&sdlmain->font, &menu->options[2], &menu->textColor, "/ resize window \\") == -1)
+		if (highlight_text(&sdlmain->font, &menu->options[2], &menu->text_color, "/ resize window \\") == -1)
 			return (1);
 		assign_sdlrect(&menu->options_rects[2], create_vec((menu->background->w - menu->options[2]->w) / 2, menu->options_rects[1].y + menu->options[1]->h), create_vec(0, 0));
 	}
 	else if (menu->current_option == FOURTH_OPTION_SELECT)
 	{
-		if (highlight_text(&sdlmain->font, &menu->options[3], &menu->textColor, "/ quit game \\") == -1)
+		if (highlight_text(&sdlmain->font, &menu->options[3], &menu->text_color, "/ quit game \\") == -1)
 			return (1);
 		assign_sdlrect(&menu->options_rects[3], create_vec((menu->background->w - menu->options[3]->w) / 2, menu->options_rects[2].y + menu->options[2]->h), create_vec(0, 0));
 	}

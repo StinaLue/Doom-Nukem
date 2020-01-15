@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 16:22:14 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/07 16:14:52 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/15 11:48:56 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 
 void	init_rotate_wall(t_wall *new_wall, const t_wall_node *current_wall, const t_player *player)
 {
-	new_wall->start_wall.x = current_wall->start_wall.x - player->pos.x;
-	new_wall->start_wall.y = current_wall->start_wall.y - player->pos.y;
-	new_wall->end_wall.x = current_wall->end_wall.x - player->pos.x;
-	new_wall->end_wall.y = current_wall->end_wall.y - player->pos.y;
-	new_wall->start_wall = rotate2d(new_wall->start_wall, -player->angle);
-	new_wall->end_wall = rotate2d(new_wall->end_wall, -player->angle);
+	new_wall->start.x = current_wall->start.x - player->pos.x;
+	new_wall->start.y = current_wall->start.y - player->pos.y;
+	new_wall->end.x = current_wall->end.x - player->pos.x;
+	new_wall->end.y = current_wall->end.y - player->pos.y;
+	new_wall->start = rotate2d(new_wall->start, -player->angle);
+	new_wall->end = rotate2d(new_wall->end, -player->angle);
 }
 
 void	draw_rot_minimap(SDL_Surface *surf, t_player *player, const t_map *map)
@@ -44,11 +44,11 @@ void	draw_rot_minimap(SDL_Surface *surf, t_player *player, const t_map *map)
 	while (current_wall != NULL)
 	{
 		init_rotate_wall(&wall_tmp, current_wall, player);
-		transfo_wall.start_wall.x = map_center.x + wall_tmp.start_wall.x;
-		transfo_wall.start_wall.y = map_center.y + wall_tmp.start_wall.y;
-		transfo_wall.end_wall.x = map_center.x + wall_tmp.end_wall.x;
-		transfo_wall.end_wall.y = map_center.y + wall_tmp.end_wall.y;
-		draw_line(vecdb_to_vec(transfo_wall.start_wall), vecdb_to_vec(transfo_wall.end_wall), surf, current_wall->color);
+		transfo_wall.start.x = map_center.x + wall_tmp.start.x;
+		transfo_wall.start.y = map_center.y + wall_tmp.start.y;
+		transfo_wall.end.x = map_center.x + wall_tmp.end.x;
+		transfo_wall.end.y = map_center.y + wall_tmp.end.y;
+		draw_line(vecdb_to_vec(transfo_wall.start), vecdb_to_vec(transfo_wall.end), surf, current_wall->color);
 		current_wall = current_wall->next;
 	}
 	draw_line(vecdb_to_vec(map_center), vecdb_to_vec(transfo_direc), surf, 0xFF8833);
