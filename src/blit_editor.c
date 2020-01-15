@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   blit.c                                             :+:      :+:    :+:   */
+/*   blit_editor.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/15 14:37:53 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/15 16:48:49 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,31 @@ int	blit_options(t_editor *editor)
 
 int blit_textures(t_editor *editor)
 {
-	if ((SDL_BlitScaled(editor->options_menu.wall_textures[0], NULL,
-			editor->options_surf, &editor->options_menu.texture_rect)) < 0)
+	int i;
+
+	i = 0;
+	while (i < 12)
+	{
+		if ((SDL_BlitScaled(editor->options_menu.wall_textures[1], NULL, // change this to "i" as soon as all textures are there 
+			editor->options_surf, &editor->options_menu.texture_rect[i])) < 0)
 		return (error_return("BlitScaled error = %s\n", SDL_GetError()));
+		i++;
+	}
+	return (0);
+}
+
+int blit_height(t_editor *editor)
+{
+	int i;
+
+	i = 0;
+	while (i < 3)
+	{
+		if ((SDL_BlitScaled(editor->options_menu.wall_textures[1], NULL,
+			editor->options_surf, &editor->options_menu.height_rect[i])) < 0)
+		return (error_return("BlitScaled error = %s\n", SDL_GetError()));
+		i++;
+	}
 	return (0);
 }
 
@@ -63,6 +85,8 @@ int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 	if (blit_options(editor) != 0)
 		return (1);
 	if (blit_textures(editor) != 0)
+		return (1);
+	if (blit_height(editor) != 0)
 		return (1);
 	if ((SDL_BlitScaled(editor->editor_surf, NULL,
 			sdlmain->win_surf, &editor->editor_rect)) < 0)
