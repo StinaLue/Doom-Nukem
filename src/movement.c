@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/14 15:36:54 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/15 11:51:53 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ double	wall_distance(t_vecdb point, t_wall_node *wall)
 {
 	double dist;
 
-	dist = (point.x - wall->end_wall.x) * (wall->end_wall.y - wall->start_wall.y) + (point.y - wall->end_wall.y) * (wall->start_wall.x - wall->end_wall.x);
+	dist = (point.x - wall->end.x) * (wall->end.y - wall->start.y) + (point.y - wall->end.y) * (wall->start.x - wall->end.x);
 	dist /= wall->length;
 	return (dist);
 }
@@ -49,7 +49,7 @@ t_vecdb	collide(t_wall_node *wall, double distance, double *col_angle)
 	if (wall == NULL)
 		return (collision);
 	distance = PLAYER_RADIUS - distance;
-	*col_angle = atan2(wall->end_wall.y - wall->start_wall.y, wall->end_wall.x - wall->start_wall.x);
+	*col_angle = atan2(wall->end.y - wall->start.y, wall->end.x - wall->start.x);
 	collision.x = distance * sin(*col_angle);
 	collision.y = distance * -cos(*col_angle);
 		return (collision);
@@ -64,7 +64,7 @@ t_vecdb	move_hyp_length(t_wall_node *wall, double distance, double angle)
 	move.y = 0;
 	if (wall == NULL)
 		return (move);
-	col_angle = atan2(wall->end_wall.y - wall->start_wall.y, wall->end_wall.x - wall->start_wall.x);
+	col_angle = atan2(wall->end.y - wall->start.y, wall->end.x - wall->start.x);
 	distance = (PLAYER_RADIUS - distance) / sin(col_angle - angle);
 	move.x = distance * cos(angle);
 	move.y = distance * sin(angle);
@@ -100,7 +100,7 @@ void	move_player(t_vecdb *position, t_vecdb move, const t_sector_node *sector)
 }
 
 void	movement(t_player *player, t_vecdb move, const t_sector_node *sector)
-{	
+{
 	double	movespeed = 0.005;
 	t_vecdb	old_position;
 

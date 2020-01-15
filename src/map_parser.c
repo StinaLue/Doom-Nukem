@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 13:02:54 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/13 17:04:42 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/15 11:50:15 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ int		write_map_walls(int fd, t_wall *walls, int index)//can be remade to work wi
 	total = write(fd, &index, sizeof(index));
 	while (index-- > 0)
 	{
-		total += write(fd, &(walls[index].start_wall.x), sizeof(walls[index].start_wall.x));
-		total += write(fd, &(walls[index].start_wall.y), sizeof(walls[index].start_wall.y));
-		total += write(fd, &(walls[index].end_wall.x), sizeof(walls[index].end_wall.x));
-		total += write(fd, &(walls[index].end_wall.y), sizeof(walls[index].end_wall.y));
-		total += write(fd, &(walls[index].color), sizeof(walls[index].color));
+		total += write(fd, &(walls[index].start.x), sizeof(walls[index].start.x));
+		total += write(fd, &(walls[index].start.y), sizeof(walls[index].start.y));
+		total += write(fd, &(walls[index].end.x), sizeof(walls[index].end.x));
+		total += write(fd, &(walls[index].end.y), sizeof(walls[index].end.y));
+		//total += write(fd, &(walls[index].color), sizeof(walls[index].color));
 	}
 	//printf("wall write: %d\n", total);
 	return (0);
@@ -75,11 +75,11 @@ int		read_map_walls(int fd, t_wall *walls)
 	total = read(fd, &wall_number, sizeof(wall_number));
 	while (index < wall_number)
 	{
-		total += read(fd, &(walls[index].start_wall.x), sizeof(walls[index].start_wall.x));
-		total += read(fd, &(walls[index].start_wall.y), sizeof(walls[index].start_wall.y));
-		total += read(fd, &(walls[index].end_wall.x), sizeof(walls[index].end_wall.x));
-		total += read(fd, &(walls[index].end_wall.y), sizeof(walls[index].end_wall.y));
-		total += read(fd, &(walls[index].color), sizeof(walls[index].color));
+		total += read(fd, &(walls[index].start.x), sizeof(walls[index].start.x));
+		total += read(fd, &(walls[index].start.y), sizeof(walls[index].start.y));
+		total += read(fd, &(walls[index].end.x), sizeof(walls[index].end.x));
+		total += read(fd, &(walls[index].end.y), sizeof(walls[index].end.y));
+		//total += read(fd, &(walls[index].color), sizeof(walls[index].color));
 		index++;
 	}
 	//printf("wall read: %d\n", total);
@@ -88,6 +88,7 @@ int		read_map_walls(int fd, t_wall *walls)
 
 int		parse_everything(t_wall *walls)
 {
+	//REDO EVERYTHING
 	int	fd;
 
 	fd = creat("mapfile.DOOM", 0666);

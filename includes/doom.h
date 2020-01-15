@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/14 23:45:16 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/15 11:50:42 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,8 @@ typedef struct	s_wall_node
 {
 	struct s_wall_node	*next;
 	//struct s_wall_node	*previous;
-	t_vecdb		start_wall;
-	t_vecdb		end_wall;
+	t_vecdb		start;
+	t_vecdb		end;
 	int			color;
 	int			tex_index;
 	int			sector_index;
@@ -113,6 +113,8 @@ typedef struct	s_wall3d
 	t_vec		top_right;
 	t_vec		bottom_left;
 	t_vec		bottom_right;
+	double		start_pos;
+	double		end_pos;
 }				t_wall3d;
 
 typedef struct	s_sdlmain
@@ -143,10 +145,8 @@ typedef struct	s_data
 
 typedef	struct	s_wall
 {
-	t_vecdb		start_wall;
-	t_vecdb 	end_wall;
-	int			color;
-	//int		flags; BIT FLAGS for walls specifications?
+	t_vecdb		start;
+	t_vecdb 	end;
 }				t_wall;
 
 typedef struct	s_player
@@ -424,7 +424,7 @@ int				free_sdlmain(t_sdlmain *sdlmain);
 ** PARSE FUNCTIONS
 */
 
-int				parse_everything(t_wall *walls);
+//int				parse_everything(t_wall *walls);
 
 /*
 ** SDL_SUB_FUNCTIONS

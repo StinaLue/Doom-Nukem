@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/12 11:47:21 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/13 16:07:27 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/15 11:53:07 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ void    print_map_contents(const t_map *map)
         while (tmp_wall != NULL)
         {
             ft_printf("\tWall index %d\n", j);
-            print_vecdb(&tmp_wall->start_wall, "start wall");
-            print_vecdb(&tmp_wall->end_wall, "end wall");
+            print_vecdb(&tmp_wall->start, "start wall");
+            print_vecdb(&tmp_wall->end, "end wall");
             tmp_wall = tmp_wall->next;
             j++;
         }

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
+#    By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/01/14 23:45:25 by afonck           ###   ########.fr        #
+#    Updated: 2020/01/15 11:50:57 by phaydont         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,7 +70,6 @@ SOURCES_LIST = main.c \
 			rot_minimap.c \
 			perspective_view.c \
 			vector.c \
-			map_parser.c \
 			poll_event.c \
 			handle_keys.c \
 			movement.c \
@@ -86,6 +85,7 @@ SOURCES_LIST = main.c \
 			create_surfaces.c\
 			editor_check.c \
 			blit.c#\
+			map_parser.c \
 	       multithreading.c \
 		   texture.c \
 		   parsing.c \

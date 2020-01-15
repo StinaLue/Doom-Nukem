@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_wall.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:25:24 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/14 23:44:33 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/15 11:52:17 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,10 @@ t_wall_node	*add_wall_node(t_wall_node **wall_head, const t_wall_node *node)
 	new_node = insert_wall_node(wall_head);
 	if (new_node == NULL)
 		return (NULL);
-	new_node->start_wall.x = node->start_wall.x;
-	new_node->start_wall.y = node->start_wall.y;
-	new_node->end_wall.x = node->end_wall.x;
-	new_node->end_wall.x = node->end_wall.y;
+	new_node->start.x = node->start.x;
+	new_node->start.y = node->start.y;
+	new_node->end.x = node->end.x;
+	new_node->end.x = node->end.y;
 	new_node->sector_index = node->sector_index;
 	new_node->neighbor_sector = node->neighbor_sector;
 	new_node->next = NULL;
@@ -88,10 +88,10 @@ t_wall_node	*create_wall_node(t_wall_node **wall_head, t_vecdb a, t_vecdb b, int
 	new_node = insert_wall_node(wall_head);
 	if (new_node == NULL)
 		return (NULL);
-	new_node->start_wall.x = a.x;
-	new_node->start_wall.y = a.y;
-	new_node->end_wall.x = b.x;
-	new_node->end_wall.y = b.y;
+	new_node->start.x = a.x;
+	new_node->start.y = a.y;
+	new_node->end.x = b.x;
+	new_node->end.y = b.y;
 	new_node->color = color;
 	new_node->sector_index = -1;
 	new_node->neighbor_sector = -1;
@@ -118,8 +118,8 @@ t_wall_node	*get_wall_by_pos(t_wall_node *wall_list, t_vecdb position, double di
 
 	if (wall_list == NULL)
 		return (NULL);
-	wall_center.x = wall_list->start_wall.x - wall_list->end_wall.x;
-	wall_center.y = wall_list->start_wall.y - wall_list->end_wall.y;
+	wall_center.x = wall_list->start.x - wall_list->end.x;
+	wall_center.y = wall_list->start.y - wall_list->end.y;
 	if (get_point_distance(position, wall_center) <= dist)
 		return (wall_list);
 	else
@@ -157,8 +157,8 @@ t_vecdb		point_average_position(t_wall_node *wall_head)
 	while (current_wall != NULL)
 	{
 		count++;
-		average.x += current_wall->start_wall.x;
-		average.y += current_wall->start_wall.y;
+		average.x += current_wall->start.x;
+		average.y += current_wall->start.y;
 		current_wall = current_wall->next;
 	}
 	if (count > 0)
@@ -192,8 +192,8 @@ int			copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list)
 	*new_list = malloc(sizeof(t_wall_node));
 	if (*new_list == NULL)
 		return (-1);
-	(*new_list)->start_wall = wall_list->start_wall;
-	(*new_list)->end_wall = wall_list->end_wall;
+	(*new_list)->start = wall_list->start;
+	(*new_list)->end = wall_list->end;
 	(*new_list)->color = wall_list->color;
 	(*new_list)->sector_index = wall_list->sector_index;
 	(*new_list)->neighbor_sector = wall_list->neighbor_sector;
