@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/15 14:42:57 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/15 16:52:45 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,11 @@ int		init_map(t_map *map)
 	t_vecdb vec7 = {40, 20};
 	t_vecdb vec8 = {20, 40};
 
+	t_vecdb vec9 = {10, 100};
+	t_vecdb vec10 = {10, 140};
+	t_vecdb vec11 = {50, 130};
+
+
 	//map->sector_head = NULL;
 	add_sector_node(&map->sector_head);
 	create_wall_node(&map->sector_head->wall_head, vec1, vec2, 0xff0000);
@@ -110,6 +115,16 @@ int		init_map(t_map *map)
 	create_wall_node(&map->sector_head->wall_head, vec6, vec7, 0xffbb00);
 	create_wall_node(&map->sector_head->wall_head, vec7, vec8, 0x00ff00);
 	create_wall_node(&map->sector_head->wall_head, vec8, vec1, 0x0088ff);
+	map->sector_head->wall_head->next->neighbor_sector = 1;
+
+	add_sector_node(&map->sector_head);
+	create_wall_node(&map->sector_head->next->wall_head, vec3, vec2, 0xff0000);
+	create_wall_node(&map->sector_head->next->wall_head, vec2, vec9, 0xff0000);
+	create_wall_node(&map->sector_head->next->wall_head, vec9, vec10, 0xff0000);
+	create_wall_node(&map->sector_head->next->wall_head, vec10, vec11, 0xff0000);
+	create_wall_node(&map->sector_head->next->wall_head, vec11, vec3, 0xff0000);
+	map->sector_head->next->wall_head->neighbor_sector = 0;
+
 	itt_sector_wall_heads(map->sector_head, &set_wall_length);
 
 	return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/14 23:44:53 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/15 14:22:56 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,7 @@ void	init_data_struct(t_data *data)
 
 void	init_player_struct(t_player *player)
 {
-	player->sector_pos = 0;
-
+	player->sector = 0;
 	player->pos.x = 50;
 	player->pos.y = 50;
 	player->angle = 0;
