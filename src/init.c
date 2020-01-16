@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/15 16:52:45 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/16 11:36:57 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,18 @@ int		init_wall_textures(SDL_Surface **wall_textures, SDL_Surface *winsurf)
 	if ((wall_textures[1] = load_opti_bmp("assets/wall_textures/grittybrick.bmp", winsurf, 0)) == NULL)
 		return (error_return("load grittybrick bmp error = %{r}s\n", SDL_GetError()));
 	if ((wall_textures[2] = load_opti_bmp("assets/wall_textures/mudbrick.bmp", winsurf, 0)) == NULL)
+		return (error_return("load mudbrick bmp error = %{r}s\n", SDL_GetError()));
+	if ((wall_textures[3] = load_opti_bmp("assets/wall_textures/bloodwall.bmp", winsurf, 0)) == NULL)
+		return (error_return("load mudbrick bmp error = %{r}s\n", SDL_GetError()));
+	if ((wall_textures[4] = load_opti_bmp("assets/wall_textures/granitewall.bmp", winsurf, 0)) == NULL)
+		return (error_return("load mudbrick bmp error = %{r}s\n", SDL_GetError()));
+	if ((wall_textures[5] = load_opti_bmp("assets/wall_textures/orangecell.bmp", winsurf, 0)) == NULL)
+		return (error_return("load mudbrick bmp error = %{r}s\n", SDL_GetError()));
+	if ((wall_textures[6] = load_opti_bmp("assets/wall_textures/rustwall.bmp", winsurf, 0)) == NULL)
+		return (error_return("load mudbrick bmp error = %{r}s\n", SDL_GetError()));
+	if ((wall_textures[7] = load_opti_bmp("assets/wall_textures/sandybrick.bmp", winsurf, 0)) == NULL)
+		return (error_return("load mudbrick bmp error = %{r}s\n", SDL_GetError()));
+	if ((wall_textures[8] = load_opti_bmp("assets/wall_textures/slimewall.bmp", winsurf, 0)) == NULL)
 		return (error_return("load mudbrick bmp error = %{r}s\n", SDL_GetError()));
 	return (0);
 }
