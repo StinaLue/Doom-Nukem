@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/15 16:59:05 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/16 12:00:56 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ typedef struct				s_options_menu
 	SDL_Rect				title_rect;
 	SDL_Rect				options_rect[5];
 	SDL_Rect				texture_rect[12];
-	SDL_Rect 				height_rect[3];
+	SDL_Rect 				height_rect[7];
 
 	TTF_Font				*font_title;
 	TTF_Font				*font;

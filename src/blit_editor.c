@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/15 16:48:49 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/16 12:06:59 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,9 @@ int blit_height(t_editor *editor)
 	int i;
 
 	i = 0;
-	while (i < 3)
+	while (i < 7)
 	{
-		if ((SDL_BlitScaled(editor->options_menu.wall_textures[1], NULL,
+		if ((SDL_BlitScaled(editor->options_menu.wall_textures[0], NULL,
 			editor->options_surf, &editor->options_menu.height_rect[i])) < 0)
 		return (error_return("BlitScaled error = %s\n", SDL_GetError()));
 		i++;
