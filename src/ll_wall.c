@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:25:24 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/15 11:52:17 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/16 16:53:15 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ t_wall_node	*delete_last_wall(t_wall_node **wall_list)
 
 //adds existing node add the end of the list and copies the variables from given node
 //returns created node adress
-t_wall_node	*add_wall_node(t_wall_node **wall_head, const t_wall_node *node)
+t_wall_node	*copy_wall_node(t_wall_node **wall_head, const t_wall_node *node)
 {
 	t_wall_node *new_node;
 
@@ -94,7 +94,7 @@ t_wall_node	*create_wall_node(t_wall_node **wall_head, t_vecdb a, t_vecdb b, int
 	new_node->end.y = b.y;
 	new_node->color = color;
 	new_node->sector_index = -1;
-	new_node->neighbor_sector = -1;
+	new_node->neighbor_sector = NULL;
 	new_node->next = NULL;
 	new_node->tex_index = 0;
 	return (new_node);

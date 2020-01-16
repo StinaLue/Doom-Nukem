@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   perspective_view.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/15 16:58:19 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/16 16:56:41 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,7 +208,8 @@ void	draw_3dwall(t_wall3d display_wall, SDL_Surface *surf, const t_wall_node *wa
 	draw_line(display_wall.bottom_left, display_wall.top_left, surf, wall->color);
 }
 
-void	draw_perspective_view(SDL_Surface *surf, t_player *player, const t_map *map, SDL_Surface **wall_textures)
+//do perspective view with view instead of player and sector instead of map //with linked sectors directly using the walls
+void	draw_perspective_view(SDL_Surface *surf, t_player *player, SDL_Surface **wall_textures)
 {
 	t_wall		wall;
 	t_wall3d	display_wall;
@@ -225,7 +226,7 @@ void	draw_perspective_view(SDL_Surface *surf, t_player *player, const t_map *map
 		draw_line(create_vec(map_center.x,map_center.y), create_vec(map_center.x-player->fov.x,map_center.y+player->fov.y), surf, 0x999999);
 		fill_pix(surf, map_center.x, map_center.y, 0x8800FF);
 	}
-	current_wall = get_sector_by_index(map->sector_head, player->sector)->wall_head;
+	current_wall = player->sector->wall_head;
 
 	while (current_wall != NULL)
 	{
@@ -253,4 +254,5 @@ void	draw_perspective_view(SDL_Surface *surf, t_player *player, const t_map *map
 		}
 		current_wall = current_wall->next;
 	}
+	//make recursive that sends surf sector view and textures
 }
