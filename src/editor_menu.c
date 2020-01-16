@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/16 12:06:38 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/16 13:16:32 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,15 @@ int	init_instruct_menu(t_editor *editor)
 	if ((editor->instruct_menu.title = TTF_RenderText_Solid(editor->instruct_menu.font_title, "Instructions", editor->instruct_menu.text_color)) == NULL)
 		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
 	assign_sdlrect(&editor->instruct_menu.title_rect, create_vec((editor->instruct_surf->w - editor->instruct_menu.title->w) / 2, (editor->instruct_surf->w - editor->instruct_menu.title->h) / 20), create_vec(0, 0));
-	if (create_instruct_strings(editor, create_vec(editor->instruct_surf->w / 18, (editor->instruct_surf->w) / 6), 0, "undo wall: u") != 0)
+	if (create_instruct_strings(editor, create_vec(editor->instruct_surf->w / 18, editor->instruct_surf->w / 6), 0, "undo wall: u") != 0)
 		return (1);
-	if (create_instruct_strings(editor, create_vec(editor->instruct_surf->w / 18, (editor->instruct_surf->w) / 4), 1, "undo sector: s") != 0)
+	if (create_instruct_strings(editor, create_vec(editor->instruct_surf->w / 18, editor->instruct_surf->w / 4), 1, "undo sector: s") != 0)
 		return (1);
-	if (create_instruct_strings(editor, create_vec(editor->instruct_surf->w / 18, (editor->instruct_surf->w) / 3), 2, "change type of wall: t") != 0)
+	if (create_instruct_strings(editor, create_vec(editor->instruct_surf->w / 18, editor->instruct_surf->w / 3), 2, "change type of wall: t") != 0)
 		return (1);
-	if (create_instruct_strings(editor, create_vec(editor->instruct_surf->w / 2, (editor->instruct_surf->w) / 6), 3, "create sector: left click") != 0)
+	if (create_instruct_strings(editor, create_vec(editor->instruct_surf->w / 2, editor->instruct_surf->w / 6), 3, "create sector: left click") != 0)
 		return (1);
-	if (create_instruct_strings(editor, create_vec(editor->instruct_surf->w / 2, (editor->instruct_surf->w) / 4), 4, "...") != 0)
+	if (create_instruct_strings(editor, create_vec(editor->instruct_surf->w / 2, editor->instruct_surf->w / 4), 4, "...") != 0)
 		return (1);
 	return (0);
 }
@@ -60,18 +60,18 @@ int set_height(t_editor *editor)
 
 int set_textures(t_editor *editor)
 {
-	assign_sdlrect(&editor->options_menu.texture_rect[0], create_vec((editor->options_surf->h / 20), ((editor->options_surf->h) / 20) * 9), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
-	assign_sdlrect(&editor->options_menu.texture_rect[1], create_vec((editor->options_surf->h / 20), ((editor->options_surf->h) / 20) * 11), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
-	assign_sdlrect(&editor->options_menu.texture_rect[2], create_vec((editor->options_surf->h / 20), ((editor->options_surf->h) / 20) * 13), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
-	assign_sdlrect(&editor->options_menu.texture_rect[3], create_vec((editor->options_surf->h / 20) * 3, ((editor->options_surf->h) / 20) * 9), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
-	assign_sdlrect(&editor->options_menu.texture_rect[4], create_vec((editor->options_surf->h / 20) * 3, ((editor->options_surf->h) / 20) * 11), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
-	assign_sdlrect(&editor->options_menu.texture_rect[5], create_vec((editor->options_surf->h / 20) * 3, ((editor->options_surf->h) / 20) * 13), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
-	assign_sdlrect(&editor->options_menu.texture_rect[6], create_vec((editor->options_surf->h / 20) * 5, ((editor->options_surf->h) / 20) * 9), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
-	assign_sdlrect(&editor->options_menu.texture_rect[7], create_vec((editor->options_surf->h / 20) * 5, ((editor->options_surf->h) / 20) * 11), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
-	assign_sdlrect(&editor->options_menu.texture_rect[8], create_vec((editor->options_surf->h / 20) * 5, ((editor->options_surf->h) / 20) * 13), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
-	assign_sdlrect(&editor->options_menu.texture_rect[9], create_vec((editor->options_surf->h / 20) * 7, ((editor->options_surf->h) / 20) * 9), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
-	assign_sdlrect(&editor->options_menu.texture_rect[10], create_vec((editor->options_surf->h / 20) * 7, ((editor->options_surf->h) / 20) * 11), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
-	assign_sdlrect(&editor->options_menu.texture_rect[11], create_vec((editor->options_surf->h / 20) * 7, ((editor->options_surf->h) / 20) * 13), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
+	assign_sdlrect(&editor->options_menu.texture_rect[0], create_vec((editor->options_surf->h / 20), ((editor->options_surf->h) / 20) * 9.5), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
+	assign_sdlrect(&editor->options_menu.texture_rect[1], create_vec((editor->options_surf->h / 20), ((editor->options_surf->h) / 20) * 11.5), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
+	assign_sdlrect(&editor->options_menu.texture_rect[2], create_vec((editor->options_surf->h / 20), ((editor->options_surf->h) / 20) * 13.5), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
+	assign_sdlrect(&editor->options_menu.texture_rect[3], create_vec((editor->options_surf->h / 20) * 3, ((editor->options_surf->h) / 20) * 9.5), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
+	assign_sdlrect(&editor->options_menu.texture_rect[4], create_vec((editor->options_surf->h / 20) * 3, ((editor->options_surf->h) / 20) * 11.5), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
+	assign_sdlrect(&editor->options_menu.texture_rect[5], create_vec((editor->options_surf->h / 20) * 3, ((editor->options_surf->h) / 20) * 13.5), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
+	assign_sdlrect(&editor->options_menu.texture_rect[6], create_vec((editor->options_surf->h / 20) * 5, ((editor->options_surf->h) / 20) * 9.5), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
+	assign_sdlrect(&editor->options_menu.texture_rect[7], create_vec((editor->options_surf->h / 20) * 5, ((editor->options_surf->h) / 20) * 11.5), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
+	assign_sdlrect(&editor->options_menu.texture_rect[8], create_vec((editor->options_surf->h / 20) * 5, ((editor->options_surf->h) / 20) * 13.5), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
+	assign_sdlrect(&editor->options_menu.texture_rect[9], create_vec((editor->options_surf->h / 20) * 7, ((editor->options_surf->h) / 20) * 9.5), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
+	assign_sdlrect(&editor->options_menu.texture_rect[10], create_vec((editor->options_surf->h / 20) * 7, ((editor->options_surf->h) / 20) * 11.5), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
+	assign_sdlrect(&editor->options_menu.texture_rect[11], create_vec((editor->options_surf->h / 20) * 7, ((editor->options_surf->h) / 20) * 13.5), create_vec((editor->options_surf->w) / 16, (editor->options_surf->w) / 16));
 	return (0);
 }
 

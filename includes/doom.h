@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/16 12:00:56 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/16 13:11:25 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -331,6 +331,17 @@ int							init_sdlmain(t_sdlmain *sdlmain);
 int							init_editor_menu(t_editor *editor);
 
 int							init_map(t_map *map);
+
+
+
+
+
+
+
+
+void	draw_border_options(SDL_Rect *rect, int color, SDL_Surface *surf);
+
+
 
 /*
 ** INIT STRUCT FUNCTIONS

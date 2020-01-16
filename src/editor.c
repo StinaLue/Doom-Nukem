@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/15 12:37:15 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/16 12:55:12 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 
 void	check_finished_sect(t_editor *editor)
 {
-	if ((editor->start_sector.x == editor->wall_tmp.end.x)
+	if ((editor->start_sector.x == editor->wall_tmp.end.x) \
 		&& (editor->start_sector.y == editor->wall_tmp.end.y))
 	{
 		editor->clicked = 0;
