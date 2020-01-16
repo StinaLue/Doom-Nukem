@@ -201,6 +201,8 @@ typedef struct				s_options_menu
 	SDL_Color				text_color;
 	int						border_color_text[12];
 	int						border_color_height[7];
+	int 					activated_texture;
+	int 					activated_height;
 }							t_options_menu;
 
 typedef struct				s_map
