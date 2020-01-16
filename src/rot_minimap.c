@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 16:22:14 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/16 14:54:10 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/16 16:33:50 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	draw_rot_minimap(SDL_Surface *surf, t_player *player, const t_map *map)
 		current_wall = current_sector->wall_head;
 		while (current_wall != NULL)
 		{
-			if (current_wall->neighbor_sector == -1)
+			if (current_wall->neighbor_sector == NULL)
 			{
 				init_rotate_wall(&wall_tmp, current_wall, player);
 				transfo_wall.start.x = map_center.x + wall_tmp.start.x;

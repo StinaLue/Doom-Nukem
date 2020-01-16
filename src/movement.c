@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/16 14:48:42 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/16 16:53:56 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,6 @@ double	wall_distance(t_vecdb point, t_wall_node *wall)
 	return (dist);
 }
 
-void		get_movement_sector(t_vecdb position, t_sector_node *sector, int *sector_index)
-{
-	double			dist;
-	t_wall_node		*wall;
-
-	wall = sector->wall_head;
-	while (wall != NULL)
-	{
-		dist = wall_distance(position, wall);
-		if (dist < 0 && wall->neighbor_sector != -1)
-			*sector_index = wall->neighbor_sector;
-		wall = wall->next;
-	}
-}
 
 t_wall_node	*get_collision_wall(t_vecdb position, t_sector_node *sector, double *min_dist, t_wall_node *tmp_wall)
 {
@@ -47,7 +33,7 @@ t_wall_node	*get_collision_wall(t_vecdb position, t_sector_node *sector, double 
 	while (wall != NULL)
 	{
 		dist = wall_distance(position, wall);
-		if (dist < *min_dist && wall->neighbor_sector == -1 && wall != tmp_wall)
+		if (dist < *min_dist && wall->neighbor_sector == NULL && wall != tmp_wall)
 		{
 			deepest_wall = wall;
 			*min_dist = dist;
@@ -92,12 +78,13 @@ void	update_sector(t_player *player, t_wall_node *wall)
 {
 	while (wall != NULL)
 	{
-		if (wall->neighbor_sector != -1 && wall_distance(player->pos, wall) < 0)
+		if (wall->neighbor_sector != NULL && wall_distance(player->pos, wall) < 0)
 			player->sector = wall->neighbor_sector;
 		wall = wall->next;
 	}
 }
 
+/*
 void	move_player(t_player *player, t_sector_node *head)
 {
 	t_wall_node		*tmp_wall;
@@ -125,9 +112,9 @@ void	move_player(t_player *player, t_sector_node *head)
 	player->pos.x += move.x;
 	player->pos.y += move.y;
 	update_sector(player, get_sector_by_index(head, player->sector)->wall_head);
-}
+}*/
 
-void	move_player2(t_player *player, t_sector_node *head)
+void	move_player2(t_player *player)
 {
 	t_wall_node		*tmp_wall;
 	double			tmp_distance;
@@ -137,16 +124,16 @@ void	move_player2(t_player *player, t_sector_node *head)
 	tmp_wall = NULL;
 	tmp_distance = PLAYER_RADIUS;
 	col_angle = 0;
-	while ((tmp_wall = get_collision_wall(player->pos, get_sector_by_index(head, player->sector), &tmp_distance, tmp_wall)) != NULL)
+	while ((tmp_wall = get_collision_wall(player->pos, player->sector, &tmp_distance, tmp_wall)) != NULL)
 	{
 		move = collide(tmp_wall, tmp_distance, &col_angle);
 		player->pos.x += move.x;
 		player->pos.y += move.y;
-		update_sector(player, get_sector_by_index(head, player->sector)->wall_head);
+		update_sector(player, player->sector->wall_head);
 	}
 }
 
-void	movement(t_player *player, t_vecdb move, t_sector_node *sectors)
+void	movement(t_player *player, t_vecdb move)
 {
 	double	movespeed = 0.005;
 	t_vecdb	old_position;
@@ -159,7 +146,8 @@ void	movement(t_player *player, t_vecdb move, t_sector_node *sectors)
 	old_position = player->pos;
 	player->pos.x += move.x + player->inertia.x;
 	player->pos.y += move.y + player->inertia.y;
-	move_player(player, sectors);
+	update_sector(player, player->sector->wall_head);
+	move_player2(player);
 
 	//printf("Px:%.15f\nPy:%.15f\n", player->pos.x, player->pos.y);
 	player->inertia.x = (player->pos.x - old_position.x) * 0.96;

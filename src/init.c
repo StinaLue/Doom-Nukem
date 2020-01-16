@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/16 14:57:19 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/16 16:39:50 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,9 @@ int		init_doom(t_doom *doom)
 		|| init_menu(&doom->menu, &doom->sdlmain) == 1 \
 		|| init_wall_textures(doom->wall_textures, doom->sdlmain.win_surf) == 1)
 		return (1);
+	//degeulasse PLEASE REMOVE ASAP
+	doom->game.player.sector = doom->map.sector_head;
+
 	doom->editor.options_menu.wall_textures = doom->wall_textures;
 	if (init_editor(&doom->editor, &doom->sdlmain) == 1)
 		return (1);
@@ -127,7 +130,6 @@ int		init_map(t_map *map)
 	create_wall_node(&map->sector_head->wall_head, vec6, vec7, 0xffbb00);
 	create_wall_node(&map->sector_head->wall_head, vec7, vec8, 0x00ff00);
 	create_wall_node(&map->sector_head->wall_head, vec8, vec1, 0x0088ff);
-	map->sector_head->wall_head->next->neighbor_sector = 1;
 
 	add_sector_node(&map->sector_head);
 	create_wall_node(&map->sector_head->next->wall_head, vec3, vec2, 0xff0000);
@@ -135,7 +137,9 @@ int		init_map(t_map *map)
 	create_wall_node(&map->sector_head->next->wall_head, vec9, vec10, 0xff0000);
 	create_wall_node(&map->sector_head->next->wall_head, vec10, vec11, 0xff0000);
 	create_wall_node(&map->sector_head->next->wall_head, vec11, vec3, 0xff0000);
-	map->sector_head->next->wall_head->neighbor_sector = 0;
+
+	map->sector_head->next->wall_head->neighbor_sector = map->sector_head;
+	map->sector_head->wall_head->next->neighbor_sector = map->sector_head->next;
 
 	itt_sector_wall_heads(map->sector_head, &set_wall_length);
 
