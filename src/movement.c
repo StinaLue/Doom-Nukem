@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/15 15:51:49 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/16 14:48:42 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,44 +88,65 @@ t_vecdb	move_hyp_length(t_wall_node *wall, double distance, double angle)
 	return (move);
 }
 
-void	move_player(t_player *player, t_vecdb move, t_sector_node *head)
+void	update_sector(t_player *player, t_wall_node *wall)
 {
-	t_wall_node	*tmp_wall;
-	double	tmp_distance;
-	double	col_angle;
-	t_sector_node	*current_sector;
+	while (wall != NULL)
+	{
+		if (wall->neighbor_sector != -1 && wall_distance(player->pos, wall) < 0)
+			player->sector = wall->neighbor_sector;
+		wall = wall->next;
+	}
+}
+
+void	move_player(t_player *player, t_sector_node *head)
+{
+	t_wall_node		*tmp_wall;
+	double			tmp_distance;
+	double			col_angle;
+	t_vecdb			move;
 
 	tmp_wall = NULL;
-
-	player->pos.x += move.x;
-	player->pos.y += move.y;
 	tmp_distance = PLAYER_RADIUS;
 	col_angle = 0;
-	current_sector = get_sector_by_index(head, player->sector);
-	tmp_wall = get_collision_wall(player->pos, current_sector, &tmp_distance, tmp_wall);
+	update_sector(player, get_sector_by_index(head, player->sector)->wall_head);
+	tmp_wall = get_collision_wall(player->pos, get_sector_by_index(head, player->sector), &tmp_distance, tmp_wall);
 	if (tmp_wall == NULL)
-	{
-		get_movement_sector(player->pos, current_sector, &player->sector);
-		current_sector = get_sector_by_index(head, player->sector);
 		return ;
-	}
 	move = collide(tmp_wall, tmp_distance, &col_angle);
 	player->pos.x += move.x;
 	player->pos.y += move.y;
 
-	get_movement_sector(player->pos, current_sector, &player->sector);
-	current_sector = get_sector_by_index(head, player->sector);
-
+	update_sector(player, get_sector_by_index(head, player->sector)->wall_head);
 	tmp_distance = PLAYER_RADIUS;
-	tmp_wall = get_collision_wall(player->pos, current_sector, &tmp_distance, tmp_wall);
+	tmp_wall = get_collision_wall(player->pos, get_sector_by_index(head, player->sector), &tmp_distance, tmp_wall);
 	if (tmp_wall == NULL)
 		return ;
 	move = move_hyp_length(tmp_wall, tmp_distance, col_angle);
 	player->pos.x += move.x;
 	player->pos.y += move.y;
+	update_sector(player, get_sector_by_index(head, player->sector)->wall_head);
 }
 
-void	movement(t_player *player, t_vecdb move, t_sector_node *head)
+void	move_player2(t_player *player, t_sector_node *head)
+{
+	t_wall_node		*tmp_wall;
+	double			tmp_distance;
+	double			col_angle;
+	t_vecdb			move;
+
+	tmp_wall = NULL;
+	tmp_distance = PLAYER_RADIUS;
+	col_angle = 0;
+	while ((tmp_wall = get_collision_wall(player->pos, get_sector_by_index(head, player->sector), &tmp_distance, tmp_wall)) != NULL)
+	{
+		move = collide(tmp_wall, tmp_distance, &col_angle);
+		player->pos.x += move.x;
+		player->pos.y += move.y;
+		update_sector(player, get_sector_by_index(head, player->sector)->wall_head);
+	}
+}
+
+void	movement(t_player *player, t_vecdb move, t_sector_node *sectors)
 {
 	double	movespeed = 0.005;
 	t_vecdb	old_position;
@@ -136,9 +157,9 @@ void	movement(t_player *player, t_vecdb move, t_sector_node *head)
 	multvec(&move, movespeed);
 
 	old_position = player->pos;
-	move.x += player->inertia.x;
-	move.y += player->inertia.y;
-	move_player(player, move, head);
+	player->pos.x += move.x + player->inertia.x;
+	player->pos.y += move.y + player->inertia.y;
+	move_player(player, sectors);
 
 	//printf("Px:%.15f\nPy:%.15f\n", player->pos.x, player->pos.y);
 	player->inertia.x = (player->pos.x - old_position.x) * 0.96;

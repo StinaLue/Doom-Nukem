@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 16:22:14 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/15 11:48:56 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/16 14:54:10 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	draw_rot_minimap(SDL_Surface *surf, t_player *player, const t_map *map)
 	t_vecdb map_center;
 	t_vecdb transfo_direc;
 	t_wall_node *current_wall;
+	t_sector_node *current_sector;
 	
 	map_center.x = surf->w / 2 +0.5;
 	map_center.y = surf->h / 2 +0.5;
@@ -39,17 +40,24 @@ void	draw_rot_minimap(SDL_Surface *surf, t_player *player, const t_map *map)
 	transfo_direc.x = map_center.x + transfo_direc.x;
 	transfo_direc.y = map_center.y + transfo_direc.y;
 
-	current_wall = map->sector_head->wall_head;
-
-	while (current_wall != NULL)
+	current_sector = map->sector_head;
+	while (current_sector != NULL)
 	{
-		init_rotate_wall(&wall_tmp, current_wall, player);
-		transfo_wall.start.x = map_center.x + wall_tmp.start.x;
-		transfo_wall.start.y = map_center.y + wall_tmp.start.y;
-		transfo_wall.end.x = map_center.x + wall_tmp.end.x;
-		transfo_wall.end.y = map_center.y + wall_tmp.end.y;
-		draw_line(vecdb_to_vec(transfo_wall.start), vecdb_to_vec(transfo_wall.end), surf, current_wall->color);
-		current_wall = current_wall->next;
+		current_wall = current_sector->wall_head;
+		while (current_wall != NULL)
+		{
+			if (current_wall->neighbor_sector == -1)
+			{
+				init_rotate_wall(&wall_tmp, current_wall, player);
+				transfo_wall.start.x = map_center.x + wall_tmp.start.x;
+				transfo_wall.start.y = map_center.y + wall_tmp.start.y;
+				transfo_wall.end.x = map_center.x + wall_tmp.end.x;
+				transfo_wall.end.y = map_center.y + wall_tmp.end.y;
+				draw_line(vecdb_to_vec(transfo_wall.start), vecdb_to_vec(transfo_wall.end), surf, current_wall->color);
+			}
+			current_wall = current_wall->next;
+		}
+		current_sector = current_sector->next;
 	}
 	draw_line(vecdb_to_vec(map_center), vecdb_to_vec(transfo_direc), surf, 0xFF8833);
 	fill_pix(surf, map_center.x, map_center.y, 0xFFFF00);
