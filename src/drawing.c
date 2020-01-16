@@ -29,19 +29,21 @@ void	draw_border_options(SDL_Rect *rect, int color, SDL_Surface *surf)
 	t_vec top_right;
 	t_vec bottom_left;
 	t_vec bottom_right;
+	int i;
 
-	give_vec_values(&top_left, rect->x, surf->h - rect->y); // this one is good
-	give_vec_values(&top_right, rect->x + rect->w, surf->h - rect->y); // good too
-	give_vec_values(&bottom_left, rect->x, surf->h - rect->y - rect->h); //
-	give_vec_values(&bottom_right, rect->x + rect->w, surf->h - rect->y - rect->h);
-	/* give_vec_values(&top_left, rect->x, surf->h - rect->y);
-	give_vec_values(&top_right, rect->x + rect->w, surf->h - rect->y);
-	give_vec_values(&bottom_left, rect->x, surf->h - rect->y + rect->h);
-	give_vec_values(&bottom_right, rect->x + rect->w, surf->h - rect->y + rect->h); */
-	draw_line(bottom_left, bottom_right, surf, color);
-	draw_line(bottom_right, top_right, surf, color);
-	draw_line(top_right, top_left, surf, color);
-	draw_line(top_left, bottom_left, surf, color);
+	i = 0;
+	while (i < 3)
+	{
+		give_vec_values(&top_left, rect->x - 1 - i, surf->h - rect->y + i);
+		give_vec_values(&top_right, rect->x + rect->w + i, surf->h - rect->y + i);
+		give_vec_values(&bottom_left, rect->x - 1 - i, surf->h - rect->y - rect->h - 1 - i);
+		give_vec_values(&bottom_right, rect->x + i + rect->w, surf->h - rect->y - rect->h - 1 - i);
+		draw_line(bottom_left, bottom_right, surf, color);
+		draw_line(bottom_right, top_right, surf, color);
+		draw_line(top_right, top_left, surf, color);
+		draw_line(top_left, bottom_left, surf, color);
+		i++;
+	}
 }
 
 void	draw_border(SDL_Surface *surf, int color)

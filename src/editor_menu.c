@@ -82,13 +82,13 @@ int	init_options_menu(t_editor *editor)
 	assign_sdlrect(&editor->options_menu.title_rect, create_vec((editor->options_surf->w - editor->options_menu.title->w) / 2, (editor->options_surf->w - editor->options_menu.title->h) / 20), create_vec(0, 0));
 	if (create_options_strings(editor, create_vec((editor->options_surf->h) / 20, ((editor->options_surf->h) / 20) * 4), 0, "CHOOSE HEIGHT") != 0)
 		return (1);
-	if (create_options_strings(editor, create_vec((editor->options_surf->h) / 20, ((editor->options_surf->h) / 20) * 8), 1, "CHOOSE TEXTURE") != 0)
+	if (create_options_strings(editor, create_vec((editor->options_surf->h) / 20, ((editor->options_surf->h) / 20) * 8.5), 1, "CHOOSE TEXTURE") != 0)
 		return (1);
 	if (create_options_strings(editor, create_vec((editor->options_surf->h) / 20, ((editor->options_surf->h) / 20) * 16), 2, "ENTER SOMETHING") != 0)
 		return (1);
 	if (create_options_strings(editor, create_vec((editor->options_surf->w) / 2, ((editor->options_surf->h) / 20) * 4), 3, "SET PLAYER POSITION") != 0)
 		return (1);
-	if (create_options_strings(editor, create_vec((editor->options_surf->w) / 2, ((editor->options_surf->h) / 20) * 8), 4, "CHOOSE OBJECT") != 0)
+	if (create_options_strings(editor, create_vec((editor->options_surf->w) / 2, ((editor->options_surf->h) / 20) * 8.5), 4, "CHOOSE OBJECT") != 0)
 		return (1);
 	if (set_textures(editor) != 0)
 		return (1);

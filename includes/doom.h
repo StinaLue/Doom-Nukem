@@ -199,6 +199,8 @@ typedef struct				s_options_menu
 	TTF_Font				*font;
 
 	SDL_Color				text_color;
+	int						border_color_text[12];
+	int						border_color_height[7];
 }							t_options_menu;
 
 typedef struct				s_map
@@ -225,13 +227,7 @@ typedef struct				s_editor
 	int						offset;
 	int						start_sector_reached;
 	int						color_change;
-	//int 					sign_pos;
-	//int 					point;
-	/* t_vec 				A; // used for convex
-	t_vec 					B;
-	t_vec 					C; */
-    //t_wall      			walls[MAX_WALLS];
-
+	int 					current_option;
 	t_vec					grid_values[NBPOINTS];
 	t_vec					start_sector;
 	t_wall_node				wall_tmp;
@@ -333,16 +329,6 @@ int							init_editor_menu(t_editor *editor);
 int							init_map(t_map *map);
 
 
-
-
-
-
-
-
-void	draw_border_options(SDL_Rect *rect, int color, SDL_Surface *surf);
-
-
-
 /*
 ** INIT STRUCT FUNCTIONS
 */
@@ -387,6 +373,8 @@ void						fill_pix(SDL_Surface *surf, int x, int y, int color);
 void						draw_line(const t_vec a, const t_vec b, SDL_Surface *surf, int color);
 
 void						draw_border(SDL_Surface *surf, int color);
+
+void						draw_border_options(SDL_Rect *rect, int color, SDL_Surface *surf);
 
 /*
 **	BLIT FUNCTIONS

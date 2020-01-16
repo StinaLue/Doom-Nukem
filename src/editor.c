@@ -70,6 +70,18 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	editor->wall_tmp.end.y = -1;
 	editor->start_sector_reached = 1;
 	editor->color_change = 0;
+	i = 0;
+	while (i < 12)
+	{
+		editor->options_menu.border_color_text[i] = 0xff0000;
+		i++;
+	}
+	i = 0;
+	while (i < 7)
+	{
+		editor->options_menu.border_color_height[i] = 0xff0000;
+		i++;
+	}
 	return (0);
 }
 
@@ -190,6 +202,7 @@ int start_wall_exists(t_wall_node *wall)
 	return (0);
 }
 
+
 int	editor_events(t_doom *doom)
 {
 	t_editor	*editor;
@@ -239,6 +252,29 @@ int	editor_events(t_doom *doom)
 				}
 			}
 		}
+		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
+		if (sdlmain->event.button.button == SDL_BUTTON_LEFT && is_mouse_collide(sdlmain->mouse_pos, editor->options_rect))
+		{
+			sdlmain->mouse_pos.x -= editor->editor_rect.w;
+			int i;
+			i = 0;
+			while (i < 12)
+			{
+				if (is_mouse_collide(sdlmain->mouse_pos, editor->options_menu.texture_rect[i]))
+					editor->options_menu.border_color_text[i] = 0x00ffff;
+				i++;			
+			}
+			i = 0;
+			while (i < 7)
+			{
+				if (is_mouse_collide(sdlmain->mouse_pos, editor->options_menu.height_rect[i]))
+					editor->options_menu.border_color_height[i] = 0x00ffff;
+				i++;
+			}
+				//draw_border_options(&editor->options_menu.texture_rect[0], 0x00ffff, editor->options_surf);
+				//editor->current_option = 0;
+				//launch_option_texture(editor);
+		}
 	}
 	if (doom->state != EDITOR_STATE)
 		return (1);
@@ -264,7 +300,6 @@ int editor_loop(t_doom *doom)
 			if (editor_events(doom) != 0)
 				break ;
         SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
-
 		int offset_border = 0;
 		if (NBPOINTSROW * editor->offset < editor->editor_surf->h)
 			offset_border = editor->editor_surf->h - NBPOINTSROW * editor->offset;

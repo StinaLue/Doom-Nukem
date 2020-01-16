@@ -55,10 +55,10 @@ int blit_textures(t_editor *editor)
 	i = 0;
 	while (i < 9)
 	{
+		draw_border_options(&editor->options_menu.texture_rect[i], editor->options_menu.border_color_text[i], editor->options_surf);
 		if ((SDL_BlitScaled(editor->options_menu.wall_textures[i], NULL, // change this to "i" as soon as all textures are there 
 			editor->options_surf, &editor->options_menu.texture_rect[i])) < 0)
 		return (error_return("BlitScaled error = %s\n", SDL_GetError()));
-		draw_border_options(&editor->options_menu.texture_rect[0], 0xff0000, editor->options_surf);
 		i++;
 	}
 	return (0);
@@ -71,14 +71,29 @@ int blit_height(t_editor *editor)
 	i = 0;
 	while (i < 7)
 	{
+		draw_border_options(&editor->options_menu.height_rect[i], editor->options_menu.border_color_height[i], editor->options_surf);
+		i++;
+	}
+	i = 0;
+	while (i < 7)
+	{
 		if ((SDL_BlitScaled(editor->options_menu.wall_textures[0], NULL,
 			editor->options_surf, &editor->options_menu.height_rect[i])) < 0)
 		return (error_return("BlitScaled error = %s\n", SDL_GetError()));
-		draw_border_options(&editor->options_menu.height_rect[3], 0xff0000, editor->options_surf);
 		i++;
 	}
 	return (0);
 }
+
+/* int highlight_texture(t_editor *editor)
+{
+	if (editor->current_option == 0)
+	{
+		if (highlight_text(&sdlmain->font, &menu->options[0], &menu->text_color, "/ editor \\") == -1)
+			return (1);
+	}
+	return (0);
+} */
 
 int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 {
@@ -90,6 +105,8 @@ int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 		return (1);
 	if (blit_height(editor) != 0)
 		return (1);
+	//if (highlight_texture(editor, sdlmain) != 0)
+	//	return (error_return("Error in highlight selection function\n", NULL));
 	if ((SDL_BlitScaled(editor->editor_surf, NULL,
 			sdlmain->win_surf, &editor->editor_rect)) < 0)
 		return (error_return("SDL_BlitScaled error = %{r}s\n",
