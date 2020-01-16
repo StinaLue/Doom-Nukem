@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/15 16:16:25 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/16 16:07:35 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ int game_loop(t_doom *doom)
 		else
 			game->surfs.perspective_view->userdata = "nocolor";
 		draw_perspective_view(game->surfs.perspective_view, &game->player, &doom->map, doom->wall_textures);
+		if ((SDL_BlitScaled(game->surfs.weapons, &game->surfs.katana[(int)((float)SDL_GetTicks() / 400) % 4], game->surfs.perspective_view, NULL)) != 0)
+			printf("%s\n", SDL_GetError());
 		if ((SDL_BlitScaled(game->surfs.perspective_view, NULL, sdlmain->win_surf, &myrect_thirdmap)) < 0)
 			return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
 		if ((draw_map(sdlmain, game, &doom->map, &game->data.hud_flags)) == 1)
