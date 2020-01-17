@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/16 16:53:56 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/17 17:03:25 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ t_vecdb	collide(t_wall_node *wall, double distance, double *col_angle)
 	collision.y = distance * -cos(*col_angle);
 		return (collision);
 }
-
+/*
 t_vecdb	move_hyp_length(t_wall_node *wall, double distance, double angle)
 {
 	double	col_angle;
@@ -72,7 +72,7 @@ t_vecdb	move_hyp_length(t_wall_node *wall, double distance, double angle)
 	move.x = distance * cos(angle);
 	move.y = distance * sin(angle);
 	return (move);
-}
+}*/
 
 void	update_sector(t_player *player, t_wall_node *wall)
 {
