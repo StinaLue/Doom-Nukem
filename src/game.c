@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/16 16:49:17 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/17 16:49:39 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@
 
 int game_loop(t_doom *doom)
 {
-	t_game *game;
-	t_sdlmain *sdlmain;
-	Uint32 startclock = 0;
-	int itt = 0;
+	t_game		*game;
+	t_sdlmain	*sdlmain;
+	Uint32		startclock = 0;
+	int			itt = 0;
+	t_view		view;
 
 	game = &(doom->game);
 	sdlmain = &(doom->sdlmain);
@@ -37,7 +38,24 @@ int game_loop(t_doom *doom)
 			game->surfs.perspective_view->userdata = "yescolor";
 		else
 			game->surfs.perspective_view->userdata = "nocolor";
-		draw_perspective_view(game->surfs.perspective_view, &game->player, doom->wall_textures);
+
+		//print sector
+		/*int i = 0;
+		t_sector_node *node = doom->map.sector_head;
+		while (node != NULL)
+		{
+			if (game->player.sector == node)
+				printf("sector: %d\n", i + 1);
+			i++;
+			node = node->next;
+		}*/
+
+		//draw_perspective_view(game->surfs.perspective_view, &game->player, doom->wall_textures);
+		view.left = doom->game.player.fov;
+		view.right = doom->game.player.fov;
+		view.left.x *= -1;
+		draw_view_recursive(game->surfs.perspective_view, doom->wall_textures, view, doom->game.player.sector, &doom->game.player);
+
 		if ((SDL_BlitScaled(game->surfs.perspective_view, NULL, sdlmain->win_surf, NULL)) < 0)
 			return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
 		if ((draw_map(sdlmain, game, &doom->map, &game->data.hud_flags)) == 1)
