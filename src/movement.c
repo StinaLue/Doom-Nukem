@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/17 17:03:25 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/17 17:05:25 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ double	wall_distance(t_vecdb point, t_wall_node *wall)
 }
 
 
-t_wall_node	*get_collision_wall(t_vecdb position, t_sector_node *sector, double *min_dist, t_wall_node *tmp_wall)
+t_wall_node	*get_collision_wall(t_vecdb position, t_sector_node *sector, double *min_dist)
 {
 	double dist;
 	t_wall_node	*wall;
@@ -33,7 +33,7 @@ t_wall_node	*get_collision_wall(t_vecdb position, t_sector_node *sector, double 
 	while (wall != NULL)
 	{
 		dist = wall_distance(position, wall);
-		if (dist < *min_dist && wall->neighbor_sector == NULL && wall != tmp_wall)
+		if (dist < *min_dist && wall->neighbor_sector == NULL)
 		{
 			deepest_wall = wall;
 			*min_dist = dist;
@@ -57,8 +57,8 @@ t_vecdb	collide(t_wall_node *wall, double distance, double *col_angle)
 	collision.y = distance * -cos(*col_angle);
 		return (collision);
 }
-/*
-t_vecdb	move_hyp_length(t_wall_node *wall, double distance, double angle)
+
+/*t_vecdb	move_hyp_length(t_wall_node *wall, double distance, double angle)
 {
 	double	col_angle;
 	t_vecdb	move;
@@ -79,7 +79,10 @@ void	update_sector(t_player *player, t_wall_node *wall)
 	while (wall != NULL)
 	{
 		if (wall->neighbor_sector != NULL && wall_distance(player->pos, wall) < 0)
+		{
 			player->sector = wall->neighbor_sector;
+			return ;
+		}
 		wall = wall->next;
 	}
 }
@@ -124,7 +127,7 @@ void	move_player2(t_player *player)
 	tmp_wall = NULL;
 	tmp_distance = PLAYER_RADIUS;
 	col_angle = 0;
-	while ((tmp_wall = get_collision_wall(player->pos, player->sector, &tmp_distance, tmp_wall)) != NULL)
+	while ((tmp_wall = get_collision_wall(player->pos, player->sector, &tmp_distance)) != NULL)
 	{
 		move = collide(tmp_wall, tmp_distance, &col_angle);
 		player->pos.x += move.x;
