@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/15 13:54:14 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/17 11:36:13 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,10 @@ int		free_menu(t_menu *menu)
 
 int		free_fonts(t_editor *editor)
 {
-	TTF_CloseFont(editor->options_menu.font);
-	editor->options_menu.font = NULL;
-	TTF_CloseFont(editor->options_menu.font_title);
-	editor->options_menu.font_title = NULL;
+	TTF_CloseFont(editor->opt_menu.font);
+	editor->opt_menu.font = NULL;
+	TTF_CloseFont(editor->opt_menu.font_title);
+	editor->opt_menu.font_title = NULL;
 	TTF_CloseFont(editor->instruct_menu.font);
 	editor->instruct_menu.font = NULL;
 	TTF_CloseFont(editor->instruct_menu.font_title);
@@ -84,19 +84,19 @@ int		free_fonts_surf(t_editor *editor)
 	i = 0;
 	SDL_FreeSurface(editor->instruct_menu.title);
 	editor->instruct_menu.title = NULL;
-	SDL_FreeSurface(editor->options_menu.title);
-	editor->options_menu.title = NULL;
+	SDL_FreeSurface(editor->opt_menu.title);
+	editor->opt_menu.title = NULL;
 	while (i < 5)
 	{
-		SDL_FreeSurface(editor->options_menu.options[i]);
-		editor->options_menu.options[i] = NULL;
+		SDL_FreeSurface(editor->opt_menu.options[i]);
+		editor->opt_menu.options[i] = NULL;
 		i++;
 	}
 	i = 0;
 	while (i < 5)
 	{
-		SDL_FreeSurface(editor->instruct_menu.instructions[i]);
-		editor->instruct_menu.instructions[i] = NULL;
+		SDL_FreeSurface(editor->instruct_menu.instructs[i]);
+		editor->instruct_menu.instructs[i] = NULL;
 		i++;
 	}
 	return (EXIT_FAILURE);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/16 16:50:49 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/17 11:53:26 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ typedef struct	s_game
 typedef struct				s_instruct_menu
 {
 	SDL_Surface				*title;
-	SDL_Surface				*instructions[5];
+	SDL_Surface				*instructs[5];
 
 	SDL_Rect				title_rect;
 	SDL_Rect				instruct_rect[5];
@@ -201,17 +201,17 @@ typedef struct				s_options_menu
 
 	SDL_Rect				title_rect;
 	SDL_Rect				options_rect[5];
-	SDL_Rect				texture_rect[12];
-	SDL_Rect 				height_rect[7];
+	SDL_Rect				text_rect[12];
+	SDL_Rect 				h_rect[7];
 
 	TTF_Font				*font_title;
 	TTF_Font				*font;
 
 	SDL_Color				text_color;
 	int						border_color_text[12];
-	int						border_color_height[7];
-	int 					activated_texture;
-	int 					activated_height;
+	int						bord_color_h[7];
+	int 					activ_text;
+	int 					activ_h;
 }							t_options_menu;
 
 typedef struct				s_map
@@ -243,7 +243,7 @@ typedef struct				s_editor
 	t_vec					start_sector;
 	t_wall_node				wall_tmp;
 	t_instruct_menu			instruct_menu;
-	t_options_menu			options_menu;
+	t_options_menu			opt_menu;
 	t_map					edit_map;
 }							t_editor;
 
@@ -363,6 +363,8 @@ void						check_menu(SDL_Event *event, int *state, int *prev_state_ptr, int prev
 */
 
 void						handle_keys(t_game *game, const Uint8 *keyboard_state);
+
+int							editor_events(t_doom *doom);
 /*
 ** PRINT MINIMAP FUNCTIONS
 */

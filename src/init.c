@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/16 16:39:50 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/17 11:35:05 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int		init_doom(t_doom *doom)
 	//degeulasse PLEASE REMOVE ASAP
 	doom->game.player.sector = doom->map.sector_head;
 
-	doom->editor.options_menu.wall_textures = doom->wall_textures;
+	doom->editor.opt_menu.wall_textures = doom->wall_textures;
 	if (init_editor(&doom->editor, &doom->sdlmain) == 1)
 		return (1);
 	return (0);

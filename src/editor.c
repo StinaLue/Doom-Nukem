@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/16 12:55:12 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/17 11:59:48 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,31 @@ int	round_num(double num, int offset)
 	return (num < 0 ? result - 0.5 : result + 0.5);
 }
 
+void	init_colors(t_editor *editor)
+{
+	int i;
+
+	i = 0;
+	editor->color_change = 0;
+	editor->opt_menu.activ_text = 0;
+	editor->opt_menu.activ_h = 1;
+	i = 0;
+	while (i < 12)
+	{
+		editor->opt_menu.border_color_text[i] = 0xff0000;
+		i++;
+	}
+	i = 0;
+	while (i < 7)
+	{
+		editor->opt_menu.bord_color_h[i] = 0xff0000;
+		i++;
+	}
+	editor->opt_menu.border_color_text[0] = 0x00ffff;
+	editor->opt_menu.bord_color_h[1] = 0x00ffff;
+	editor->opt_menu.bord_color_h[4] = 0x00ffff;
+}
+
 int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 {
 	int i;
@@ -69,23 +94,7 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	editor->wall_tmp.end.x = -1;
 	editor->wall_tmp.end.y = -1;
 	editor->start_sector_reached = 1;
-	editor->color_change = 0;
-	editor->options_menu.activated_texture = 0;
-	editor->options_menu.activated_height = 1;
-	i = 0;
-	while (i < 12)
-	{
-		editor->options_menu.border_color_text[i] = 0xff0000;
-		i++;
-	}
-	i = 0;
-	while (i < 7)
-	{
-		editor->options_menu.border_color_height[i] = 0xff0000;
-		i++;
-	}
-	editor->options_menu.border_color_text[0] = 0x00ffff;
-	editor->options_menu.border_color_height[1] = 0x00ffff;
+	init_colors(editor);
 	return (0);
 }
 
@@ -119,12 +128,14 @@ void	fill_area(SDL_Surface *surf, t_wall_node *wall, t_editor *editor)
 
 void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 {
-	int i;
+	int				i;
+	t_sector_node	*tmp_sect;
+	t_wall_node		*tmp_wall;
 
 	i = 0;
 	if (editor->edit_map.sector_head == NULL)
 		return ;
-	t_sector_node *tmp_sect = editor->edit_map.sector_head;
+	tmp_sect = editor->edit_map.sector_head;
 	if (editor->start_sector_reached == 0)
 	{
 		draw_line(mult_vec(sdlmain->mouse_pos, editor->offset),
@@ -133,7 +144,7 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 	}
 	while (tmp_sect != NULL)
 	{
-		t_wall_node *tmp_wall = tmp_sect->wall_head;
+		tmp_wall = tmp_sect->wall_head;
 		while (tmp_wall != NULL)
 		{
 			fill_area(editor_surf, tmp_wall, editor);
@@ -148,18 +159,6 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 	}
 }
 
-void	check_finished_sect(t_editor *editor)
-{
-	if ((editor->start_sector.x == editor->wall_tmp.end.x) \
-		&& (editor->start_sector.y == editor->wall_tmp.end.y))
-	{
-		editor->clicked = 0;
-		editor->start_sector_reached = 1;
-		editor->num_sectors++;
-		editor->wall_tmp.start.x = -1;
-		editor->wall_tmp.start.y = -1;
-	}
-}
 
 void	draw_editor(SDL_Surface *editor_surf,
 					t_editor *editor, t_sdlmain *sdlmain)
@@ -199,111 +198,12 @@ int	is_pos_wall(t_wall_node *wall)
 	return (0);
 }
 
-int start_wall_exists(t_wall_node *wall)
-{
-	if (wall->start.x > 0 && wall->start.y > 0)
-		return (1);
-	return (0);
-}
 
-void	event_editor_surf(t_sdlmain *sdlmain, t_editor *editor)
-{
-	if (start_wall_exists(&editor->wall_tmp) && !(sdlmain->mouse_pos.x == editor->wall_tmp.end.x && sdlmain->mouse_pos.y == editor->wall_tmp.end.y))
-	{
-		editor->wall_tmp.end.x = sdlmain->mouse_pos.x;
-		editor->wall_tmp.end.y = sdlmain->mouse_pos.y;
-
-		editor->current_sector = get_last_sector(editor->edit_map.sector_head);
-		create_wall_node(&editor->current_sector->wall_head, editor->wall_tmp.start, editor->wall_tmp.end, 0x00ABFF);
-		editor->wall_tmp.start.x = editor->wall_tmp.end.x;
-		editor->wall_tmp.start.y = editor->wall_tmp.end.y;
-		check_finished_sect(editor);
-	}
-	else
-	{
-		if (editor->start_sector_reached == 1)
-		{
-			add_sector_node(&editor->edit_map.sector_head);
-
-			editor->start_sector.x = sdlmain->mouse_pos.x;
-			editor->start_sector.y = sdlmain->mouse_pos.y;
-			editor->wall_tmp.start.x = sdlmain->mouse_pos.x;
-			editor->wall_tmp.start.y = sdlmain->mouse_pos.y;
-			editor->wall_tmp.end.x = sdlmain->mouse_pos.x;
-			editor->wall_tmp.end.y = sdlmain->mouse_pos.y;
-			editor->start_sector_reached = 0;
-		}
-	}
-}
-
-int	editor_events(t_doom *doom)
+int	editor_loop(t_doom *doom)
 {
 	t_editor	*editor;
 	t_sdlmain	*sdlmain;
-
-	editor = &(doom->editor);
-	sdlmain = &(doom->sdlmain);
-	check_quit(&doom->sdlmain.event, &doom->state);
-	if (sdlmain->event.type == SDL_KEYDOWN)
-	{
-		if (sdlmain->event.key.repeat == 0)
-			check_menu(&doom->sdlmain.event, &doom->state, &doom->menu.previous_state, EDITOR_STATE);
-		if (sdlmain->event.key.keysym.sym == SDLK_u)
-		{
-			undo_wall(editor->edit_map.sector_head);
-			// start has to be set to last end
-		}
-	}
-	if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
-	{
-		if (sdlmain->event.button.button == SDL_BUTTON_LEFT && sdlmain->mouse_pos.x <= NBPOINTSROW)
-		{
-			event_editor_surf(sdlmain, editor);
-		}
-		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
-		if (sdlmain->event.button.button == SDL_BUTTON_LEFT && is_mouse_collide(sdlmain->mouse_pos, editor->options_rect))
-		{
-			sdlmain->mouse_pos.x -= editor->editor_rect.w;
-			int i;
-			i = 0;
-			while (i < 12)
-			{
-				if (is_mouse_collide(sdlmain->mouse_pos, editor->options_menu.texture_rect[i]))
-				{
-					if (editor->options_menu.activated_texture != i)
-						editor->options_menu.border_color_text[editor->options_menu.activated_texture] = 0xff0000;
-					editor->options_menu.border_color_text[i] = 0x00ffff;
-					editor->options_menu.activated_texture = i;
-				}
-				i++;		
-			}
-			i = 0;
-			while (i < 7)
-			{
-				if (is_mouse_collide(sdlmain->mouse_pos, editor->options_menu.height_rect[i]))
-				{
-					if (editor->options_menu.activated_height != i)
-						editor->options_menu.border_color_height[editor->options_menu.activated_height] = 0xff0000;
-					editor->options_menu.border_color_height[i] = 0x00ffff;
-					editor->options_menu.activated_height = i;
-				}
-				i++;
-			}
-				//draw_border_options(&editor->options_menu.texture_rect[0], 0x00ffff, editor->options_surf);
-				//editor->current_option = 0;
-				//launch_option_texture(editor);
-		}
-	}
-	if (doom->state != EDITOR_STATE)
-		return (1);
-	//print_map_contents(&editor->edit_map);
-	return (0);
-}
-
-int editor_loop(t_doom *doom)
-{
-	t_editor *editor;
-	t_sdlmain *sdlmain;
+	int			offset_border;
 
 	editor = &(doom->editor);
 	sdlmain = &(doom->sdlmain);
@@ -317,8 +217,7 @@ int editor_loop(t_doom *doom)
 		while (SDL_PollEvent(&sdlmain->event) != 0)
 			if (editor_events(doom) != 0)
 				break ;
-        SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
-		int offset_border = 0;
+		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
 		if (NBPOINTSROW * editor->offset < editor->editor_surf->h)
 			offset_border = editor->editor_surf->h - NBPOINTSROW * editor->offset;
         sdlmain->mouse_pos.x = round_num(sdlmain->mouse_pos.x, editor->offset);
