@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/17 16:49:39 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/17 16:59:05 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ int game_loop(t_doom *doom)
 		view.left.x *= -1;
 		draw_view_recursive(game->surfs.perspective_view, doom->wall_textures, view, doom->game.player.sector, &doom->game.player);
 
+		if ((SDL_BlitScaled(game->surfs.weapons, &game->surfs.katana[(int)((float)SDL_GetTicks() / 400) % 4], game->surfs.perspective_view, NULL)) != 0)
+			printf("%s\n", SDL_GetError());
 		if ((SDL_BlitScaled(game->surfs.perspective_view, NULL, sdlmain->win_surf, NULL)) < 0)
 			return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
 		if ((draw_map(sdlmain, game, &doom->map, &game->data.hud_flags)) == 1)

@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/01/16 11:23:53 by sluetzen         ###   ########.fr        #
+#    Updated: 2020/01/16 15:24:04 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = doom
-DEBUG_NAME = doom_debug
+NAME = doom_nukem
+DEBUG_NAME = doom_nukem_debug
 
 CC = clang
 
