@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/17 14:52:44 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/17 16:55:00 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,14 @@
 
 # define NBPOINTS 2501 // map has 50 * 50 points
 # define NBPOINTSROW 50 // NBPOINTS = NBPOINTSROW * NBPOINTSROW
-# define MAX_WALLS 50
-# define MAX_SECTORS 10
 # define NBTEXTURES	12
 # define NBHEIGHTS 7
+# define NBOPTIONS 5
+# define NBINSTRUCTS 5
+# define COLOR_HOVER 0x6C1413
+# define COLOR_PRESSED 0xffff00
+# define COLOR_NORMAL 0xff0000
+
 /*
 ** HUD FLAGS
 */
@@ -75,17 +79,17 @@
 ** VECTOR STRUCTS
 */
 
-struct				s_sector_node;
-struct				s_wall_node;
+struct s_sector_node;
+struct s_wall_node;
 
 typedef struct				s_vec
-{		
+{
 	int						x;
 	int						y;
 }							t_vec;
-		
+
 typedef struct				s_vecdb
-{		
+{
 	double					x;
 	double					y;
 }							t_vecdb;
@@ -174,46 +178,45 @@ typedef struct				s_player
 	int						helper;
 }							t_player;
 
-typedef struct	s_game
+typedef struct				s_game
 {
 	t_gamesurfs				surfs;
 	t_data					data;
 	t_player				player;
 }							t_game;
 
-typedef struct				s_instruct_menu
+typedef struct				s_instr_menu
 {
 	SDL_Surface				*title;
 	SDL_Surface				*instructs[5];
 
 	SDL_Rect				title_rect;
-	SDL_Rect				instruct_rect[5];
+	SDL_Rect				instr_rect[5];
 
 	TTF_Font				*font_title;
 	TTF_Font				*font;
 
 	SDL_Color				text_color;
-}							t_instruct_menu;
+}							t_instr_menu;
 
 typedef struct				s_options_menu
 {
 	SDL_Surface				*title;
 	SDL_Surface				*options[5];
-	SDL_Surface				**wall_textures;
 
 	SDL_Rect				title_rect;
 	SDL_Rect				options_rect[5];
 	SDL_Rect				text_rect[NBTEXTURES];
-	SDL_Rect 				h_rect[NBHEIGHTS];
+	SDL_Rect				h_rect[NBHEIGHTS];
 
 	TTF_Font				*font_title;
 	TTF_Font				*font;
 
 	SDL_Color				text_color;
-	int						border_color_text[NBTEXTURES];
-	int						bord_color_h[7];
-	int 					activ_text;
-	int 					activ_h;
+	int						bord_color_text[NBTEXTURES];
+	int						bord_color_h[NBHEIGHTS];
+	int						activ_text;
+	int						activ_h;
 }							t_options_menu;
 
 typedef struct				s_map
@@ -226,11 +229,14 @@ typedef struct				s_editor
 {
 	SDL_Surface				*editor_surf;
 	SDL_Surface				*options_surf;
-	SDL_Surface				*instruct_surf;
+	SDL_Surface				*instr_surf;
+	SDL_Surface				*mouse_surf;
+	SDL_Surface				**wall_textures;
 
 	SDL_Rect				editor_rect;
 	SDL_Rect				options_rect;
-	SDL_Rect				instruct_rect;
+	SDL_Rect				instr_rect;
+	SDL_Rect 				mouse_rect;
 
 	t_sector_node			*current_sector;
 	t_wall_node				*current_wall;
@@ -240,11 +246,11 @@ typedef struct				s_editor
 	int						offset;
 	int						start_sector_reached;
 	int						color_change;
-	int 					current_option;
+	int						current_option; // used?
 	t_vec					grid_values[NBPOINTS];
 	t_vec					start_sector;
 	t_wall_node				wall_tmp;
-	t_instruct_menu			instruct_menu;
+	t_instr_menu			instr_menu;
 	t_options_menu			opt_menu;
 	t_map					edit_map;
 }							t_editor;
@@ -536,7 +542,7 @@ t_wall_node					*delete_last_wall(t_wall_node **wall_list);
 
 t_wall_node					*get_last_wall_node(t_wall_node *wall_list);
 
-t_wall_node 				*undo_wall(t_sector_node *node);
+t_wall_node					*undo_wall(t_sector_node *node);
 
 /*
 ** DEBUG FUNCTIONS
@@ -551,4 +557,4 @@ int							wall_loop(t_wall_node *node);
 int							count_walls(t_wall_node *wall_list);
 
 void						set_wall_length(t_wall_node *head);
-#endif		
+#endif

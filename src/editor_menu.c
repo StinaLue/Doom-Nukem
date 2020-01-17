@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/17 11:36:13 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/17 16:30:47 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int create_instruct_strings(t_editor *editor, t_vec origin, int i, const char *str)
 {
-	if ((editor->instruct_menu.instructs[i] = TTF_RenderText_Solid(editor->instruct_menu.font, str, editor->instruct_menu.text_color)) == NULL)
+	if ((editor->instr_menu.instructs[i] = TTF_RenderText_Solid(editor->instr_menu.font, str, editor->instr_menu.text_color)) == NULL)
 		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
-	assign_sdlrect(&editor->instruct_menu.instruct_rect[i], origin, create_vec(0, 0));
+	assign_sdlrect(&editor->instr_menu.instr_rect[i], origin, create_vec(0, 0));
 	return (0);
 }
 
@@ -28,20 +28,20 @@ int create_options_strings(t_editor *editor, t_vec origin, int i, const char *st
 	return (0);
 }
 
-int	init_instruct_menu(t_editor *editor)
+int	init_instr_menu(t_editor *editor)
 {
-	if ((editor->instruct_menu.title = TTF_RenderText_Solid(editor->instruct_menu.font_title, "instructs", editor->instruct_menu.text_color)) == NULL)
+	if ((editor->instr_menu.title = TTF_RenderText_Solid(editor->instr_menu.font_title, "instructs", editor->instr_menu.text_color)) == NULL)
 		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
-	assign_sdlrect(&editor->instruct_menu.title_rect, create_vec((editor->instruct_surf->w - editor->instruct_menu.title->w) / 2, (editor->instruct_surf->w - editor->instruct_menu.title->h) / 20), create_vec(0, 0));
-	if (create_instruct_strings(editor, create_vec(editor->instruct_surf->w / 18, editor->instruct_surf->w / 6), 0, "undo wall: u") != 0)
+	assign_sdlrect(&editor->instr_menu.title_rect, create_vec((editor->instr_surf->w - editor->instr_menu.title->w) / 2, (editor->instr_surf->w - editor->instr_menu.title->h) / 20), create_vec(0, 0));
+	if (create_instruct_strings(editor, create_vec(editor->instr_surf->w / 18, editor->instr_surf->w / 6), 0, "undo wall: u") != 0)
 		return (1);
-	if (create_instruct_strings(editor, create_vec(editor->instruct_surf->w / 18, editor->instruct_surf->w / 4), 1, "undo sector: s") != 0)
+	if (create_instruct_strings(editor, create_vec(editor->instr_surf->w / 18, editor->instr_surf->w / 4), 1, "undo sector: s") != 0)
 		return (1);
-	if (create_instruct_strings(editor, create_vec(editor->instruct_surf->w / 18, editor->instruct_surf->w / 3), 2, "change type of wall: t") != 0)
+	if (create_instruct_strings(editor, create_vec(editor->instr_surf->w / 18, editor->instr_surf->w / 3), 2, "change type of wall: t") != 0)
 		return (1);
-	if (create_instruct_strings(editor, create_vec(editor->instruct_surf->w / 2, editor->instruct_surf->w / 6), 3, "create sector: left click") != 0)
+	if (create_instruct_strings(editor, create_vec(editor->instr_surf->w / 2, editor->instr_surf->w / 6), 3, "create sector: left click") != 0)
 		return (1);
-	if (create_instruct_strings(editor, create_vec(editor->instruct_surf->w / 2, editor->instruct_surf->w / 4), 4, "...") != 0)
+	if (create_instruct_strings(editor, create_vec(editor->instr_surf->w / 2, editor->instr_surf->w / 4), 4, "...") != 0)
 		return (1);
 	return (0);
 }
@@ -103,15 +103,15 @@ int init_editor_menu(t_editor *editor)
 	//menu->previous_state = QUIT_STATE;
 	if ((editor->opt_menu.font_title = TTF_OpenFont("assets/fonts/dukes-3d.ttf", 16)) == NULL)
 		return (error_return("TTF_OpenFont error = %s\n", TTF_GetError()));
-	if ((editor->instruct_menu.font_title = TTF_OpenFont("assets/fonts/dukes-3d.ttf", 16)) == NULL)
+	if ((editor->instr_menu.font_title = TTF_OpenFont("assets/fonts/dukes-3d.ttf", 16)) == NULL)
 		return (error_return("TTF_OpenFont error = %s\n", TTF_GetError()));
 	if ((editor->opt_menu.font = TTF_OpenFont("assets/fonts/dooM.ttf", 14)) == NULL)
 		return (error_return("TTF_OpenFont error = %s\n", TTF_GetError()));
-	if ((editor->instruct_menu.font = TTF_OpenFont("assets/fonts/dooM.ttf",	16)) == NULL)
+	if ((editor->instr_menu.font = TTF_OpenFont("assets/fonts/dooM.ttf",	16)) == NULL)
 		return (error_return("TTF_OpenFont error = %s\n", TTF_GetError()));
-	assign_sdlcolor(&editor->instruct_menu.text_color, 255, 0, 0);
+	assign_sdlcolor(&editor->instr_menu.text_color, 255, 0, 0);
 	assign_sdlcolor(&editor->opt_menu.text_color, 255, 0, 0);
-	if (init_instruct_menu(editor) != 0)
+	if (init_instr_menu(editor) != 0)
 		return (1);
 	if (init_options_menu(editor) != 0)
 		return (1);
