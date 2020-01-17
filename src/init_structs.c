@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/16 16:36:05 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/17 16:22:30 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ int	init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain)
 	gamesurfs->rot_mmap = NULL;
 	gamesurfs->perspective_view = NULL;
 	gamesurfs->weapons = NULL;
-	if ((gamesurfs->rot_mmap = SDL_CreateRGBSurface(0, 64, 64, 32, 0, 0, 0, 0)) == NULL) //--> should be a square that can handle the size of a sector
+	if ((gamesurfs->rot_mmap = SDL_CreateRGBSurface(0, 128, 128, 32, 0, 0, 0, 0)) == NULL) //--> should be a square that can handle the size of a sector
 		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
-	if ((gamesurfs->fixed_mmap = SDL_CreateRGBSurface(0, 64, 64, 32, 0, 0, 0, 0)) == NULL) //--> should be a square that can handle the size of the whole map
+	if ((gamesurfs->fixed_mmap = SDL_CreateRGBSurface(0, 128, 128, 32, 0, 0, 0, 0)) == NULL) //--> should be a square that can handle the size of the whole map
 		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
 	if ((gamesurfs->perspective_view = SDL_CreateRGBSurface(0, sdlmain->win_surf->w / 4, sdlmain->win_surf->h / 4, 32, 0, 0, 0, 0)) == NULL)
 		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
@@ -72,8 +72,8 @@ void	init_data_struct(t_data *data)
 void	init_player_struct(t_player *player)
 {
 	player->sector = NULL;
-	player->pos.x = 50;
-	player->pos.y = 50;
+	player->pos.x = 49;
+	player->pos.y = 35;
 	player->angle = 0;
 	player->view_z = 0;
 	player->inertia.x = 0;
