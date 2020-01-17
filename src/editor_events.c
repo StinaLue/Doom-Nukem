@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/17 11:55:17 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/17 15:12:06 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,7 @@ void	set_border_color(t_editor *editor, t_vec mouse_pos)
 	int i;
 
 	i = 0;
-	mouse_pos.x -= editor->editor_rect.w;
-	while (i < 12)
+	while (i < NBTEXTURES)
 	{
 		if (is_mouse_collide(mouse_pos, editor->opt_menu.text_rect[i]))
 		{
@@ -106,7 +105,7 @@ void	set_border_color(t_editor *editor, t_vec mouse_pos)
 		i++;
 	}
 	i = 0;
-	while (i < 7)
+	while (i < NBHEIGHTS)
 	{
 		editor->opt_menu.bord_color_h[i] = 0xff0000;
 		if (is_mouse_collide(mouse_pos, editor->opt_menu.h_rect[i]))
@@ -116,6 +115,40 @@ void	set_border_color(t_editor *editor, t_vec mouse_pos)
 	editor->opt_menu.bord_color_h[editor->opt_menu.activ_h] = 0x00ffff;
 }
 
+void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
+{
+	int i;
+
+	i = 0;
+	if (is_mouse_collide(sdlmain->mouse_pos, editor->options_rect))
+	{
+		sdlmain->mouse_pos.x -= editor->editor_rect.w;
+		if (sdlmain->event.button.button == SDL_BUTTON_LEFT)
+		{
+			set_border_color(editor, sdlmain->mouse_pos);
+			special_case_height(editor);
+		}
+		while (i < NBTEXTURES)
+		{
+			if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.text_rect[i]) && i != editor->opt_menu.activ_text)
+				editor->opt_menu.border_color_text[i] = 0xffff00;
+			else if (!is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.text_rect[i]) && i != editor->opt_menu.activ_text)
+				editor->opt_menu.border_color_text[i] = 0xff0000;
+			i++;
+		}
+		i = 0;
+		while (i < NBHEIGHTS)
+		{
+			if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect[i]) && i != editor->opt_menu.activ_h)
+				editor->opt_menu.bord_color_h[i] = 0xffff00;
+			else if (!is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect[i]) && i != editor->opt_menu.activ_h)
+				editor->opt_menu.bord_color_h[i] = 0xff0000;
+			special_case_height(editor);
+			i++;
+		}
+	}
+
+}
 int	editor_events(t_doom *doom)
 {
 	t_editor	*editor;
@@ -135,20 +168,15 @@ int	editor_events(t_doom *doom)
 			// start has to be set to last end
 		}
 	}
-	if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
+	if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN || sdlmain->event.type == SDL_MOUSEMOTION)
 	{
 		if (sdlmain->event.button.button == SDL_BUTTON_LEFT \
-				&& sdlmain->mouse_pos.x <= NBPOINTSROW)
+				&& sdlmain->mouse_pos.x <= NBPOINTSROW && sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
 		{
 			event_editor_surf(sdlmain, editor);
 		}
 		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
-		if (sdlmain->event.button.button == SDL_BUTTON_LEFT \
-			&& is_mouse_collide(sdlmain->mouse_pos, editor->options_rect))
-		{
-			set_border_color(editor, sdlmain->mouse_pos);
-			special_case_height(editor);
-		}
+		mouse_in_options(editor, sdlmain);
 	}
 	if (doom->state != EDITOR_STATE)
 		return (1);

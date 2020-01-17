@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/17 11:59:48 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/17 14:53:00 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,13 @@ void	init_colors(t_editor *editor)
 	editor->opt_menu.activ_text = 0;
 	editor->opt_menu.activ_h = 1;
 	i = 0;
-	while (i < 12)
+	while (i < NBTEXTURES)
 	{
 		editor->opt_menu.border_color_text[i] = 0xff0000;
 		i++;
 	}
 	i = 0;
-	while (i < 7)
+	while (i < NBHEIGHTS)
 	{
 		editor->opt_menu.bord_color_h[i] = 0xff0000;
 		i++;

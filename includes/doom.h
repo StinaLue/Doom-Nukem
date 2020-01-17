@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/17 11:53:26 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/17 14:52:44 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@
 # define NBPOINTSROW 50 // NBPOINTS = NBPOINTSROW * NBPOINTSROW
 # define MAX_WALLS 50
 # define MAX_SECTORS 10
+# define NBTEXTURES	12
+# define NBHEIGHTS 7
 /*
 ** HUD FLAGS
 */
@@ -201,14 +203,14 @@ typedef struct				s_options_menu
 
 	SDL_Rect				title_rect;
 	SDL_Rect				options_rect[5];
-	SDL_Rect				text_rect[12];
-	SDL_Rect 				h_rect[7];
+	SDL_Rect				text_rect[NBTEXTURES];
+	SDL_Rect 				h_rect[NBHEIGHTS];
 
 	TTF_Font				*font_title;
 	TTF_Font				*font;
 
 	SDL_Color				text_color;
-	int						border_color_text[12];
+	int						border_color_text[NBTEXTURES];
 	int						bord_color_h[7];
 	int 					activ_text;
 	int 					activ_h;

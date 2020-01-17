@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/17 11:36:13 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/17 14:53:00 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,13 @@ int blit_height(t_editor *editor)
 	int i;
 
 	i = 0;
-	while (i < 7)
+	while (i < NBHEIGHTS)
 	{
 		draw_border_options(&editor->opt_menu.h_rect[i], editor->opt_menu.bord_color_h[i], editor->options_surf);
 		i++;
 	}
 	i = 0;
-	while (i < 7)
+	while (i < NBHEIGHTS)
 	{
 		if ((SDL_BlitScaled(editor->opt_menu.wall_textures[0], NULL,
 			editor->options_surf, &editor->opt_menu.h_rect[i])) < 0)
