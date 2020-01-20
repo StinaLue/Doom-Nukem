@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/17 17:06:52 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/20 14:03:05 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int blit_height(t_editor *editor)
 	i = 0;
 	while (i < NBHEIGHTS)
 	{
-		if ((SDL_BlitScaled(editor->wall_textures[editor->opt_menu.activ_text], NULL,
+		if ((SDL_BlitScaled(editor->wall_textures[editor->opt_menu.activ_tex], NULL,
 			editor->options_surf, &editor->opt_menu.h_rect[i])) < 0)
 		return (error_return("BlitScaled error = %s\n", SDL_GetError()));
 		i++;
@@ -118,7 +118,7 @@ int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 	if ((SDL_BlitScaled(editor->instr_surf, NULL,
 			sdlmain->win_surf, &editor->instr_rect)) < 0)
 		return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
-	if ((SDL_BlitScaled(editor->wall_textures[editor->opt_menu.activ_text], NULL,
+	if ((SDL_BlitScaled(editor->wall_textures[editor->opt_menu.activ_tex], NULL,
 			sdlmain->win_surf, &editor->mouse_rect)) < 0)
 		return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
 	if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)

@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/17 16:31:51 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/20 14:03:05 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	event_editor_surf(t_sdlmain *sdlmain, t_editor *editor)
 		editor->wall_tmp.end.y = sdlmain->mouse_pos.y;
 		editor->current_sector = get_last_sector(editor->edit_map.sector_head);
 		create_wall_node(&editor->current_sector->wall_head,
-			editor->wall_tmp.start, editor->wall_tmp.end, 0x00ABFF);
+			editor->wall_tmp.start, editor->wall_tmp.end, editor->opt_menu.activ_tex);
 		editor->wall_tmp.start.x = editor->wall_tmp.end.x;
 		editor->wall_tmp.start.y = editor->wall_tmp.end.y;
 		check_finished_sect(editor);
@@ -97,10 +97,10 @@ void	set_border_color(t_editor *editor, t_vec mouse_pos)
 	{
 		if (is_mouse_collide(mouse_pos, editor->opt_menu.text_rect[i]))
 		{
-			if (editor->opt_menu.activ_text != i)
-				editor->opt_menu.bord_color_text[editor->opt_menu.activ_text] = COLOR_NORMAL;
+			if (editor->opt_menu.activ_tex != i)
+				editor->opt_menu.bord_color_text[editor->opt_menu.activ_tex] = COLOR_NORMAL;
 			editor->opt_menu.bord_color_text[i] = COLOR_PRESSED;
-			editor->opt_menu.activ_text = i;
+			editor->opt_menu.activ_tex = i;
 		}
 		i++;
 	}
@@ -130,9 +130,9 @@ void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
 		}
 		while (i < NBTEXTURES)
 		{
-			if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.text_rect[i]) && i != editor->opt_menu.activ_text)
+			if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.text_rect[i]) && i != editor->opt_menu.activ_tex)
 				editor->opt_menu.bord_color_text[i] = COLOR_HOVER;
-			else if (!is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.text_rect[i]) && i != editor->opt_menu.activ_text)
+			else if (!is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.text_rect[i]) && i != editor->opt_menu.activ_tex)
 				editor->opt_menu.bord_color_text[i] = COLOR_NORMAL;
 			i++;
 		}

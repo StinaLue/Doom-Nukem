@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/17 17:14:44 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/20 14:03:05 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,7 +215,7 @@ typedef struct				s_options_menu
 	SDL_Color				text_color;
 	int						bord_color_text[NBTEXTURES];
 	int						bord_color_h[NBHEIGHTS];
-	int						activ_text;
+	int						activ_tex;
 	int						activ_h;
 }							t_options_menu;
 
@@ -533,7 +533,7 @@ void						free_sector_list(t_sector_node **sector_list);
 
 t_wall_node					*add_wall_node(t_wall_node **wall_head, const t_wall_node *node);
 
-t_wall_node					*create_wall_node(t_wall_node **wall_head, t_vecdb a, t_vecdb b, int color);
+t_wall_node					*create_wall_node(t_wall_node **wall_head, t_vecdb a, t_vecdb b, int tex_index);
 
 void						free_wall_list(t_wall_node **wall_list);
 
