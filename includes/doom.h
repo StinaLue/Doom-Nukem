@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/16 16:50:49 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/20 23:37:55 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,8 @@ typedef struct				s_gamesurfs
 	SDL_Surface				*weapons;
 
 	SDL_Rect				katana[4];
+	int						current_frame;
+	int						anim_timer;
 }							t_gamesurfs;
 
 typedef struct				s_data
@@ -177,6 +179,7 @@ typedef struct	s_game
 	t_gamesurfs				surfs;
 	t_data					data;
 	t_player				player;
+	int						anim;
 }							t_game;
 
 typedef struct				s_instruct_menu

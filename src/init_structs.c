@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/16 16:36:05 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/21 00:39:58 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ int	init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain)
 	gamesurfs->katana[1] = create_sdlrect(236, 110, 147, 137);
 	gamesurfs->katana[2] = create_sdlrect(391, 45, 232, 202);
 	gamesurfs->katana[3] = create_sdlrect(628, 77, 152, 172);
+	gamesurfs->anim_timer = 0;
+	gamesurfs->current_frame = 0;
 	return (0);
 }
 
