@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/17 17:13:07 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/20 14:22:14 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int		init_doom(t_doom *doom)
 	//degeulasse PLEASE REMOVE ASAP
 	doom->game.player.sector = doom->map.sector_head->next;
 
-	doom->editor.opt_menu.wall_textures = doom->wall_textures;
+	doom->editor.wall_textures = doom->wall_textures;
 	if (init_editor(&doom->editor, &doom->sdlmain) == 1)
 		return (1);
 	return (0);
@@ -139,60 +139,60 @@ int		init_map(t_map *map)
 	t_vecdb vec22 = {0, 60};
 
 	current_sector = add_sector_node(&map->sector_head);
-	create_wall_node(&current_sector->wall_head, vec1, vec2, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec2, vec3, 0xffbb00);
-	create_wall_node(&current_sector->wall_head, vec3, vec4, 0x00ff00);
-	create_wall_node(&current_sector->wall_head, vec4, vec1, 0x00ff00);
+	create_wall_node(&current_sector->wall_head, vec1, vec2, 0);
+	create_wall_node(&current_sector->wall_head, vec2, vec3, 1);
+	create_wall_node(&current_sector->wall_head, vec3, vec4, 1);
+	create_wall_node(&current_sector->wall_head, vec4, vec1, 1);
 
 	current_sector = add_sector_node(&map->sector_head);
-	create_wall_node(&current_sector->wall_head, vec2, vec1, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec1, vec5, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec5, vec6, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec6, vec7, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec7, vec8, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec8, vec9, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec9, vec10, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec10, vec2, 0xff0000);
+	create_wall_node(&current_sector->wall_head, vec2, vec1, 2);
+	create_wall_node(&current_sector->wall_head, vec1, vec5, 2);
+	create_wall_node(&current_sector->wall_head, vec5, vec6, 2);
+	create_wall_node(&current_sector->wall_head, vec6, vec7, 2);
+	create_wall_node(&current_sector->wall_head, vec7, vec8, 2);
+	create_wall_node(&current_sector->wall_head, vec8, vec9, 2);
+	create_wall_node(&current_sector->wall_head, vec9, vec10, 3);
+	create_wall_node(&current_sector->wall_head, vec10, vec2, 3);
 
 	current_sector = add_sector_node(&map->sector_head);
-	create_wall_node(&current_sector->wall_head, vec7, vec11, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec11, vec12, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec12, vec13, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec13, vec14, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec14, vec7, 0xff0000);
+	create_wall_node(&current_sector->wall_head, vec7, vec11, 1);
+	create_wall_node(&current_sector->wall_head, vec11, vec12, 3);
+	create_wall_node(&current_sector->wall_head, vec12, vec13, 4);
+	create_wall_node(&current_sector->wall_head, vec13, vec14, 5);
+	create_wall_node(&current_sector->wall_head, vec14, vec7, 3);
 
 	current_sector = add_sector_node(&map->sector_head);
-	create_wall_node(&current_sector->wall_head, vec7, vec14, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec14, vec15, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec15, vec8, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec8, vec7, 0xff0000);
+	create_wall_node(&current_sector->wall_head, vec7, vec14, 4);
+	create_wall_node(&current_sector->wall_head, vec14, vec15,4);
+	create_wall_node(&current_sector->wall_head, vec15, vec8, 4);
+	create_wall_node(&current_sector->wall_head, vec8, vec7, 5);
 
 	current_sector = add_sector_node(&map->sector_head);
-	create_wall_node(&current_sector->wall_head, vec12, vec16, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec16, vec17, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec17, vec13, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec13, vec12, 0xff0000);
+	create_wall_node(&current_sector->wall_head, vec12, vec16, 3);
+	create_wall_node(&current_sector->wall_head, vec16, vec17, 3);
+	create_wall_node(&current_sector->wall_head, vec17, vec13, 3);
+	create_wall_node(&current_sector->wall_head, vec13, vec12, 3);
 
 	current_sector = add_sector_node(&map->sector_head);
-	create_wall_node(&current_sector->wall_head, vec8, vec15, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec15, vec17, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec17, vec16, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec16, vec18, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec18, vec8, 0xff0000);
+	create_wall_node(&current_sector->wall_head, vec8, vec15, 4);
+	create_wall_node(&current_sector->wall_head, vec15, vec17, 4);
+	create_wall_node(&current_sector->wall_head, vec17, vec16, 4);
+	create_wall_node(&current_sector->wall_head, vec16, vec18, 4);
+	create_wall_node(&current_sector->wall_head, vec18, vec8, 4);
 
 	current_sector = add_sector_node(&map->sector_head);
-	create_wall_node(&current_sector->wall_head, vec16, vec19, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec19, vec20, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec20, vec21, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec21, vec18, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec18, vec16, 0xff0000);
+	create_wall_node(&current_sector->wall_head, vec16, vec19, 6);
+	create_wall_node(&current_sector->wall_head, vec19, vec20, 6);
+	create_wall_node(&current_sector->wall_head, vec20, vec21, 6);
+	create_wall_node(&current_sector->wall_head, vec21, vec18, 6);
+	create_wall_node(&current_sector->wall_head, vec18, vec16, 6);
 
 	current_sector = add_sector_node(&map->sector_head);
-	create_wall_node(&current_sector->wall_head, vec11, vec22, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec22, vec20, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec20, vec19, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec19, vec12, 0xff0000);
-	create_wall_node(&current_sector->wall_head, vec12, vec11, 0xff0000);
+	create_wall_node(&current_sector->wall_head, vec11, vec22, 4);
+	create_wall_node(&current_sector->wall_head, vec22, vec20, 4);
+	create_wall_node(&current_sector->wall_head, vec20, vec19, 4);
+	create_wall_node(&current_sector->wall_head, vec19, vec12, 4);
+	create_wall_node(&current_sector->wall_head, vec12, vec11, 4);
 
 	current_sector = map->sector_head;
 	current_sector->wall_head->neighbor_sector = current_sector->next;

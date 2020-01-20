@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/17 11:59:48 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/20 14:03:05 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,23 +54,23 @@ void	init_colors(t_editor *editor)
 
 	i = 0;
 	editor->color_change = 0;
-	editor->opt_menu.activ_text = 0;
+	editor->opt_menu.activ_tex = 0;
 	editor->opt_menu.activ_h = 1;
 	i = 0;
-	while (i < 12)
+	while (i < NBTEXTURES)
 	{
-		editor->opt_menu.border_color_text[i] = 0xff0000;
+		editor->opt_menu.bord_color_text[i] = COLOR_NORMAL;
 		i++;
 	}
 	i = 0;
-	while (i < 7)
+	while (i < NBHEIGHTS)
 	{
-		editor->opt_menu.bord_color_h[i] = 0xff0000;
+		editor->opt_menu.bord_color_h[i] = COLOR_NORMAL;
 		i++;
 	}
-	editor->opt_menu.border_color_text[0] = 0x00ffff;
-	editor->opt_menu.bord_color_h[1] = 0x00ffff;
-	editor->opt_menu.bord_color_h[4] = 0x00ffff;
+	editor->opt_menu.bord_color_text[0] = COLOR_PRESSED;
+	editor->opt_menu.bord_color_h[1] = COLOR_PRESSED;
+	editor->opt_menu.bord_color_h[4] = COLOR_PRESSED;
 }
 
 int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
@@ -98,30 +98,31 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	return (0);
 }
 
-void	fill_area2(SDL_Surface *surf, int x, int y, int j)
+void	fill_area2(SDL_Surface *surf, t_vec wall, int j, int color)
 {
-	int color;
-
-	color = 0XB11226;
-	fill_pix(surf, x + j, y, color);
-	fill_pix(surf, x, y + j, color);
-	fill_pix(surf, x + j, y - j, color);
-	fill_pix(surf, x + j, y + j, color);
+	fill_pix(surf, wall.x + j, wall.y, color);
+	fill_pix(surf, wall.x, wall.y + j, color);
+	fill_pix(surf, wall.x + j, wall.y - j, color);
+	fill_pix(surf, wall.x + j, wall.y + j, color);
 }
 
 void	fill_area(SDL_Surface *surf, t_wall_node *wall, t_editor *editor)
 {
 	int j;
-	int wall_x;
-	int wall_y;
+	t_vec tmp_wall;
+	int	color;
 
+	if (editor->start_sector.x == wall->start.x)
+		color = 0X00FF00;
+	else
+		color = 0XB11226;
 	j = 0;
-	wall_x = wall->end.x * editor->offset;
-	wall_y = wall->end.y * editor->offset;
+	tmp_wall.x = wall->start.x * editor->offset;
+	tmp_wall.y = wall->start.y * editor->offset;
 	while (j < 4)
 	{
-		fill_area2(surf, wall_x, wall_y, j);
-		fill_area2(surf, wall_x, wall_y, -j);
+		fill_area2(surf, tmp_wall, j, color);
+		fill_area2(surf, tmp_wall, -j, color);
 		j++;
 	}
 }
@@ -137,11 +138,9 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 		return ;
 	tmp_sect = editor->edit_map.sector_head;
 	if (editor->start_sector_reached == 0)
-	{
 		draw_line(mult_vec(sdlmain->mouse_pos, editor->offset),
 			mult_vec(vecdb_to_vec(editor->wall_tmp.end), editor->offset), editor_surf, 0x00ABFF);
-		fill_area(editor_surf, &editor->wall_tmp, editor);
-	}
+	fill_area(editor_surf, &editor->wall_tmp, editor);
 	while (tmp_sect != NULL)
 	{
 		tmp_wall = tmp_sect->wall_head;
@@ -158,7 +157,6 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 		tmp_sect = tmp_sect->next;
 	}
 }
-
 
 void	draw_editor(SDL_Surface *editor_surf,
 					t_editor *editor, t_sdlmain *sdlmain)
@@ -198,6 +196,12 @@ int	is_pos_wall(t_wall_node *wall)
 	return (0);
 }
 
+void	chosen_texture(t_editor *editor, t_vec mouse)
+{
+	(void)editor;
+	//create rectangle
+	assign_sdlrect(&editor->mouse_rect, create_vec(mouse.x - 15, mouse.y - 15), create_vec(15, 15));
+}
 
 int	editor_loop(t_doom *doom)
 {
@@ -207,7 +211,7 @@ int	editor_loop(t_doom *doom)
 
 	editor = &(doom->editor);
 	sdlmain = &(doom->sdlmain);
-	SDL_WarpMouseInWindow(sdlmain->win, sdlmain->win_surf->w / 2, sdlmain->win_surf->h / 2);
+	//SDL_WarpMouseInWindow(sdlmain->win, sdlmain->win_surf->w / 2, sdlmain->win_surf->h / 2);
 	if (editor->editor_surf->w < editor->editor_surf->h)
 		editor->offset = editor->editor_surf->w / NBPOINTSROW;
 	else
@@ -218,17 +222,24 @@ int	editor_loop(t_doom *doom)
 			if (editor_events(doom) != 0)
 				break ;
 		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
+		// add little square here? if in each surface
+		chosen_texture(editor, sdlmain->mouse_pos);
 		if (NBPOINTSROW * editor->offset < editor->editor_surf->h)
-			offset_border = editor->editor_surf->h - NBPOINTSROW * editor->offset;
-        sdlmain->mouse_pos.x = round_num(sdlmain->mouse_pos.x, editor->offset);
-        sdlmain->mouse_pos.y = round_num(sdlmain->mouse_pos.y - offset_border + editor->offset, editor->offset);
-		ft_bzero(editor->editor_surf->pixels, editor->editor_surf->h * editor->editor_surf->pitch);
-		ft_bzero(editor->options_surf->pixels, editor->options_surf->h * editor->options_surf->pitch);
-		ft_bzero(editor->instruct_surf->pixels, editor->instruct_surf->h * editor->instruct_surf->pitch);
+			offset_border = editor->editor_surf->h \
+						- NBPOINTSROW * editor->offset;
+		sdlmain->mouse_pos.x = round_num(sdlmain->mouse_pos.x, editor->offset);
+		sdlmain->mouse_pos.y = round_num(sdlmain->mouse_pos.y - offset_border \
+											+ editor->offset, editor->offset);
+		ft_bzero(editor->editor_surf->pixels, \
+					editor->editor_surf->h * editor->editor_surf->pitch);
+		ft_bzero(editor->options_surf->pixels, \
+					editor->options_surf->h * editor->options_surf->pitch);
+		ft_bzero(editor->instr_surf->pixels, \
+					editor->instr_surf->h * editor->instr_surf->pitch);
 		draw_editor(editor->editor_surf, editor, sdlmain);
 		draw_border(editor->editor_surf, 0xB12211);
 		draw_border(editor->options_surf, 0xB12211);
-		draw_border(editor->instruct_surf, 0xB12211);
+		draw_border(editor->instr_surf, 0xB12211);
 		draw_lines(editor, editor->editor_surf, sdlmain);
 		if (blit_editor(editor, sdlmain) != 0)
 			return (1);

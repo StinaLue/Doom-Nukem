@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/17 11:55:17 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/20 14:03:05 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	event_editor_surf(t_sdlmain *sdlmain, t_editor *editor)
 		editor->wall_tmp.end.y = sdlmain->mouse_pos.y;
 		editor->current_sector = get_last_sector(editor->edit_map.sector_head);
 		create_wall_node(&editor->current_sector->wall_head,
-			editor->wall_tmp.start, editor->wall_tmp.end, 0x00ABFF);
+			editor->wall_tmp.start, editor->wall_tmp.end, editor->opt_menu.activ_tex);
 		editor->wall_tmp.start.x = editor->wall_tmp.end.x;
 		editor->wall_tmp.start.y = editor->wall_tmp.end.y;
 		check_finished_sect(editor);
@@ -68,22 +68,22 @@ void	special_case_height(t_editor *editor)
 	if (editor->opt_menu.activ_h == 1 \
 		|| editor->opt_menu.activ_h == 4)
 	{
-		editor->opt_menu.bord_color_h[1] = 0x00ffff;
-		editor->opt_menu.bord_color_h[4] = 0x00ffff;
+		editor->opt_menu.bord_color_h[1] = COLOR_PRESSED;
+		editor->opt_menu.bord_color_h[4] = COLOR_PRESSED;
 		editor->opt_menu.activ_h = 1;
 	}
 	if (editor->opt_menu.activ_h == 2 \
 		|| editor->opt_menu.activ_h == 5)
 	{
-		editor->opt_menu.bord_color_h[2] = 0x00ffff;
-		editor->opt_menu.bord_color_h[5] = 0x00ffff;
+		editor->opt_menu.bord_color_h[2] = COLOR_PRESSED;
+		editor->opt_menu.bord_color_h[5] = COLOR_PRESSED;
 		editor->opt_menu.activ_h = 2;
 	}
 	if (editor->opt_menu.activ_h == 3 \
 		|| editor->opt_menu.activ_h == 6)
 	{
-		editor->opt_menu.bord_color_h[3] = 0x00ffff;
-		editor->opt_menu.bord_color_h[6] = 0x00ffff;
+		editor->opt_menu.bord_color_h[3] = COLOR_PRESSED;
+		editor->opt_menu.bord_color_h[6] = COLOR_PRESSED;
 		editor->opt_menu.activ_h = 3;
 	}
 }
@@ -93,27 +93,61 @@ void	set_border_color(t_editor *editor, t_vec mouse_pos)
 	int i;
 
 	i = 0;
-	mouse_pos.x -= editor->editor_rect.w;
-	while (i < 12)
+	while (i < NBTEXTURES)
 	{
 		if (is_mouse_collide(mouse_pos, editor->opt_menu.text_rect[i]))
 		{
-			if (editor->opt_menu.activ_text != i)
-				editor->opt_menu.border_color_text[editor->opt_menu.activ_text] = 0xff0000;
-			editor->opt_menu.border_color_text[i] = 0x00ffff;
-			editor->opt_menu.activ_text = i;
+			if (editor->opt_menu.activ_tex != i)
+				editor->opt_menu.bord_color_text[editor->opt_menu.activ_tex] = COLOR_NORMAL;
+			editor->opt_menu.bord_color_text[i] = COLOR_PRESSED;
+			editor->opt_menu.activ_tex = i;
 		}
 		i++;
 	}
 	i = 0;
-	while (i < 7)
+	while (i < NBHEIGHTS)
 	{
-		editor->opt_menu.bord_color_h[i] = 0xff0000;
+		editor->opt_menu.bord_color_h[i] = COLOR_NORMAL;
 		if (is_mouse_collide(mouse_pos, editor->opt_menu.h_rect[i]))
 			editor->opt_menu.activ_h = i;
 		i++;
 	}
-	editor->opt_menu.bord_color_h[editor->opt_menu.activ_h] = 0x00ffff;
+	editor->opt_menu.bord_color_h[editor->opt_menu.activ_h] = COLOR_PRESSED;
+}
+
+void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
+{
+	int i;
+
+	i = 0;
+	if (is_mouse_collide(sdlmain->mouse_pos, editor->options_rect))
+	{
+		sdlmain->mouse_pos.x -= editor->editor_rect.w;
+		if (sdlmain->event.button.button == SDL_BUTTON_LEFT)
+		{
+			set_border_color(editor, sdlmain->mouse_pos);
+			special_case_height(editor);
+		}
+		while (i < NBTEXTURES)
+		{
+			if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.text_rect[i]) && i != editor->opt_menu.activ_tex)
+				editor->opt_menu.bord_color_text[i] = COLOR_HOVER;
+			else if (!is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.text_rect[i]) && i != editor->opt_menu.activ_tex)
+				editor->opt_menu.bord_color_text[i] = COLOR_NORMAL;
+			i++;
+		}
+		i = 0;
+		while (i < NBHEIGHTS)
+		{
+			if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect[i]) && i != editor->opt_menu.activ_h)
+				editor->opt_menu.bord_color_h[i] = COLOR_HOVER;
+			else if (!is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect[i]) && i != editor->opt_menu.activ_h)
+				editor->opt_menu.bord_color_h[i] = COLOR_NORMAL;
+			special_case_height(editor);
+			i++;
+		}
+	}
+
 }
 
 int	editor_events(t_doom *doom)
@@ -135,20 +169,15 @@ int	editor_events(t_doom *doom)
 			// start has to be set to last end
 		}
 	}
-	if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
+	if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN \
+		|| sdlmain->event.type == SDL_MOUSEMOTION)
 	{
 		if (sdlmain->event.button.button == SDL_BUTTON_LEFT \
-				&& sdlmain->mouse_pos.x <= NBPOINTSROW)
-		{
+				&& sdlmain->mouse_pos.x <= NBPOINTSROW \
+				&& sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
 			event_editor_surf(sdlmain, editor);
-		}
 		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
-		if (sdlmain->event.button.button == SDL_BUTTON_LEFT \
-			&& is_mouse_collide(sdlmain->mouse_pos, editor->options_rect))
-		{
-			set_border_color(editor, sdlmain->mouse_pos);
-			special_case_height(editor);
-		}
+		mouse_in_options(editor, sdlmain);
 	}
 	if (doom->state != EDITOR_STATE)
 		return (1);
