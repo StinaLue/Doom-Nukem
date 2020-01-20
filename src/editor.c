@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/20 14:03:05 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/20 20:04:07 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,36 +93,36 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	editor->wall_tmp.start.y = -1;
 	editor->wall_tmp.end.x = -1;
 	editor->wall_tmp.end.y = -1;
+	editor->wall_tmp.wall_type = 0;
 	editor->start_sector_reached = 1;
 	init_colors(editor);
 	return (0);
 }
 
-void	fill_area2(SDL_Surface *surf, t_vec wall, int j, int color)
-{
-	fill_pix(surf, wall.x + j, wall.y, color);
-	fill_pix(surf, wall.x, wall.y + j, color);
-	fill_pix(surf, wall.x + j, wall.y - j, color);
-	fill_pix(surf, wall.x + j, wall.y + j, color);
-}
-
 void	fill_area(SDL_Surface *surf, t_wall_node *wall, t_editor *editor)
 {
-	int j;
-	t_vec tmp_wall;
-	int	color;
+	t_vec	tmp_wall;
+	int		j;
+	int		color;
+	int		i;
 
-	if (editor->start_sector.x == wall->start.x)
-		color = 0X00FF00;
-	else
-		color = 0XB11226;
+	color = (editor->start_sector.x == wall->start.x \
+			&& editor->start_sector.y == wall->start.y) ? 0X00FF00 : 0XB11226;
 	j = 0;
 	tmp_wall.x = wall->start.x * editor->offset;
 	tmp_wall.y = wall->start.y * editor->offset;
 	while (j < 4)
 	{
-		fill_area2(surf, tmp_wall, j, color);
-		fill_area2(surf, tmp_wall, -j, color);
+		i = 0;
+		while (i < 2)
+		{
+			fill_pix(surf, tmp_wall.x + j, tmp_wall.y, color);
+			fill_pix(surf, tmp_wall.x, tmp_wall.y + j, color);
+			fill_pix(surf, tmp_wall.x + j, tmp_wall.y - j, color);
+			fill_pix(surf, tmp_wall.x + j, tmp_wall.y + j, color);
+			j = -j;
+			i++;
+		}
 		j++;
 	}
 }
@@ -139,7 +139,7 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 	tmp_sect = editor->edit_map.sector_head;
 	if (editor->start_sector_reached == 0)
 		draw_line(mult_vec(sdlmain->mouse_pos, editor->offset),
-			mult_vec(vecdb_to_vec(editor->wall_tmp.end), editor->offset), editor_surf, 0x00ABFF);
+			mult_vec(vecdb_to_vec(editor->wall_tmp.end), editor->offset), editor_surf, editor->wall_tmp.type_color);
 	fill_area(editor_surf, &editor->wall_tmp, editor);
 	while (tmp_sect != NULL)
 	{
@@ -147,10 +147,8 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 		while (tmp_wall != NULL)
 		{
 			fill_area(editor_surf, tmp_wall, editor);
-			if (i % 2 == 0)
-				draw_line(mult_vec(vecdb_to_vec(tmp_wall->end), editor->offset), mult_vec(vecdb_to_vec(tmp_wall->start), editor->offset), editor_surf, 0x00ABFF);
-			else
-				draw_line(mult_vec(vecdb_to_vec(tmp_wall->end), editor->offset), mult_vec(vecdb_to_vec(tmp_wall->start), editor->offset), editor_surf, 0xABABFF);
+			draw_line(mult_vec(vecdb_to_vec(tmp_wall->end), editor->offset),
+				mult_vec(vecdb_to_vec(tmp_wall->start), editor->offset), editor_surf, tmp_wall->type_color);
 			i++;
 			tmp_wall = tmp_wall->next;
 		}
@@ -196,12 +194,6 @@ int	is_pos_wall(t_wall_node *wall)
 	return (0);
 }
 
-void	chosen_texture(t_editor *editor, t_vec mouse)
-{
-	(void)editor;
-	//create rectangle
-	assign_sdlrect(&editor->mouse_rect, create_vec(mouse.x - 15, mouse.y - 15), create_vec(15, 15));
-}
 
 int	editor_loop(t_doom *doom)
 {
@@ -222,8 +214,7 @@ int	editor_loop(t_doom *doom)
 			if (editor_events(doom) != 0)
 				break ;
 		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
-		// add little square here? if in each surface
-		chosen_texture(editor, sdlmain->mouse_pos);
+		assign_sdlrect(&editor->mouse_rect, create_vec(sdlmain->mouse_pos.x - 15, sdlmain->mouse_pos.y - 15), create_vec(15, 15));
 		if (NBPOINTSROW * editor->offset < editor->editor_surf->h)
 			offset_border = editor->editor_surf->h \
 						- NBPOINTSROW * editor->offset;

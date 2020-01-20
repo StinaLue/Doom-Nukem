@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/20 14:03:05 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/20 20:09:05 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,15 +85,6 @@ int blit_height(t_editor *editor)
 	return (0);
 }
 
-/* int highlight_texture(t_editor *editor)
-{
-	if (editor->current_option == 0)
-	{
-		if (highlight_text(&sdlmain->font, &menu->options[0], &menu->text_color, "/ editor \\") == -1)
-			return (1);
-	}
-	return (0);
-} */
 
 int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 {
@@ -105,8 +96,6 @@ int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 		return (1);
 	if (blit_height(editor) != 0)
 		return (1);
-	//if (highlight_texture(editor, sdlmain) != 0)
-	//	return (error_return("Error in highlight selection function\n", NULL));
 	if ((SDL_BlitScaled(editor->editor_surf, NULL,
 			sdlmain->win_surf, &editor->editor_rect)) < 0)
 		return (error_return("SDL_BlitScaled error = %{r}s\n",

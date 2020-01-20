@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:25:24 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/20 14:01:29 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/20 19:54:19 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,11 @@ t_wall_node	*copy_wall_node(t_wall_node **wall_head, const t_wall_node *node)
 	new_node->start.x = node->start.x;
 	new_node->start.y = node->start.y;
 	new_node->end.x = node->end.x;
-	new_node->end.x = node->end.y;
+	new_node->end.y = node->end.y;
 	new_node->sector_index = node->sector_index;
 	new_node->neighbor_sector = node->neighbor_sector;
 	new_node->next = NULL;
+	new_node->type_color = node->type_color;
 	return (new_node);
 }
 

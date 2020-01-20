@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/20 14:28:11 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/20 20:08:57 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ typedef struct				s_wall_node
 	int						color;
 	int						tex_index;
 	int						sector_index;
+	int 					wall_type; // for editor
+	int	 					type_color;
 	struct s_sector_node	*neighbor_sector;
 	double					length;
 }							t_wall_node;
@@ -246,7 +248,6 @@ typedef struct				s_editor
 	int						offset;
 	int						start_sector_reached;
 	int						color_change;
-	int						current_option; // used?
 	t_vec					grid_values[NBPOINTS];
 	t_vec					start_sector;
 	t_wall_node				wall_tmp;
@@ -544,6 +545,8 @@ t_wall_node					*delete_last_wall(t_wall_node **wall_list);
 t_wall_node					*get_last_wall_node(t_wall_node *wall_list);
 
 t_wall_node					*undo_wall(t_sector_node *node);
+
+t_wall_node					*copy_wall_node(t_wall_node **wall_head, const t_wall_node *node);
 
 /*
 ** DEBUG FUNCTIONS

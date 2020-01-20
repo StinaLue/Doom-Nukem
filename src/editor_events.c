@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/20 14:03:05 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/20 20:08:34 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,9 @@ void	event_editor_surf(t_sdlmain *sdlmain, t_editor *editor)
 		editor->wall_tmp.end.x = sdlmain->mouse_pos.x;
 		editor->wall_tmp.end.y = sdlmain->mouse_pos.y;
 		editor->current_sector = get_last_sector(editor->edit_map.sector_head);
-		create_wall_node(&editor->current_sector->wall_head,
-			editor->wall_tmp.start, editor->wall_tmp.end, editor->opt_menu.activ_tex);
+		copy_wall_node(&editor->current_sector->wall_head, &editor->wall_tmp);
+		//create_wall_node(&editor->current_sector->wall_head,
+		//	editor->wall_tmp.start, editor->wall_tmp.end, editor->opt_menu.activ_tex);
 		editor->wall_tmp.start.x = editor->wall_tmp.end.x;
 		editor->wall_tmp.start.y = editor->wall_tmp.end.y;
 		check_finished_sect(editor);
@@ -147,7 +148,6 @@ void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
 			i++;
 		}
 	}
-
 }
 
 int	editor_events(t_doom *doom)
@@ -167,6 +167,19 @@ int	editor_events(t_doom *doom)
 		{
 			undo_wall(editor->edit_map.sector_head);
 			// start has to be set to last end
+		}
+		if (sdlmain->event.key.keysym.sym == SDLK_t && sdlmain->event.key.repeat == 0)
+		{
+			if (editor->wall_tmp.wall_type == 1)
+			{
+				editor->wall_tmp.wall_type = 0;
+				editor->wall_tmp.type_color = 0xFF0000;
+			}
+			else
+			{
+				editor->wall_tmp.wall_type = 1;
+				editor->wall_tmp.type_color = 0xFF00FF;
+			}
 		}
 	}
 	if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN \
