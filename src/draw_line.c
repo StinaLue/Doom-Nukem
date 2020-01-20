@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 16:06:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/20 14:24:10 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/20 18:00:12 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	draw_line(t_vec a, t_vec b, SDL_Surface *surf, int color)
 	steps = ft_absolute(get_steps(&deltax, &deltay));
 	pos.x = a.x + 0.5;
 	pos.y = a.y + 0.5;
-	while (steps > 0)
+	while (steps >= 0)
 	{
 		if (pos.x > 0 && pos.y > 0 && pos.x < surf->w && pos.y < surf->h)
 			fill_pix(surf, (int)pos.x, (int)pos.y, color);
