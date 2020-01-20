@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   perspective_view.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/20 14:12:40 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/20 18:04:37 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,6 +248,16 @@ void	draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view 
 
 	current_wall = sector->wall_head;
 
+	if (player->helper)
+	{
+		new_view = view;
+		new_view.left.x += surf->w / 2 + 0.5;
+		new_view.left.y += 0.5;
+		new_view.right.x += surf->w / 2;
+		draw_line(create_vec(surf->w / 2, 0), vecdb_to_vec(new_view.left), surf, 0x444444);
+		draw_line(create_vec(surf->w / 2, 0), vecdb_to_vec(new_view.right), surf, 0x333333);
+	}
+
 	while (current_wall != NULL)
 	{
 		init_rotate_wall(&wall, current_wall, player);
@@ -267,6 +277,13 @@ void	draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view 
 				//display_wall.start_pos = 1 - (tmp_wall.y - wall.start.x) / (tmp_wall.y - tmp_wall.x);
 				//display_wall.end_pos = (wall.end.x - tmp_wall.x) / (tmp_wall.y - tmp_wall.x);
 				draw_3dwall(display_wall, surf, current_wall, wall_textures);
+
+				if (player->helper)
+				{
+					wall.start.x += surf->w / 2;
+					wall.end.x += surf->w / 2;
+					draw_line(vecdb_to_vec(wall.start), vecdb_to_vec(wall.end), surf, 0xFF0000);
+				}
 			}
 		}
 		current_wall = current_wall->next;
