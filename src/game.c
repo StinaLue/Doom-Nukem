@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/21 00:40:51 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/21 13:58:56 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)
 			gamesurfs->anim_timer = SDL_GetTicks();
 		if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->katana[gamesurfs->current_frame], dest, NULL) != 0)
 			return (error_return("SDL_BlitScaled error: %s\n", SDL_GetError()));
-		if ((SDL_GetTicks() - gamesurfs->anim_timer) >= 100)
+		if ((SDL_GetTicks() - gamesurfs->anim_timer) >= 150)
 		{
 			gamesurfs->current_frame++;
 			gamesurfs->anim_timer = SDL_GetTicks();
@@ -35,7 +35,7 @@ int blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)
 	}
 	else
 	{
-		if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->katana[2], dest, NULL) != 0)
+		if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->katana[0], dest, NULL) != 0)
 			return (error_return("SDL_BlitScaled error: %s\n", SDL_GetError()));
 		gamesurfs->anim_timer = 0;
 	}
@@ -43,13 +43,11 @@ int blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)
 	return (0);
 }
 
-static int (*p[4])(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim);
-
-int	blit_weapon(t_gamesurfs *gamesurfs, SDL_Surface *dest, int weapon, int *anim)
+int	blit_weapon(t_game *game, SDL_Surface *dest, int weapon)
 {
 	int return_val;
 
-	return_val = (*p[weapon])(gamesurfs, dest, anim);
+	return_val = (*game->weapon_anim[weapon])(&game->surfs, dest, &game->anim);
 	return (return_val);
 }
 
@@ -65,7 +63,6 @@ int game_loop(t_doom *doom)
 
 	SDL_WarpMouseInWindow(sdlmain->win, sdlmain->win_surf->w / 2, sdlmain->win_surf->h / 2);
 	startclock = SDL_GetTicks();
-	p[0] = blit_katana;
 	while (doom->state == GAME_STATE)
 	{
 		ft_bzero(game->surfs.perspective_view->pixels, game->surfs.perspective_view->h * game->surfs.perspective_view->pitch);
@@ -78,7 +75,7 @@ int game_loop(t_doom *doom)
 		else
 			game->surfs.perspective_view->userdata = "nocolor";
 		draw_perspective_view(game->surfs.perspective_view, &game->player, doom->wall_textures);
-		if (blit_weapon(&game->surfs, game->surfs.perspective_view, 0, &game->anim) != 0)
+		if (blit_weapon(game, game->surfs.perspective_view, 0) != 0)
 			return (error_return("Blit weapon error\n", NULL));
 		//if ((SDL_BlitScaled(game->surfs.weapons, &game->surfs.katana[(int)((float)SDL_GetTicks() / 400) % 4], game->surfs.perspective_view, NULL)) != 0)
 		//	printf("%s\n", SDL_GetError());

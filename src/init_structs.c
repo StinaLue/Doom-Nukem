@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/21 00:39:58 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/21 13:49:49 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,10 @@ int	init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain)
 	//if ((gamesurfs->weapons = load_bmp("assets/shadow.bmp")) == NULL)
 	if ((gamesurfs->weapons = load_opti_bmp("assets/shadow.bmp", sdlmain->win_surf, 0x0080FF)) == NULL)
 		return (error_return("load weapon bmp surf error\n", NULL));
-	gamesurfs->katana[0] = create_sdlrect(9, 113, 226, 135);
-	gamesurfs->katana[1] = create_sdlrect(236, 110, 147, 137);
-	gamesurfs->katana[2] = create_sdlrect(391, 45, 232, 202);
-	gamesurfs->katana[3] = create_sdlrect(628, 77, 152, 172);
+	gamesurfs->katana[0] = create_sdlrect(9, 78, 226, 169);
+	gamesurfs->katana[1] = create_sdlrect(236, 76, 148, 169);
+	gamesurfs->katana[2] = create_sdlrect(391, 47, 239, 200);
+	gamesurfs->katana[3] = create_sdlrect(631, 25, 186, 223);
 	gamesurfs->anim_timer = 0;
 	gamesurfs->current_frame = 0;
 	return (0);
