@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/17 16:30:47 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/21 17:25:47 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int		free_game(t_game *game)
 	game->surfs.perspective_view = NULL;
 	SDL_FreeSurface(game->surfs.weapons);
 	game->surfs.weapons = NULL;
+	SDL_FreeSurface(game->surfs.hud_faces_surf);
+	game->surfs.hud_faces_surf = NULL;
 	return (EXIT_FAILURE);
 }
 

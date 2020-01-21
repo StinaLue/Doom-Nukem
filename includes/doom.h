@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/21 14:03:35 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/21 17:20:03 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@
 # define ROT_MAP_SHOW 1//0x00000001
 # define FIX_MAP_SHOW 2//0x00000010
 # define COLORFLAG 4//0x00000100
+# define HEALTH_STATUS 8//0x00001000
 
 /*
 ** MENU OPTIONS
@@ -145,10 +146,13 @@ typedef struct				s_gamesurfs
 	SDL_Surface				*rot_mmap;
 	SDL_Surface				*perspective_view;
 	SDL_Surface				*weapons;
+	SDL_Surface				*hud_faces_surf;
 
 	SDL_Rect				katana[4];
+	SDL_Rect				hud_faces_rect;
 	int						current_frame;
 	int						anim_timer;
+	int						hud_timer;
 }							t_gamesurfs;
 
 typedef struct				s_data
@@ -180,6 +184,7 @@ typedef struct				s_player
 	t_vecdb					fov;
 	double					true_fov;
 	int						helper;
+	int						health;
 }							t_player;
 
 typedef struct				s_game
@@ -299,7 +304,7 @@ void						init_rotate_wall(t_wall *new_wall, const t_wall_node *current_wall, co
 
 int							is_in_map(t_vecdb *player);
 
-SDL_Surface					*load_opti_bmp(char *file, SDL_Surface *win_surf, Uint32 colorkey);
+SDL_Surface					*load_opti_bmp(char *file, SDL_Surface *dst_surf, Uint32 colorkey);
 /*
 ** VECTOR FUNCTIONS
 */

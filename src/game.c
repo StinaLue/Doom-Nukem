@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/21 14:04:38 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/21 18:54:41 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,51 @@ int	blit_weapon(t_game *game, SDL_Surface *dest, int weapon)
 
 	return_val = (*game->weapon_anim[weapon])(&game->surfs, dest, &game->anim);
 	return (return_val);
+}
+
+int	player_hurt_anim(int health, SDL_Rect *surf_rect)
+{
+	int y_anim;
+
+	y_anim = 0;
+	if (health > 80)
+		y_anim = 0;
+	else if (health > 60)
+		y_anim = surf_rect->h * 1;
+	else if (health > 40)
+		y_anim = surf_rect->h * 2;
+	else if (health > 20)
+		y_anim = surf_rect->h * 3;
+	else
+		y_anim = surf_rect->h * 4;
+	return (y_anim);
+}
+
+int	blit_hud_faces(t_game *game)
+{
+	t_gamesurfs *surfs;
+	t_data		*data;
+	SDL_Rect	dst;
+
+	surfs = &game->surfs;
+	data = &game->data;
+	if ((data->hud_flags & HEALTH_STATUS))
+	{
+		surfs->hud_faces_rect.y = player_hurt_anim(game->player.health, &surfs->hud_faces_rect);
+		dst.x = surfs->perspective_view->w - surfs->hud_faces_rect.w;
+		dst.y = 0;
+		if ((SDL_GetTicks() - surfs->hud_timer) >= 1000)
+		{
+			surfs->hud_timer = SDL_GetTicks();
+			if (surfs->hud_faces_rect.x < surfs->hud_faces_rect.w * 2)
+				surfs->hud_faces_rect.x += surfs->hud_faces_rect.w;
+			else
+				surfs->hud_faces_rect.x = 0;
+		}
+		if ((SDL_BlitSurface(surfs->hud_faces_surf, &surfs->hud_faces_rect, surfs->perspective_view, &dst)) != 0)
+			return (1);
+	}
+	return (0);
 }
 
 int game_loop(t_doom *doom)
@@ -98,6 +143,8 @@ int game_loop(t_doom *doom)
 		if (blit_weapon(game, game->surfs.perspective_view, 0) != 0)
 			return (error_return("Blit weapon error\n", NULL));
 
+		if ((blit_hud_faces(game)) == 1)
+			return (error_return("error during blit_hud_faces\n", NULL));
 		if ((SDL_BlitScaled(game->surfs.perspective_view, NULL, sdlmain->win_surf, NULL)) < 0)
 			return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
 		if ((draw_map(sdlmain, game, &doom->map, &game->data.hud_flags)) == 1)
