@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/17 16:30:47 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/21 16:23:08 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,8 @@ int		free_editor(t_editor *editor)
 	editor->editor_surf = NULL;
 	SDL_FreeSurface(editor->instr_surf);
 	editor->instr_surf = NULL;
-	SDL_FreeSurface(editor->options_surf);
-	editor->options_surf = NULL;
+	SDL_FreeSurface(editor->opt_surf);
+	editor->opt_surf = NULL;
 	free_fonts_surf(editor);
 	free_fonts(editor);
 	return (EXIT_FAILURE);

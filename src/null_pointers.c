@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/20 20:07:52 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/21 16:23:08 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void null_editor_pointers(t_editor *editor)
 
     i = 0;
     editor->editor_surf = NULL;
-    editor->options_surf = NULL;
+    editor->opt_surf = NULL;
     editor->instr_surf = NULL;
     editor->current_sector = NULL;
     editor->current_wall = NULL;

@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 14:55:47 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/17 16:30:47 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/21 16:23:08 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int create_surfaces_editor(t_editor *editor, t_sdlmain *sdlmain)
 {
 	if ((editor->editor_surf = SDL_CreateRGBSurface(0, sdlmain->win_surf->w / 1.79, sdlmain->win_surf->h, 32, 0, 0, 0, 0)) == NULL)
 		return (error_return("create surface error = %s\n", SDL_GetError()));
-	if ((editor->options_surf = SDL_CreateRGBSurface(0, sdlmain->win_surf->w - (sdlmain->win_surf->w / 1.79), (sdlmain->win_surf->h / 3) * 2, 32, 0, 0, 0, 0)) == NULL)
+	if ((editor->opt_surf = SDL_CreateRGBSurface(0, sdlmain->win_surf->w - (sdlmain->win_surf->w / 1.79), (sdlmain->win_surf->h / 3) * 2, 32, 0, 0, 0, 0)) == NULL)
 		return (error_return("create surface error = %s\n", SDL_GetError())); // remove bug color from game shining through editor on right side
 	if ((editor->instr_surf = SDL_CreateRGBSurface(0, sdlmain->win_surf->w - (sdlmain->win_surf->w / 1.79), sdlmain->win_surf->h - (sdlmain->win_surf->h / 3) * 2, 32, 0, 0, 0, 0)) == NULL)
 		return (error_return("create surface error = %s\n", SDL_GetError()));

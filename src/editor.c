@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/20 20:04:07 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/21 17:42:25 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,30 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	editor->wall_tmp.wall_type = 0;
 	editor->start_sector_reached = 1;
 	init_colors(editor);
+	return (0);
+}
+
+int	reset_init_editor(t_editor *editor, t_sdlmain *sdlmain)
+{
+	int i;
+
+	i = 0;
+	if (create_surfaces_editor(editor, sdlmain) != 0)
+		return (1);
+	if (init_editor_menu(editor) != 0)
+		return (1);
+	while (i < NBPOINTS)
+	{
+		editor->grid_values[i].x = 0;
+		editor->grid_values[i].y = 0;
+		i++;
+	}
+	editor->wall_tmp.start.x = -1;   //not sure if needed
+	editor->wall_tmp.start.y = -1;   //not sure if needed
+	editor->wall_tmp.end.x = -1;   //not sure if needed
+	editor->wall_tmp.end.y = -1;   //not sure if needed
+	editor->wall_tmp.wall_type = 0;   //not sure if needed
+	editor->start_sector_reached = 1;   //not sure if needed
 	return (0);
 }
 
@@ -223,13 +247,13 @@ int	editor_loop(t_doom *doom)
 											+ editor->offset, editor->offset);
 		ft_bzero(editor->editor_surf->pixels, \
 					editor->editor_surf->h * editor->editor_surf->pitch);
-		ft_bzero(editor->options_surf->pixels, \
-					editor->options_surf->h * editor->options_surf->pitch);
+		ft_bzero(editor->opt_surf->pixels, \
+					editor->opt_surf->h * editor->opt_surf->pitch);
 		ft_bzero(editor->instr_surf->pixels, \
 					editor->instr_surf->h * editor->instr_surf->pitch);
 		draw_editor(editor->editor_surf, editor, sdlmain);
 		draw_border(editor->editor_surf, 0xB12211);
-		draw_border(editor->options_surf, 0xB12211);
+		draw_border(editor->opt_surf, 0xB12211);
 		draw_border(editor->instr_surf, 0xB12211);
 		draw_lines(editor, editor->editor_surf, sdlmain);
 		if (blit_editor(editor, sdlmain) != 0)

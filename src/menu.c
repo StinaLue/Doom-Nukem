@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:27:36 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/15 12:19:24 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/21 16:07:56 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,7 @@ int	reset_doom(t_doom *doom)
 		|| init_sdlmain(&doom->sdlmain) == 1 \
 		|| init_gamesurfs_struct(&doom->game.surfs, &doom->sdlmain) == 1 \
 		|| init_menu(&doom->menu, &doom->sdlmain) == 1 \
-		|| init_editor(&doom->editor, &doom->sdlmain) == 1)
+		|| reset_init_editor(&doom->editor, &doom->sdlmain) == 1)
 		return (1);
 	doom->state = GAME_STATE;
 	return (0);

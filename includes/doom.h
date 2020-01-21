@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/21 15:34:31 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/21 17:23:12 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@
 
 # define NBPOINTS 2501 // map has 50 * 50 points
 # define NBPOINTSROW 50 // NBPOINTS = NBPOINTSROW * NBPOINTSROW
-# define NBTEXTURES	12
+# define NBTEXTURES	9
 # define NBHEIGHTS 7
 # define NBOPTIONS 5
 # define NBINSTRUCTS 5
@@ -98,7 +98,7 @@ typedef struct				s_wall_node
 {
 	struct s_wall_node		*next;
 	struct s_wall_node		*previous;
-	t_vecdb					start;
+	t_vecdb					start; // why not t_vec?
 	t_vecdb					end;
 	int						color;
 	int						tex_index;
@@ -158,7 +158,7 @@ typedef struct				s_data
 
 typedef	struct				s_wall
 {
-	t_vecdb					start;
+	t_vecdb					start; // why not t_vec?
 	t_vecdb					end;
 }							t_wall;
 
@@ -234,7 +234,7 @@ typedef struct				s_map
 typedef struct				s_editor
 {
 	SDL_Surface				*editor_surf;
-	SDL_Surface				*options_surf;
+	SDL_Surface				*opt_surf;
 	SDL_Surface				*instr_surf;
 	SDL_Surface				*mouse_surf;
 	SDL_Surface				**wall_textures;
@@ -242,7 +242,7 @@ typedef struct				s_editor
 	SDL_Rect				editor_rect;
 	SDL_Rect				options_rect;
 	SDL_Rect				instr_rect;
-	SDL_Rect 				mouse_rect;
+	SDL_Rect				mouse_rect;
 
 	t_sector_node			*current_sector;
 	t_wall_node				*current_wall;
@@ -300,9 +300,11 @@ void						init_rotate_wall(t_wall *new_wall, const t_wall_node *current_wall, co
 int							is_in_map(t_vecdb *player);
 
 SDL_Surface					*load_opti_bmp(char *file, SDL_Surface *win_surf, Uint32 colorkey);
+
 /*
 ** VECTOR FUNCTIONS
 */
+
 double						get_magnitude(t_vecdb a, t_vecdb b);
 
 void						multvec(t_vecdb *vecdb, double n);
@@ -332,6 +334,8 @@ t_vecdb						create_vecdb(double x, double y);
 double						cross_product_len(t_vec a, t_vec b, t_vec c);
 
 double						get_point_distance(t_vecdb a, t_vecdb b);
+
+void						set_vec_values(t_vec *src, t_vec *dst);
 
 /*
 ** INIT FUNCTIONS
@@ -505,6 +509,7 @@ int							error_return(const char *error_msg, const char *sdl_error);
 ** EDITOR FUNCTIONS
 */
 
+int							reset_init_editor(t_editor *editor, t_sdlmain *sdlmain);
 /*
 ** LINKED LIST FUNCTIONS
 */
