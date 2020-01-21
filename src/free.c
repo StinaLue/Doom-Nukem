@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/21 17:25:47 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/21 23:24:00 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,5 +114,19 @@ int		free_editor(t_editor *editor)
 	editor->options_surf = NULL;
 	free_fonts_surf(editor);
 	free_fonts(editor);
+	return (EXIT_FAILURE);
+}
+
+int		free_wall_textures(SDL_Surface **wall_textures)
+{
+	int i;
+
+	i = 0;
+	while (i < 9)
+	{
+		SDL_FreeSurface(wall_textures[i]);
+		wall_textures[i] = NULL;
+		i++;
+	}
 	return (EXIT_FAILURE);
 }

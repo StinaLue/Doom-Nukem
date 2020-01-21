@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   menu.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:27:36 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/15 12:19:24 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/21 23:55:30 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,12 +205,14 @@ int	reset_doom(t_doom *doom)
 	free_menu(&doom->menu);
 	free_editor(&doom->editor);
 	free_sdlmain(&doom->sdlmain);
+	//free_wall_textures(doom->wall_textures);
 	quit_sdl_and_ttf();
 	if (init_sdl_and_ttf() == 1 \
 		|| init_sdlmain(&doom->sdlmain) == 1 \
 		|| init_gamesurfs_struct(&doom->game.surfs, &doom->sdlmain) == 1 \
 		|| init_menu(&doom->menu, &doom->sdlmain) == 1 \
-		|| init_editor(&doom->editor, &doom->sdlmain) == 1)
+		|| init_editor(&doom->editor, &doom->sdlmain) == 1)// \
+		//|| init_wall_textures(doom->wall_textures, doom->sdlmain.win_surf) == 1)
 		return (1);
 	doom->state = GAME_STATE;
 	return (0);

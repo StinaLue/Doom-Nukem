@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/21 18:57:22 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/21 23:19:02 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -357,6 +357,8 @@ int							init_editor_menu(t_editor *editor);
 
 int							init_map(t_map *map);
 
+int							init_wall_textures(SDL_Surface **wall_textures, SDL_Surface *winsurf);
+
 
 /*
 ** INIT STRUCT FUNCTIONS
@@ -455,6 +457,8 @@ int							free_game(t_game *game);
 int							free_editor(t_editor *editor);
 
 int							free_sdlmain(t_sdlmain *sdlmain);
+
+int							free_wall_textures(SDL_Surface **wall_textures);
 
 /*
 ** PARSE FUNCTIONS

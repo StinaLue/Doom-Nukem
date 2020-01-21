@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/15 11:41:59 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/21 23:56:43 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ int	main_loop()
 	free_editor(&doom.editor);
 	free_sdlmain(&doom.sdlmain);
 	free_sector_list(&doom.map.sector_head);
+	free_wall_textures(doom.wall_textures);
 	quit_sdl_and_ttf();
 	if (ret == 1)
 		return (error_return("Error during main loop\n", NULL));
