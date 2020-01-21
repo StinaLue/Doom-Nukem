@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_wall.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:25:24 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/16 16:53:15 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/20 19:54:19 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,16 +72,17 @@ t_wall_node	*copy_wall_node(t_wall_node **wall_head, const t_wall_node *node)
 	new_node->start.x = node->start.x;
 	new_node->start.y = node->start.y;
 	new_node->end.x = node->end.x;
-	new_node->end.x = node->end.y;
+	new_node->end.y = node->end.y;
 	new_node->sector_index = node->sector_index;
 	new_node->neighbor_sector = node->neighbor_sector;
 	new_node->next = NULL;
+	new_node->type_color = node->type_color;
 	return (new_node);
 }
 
 //create new node with given params and adds it to the end of list
 //returns created node adress
-t_wall_node	*create_wall_node(t_wall_node **wall_head, t_vecdb a, t_vecdb b, int color)
+t_wall_node	*create_wall_node(t_wall_node **wall_head, t_vecdb a, t_vecdb b, int tex_index)
 {
 	t_wall_node *new_node;
 
@@ -92,11 +93,11 @@ t_wall_node	*create_wall_node(t_wall_node **wall_head, t_vecdb a, t_vecdb b, int
 	new_node->start.y = a.y;
 	new_node->end.x = b.x;
 	new_node->end.y = b.y;
-	new_node->color = color;
+	new_node->color = 0xffffff;
 	new_node->sector_index = -1;
 	new_node->neighbor_sector = NULL;
 	new_node->next = NULL;
-	new_node->tex_index = 0;
+	new_node->tex_index = tex_index;
 	return (new_node);
 }
 
