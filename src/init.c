@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/20 14:22:14 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/21 14:02:18 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,5 +239,7 @@ int	init_game(t_game *game, t_sdlmain *sdlmain)
 		return (1);
 	init_data_struct(&(game->data));
 	init_player_struct(&(game->player));
+	game->weapon_anim[0] = blit_katana;
+	game->anim = 0;
 	return (0);
 }

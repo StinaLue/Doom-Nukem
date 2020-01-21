@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/21 14:42:57 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/21 15:34:31 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,8 @@ typedef struct				s_gamesurfs
 	SDL_Surface				*weapons;
 
 	SDL_Rect				katana[4];
+	int						current_frame;
+	int						anim_timer;
 }							t_gamesurfs;
 
 typedef struct				s_data
@@ -185,6 +187,8 @@ typedef struct				s_game
 	t_gamesurfs				surfs;
 	t_data					data;
 	t_player				player;
+	int						(*weapon_anim[4])(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim);
+	int						anim;
 }							t_game;
 
 typedef struct				s_instr_menu
@@ -407,6 +411,7 @@ int							blit_editor(t_editor *editor, t_sdlmain *sdlmain);
 
 int							blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf);
 
+int							blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim);
 
 /*
 ** TEXT FUNCTIONS

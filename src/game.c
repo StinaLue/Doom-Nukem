@@ -3,16 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/17 16:59:05 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/21 14:04:38 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "doom.h"
 #include "libbmp.h"
+
+int blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)
+{
+	if (*anim == 1)
+	{
+		if (gamesurfs->current_frame == 0 && gamesurfs->anim_timer == 0)
+			gamesurfs->anim_timer = SDL_GetTicks();
+		if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->katana[gamesurfs->current_frame], dest, NULL) != 0)
+			return (error_return("SDL_BlitScaled error: %s\n", SDL_GetError()));
+		if ((SDL_GetTicks() - gamesurfs->anim_timer) >= 150)
+		{
+			gamesurfs->current_frame++;
+			gamesurfs->anim_timer = SDL_GetTicks();
+		}
+		if (gamesurfs->current_frame >= 4)
+		{
+			gamesurfs->current_frame = 0;
+			*anim = 0;
+		}
+	}
+	else
+	{
+		if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->katana[0], dest, NULL) != 0)
+			return (error_return("SDL_BlitScaled error: %s\n", SDL_GetError()));
+		gamesurfs->anim_timer = 0;
+	}
+	
+	return (0);
+}
+
+int	blit_weapon(t_game *game, SDL_Surface *dest, int weapon)
+{
+	int return_val;
+
+	return_val = (*game->weapon_anim[weapon])(&game->surfs, dest, &game->anim);
+	return (return_val);
+}
 
 int game_loop(t_doom *doom)
 {
@@ -38,6 +75,9 @@ int game_loop(t_doom *doom)
 			game->surfs.perspective_view->userdata = "yescolor";
 		else
 			game->surfs.perspective_view->userdata = "nocolor";
+		//draw_perspective_view(game->surfs.perspective_view, &game->player, doom->wall_textures);
+		//if ((SDL_BlitScaled(game->surfs.weapons, &game->surfs.katana[(int)((float)SDL_GetTicks() / 400) % 4], game->surfs.perspective_view, NULL)) != 0)
+		//	printf("%s\n", SDL_GetError());
 
 		//print sector
 		/*int i = 0;
@@ -55,9 +95,9 @@ int game_loop(t_doom *doom)
 		view.right = doom->game.player.fov;
 		view.left.x *= -1;
 		draw_view_recursive(game->surfs.perspective_view, doom->wall_textures, view, doom->game.player.sector, &doom->game.player);
+		if (blit_weapon(game, game->surfs.perspective_view, 0) != 0)
+			return (error_return("Blit weapon error\n", NULL));
 
-		if ((SDL_BlitScaled(game->surfs.weapons, &game->surfs.katana[(int)((float)SDL_GetTicks() / 400) % 4], game->surfs.perspective_view, NULL)) != 0)
-			printf("%s\n", SDL_GetError());
 		if ((SDL_BlitScaled(game->surfs.perspective_view, NULL, sdlmain->win_surf, NULL)) < 0)
 			return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
 		if ((draw_map(sdlmain, game, &doom->map, &game->data.hud_flags)) == 1)
