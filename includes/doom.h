@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/20 20:08:57 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/21 14:42:57 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define TITLE "DOOM"
 
 # define SQRT2 1.4142135623730950488
-# define PLAYER_RADIUS 0.000001
+# define PLAYER_RADIUS 0.8
 
 /*
 ** MAIN LOOP STATES
@@ -97,7 +97,7 @@ typedef struct				s_vecdb
 typedef struct				s_wall_node
 {
 	struct s_wall_node		*next;
-	//struct s_wall_node	*previous;
+	struct s_wall_node		*previous;
 	t_vecdb					start;
 	t_vecdb					end;
 	int						color;
