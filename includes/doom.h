@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/21 17:23:12 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/22 11:57:15 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@
 # define NBTEXTURES	9
 # define NBHEIGHTS 7
 # define NBOPTIONS 5
-# define NBINSTRUCTS 5
+# define NBINSTRUCTS 6
 # define COLOR_HOVER 0x6C1413
 # define COLOR_PRESSED 0xffff00
 # define COLOR_NORMAL 0xff0000
@@ -194,10 +194,10 @@ typedef struct				s_game
 typedef struct				s_instr_menu
 {
 	SDL_Surface				*title;
-	SDL_Surface				*instructs[5];
+	SDL_Surface				*instructs[NBINSTRUCTS];
 
 	SDL_Rect				title_rect;
-	SDL_Rect				instr_rect[5];
+	SDL_Rect				instr_rect[NBINSTRUCTS];
 
 	TTF_Font				*font_title;
 	TTF_Font				*font;

@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/21 16:32:13 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/22 12:02:45 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,13 @@ int	init_instr_menu(t_editor *editor)
 		return (1);
 	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, editor->instr_surf->w / 4), 1, "undo sector: s") != 0)
 		return (1);
-	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, editor->instr_surf->w / 3), 2, "change type of wall: t") != 0)
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, editor->instr_surf->w / 3), 2, "replace map: r") != 0)
 		return (1);
 	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, editor->instr_surf->w / 6), 3, "create sector: left click") != 0)
 		return (1);
-	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, editor->instr_surf->w / 4), 4, "...") != 0)
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, editor->instr_surf->w / 4), 4, "create new map: n") != 0)
+		return (1);
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, editor->instr_surf->w / 3), 5, "change type of wall: t") != 0)
 		return (1);
 	return (0);
 }

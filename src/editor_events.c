@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/21 17:47:02 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/22 13:11:00 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,27 @@ int	start_wall_exists(t_wall_node *wall)
 	return (0);
 }
 
-void	event_editor_surf(t_sdlmain *sdlmain, t_editor *editor)
+/* int is_convex()
+{
+	return(1);
+} */
+
+void	event_editor_surf(t_vec mouse, t_editor *editor)
 {
 	if (start_wall_exists(&editor->wall_tmp) \
-		&& !(sdlmain->mouse_pos.x == editor->wall_tmp.end.x \
-		&& sdlmain->mouse_pos.y == editor->wall_tmp.end.y))
+		&& !(mouse.x == editor->wall_tmp.end.x \
+		&& mouse.y == editor->wall_tmp.end.y))
 	{
-		editor->wall_tmp.end.x = sdlmain->mouse_pos.x;
-		editor->wall_tmp.end.y = sdlmain->mouse_pos.y;
+		/* if (is_convex())
+			printf("is convex\n");
+		else
+			printf("is not convex\n"); */
+		editor->wall_tmp.end.x = mouse.x;
+		editor->wall_tmp.end.y = mouse.y;
+		editor->wall_tmp.tex_index = editor->opt_menu.activ_tex;
 		editor->current_sector = get_last_sector(editor->edit_map.sector_head);
 		copy_wall_node(&editor->current_sector->wall_head, &editor->wall_tmp);
+		printf("activ tex %d\n", editor->opt_menu.activ_tex);
 		editor->wall_tmp.start.x = editor->wall_tmp.end.x;
 		editor->wall_tmp.start.y = editor->wall_tmp.end.y;
 		check_finished_sect(editor);
@@ -51,13 +62,11 @@ void	event_editor_surf(t_sdlmain *sdlmain, t_editor *editor)
 		if (editor->start_sector_reached == 1)
 		{
 			add_sector_node(&editor->edit_map.sector_head);
-			set_vec_values(&sdlmain->mouse_pos, &editor->start_sector);
-			//editor->start_sector.x = sdlmain->mouse_pos.x;
-			//editor->start_sector.y = sdlmain->mouse_pos.y;
-			editor->wall_tmp.start.x = sdlmain->mouse_pos.x; // set_vec_values can be used if wall_tmp.start is int
-			editor->wall_tmp.start.y = sdlmain->mouse_pos.y;
-			editor->wall_tmp.end.x = sdlmain->mouse_pos.x;
-			editor->wall_tmp.end.y = sdlmain->mouse_pos.y;
+			set_vec_values(&mouse, &editor->start_sector);
+			editor->wall_tmp.start.x = mouse.x; // set_vec_values can be used if wall_tmp.start is int
+			editor->wall_tmp.start.y = mouse.y;
+			editor->wall_tmp.end.x = mouse.x;
+			editor->wall_tmp.end.y = mouse.y;
 			editor->start_sector_reached = 0;
 		}
 	}
@@ -149,6 +158,52 @@ void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
 	}
 }
 
+int	compare_walls(t_wall_node *current_wall, t_wall_node *wall)
+{
+	if (current_wall->start.x == wall->end.x && current_wall->start.y == wall->end.y && current_wall->end.x == wall->start.x && current_wall->end.y == wall->start.y)
+	{
+		return (1);
+	}
+	return (0);
+}
+
+t_sector_node	*find_wall_neighbor(t_wall_node *wall, t_sector_node *sector_list)
+{
+	t_sector_node	*current_sector;
+	t_wall_node		*current_wall;
+
+	current_sector = sector_list;
+	while (current_sector != NULL)
+	{
+		current_wall = current_sector->wall_head;
+		while (current_wall != NULL)
+		{
+			if (compare_walls(current_wall, wall) == 1)
+				return (current_sector);
+			current_wall = current_wall->next;
+		}
+		current_sector = current_sector->next;
+	}
+	return (NULL);
+}
+
+void	find_neighbors(t_doom *doom)
+{
+	t_sector_node	*current_sector;
+	t_wall_node		*current_wall;
+	current_sector = doom->map.sector_head;
+	while (current_sector != NULL)
+	{
+		current_wall = current_sector->wall_head;
+		while (current_wall != NULL)
+		{
+			current_wall->neighbor_sector = find_wall_neighbor(current_wall, doom->map.sector_head);
+			current_wall = current_wall->next;
+		}
+		current_sector = current_sector->next;
+	}
+}
+
 int	editor_events(t_doom *doom)
 {
 	t_editor	*editor;
@@ -165,7 +220,7 @@ int	editor_events(t_doom *doom)
 		if (sdlmain->event.key.keysym.sym == SDLK_u)
 		{
 			previous = undo_wall(editor->edit_map.sector_head);
-			if (previous != NULL)
+			if (previous != NULL) // condition has to be added so walls from sector before get removed, too
 			{
 				editor->wall_tmp.start.x = previous->end.x;
 				editor->wall_tmp.start.y = previous->end.y;
@@ -178,7 +233,7 @@ int	editor_events(t_doom *doom)
 				editor->wall_tmp.start.y = -1;
 				editor->wall_tmp.end.x = -1;
 				editor->wall_tmp.end.y = -1;
-				editor->start_sector_reached = 1;
+				editor->start_sector_reached = 1; // only works when there's only one sector 
 			}
 		}
 		if (sdlmain->event.key.keysym.sym == SDLK_t \
@@ -195,6 +250,13 @@ int	editor_events(t_doom *doom)
 				editor->wall_tmp.type_color = 0xFF00FF;
 			}
 		}
+		if (sdlmain->event.key.keysym.sym == SDLK_r)
+		{
+			editor->edit_map.sector_head = doom->map.sector_head;
+			//free(doom->map.sector_head);
+			//doom->map.sector_head = NULL;
+			//doom->map.sector_head = editor->edit_map.sector_head;
+		}
 	}
 	if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN \
 		|| sdlmain->event.type == SDL_MOUSEMOTION)
@@ -202,11 +264,15 @@ int	editor_events(t_doom *doom)
 		if (sdlmain->event.button.button == SDL_BUTTON_LEFT \
 				&& sdlmain->mouse_pos.x <= NBPOINTSROW \
 				&& sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
-			event_editor_surf(sdlmain, editor);
+			event_editor_surf(sdlmain->mouse_pos, editor);
 		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
 		mouse_in_options(editor, sdlmain);
 	}
 	if (doom->state != EDITOR_STATE)
+	{
+		find_neighbors(doom);
+		itt_sector_wall_heads(doom->map.sector_head, &set_wall_length);
 		return (1);
+	}
 	return (0);
 }
