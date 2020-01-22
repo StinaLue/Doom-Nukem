@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:25:24 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/20 19:54:19 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/22 13:11:03 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 //returns malloced adress
 t_wall_node	*insert_wall_node(t_wall_node **wall_list)
 {
-	if(*wall_list == NULL)
+	if (*wall_list == NULL)
 	{
 		*wall_list = malloc(sizeof(t_wall_node));
 		return (*wall_list);
@@ -26,7 +26,7 @@ t_wall_node	*insert_wall_node(t_wall_node **wall_list)
 }
 
 //frees every node of the wall_list and sets them to NULL
-void		free_wall_list(t_wall_node **wall_list)
+void	free_wall_list(t_wall_node **wall_list)
 {
 	if (*wall_list)
 	{
@@ -76,6 +76,7 @@ t_wall_node	*copy_wall_node(t_wall_node **wall_head, const t_wall_node *node)
 	new_node->sector_index = node->sector_index;
 	new_node->neighbor_sector = node->neighbor_sector;
 	new_node->next = NULL;
+	new_node->tex_index = node->tex_index;
 	new_node->type_color = node->type_color;
 	return (new_node);
 }
@@ -145,7 +146,7 @@ t_wall_node	*get_closest_wall(t_wall_node *wall_list, t_vecdb position, double d
 
 //returns a vector of the average position of all the wall_start coordinates of a list of walls
 //returns a 0,0 vector if there are no walls
-t_vecdb		point_average_position(t_wall_node *wall_head)
+t_vecdb	point_average_position(t_wall_node *wall_head)
 {
 	t_vecdb	average;
 	int		count;
@@ -184,7 +185,7 @@ t_wall_node		*get_last_wall_node(t_wall_node *wall_list)
 
 //mallocs and copies a list of walls on a new list adress
 //returns the number of walls mallocs or -1 if malloc error
-int			copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list)
+int	copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list)
 {
 	int	ret;
 
@@ -205,7 +206,7 @@ int			copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list)
 }
 
 //returns wall count
-int			count_walls(t_wall_node *wall_list)
+int	count_walls(t_wall_node *wall_list)
 {
 	int i;
 
@@ -216,4 +217,13 @@ int			count_walls(t_wall_node *wall_list)
 		i++;
 	}
 	return (i);
+}
+
+t_wall_node	*undo_wall(t_sector_node *node)
+{
+	if (node == NULL)
+		return (NULL);
+	while (node->next != NULL)
+		node = node->next;
+	return (delete_last_wall(&node->wall_head));
 }

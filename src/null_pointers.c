@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/22 18:04:25 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/22 18:07:10 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void null_editor_pointers(t_editor *editor)
 
     i = 0;
     editor->editor_surf = NULL;
-    editor->options_surf = NULL;
+    editor->opt_surf = NULL;
     editor->instr_surf = NULL;
     editor->current_sector = NULL;
     editor->current_wall = NULL;
