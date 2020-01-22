@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/21 23:24:00 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/22 10:23:04 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,10 @@ int		free_game(t_game *game)
 	game->surfs.weapons = NULL;
 	SDL_FreeSurface(game->surfs.hud_faces_surf);
 	game->surfs.hud_faces_surf = NULL;
+	SDL_FreeSurface(game->surfs.enemy_texture[0]);
+	game->surfs.enemy_texture[0] = NULL;
+	SDL_FreeSurface(game->surfs.enemy_texture[1]);
+	game->surfs.enemy_texture[1] = NULL;
 	return (EXIT_FAILURE);
 }
 

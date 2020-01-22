@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/21 23:19:02 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/22 10:25:11 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ typedef struct				s_gamesurfs
 	SDL_Surface				*perspective_view;
 	SDL_Surface				*weapons;
 	SDL_Surface				*hud_faces_surf;
+	SDL_Surface				*enemy_texture[2];
 
 	SDL_Rect				katana[4];
 	SDL_Rect				hud_faces_rect;
@@ -172,6 +173,15 @@ typedef struct				s_view
 	t_vecdb					right;
 	t_vecdb					origin;
 }							t_view;
+
+typedef struct				s_enemy
+{
+	t_vecdb					pos;
+	SDL_Surface				*texture;
+	SDL_Rect				clip_tex;
+	int						health;
+	int						state;
+}							t_enemy;
 
 typedef struct				s_player
 {

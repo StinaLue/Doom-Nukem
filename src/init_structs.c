@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/21 17:57:57 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/22 10:21:40 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,10 @@ int	init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain)
 		return (error_return("load weapon bmp surf error\n", NULL));
 	if ((gamesurfs->hud_faces_surf = load_opti_bmp("assets/hud/hud_faces.bmp", gamesurfs->perspective_view, 0x00FFFF)) == NULL)
 		return (error_return("load hud faces bmp surf error\n", NULL));
+	if ((gamesurfs->enemy_texture[0] = load_opti_bmp("assets/enemy_sprites/UndeadWarrior.bmp", gamesurfs->perspective_view, 0x00FFFF)) == NULL)
+		return (error_return("load UndeadWarrior surf error\n", NULL));
+	if ((gamesurfs->enemy_texture[1] = load_opti_bmp("assets/enemy_sprites/Ogre.bmp", gamesurfs->perspective_view, 0x00FFFF)) == NULL)
+		return (error_return("load Ogre surf error\n", NULL));
 	gamesurfs->katana[0] = create_sdlrect(9, 78, 226, 169);
 	gamesurfs->katana[1] = create_sdlrect(236, 76, 148, 169);
 	gamesurfs->katana[2] = create_sdlrect(391, 47, 239, 200);

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/21 14:02:18 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/22 09:35:21 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int		init_sdlmain(t_sdlmain *sdlmain)
 	return (EXIT_SUCCESS);
 }
 
-int		init_map(t_map *map)
+int		init_map(t_map *map) //<-- INIT MAP LEAKS
 {
 	t_sector_node	*current_sector;
 
@@ -138,7 +138,7 @@ int		init_map(t_map *map)
 
 	t_vecdb vec22 = {0, 60};
 
-	current_sector = add_sector_node(&map->sector_head);
+	current_sector = add_sector_node(&map->sector_head); //<---- THIS LEAKS
 	create_wall_node(&current_sector->wall_head, vec1, vec2, 0);
 	create_wall_node(&current_sector->wall_head, vec2, vec3, 1);
 	create_wall_node(&current_sector->wall_head, vec3, vec4, 1);
