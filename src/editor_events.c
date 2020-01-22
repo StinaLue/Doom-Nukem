@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/22 13:44:34 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/22 15:05:54 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	check_finished_sect(t_editor *editor)
 		editor->num_sectors++;
 		editor->wall_tmp.start.x = -1;
 		editor->wall_tmp.start.y = -1;
+		set_sector_position(editor->current_sector);
 	}
 }
 
@@ -60,6 +61,8 @@ void	event_editor_surf(t_vec mouse, t_editor *editor)
 	{
 		if (editor->start_sector_reached == 1)
 		{
+			//if (editor->current_sector != NULL)
+			//	set_sector_position(editor->current_sector);
 			add_sector_node(&editor->edit_map.sector_head);
 			set_vec_values(&mouse, &editor->start_sector);
 			editor->wall_tmp.start.x = mouse.x; // set_vec_values can be used if wall_tmp.start is int
@@ -264,6 +267,14 @@ int	editor_events(t_doom *doom)
 				&& sdlmain->mouse_pos.x <= NBPOINTSROW \
 				&& sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
 			event_editor_surf(sdlmain->mouse_pos, editor);
+		if (sdlmain->event.button.button == SDL_BUTTON_RIGHT \
+				&& sdlmain->mouse_pos.x <= NBPOINTSROW \
+				&& sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
+				{
+					get_sector_by_pos(editor->current_sector, vec_to_vecdb(sdlmain->mouse_pos), 10);
+					//printf("%p\n", get_sector_by_pos(editor->edit_map.sector_head, vec_to_vecdb(sdlmain->mouse_pos), 5));
+					// select "set_height"
+				}
 		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
 		mouse_in_options(editor, sdlmain);
 	}

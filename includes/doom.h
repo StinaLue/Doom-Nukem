@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/22 13:42:45 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/22 14:32:28 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -529,6 +529,8 @@ int							reset_init_editor(t_editor *editor, t_sdlmain *sdlmain);
 t_sector_node				*add_sector_node(t_sector_node **sector_head);
 
 void						set_sector_position(t_sector_node *sector_list);
+
+t_sector_node				*get_sector_by_pos(t_sector_node *sector_list, t_vecdb point, double dist);
 
 t_sector_node				*get_sector_by_index(t_sector_node *sector_list, unsigned int index);
 
