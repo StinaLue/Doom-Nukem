@@ -6,13 +6,12 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/22 10:25:11 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/22 17:31:14 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DOOM_H
 # define DOOM_H
-
 # include "SDL.h"
 # include "SDL_ttf.h"
 # include "SDL_mixer.h"
@@ -83,6 +82,7 @@
 struct s_sector_node;
 struct s_wall_node;
 
+
 typedef struct				s_vec
 {
 	int						x;
@@ -94,6 +94,12 @@ typedef struct				s_vecdb
 	double					x;
 	double					y;
 }							t_vecdb;
+
+typedef struct				s_enemy_info
+{
+	t_vec					enemy_spawn;
+	int						which_enemy;
+}							t_enemy_info;
 
 typedef struct				s_wall_node
 {
@@ -158,6 +164,8 @@ typedef struct				s_gamesurfs
 
 typedef struct				s_data
 {
+	t_enemy_info			*enemy_info;
+	int						num_enemies;
 	char					hud_flags;
 }							t_data;
 
@@ -179,6 +187,7 @@ typedef struct				s_enemy
 	t_vecdb					pos;
 	SDL_Surface				*texture;
 	SDL_Rect				clip_tex;
+	double					angle;
 	int						health;
 	int						state;
 }							t_enemy;
@@ -202,6 +211,7 @@ typedef struct				s_game
 	t_gamesurfs				surfs;
 	t_data					data;
 	t_player				player;
+	t_enemy					*enemy;
 	int						(*weapon_anim[4])(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim);
 	int						anim;
 }							t_game;
@@ -243,7 +253,9 @@ typedef struct				s_options_menu
 typedef struct				s_map
 {
 	t_sector_node			*sector_head;
+	t_enemy_info			*enemy_info;
 	int						num_sectors;
+	int						num_enemies;
 }							t_map;
 
 typedef struct				s_editor
@@ -355,7 +367,7 @@ int							init_doom(t_doom *doom);
 
 int							init_sdl_and_ttf();
 
-int							init_game(t_game *game, t_sdlmain *sdlmain);
+int							init_game(t_game *game, t_sdlmain *sdlmain, t_map *map);
 
 int							init_menu(t_menu *menu, t_sdlmain *sdlmain);
 
@@ -375,9 +387,11 @@ int							init_wall_textures(SDL_Surface **wall_textures, SDL_Surface *winsurf);
 */
 int							init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain);
 
-void						init_data_struct(t_data *data);
+void						init_data_struct(t_data *data, t_map *map);
 
 void						init_player_struct(t_player *player);
+
+int							init_enemy_struct(t_game *game);
 
 /*
 ** POLL EVENT FUNCTIONS
@@ -469,6 +483,8 @@ int							free_editor(t_editor *editor);
 int							free_sdlmain(t_sdlmain *sdlmain);
 
 int							free_wall_textures(SDL_Surface **wall_textures);
+
+int							free_map(t_map *map);
 
 /*
 ** PARSE FUNCTIONS

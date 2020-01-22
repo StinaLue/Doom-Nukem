@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:27:36 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/21 23:55:30 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/22 17:36:18 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,6 +210,7 @@ int	reset_doom(t_doom *doom)
 	if (init_sdl_and_ttf() == 1 \
 		|| init_sdlmain(&doom->sdlmain) == 1 \
 		|| init_gamesurfs_struct(&doom->game.surfs, &doom->sdlmain) == 1 \
+		|| init_enemy_struct(&doom->game) == 1 \
 		|| init_menu(&doom->menu, &doom->sdlmain) == 1 \
 		|| init_editor(&doom->editor, &doom->sdlmain) == 1)// \
 		//|| init_wall_textures(doom->wall_textures, doom->sdlmain.win_surf) == 1)

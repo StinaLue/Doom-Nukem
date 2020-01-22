@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   null_pointers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/20 20:07:52 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/22 18:04:25 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@ void null_game_pointers(t_game *game)
     game->surfs.rot_mmap = NULL;
     game->surfs.perspective_view = NULL;
     game->surfs.weapons = NULL;
+	game->surfs.hud_faces_surf = NULL;
+	game->surfs.enemy_texture[0] = NULL;
+	game->surfs.enemy_texture[1] = NULL;
+	game->enemy = NULL;
 }
 
 void null_menu_pointers(t_menu *menu)
@@ -73,4 +77,5 @@ void    null_sdlmain_pointers(t_sdlmain *sdlmain)
 void    null_map_pointers(t_map *map)
 {
 	map->sector_head = NULL;
+	map->enemy_info = NULL;
 }

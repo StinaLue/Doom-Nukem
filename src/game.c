@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/21 18:54:41 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/22 16:45:09 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,13 @@ int	blit_hud_faces(t_game *game)
 	return (0);
 }
 
+int	blit_enemies(t_game *game, SDL_Surface *dest)
+{
+	if ((SDL_BlitScaled(game->enemy[0].texture, &game->enemy[0].clip_tex, dest, NULL)) != 0)
+		return (error_return("SDL_BlitScaled error: %{r}s\n", SDL_GetError()));
+	return (0);
+}
+
 int game_loop(t_doom *doom)
 {
 	t_game		*game;
@@ -140,6 +147,8 @@ int game_loop(t_doom *doom)
 		view.right = doom->game.player.fov;
 		view.left.x *= -1;
 		draw_view_recursive(game->surfs.perspective_view, doom->wall_textures, view, doom->game.player.sector, &doom->game.player);
+		if (blit_enemies(game, game->surfs.perspective_view) != 0)
+			return (error_return("Blit enemies error\n", NULL));
 		if (blit_weapon(game, game->surfs.perspective_view, 0) != 0)
 			return (error_return("Blit weapon error\n", NULL));
 

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/22 10:23:04 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/22 17:14:38 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ int		free_sdlmain(t_sdlmain *sdlmain)
 
 int		free_game(t_game *game)
 {
+	int nb_enemy;
+
+	nb_enemy = game->data.num_enemies;
 	SDL_FreeSurface(game->surfs.fixed_mmap);
 	game->surfs.fixed_mmap = NULL;
 	SDL_FreeSurface(game->surfs.rot_mmap);
@@ -49,6 +52,8 @@ int		free_game(t_game *game)
 	game->surfs.enemy_texture[0] = NULL;
 	SDL_FreeSurface(game->surfs.enemy_texture[1]);
 	game->surfs.enemy_texture[1] = NULL;
+	if (nb_enemy >= 0)
+		ft_memdel((void **)&game->enemy);
 	return (EXIT_FAILURE);
 }
 
@@ -132,5 +137,16 @@ int		free_wall_textures(SDL_Surface **wall_textures)
 		wall_textures[i] = NULL;
 		i++;
 	}
+	return (EXIT_FAILURE);
+}
+
+int		free_map(t_map *map)
+{
+	int nb_enemy;
+
+	nb_enemy = map->num_enemies;
+	free_sector_list(&map->sector_head);
+	if (nb_enemy >= 0)
+		ft_memdel((void **)&map->enemy_info);
 	return (EXIT_FAILURE);
 }

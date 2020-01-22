@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/22 09:35:21 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/22 17:32:11 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,13 @@ int		init_doom(t_doom *doom)
 {
 	if (init_map(&doom->map) == 1 || init_sdl_and_ttf() == 1 \
 		|| init_sdlmain(&doom->sdlmain) == 1 \
-		|| init_game(&doom->game, &doom->sdlmain) == 1 \
+		|| init_game(&doom->game, &doom->sdlmain, &doom->map) == 1 \
 		|| init_menu(&doom->menu, &doom->sdlmain) == 1 \
 		|| init_wall_textures(doom->wall_textures, doom->sdlmain.win_surf) == 1)
 		return (1);
 	//degeulasse PLEASE REMOVE ASAP
 	doom->game.player.sector = doom->map.sector_head->next;
+
 
 	doom->editor.wall_textures = doom->wall_textures;
 	if (init_editor(&doom->editor, &doom->sdlmain) == 1)
@@ -107,7 +108,15 @@ int		init_sdlmain(t_sdlmain *sdlmain)
 int		init_map(t_map *map) //<-- INIT MAP LEAKS
 {
 	t_sector_node	*current_sector;
+	map->num_enemies = 1;
 
+	if (map->num_enemies >= 1)
+	{
+		if (((map->enemy_info = (t_enemy_info *)malloc(sizeof(t_enemy_info) * map->num_enemies))) == NULL)
+			return (1);
+		map->enemy_info[0].enemy_spawn = create_vec(50, 34);
+		map->enemy_info[0].which_enemy = 1;
+	}
 	t_vecdb vec1 = {30, 30};
 	t_vecdb vec2 = {70, 30};
 	t_vecdb vec3 = {70, 10};
@@ -233,11 +242,14 @@ int		init_map(t_map *map) //<-- INIT MAP LEAKS
 	return (0);
 }
 
-int	init_game(t_game *game, t_sdlmain *sdlmain)
+int	init_game(t_game *game, t_sdlmain *sdlmain, t_map *map)
 {
-	if (init_gamesurfs_struct(&(game->surfs), sdlmain) == 1)
+	//game->data.num_enemies = map->num_enemies;
+	//game->data.enemy_info = map->enemy_info;
+	init_data_struct(&(game->data), map);
+	if (init_gamesurfs_struct(&(game->surfs), sdlmain) == 1 || init_enemy_struct(game) == 1)
 		return (1);
-	init_data_struct(&(game->data));
+	//init_data_struct(&(game->data, map));
 	init_player_struct(&(game->player));
 	game->weapon_anim[0] = blit_katana;
 	game->anim = 0;
