@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/22 14:32:28 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/22 17:54:07 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,8 @@ typedef struct				s_sector_node
 	struct s_sector_node	*next;
 	t_wall_node				*wall_head;
 	int						wall_num;
+	int						floor_height;
+	int						ceiling_height;
 	t_vecdb					sector_center;
 }							t_sector_node;
 
@@ -219,6 +221,8 @@ typedef struct				s_options_menu
 	SDL_Rect				options_rect[5];
 	SDL_Rect				text_rect[NBTEXTURES];
 	SDL_Rect				h_rect[NBHEIGHTS];
+	SDL_Rect 				h_rect_ceiling[2];
+	SDL_Rect 				h_rect_floor[2];
 
 	TTF_Font				*font_title;
 	TTF_Font				*font;
@@ -227,7 +231,9 @@ typedef struct				s_options_menu
 	int						bord_color_text[NBTEXTURES];
 	int						bord_color_h[NBHEIGHTS];
 	int						activ_tex;
-	int						activ_h;
+	int						activ_h; // maybe not needed
+	double 					height_ceiling;
+	double						height_floor;
 }							t_options_menu;
 
 typedef struct				s_map
@@ -388,6 +394,9 @@ void						check_menu(SDL_Event *event, int *state, int *prev_state_ptr, int prev
 void						handle_keys(t_game *game, const Uint8 *keyboard_state);
 
 int							editor_events(t_doom *doom);
+
+int							set_height_test(t_editor *editor);
+
 /*
 ** PRINT MINIMAP FUNCTIONS
 */
@@ -479,6 +488,7 @@ SDL_Rect					create_sdlrect(int x, int y, int w, int h);
 
 void						assign_sdlrect(SDL_Rect *rect, t_vec origin, t_vec size);
 
+void						assign_sdlrect_invert(SDL_Rect *rect, t_vec origin, t_vec size);
 
 /*
 ** MOVEMENT

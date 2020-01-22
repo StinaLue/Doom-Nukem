@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/21 16:37:42 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/22 17:50:24 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,26 @@ int	blit_textures(t_editor *editor)
 	return (0);
 }
 
+int blit_test_height(t_editor *editor)
+{
+	draw_border_options(&editor->opt_menu.h_rect_ceiling[1], \
+				editor->opt_menu.bord_color_h[1], editor->opt_surf);
+	draw_border_options(&editor->opt_menu.h_rect_floor[1], \
+				editor->opt_menu.bord_color_h[1], editor->opt_surf);
+	/* draw_border_options(&editor->opt_menu.h_rect_ceiling, \
+				editor->opt_menu.bord_color_h[1], editor->opt_surf); */
+	if ((SDL_BlitScaled(editor->wall_textures[editor->opt_menu.activ_tex], \
+			NULL, editor->opt_surf, &editor->opt_menu.h_rect_ceiling[0])) < 0)
+			return (error_return("BlitScaled error = %s\n", SDL_GetError()));
+
+	/* draw_border_options(&editor->opt_menu.h_rect_floor[0], \
+				editor->opt_menu.bord_color_h[1], editor->opt_surf); */
+	if ((SDL_BlitScaled(editor->wall_textures[editor->opt_menu.activ_tex], \
+			NULL, editor->opt_surf, &editor->opt_menu.h_rect_floor[0])) < 0)
+			return (error_return("BlitScaled error = %s\n", SDL_GetError()));
+	return (0);
+}
+
 int	blit_height(t_editor *editor)
 {
 	int i;
@@ -95,8 +115,10 @@ int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 		return (1);
 	if (blit_textures(editor) != 0)
 		return (1);
+	if (blit_test_height(editor) != 0)
+		return (1);/* 
 	if (blit_height(editor) != 0)
-		return (1);
+		return (1); */
 	if ((SDL_BlitScaled(editor->editor_surf, NULL,
 			sdlmain->win_surf, &editor->editor_rect)) < 0)
 		return (error_return("SDL_BlitScaled error = %{r}s\n",

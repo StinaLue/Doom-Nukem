@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/22 15:05:54 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/22 17:46:25 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,15 +115,36 @@ void	set_border_color(t_editor *editor, t_vec mouse_pos)
 		}
 		i++;
 	}
-	i = 0;
+	i = 0;/* 
 	while (i < NBHEIGHTS)
 	{
 		editor->opt_menu.bord_color_h[i] = COLOR_NORMAL;
 		if (is_mouse_collide(mouse_pos, editor->opt_menu.h_rect[i]))
 			editor->opt_menu.activ_h = i;
 		i++;
-	}
+	} */
 	editor->opt_menu.bord_color_h[editor->opt_menu.activ_h] = COLOR_PRESSED;
+}
+
+void change_size(t_editor *editor, t_sdlmain *sdlmain)
+{
+	if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_floor[1]) && sdlmain->event.wheel.y > 0 && editor->opt_menu.height_floor > 12)
+	{
+		editor->opt_menu.height_floor--;
+	}
+	else if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_floor[1]) && sdlmain->event.wheel.y < 0 && editor->opt_menu.height_floor < 50)
+	{
+		editor->opt_menu.height_floor++;
+	}
+	if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_ceiling[1]) && sdlmain->event.wheel.y > 0 && editor->opt_menu.height_ceiling < 50)
+	{
+		editor->opt_menu.height_ceiling++;
+	}
+	else if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_ceiling[1]) && sdlmain->event.wheel.y < 0 && editor->opt_menu.height_ceiling > 10)
+	{
+		editor->opt_menu.height_ceiling--;
+	}
+	set_height_test(editor);
 }
 
 void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
@@ -137,7 +158,7 @@ void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
 		if (sdlmain->event.button.button == SDL_BUTTON_LEFT)
 		{
 			set_border_color(editor, sdlmain->mouse_pos);
-			special_case_height(editor);
+			//special_case_height(editor);
 		}
 		while (i < NBTEXTURES)
 		{
@@ -147,7 +168,8 @@ void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
 				editor->opt_menu.bord_color_text[i] = COLOR_NORMAL;
 			i++;
 		}
-		i = 0;
+		/*
+		i = 0; 
 		while (i < NBHEIGHTS)
 		{
 			if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect[i]) && i != editor->opt_menu.activ_h)
@@ -156,7 +178,7 @@ void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
 				editor->opt_menu.bord_color_h[i] = COLOR_NORMAL;
 			special_case_height(editor);
 			i++;
-		}
+		} */
 	}
 }
 
@@ -261,7 +283,8 @@ int	editor_events(t_doom *doom)
 		}
 	}
 	if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN \
-		|| sdlmain->event.type == SDL_MOUSEMOTION)
+		|| sdlmain->event.type == SDL_MOUSEMOTION \
+		|| sdlmain->event.type == SDL_MOUSEWHEEL)
 	{
 		if (sdlmain->event.button.button == SDL_BUTTON_LEFT \
 				&& sdlmain->mouse_pos.x <= NBPOINTSROW \
@@ -277,7 +300,11 @@ int	editor_events(t_doom *doom)
 				}
 		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
 		mouse_in_options(editor, sdlmain);
-	}
+		if (sdlmain->event.type == SDL_MOUSEWHEEL)
+			change_size(editor, sdlmain);
+	}/* 
+	if (sdlmain->event.type == SDL_MOUSEWHEEL || sdlmain->event.type == SDL_MOUSEMOTION)
+		change_size(editor, sdlmain); */
 	if (doom->state != EDITOR_STATE)
 	{
 		find_neighbors(doom);
