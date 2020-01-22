@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/21 16:17:47 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/22 17:57:36 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,8 +132,8 @@ int		init_map(t_map *map)
 
 	t_vecdb vec18 = {70, 60};
 
-	t_vecdb vec19 = {50, 110};
-	t_vecdb vec20 = {50, 150};
+	t_vecdb vec19 = {51, 110}; //triangle top
+	t_vecdb vec20 = {49, 150};
 	t_vecdb vec21 = {100, 60};
 
 	t_vecdb vec22 = {0, 60};

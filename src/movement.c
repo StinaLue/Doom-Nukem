@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/21 15:30:29 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/22 15:09:49 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,15 @@ int		is_in_range(t_vecdb pos, t_wall_node *wall)
 	return (1);
 }
 
-t_wall_node	*get_collision_wall(t_player *player, t_sector_node *sector, double *min_dist)
+t_wall_node	*get_collision_wall(t_player *player, t_sector_node *sector, double *min_dist, int depth)
 {
 	double dist;
 	t_wall_node	*wall;
 	t_wall_node	*deepest_wall;
 	t_wall_node	*tmp_deepest_wall;
 
+	if (depth == 0)
+		return (NULL);
 	wall = sector->wall_head;
 	deepest_wall = NULL;
 	while (wall != NULL)
@@ -64,7 +66,7 @@ t_wall_node	*get_collision_wall(t_player *player, t_sector_node *sector, double 
 				}
 				else if (wall->neighbor_sector != player->sector)
 				{
-					tmp_deepest_wall = get_collision_wall(player, wall->neighbor_sector, min_dist);
+					tmp_deepest_wall = get_collision_wall(player, wall->neighbor_sector, min_dist, depth - 1);
 					if (tmp_deepest_wall != NULL)
 						deepest_wall = tmp_deepest_wall;
 				}
@@ -159,7 +161,7 @@ void	move_player2(t_player *player)
 	tmp_wall = NULL;
 	tmp_distance = PLAYER_RADIUS;
 	col_angle = 0;
-	if ((tmp_wall = get_collision_wall(player, player->sector, &tmp_distance)) != NULL)
+	if ((tmp_wall = get_collision_wall(player, player->sector, &tmp_distance, 6)) != NULL)
 	{
 		move = collide(tmp_wall, tmp_distance, &col_angle);
 		player->pos.x += move.x;
@@ -168,7 +170,7 @@ void	move_player2(t_player *player)
 
 		tmp_distance = PLAYER_RADIUS;
 		tmp_wall2 = tmp_wall;
-		if ((tmp_wall = get_collision_wall(player, player->sector, &tmp_distance)) != NULL && tmp_wall != tmp_wall2)
+		if ((tmp_wall = get_collision_wall(player, player->sector, &tmp_distance, 5)) != NULL && tmp_wall != tmp_wall2)
 		{
 			move = move_hyp_length(tmp_wall, tmp_distance, col_angle);
 			player->pos.x += move.x;
@@ -188,16 +190,15 @@ void	movement(t_player *player, t_vecdb move)
 	t_vecdb	old_position;
 
 	if (fabs(move.x) + fabs(move.y) > 1)
-		multvec(&move, 1 / SQRT2);//change later to actually calculate velocity
+		move = multvecdb(move, 1 / SQRT2);//change later to actually calculate velocity
 	move = rotate2d(move, player->angle);
-	multvec(&move, movespeed);
+	move = multvecdb(move, movespeed);
 
 	old_position = player->pos;
 	player->pos.x += move.x + player->inertia.x;
 	player->pos.y += move.y + player->inertia.y;
 	update_sector(player, player->sector->wall_head);
 	move_player2(player);
-
 	//printf("Px:%.15f\nPy:%.15f\n", player->pos.x, player->pos.y);
 	player->inertia.x = (player->pos.x - old_position.x) * 0.96;
 	player->inertia.y = (player->pos.y - old_position.y) * 0.96;

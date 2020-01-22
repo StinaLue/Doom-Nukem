@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/22 17:54:07 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/22 17:57:16 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define TITLE "DOOM"
 
 # define SQRT2 1.4142135623730950488
-# define PLAYER_RADIUS 0.8
+# define PLAYER_RADIUS 1
 
 /*
 ** MAIN LOOP STATES
@@ -317,9 +317,9 @@ SDL_Surface					*load_opti_bmp(char *file, SDL_Surface *dst_surf, Uint32 colorke
 
 double						get_magnitude(t_vecdb a, t_vecdb b);
 
-void						multvec(t_vecdb *vecdb, double n);
+t_vecdb						multvecdb(t_vecdb vecdb, double n);
 
-t_vec						mult_vec(t_vec vec, int mult);
+t_vec						multvec(t_vec vec, int mult);
 
 t_vec						create_vec(int x, int y);
 
