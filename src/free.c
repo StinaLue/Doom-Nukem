@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/21 16:23:08 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/22 13:43:57 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int		free_game(t_game *game)
 	game->surfs.perspective_view = NULL;
 	SDL_FreeSurface(game->surfs.weapons);
 	game->surfs.weapons = NULL;
+	SDL_FreeSurface(game->surfs.hud_faces_surf);
+	game->surfs.hud_faces_surf = NULL;
 	return (EXIT_FAILURE);
 }
 
@@ -112,5 +114,19 @@ int		free_editor(t_editor *editor)
 	editor->opt_surf = NULL;
 	free_fonts_surf(editor);
 	free_fonts(editor);
+	return (EXIT_FAILURE);
+}
+
+int		free_wall_textures(SDL_Surface **wall_textures)
+{
+	int i;
+
+	i = 0;
+	while (i < 9)
+	{
+		SDL_FreeSurface(wall_textures[i]);
+		wall_textures[i] = NULL;
+		i++;
+	}
 	return (EXIT_FAILURE);
 }

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:22:12 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/21 00:04:30 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/21 16:35:43 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,13 @@ void	handle_hud(SDL_Event *event, char *hud_flags)
 				*hud_flags |= COLORFLAG;
 			else if ((*hud_flags & COLORFLAG))
 				*hud_flags &= ~(COLORFLAG);
+		}
+		if (event->key.keysym.sym == SDLK_p)
+		{
+			if ((*hud_flags & HEALTH_STATUS) == 0)
+				*hud_flags |= HEALTH_STATUS;
+			else if ((*hud_flags & HEALTH_STATUS))
+				*hud_flags &= ~(HEALTH_STATUS);
 		}
 }
 

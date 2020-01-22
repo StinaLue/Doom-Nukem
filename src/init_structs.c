@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/21 14:01:47 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/21 17:57:57 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "doom.h"
 #include "libbmp.h"
 
-SDL_Surface *load_opti_bmp(char *file, SDL_Surface *win_surf, Uint32 colorkey)
+SDL_Surface *load_opti_bmp(char *file, SDL_Surface *dst_surf, Uint32 colorkey)
 {
 	SDL_Surface *opti_surf;
 	SDL_Surface *surf;
@@ -23,7 +23,7 @@ SDL_Surface *load_opti_bmp(char *file, SDL_Surface *win_surf, Uint32 colorkey)
 	surf = NULL;
 	if ((surf = load_bmp(file)) == NULL)
 		return (NULL);
-	if ((opti_surf = SDL_ConvertSurface(surf, win_surf->format, 0)) == NULL)
+	if ((opti_surf = SDL_ConvertSurface(surf, dst_surf->format, 0)) == NULL)
 	{
 		ft_dprintf(STDERR_FILENO, "ConvertSurf err = %{r}s\n", SDL_GetError());
 		SDL_FreeSurface(surf);
@@ -55,13 +55,17 @@ int	init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain)
 	if ((gamesurfs->perspective_view = SDL_CreateRGBSurface(0, sdlmain->win_surf->w / 4, sdlmain->win_surf->h / 4, 32, 0, 0, 0, 0)) == NULL)
 		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
 	//if ((gamesurfs->weapons = load_bmp("assets/shadow.bmp")) == NULL)
-	if ((gamesurfs->weapons = load_opti_bmp("assets/shadow.bmp", sdlmain->win_surf, 0x0080FF)) == NULL)
+	if ((gamesurfs->weapons = load_opti_bmp("assets/shadow.bmp", gamesurfs->perspective_view/*sdlmain->win_surf*/, 0x0080FF)) == NULL)
 		return (error_return("load weapon bmp surf error\n", NULL));
+	if ((gamesurfs->hud_faces_surf = load_opti_bmp("assets/hud/hud_faces.bmp", gamesurfs->perspective_view, 0x00FFFF)) == NULL)
+		return (error_return("load hud faces bmp surf error\n", NULL));
 	gamesurfs->katana[0] = create_sdlrect(9, 78, 226, 169);
 	gamesurfs->katana[1] = create_sdlrect(236, 76, 148, 169);
 	gamesurfs->katana[2] = create_sdlrect(391, 47, 239, 200);
 	gamesurfs->katana[3] = create_sdlrect(631, 25, 186, 223);
+	gamesurfs->hud_faces_rect = create_sdlrect(0, 0, gamesurfs->hud_faces_surf->w / 3, gamesurfs->hud_faces_surf->h / 5);
 	gamesurfs->anim_timer = 0;
+	gamesurfs->hud_timer = 0;
 	gamesurfs->current_frame = 0;
 	return (0);
 }
@@ -83,4 +87,5 @@ void	init_player_struct(t_player *player)
 	player->fov.x = 100;
 	player->fov.y = 100;
 	player->true_fov = 1.5708; //hardcoded 90deg
+	player->health = 100;
 }

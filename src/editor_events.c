@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/22 13:11:00 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/22 13:44:34 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void	event_editor_surf(t_vec mouse, t_editor *editor)
 		editor->wall_tmp.tex_index = editor->opt_menu.activ_tex;
 		editor->current_sector = get_last_sector(editor->edit_map.sector_head);
 		copy_wall_node(&editor->current_sector->wall_head, &editor->wall_tmp);
-		printf("activ tex %d\n", editor->opt_menu.activ_tex);
 		editor->wall_tmp.start.x = editor->wall_tmp.end.x;
 		editor->wall_tmp.start.y = editor->wall_tmp.end.y;
 		check_finished_sect(editor);

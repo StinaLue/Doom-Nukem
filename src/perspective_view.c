@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   perspective_view.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/20 18:04:37 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/21 22:21:17 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,11 @@ void	fill_wall_texture(SDL_Surface *surf, const t_wall3d *display_wall, SDL_Surf
 	t_vec current_bottom;
 	//int current_xtex = display_wall->bottom_left.x;
 	int current_xtex = 0;
-	double step = 1.0 * tex->w / (display_wall->top_right.x - display_wall->top_left.x);
+	double step;
+	if (display_wall->top_right.x - display_wall->top_left.x == 0)
+		step = tex->w;
+	else
+		step = tex->w / (display_wall->top_right.x - display_wall->top_left.x);
 	if (step < 1)
 		step = 1;
 	//printf("step %f\n", step);
