@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/21 18:54:41 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/22 15:47:35 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ int game_loop(t_doom *doom)
 		//if ((SDL_BlitScaled(game->surfs.weapons, &game->surfs.katana[(int)((float)SDL_GetTicks() / 400) % 4], game->surfs.perspective_view, NULL)) != 0)
 		//	printf("%s\n", SDL_GetError());
 
-		//print sector
+		//print sector index
 		/*int i = 0;
 		t_sector_node *node = doom->map.sector_head;
 		while (node != NULL)
@@ -140,8 +140,8 @@ int game_loop(t_doom *doom)
 		view.right = doom->game.player.fov;
 		view.left.x *= -1;
 		draw_view_recursive(game->surfs.perspective_view, doom->wall_textures, view, doom->game.player.sector, &doom->game.player);
-		if (blit_weapon(game, game->surfs.perspective_view, 0) != 0)
-			return (error_return("Blit weapon error\n", NULL));
+		/*if (blit_weapon(game, game->surfs.perspective_view, 0) != 0)
+			return (error_return("Blit weapon error\n", NULL));*/
 
 		if ((blit_hud_faces(game)) == 1)
 			return (error_return("error during blit_hud_faces\n", NULL));

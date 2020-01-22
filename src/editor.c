@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/20 20:04:07 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/22 15:10:28 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,8 +138,8 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 		return ;
 	tmp_sect = editor->edit_map.sector_head;
 	if (editor->start_sector_reached == 0)
-		draw_line(mult_vec(sdlmain->mouse_pos, editor->offset),
-			mult_vec(vecdb_to_vec(editor->wall_tmp.end), editor->offset), editor_surf, editor->wall_tmp.type_color);
+		draw_line(multvec(sdlmain->mouse_pos, editor->offset),
+			multvec(vecdb_to_vec(editor->wall_tmp.end), editor->offset), editor_surf, editor->wall_tmp.type_color);
 	fill_area(editor_surf, &editor->wall_tmp, editor);
 	while (tmp_sect != NULL)
 	{
@@ -147,8 +147,8 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 		while (tmp_wall != NULL)
 		{
 			fill_area(editor_surf, tmp_wall, editor);
-			draw_line(mult_vec(vecdb_to_vec(tmp_wall->end), editor->offset),
-				mult_vec(vecdb_to_vec(tmp_wall->start), editor->offset), editor_surf, tmp_wall->type_color);
+			draw_line(multvec(vecdb_to_vec(tmp_wall->end), editor->offset),
+				multvec(vecdb_to_vec(tmp_wall->start), editor->offset), editor_surf, tmp_wall->type_color);
 			i++;
 			tmp_wall = tmp_wall->next;
 		}

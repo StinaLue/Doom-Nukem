@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   perspective_view.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/21 22:21:17 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/22 15:16:55 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,13 @@ t_vecdb simple_intersect(t_vecdb start, t_vecdb end, t_vecdb cross)
 {
 	t_vecdb	intersection;
 	double	tmp;
+	double	vcp;
 
-	tmp = cross_product(start, end) / vxs(start.x - end.x, start.y - end.y, cross.x, cross.y);
+	//check vxs != 0
+	tmp = 1;
+	vcp = vxs(start.x - end.x, start.y - end.y, cross.x, cross.y);
+	if (vcp != 0)
+		tmp = cross_product(start, end) / vcp;
 	intersection.x = tmp * cross.x;
 	intersection.y = tmp * cross.y;
 	return (intersection);
@@ -180,24 +185,23 @@ int		intersect_view(t_wall *wall, t_view view)
 	if (cross_product(wall->start, wall->end) > 0)
 		return (0);
 
-	if (cross_product(wall->end, view.right) > 0)
-	{
-		if (cross_product(wall->start, view.right) > 0)
-			return (0);
-		wall->end = simple_intersect(wall->start, wall->end, view.right);
-	}
-	else if (wall->end.y < 0)
-		return (0);
-
 	if (cross_product(wall->start, view.left) < 0)
 	{
 		if (cross_product(wall->end, view.left) < 0)
 			return (0);
 		wall->start = simple_intersect(wall->start, wall->end, view.left);
 	}
-	else if (wall->start.y < 0)
+	else if (wall->start.y <= 0)
 		return (0);
 
+	if (cross_product(wall->end, view.right) > 0)
+	{
+		if (cross_product(wall->start, view.right) > 0)
+			return (0);
+		wall->end = simple_intersect(wall->start, wall->end, view.right);
+	}
+	else if (wall->end.y <= 0)
+		return (0);
 	return (1);
 }
 
@@ -249,7 +253,6 @@ void	draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view 
 	t_wall_node	*current_wall;
 	t_vecdb		tmp_wall;
 	t_view		new_view;
-
 	current_wall = sector->wall_head;
 
 	if (player->helper)
@@ -267,6 +270,10 @@ void	draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view 
 		init_rotate_wall(&wall, current_wall, player);
 		tmp_wall.x = wall.start.x;
 		tmp_wall.y = wall.end.x;
+		if (current_wall->neighbor_sector != NULL)
+		{
+			new_view.left.x = 1;
+		}
 		if ((wall.start.y > 0 || wall.end.y > 0) && intersect_view(&wall, view)) //wall is at least partly in front of us && crosses the field of view
 		{
 			if (current_wall->neighbor_sector != NULL)
