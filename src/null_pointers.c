@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/22 18:07:10 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/23 19:19:38 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void null_editor_pointers(t_editor *editor)
     editor->current_sector = NULL;
     editor->current_wall = NULL;
     editor->mouse_surf = NULL;
-    editor->wall_tmp.wall_type = 1;
+    editor->wall_tmp.wall_type = 0;//1;
 	editor->wall_tmp.type_color = 0xFF0000;
     while (i < NBINSTRUCTS)
     {

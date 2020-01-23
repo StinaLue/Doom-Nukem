@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/23 11:21:12 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/23 20:22:52 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ typedef struct				s_wall_node
 	int						color;
 	int						tex_index;
 	int						sector_index;
-	int 					wall_type; // for editor
+	int 					wall_type; // for editor --> 0 == normal wall / 1 == portal
 	int	 					type_color;
 	struct s_sector_node	*neighbor_sector;
 	double					length;
@@ -120,10 +120,10 @@ typedef struct				s_sector_node
 {
 	struct s_sector_node	*next;
 	t_wall_node				*wall_head;
-	int						wall_num;
-	int						floor_height;
-	int						ceiling_height;
 	t_vecdb					sector_center;
+	double					floor_height;
+	double					ceiling_height;
+	int						wall_num;
 }							t_sector_node;
 
 typedef struct				s_wall3d
@@ -279,6 +279,7 @@ typedef struct				s_editor
 	SDL_Rect				mouse_rect;
 
 	t_sector_node			*current_sector;
+	t_sector_node			*selected_sector;
 	t_wall_node				*current_wall;
 
 	int						clicked;
@@ -576,6 +577,8 @@ void						delete_sector(t_sector_node **node);
 void						delete_sector_by_index(t_sector_node **sector_list,unsigned int index);
 
 t_sector_node				*get_last_sector(t_sector_node *node);
+
+t_sector_node				*get_previous_sector(t_sector_node *list, t_sector_node *node);
 
 int							copy_sector_list(t_sector_node *sector_list, t_sector_node **new_list);
 

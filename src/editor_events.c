@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/23 10:44:21 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/23 21:22:55 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	check_finished_sect(t_editor *editor)
 		editor->wall_tmp.start.x = -1;
 		editor->wall_tmp.start.y = -1;
 		set_sector_position(editor->current_sector);
+		editor->current_sector->floor_height = editor->opt_menu.height_floor;
+		editor->current_sector->ceiling_height = editor->opt_menu.height_ceiling;
 	}
 }
 
@@ -128,24 +130,35 @@ void	set_border_color(t_editor *editor, t_vec mouse_pos)
 
 void change_size(t_editor *editor, t_sdlmain *sdlmain)
 {
-	if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_floor[1]) && sdlmain->event.wheel.y > 0 && editor->opt_menu.height_floor > 10)
+	if (editor->selected_sector != NULL)
 	{
-		editor->opt_menu.height_floor--; // makes floor lower
+		editor->opt_menu.height_floor = editor->selected_sector->floor_height;
+		editor->opt_menu.height_ceiling = editor->selected_sector->ceiling_height;
+		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_floor[1]) && sdlmain->event.wheel.y > 0 && editor->opt_menu.height_floor > 10)
+		{
+			//editor->opt_menu.height_floor--; // makes floor lower
+			editor->selected_sector->floor_height--;
+		}
+		else if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_floor[1]) && sdlmain->event.wheel.y < 0 && editor->opt_menu.height_floor < 50)
+		{
+			//editor->opt_menu.height_floor++;
+			editor->selected_sector->floor_height++;
+		}
+		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_ceiling[1]) && sdlmain->event.wheel.y > 0 && editor->opt_menu.height_ceiling < 50)
+		{
+			//printf("ceil %f\n", editor->opt_menu.height_ceiling);
+			//editor->opt_menu.height_ceiling++;
+			editor->selected_sector->ceiling_height++;
+		}
+		else if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_ceiling[1]) && sdlmain->event.wheel.y < 0 && editor->opt_menu.height_ceiling > 12)
+		{
+			//editor->opt_menu.height_ceiling--;
+			editor->selected_sector->ceiling_height--;
+		}
+		//editor->opt_menu.height_floor = editor->selected_sector->floor_height;
+		//editor->opt_menu.height_ceiling = editor->selected_sector->ceiling_height;
+		set_height_test(editor);
 	}
-	else if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_floor[1]) && sdlmain->event.wheel.y < 0 && editor->opt_menu.height_floor < 50)
-	{
-		editor->opt_menu.height_floor++;
-	}
-	if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_ceiling[1]) && sdlmain->event.wheel.y > 0 && editor->opt_menu.height_ceiling < 50)
-	{
-		printf("ceil %f\n", editor->opt_menu.height_ceiling);
-		editor->opt_menu.height_ceiling++;
-	}
-	else if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_ceiling[1]) && sdlmain->event.wheel.y < 0 && editor->opt_menu.height_ceiling > 12)
-	{
-		editor->opt_menu.height_ceiling--;
-	}
-	set_height_test(editor);
 }
 
 void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
@@ -222,10 +235,43 @@ void	find_neighbors(t_doom *doom)
 		current_wall = current_sector->wall_head;
 		while (current_wall != NULL)
 		{
-			current_wall->neighbor_sector = find_wall_neighbor(current_wall, doom->map.sector_head);
+			//if (current_wall->wall_type == 1)
+				current_wall->neighbor_sector = find_wall_neighbor(current_wall, doom->map.sector_head);
+			//else
+			//	current_wall->neighbor_sector = NULL;
 			current_wall = current_wall->next;
 		}
 		current_sector = current_sector->next;
+	}
+}
+
+void	highlight_sector(t_sector_node *selected_sector)
+{
+	t_wall_node *current_wall;
+
+	if (selected_sector == NULL)
+		return ;
+	current_wall = selected_sector->wall_head;
+	while (current_wall != NULL)
+	{
+		current_wall->color = current_wall->type_color;
+		current_wall->type_color = 0xFFFFFF;
+		current_wall = current_wall->next;
+	}
+}
+
+void	remove_highlight_sector(t_sector_node *sector)
+{
+	t_wall_node *current_wall;
+
+	if (sector == NULL)
+		return ;
+	current_wall = sector->wall_head;
+	while (current_wall != NULL)
+	{
+		current_wall->type_color = current_wall->color;
+		current_wall->color = 0xFFFFFF;
+		current_wall = current_wall->next;
 	}
 }
 
@@ -261,6 +307,22 @@ int	editor_events(t_doom *doom)
 				editor->start_sector_reached = 1; // only works when there's only one sector 
 			}
 		}
+		if (sdlmain->event.key.keysym.sym == SDLK_s)
+		{
+			if (editor->selected_sector != NULL)
+			{
+				/*
+				if (editor->selected_sector == editor->edit_map.sector_head)
+					editor->edit_map.sector_head = editor->selected_sector->next;
+				t_sector_node *previous_node;
+				previous_node = get_previous_sector(editor->edit_map.sector_head, editor->selected_sector);
+				//previous_node = editor->selected_sector->next;
+				delete_sector(&editor->selected_sector);
+				previous_node = editor->selected_sector;
+				*/
+				;
+			}
+		}
 		if (sdlmain->event.key.keysym.sym == SDLK_t \
 			&& sdlmain->event.key.repeat == 0)
 		{
@@ -278,6 +340,8 @@ int	editor_events(t_doom *doom)
 		if (sdlmain->event.key.keysym.sym == SDLK_r)
 		{
 			editor->edit_map.sector_head = doom->map.sector_head;
+			//doom->map.sector_head = editor->edit_map.sector_head; 
+			//doom->game.player.sector = doom->map.sector_head;
 			//free(doom->map.sector_head);
 			//doom->map.sector_head = NULL;
 			//doom->map.sector_head = editor->edit_map.sector_head;
@@ -295,9 +359,19 @@ int	editor_events(t_doom *doom)
 				&& sdlmain->mouse_pos.x <= NBPOINTSROW \
 				&& sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
 				{
-					get_sector_by_pos(editor->current_sector, vec_to_vecdb(sdlmain->mouse_pos), 10);
+					t_sector_node *tmp_sector = editor->selected_sector;
+					//selected_sector = get_sector_by_pos(editor->current_sector, vec_to_vecdb(sdlmain->mouse_pos), 10);
+					//highlight_sector(selected_sector);
+					editor->selected_sector = get_sector_by_pos(editor->edit_map.sector_head, vec_to_vecdb(sdlmain->mouse_pos), 10);
+					if (tmp_sector != NULL && tmp_sector != editor->selected_sector)
+						remove_highlight_sector(tmp_sector);
+					if (tmp_sector != editor->selected_sector)
+						highlight_sector(editor->selected_sector);
 					//printf("%p\n", get_sector_by_pos(editor->edit_map.sector_head, vec_to_vecdb(sdlmain->mouse_pos), 5));
 					// select "set_height"
+					editor->opt_menu.height_floor = editor->selected_sector->floor_height;
+					editor->opt_menu.height_ceiling = editor->selected_sector->ceiling_height;
+					set_height_test(editor);
 				}
 		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
 		mouse_in_options(editor, sdlmain);

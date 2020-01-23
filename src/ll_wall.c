@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_wall.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:25:24 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/22 13:11:03 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/23 19:26:23 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ t_wall_node	*copy_wall_node(t_wall_node **wall_head, const t_wall_node *node)
 	new_node->next = NULL;
 	new_node->tex_index = node->tex_index;
 	new_node->type_color = node->type_color;
+	new_node->wall_type = node->wall_type;
+	new_node->color = 0xFFFFFF;
 	return (new_node);
 }
 

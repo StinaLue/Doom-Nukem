@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_sector.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:02:35 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/21 16:41:28 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/23 20:28:31 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void		delete_sector(t_sector_node **node)
 	*node = (*node)->next;
 	free_wall_list(&tmp->wall_head);
 	free(tmp);
+	tmp = NULL;
 }
 
 //deletes sector at given index in list and relinks the list
@@ -140,6 +141,16 @@ t_sector_node	*get_last_sector(t_sector_node *node)
 	if (node->next == NULL)
 		return (node);
 	return (get_last_sector(node->next));
+}
+
+//returns the previous sector adress of the node
+t_sector_node	*get_previous_sector(t_sector_node *list, t_sector_node *node)
+{
+	if (node == NULL || list == NULL)
+		return (NULL);
+	if (list->next == node)
+		return (list);
+	return (get_previous_sector(list->next, node));
 }
 
 //returns sector count

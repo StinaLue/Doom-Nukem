@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/22 17:57:50 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/23 19:10:31 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,10 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	editor->edit_map.sector_head = NULL;
 	editor->opt_menu.height_ceiling = 26;
 	editor->opt_menu.height_floor = 26;
+
+	editor->current_sector = NULL;
+	editor->current_wall = NULL;
+	editor->selected_sector = NULL;
 	if (create_surfaces_editor(editor, sdlmain) != 0)
 		return (1);
 	if (init_editor_menu(editor) != 0)
