@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/22 17:51:27 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/23 11:32:53 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,10 @@ int set_height(t_editor *editor)
 
 int set_height_test(t_editor *editor)
 {
-	assign_sdlrect(&editor->opt_menu.h_rect_ceiling[0], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 6), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / editor->opt_menu.height_ceiling));
-	assign_sdlrect(&editor->opt_menu.h_rect_ceiling[1], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 6), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / 10));
-	assign_sdlrect_invert(&editor->opt_menu.h_rect_floor[0], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 6), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / editor->opt_menu.height_floor));
-	assign_sdlrect_invert(&editor->opt_menu.h_rect_floor[1], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 6), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / 12));
+	assign_sdlrect(&editor->opt_menu.h_rect_floor[0], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 6), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / editor->opt_menu.height_floor));
+	assign_sdlrect(&editor->opt_menu.h_rect_floor[1], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 6), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / 10));
+	assign_sdlrect_invert(&editor->opt_menu.h_rect_ceiling[0], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 6), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / editor->opt_menu.height_ceiling));
+	assign_sdlrect_invert(&editor->opt_menu.h_rect_ceiling[1], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 6), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / 12));
 	return (0);
 }
 
@@ -107,6 +107,7 @@ int	init_options_menu(t_editor *editor)
 		return (1);
 	if (create_opt_str(editor, create_vec((editor->opt_surf->w) / 2, ((editor->opt_surf->h) / 20) * 3), 3, "SET PLAYER POSITION") != 0)
 		return (1);
+	assign_sdlrect(&editor->opt_menu.player_rect, create_vec((editor->opt_surf->h / 2), ((editor->opt_surf->h) / 20) * 4), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
 	if (create_opt_str(editor, create_vec((editor->opt_surf->w) / 2, ((editor->opt_surf->h) / 20) * 8.5), 4, "CHOOSE OBJECT") != 0)
 		return (1);
 	if (set_textures(editor) != 0)

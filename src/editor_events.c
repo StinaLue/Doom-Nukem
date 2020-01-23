@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/22 17:46:25 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/23 10:44:21 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,9 +128,9 @@ void	set_border_color(t_editor *editor, t_vec mouse_pos)
 
 void change_size(t_editor *editor, t_sdlmain *sdlmain)
 {
-	if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_floor[1]) && sdlmain->event.wheel.y > 0 && editor->opt_menu.height_floor > 12)
+	if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_floor[1]) && sdlmain->event.wheel.y > 0 && editor->opt_menu.height_floor > 10)
 	{
-		editor->opt_menu.height_floor--;
+		editor->opt_menu.height_floor--; // makes floor lower
 	}
 	else if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_floor[1]) && sdlmain->event.wheel.y < 0 && editor->opt_menu.height_floor < 50)
 	{
@@ -138,9 +138,10 @@ void change_size(t_editor *editor, t_sdlmain *sdlmain)
 	}
 	if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_ceiling[1]) && sdlmain->event.wheel.y > 0 && editor->opt_menu.height_ceiling < 50)
 	{
+		printf("ceil %f\n", editor->opt_menu.height_ceiling);
 		editor->opt_menu.height_ceiling++;
 	}
-	else if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_ceiling[1]) && sdlmain->event.wheel.y < 0 && editor->opt_menu.height_ceiling > 10)
+	else if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_ceiling[1]) && sdlmain->event.wheel.y < 0 && editor->opt_menu.height_ceiling > 12)
 	{
 		editor->opt_menu.height_ceiling--;
 	}
