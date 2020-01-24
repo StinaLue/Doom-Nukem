@@ -3,23 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/17 16:52:20 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/22 18:09:38 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DOOM_H
 # define DOOM_H
-
 # include "SDL.h"
 # include "SDL_ttf.h"
 # include "SDL_mixer.h"
 # define TITLE "DOOM"
 
 # define SQRT2 1.4142135623730950488
-# define PLAYER_RADIUS 0.001
+# define PLAYER_RADIUS 1
 
 /*
 ** MAIN LOOP STATES
@@ -50,8 +49,14 @@
 
 # define NBPOINTS 2501 // map has 50 * 50 points
 # define NBPOINTSROW 50 // NBPOINTS = NBPOINTSROW * NBPOINTSROW
-# define MAX_WALLS 50
-# define MAX_SECTORS 10
+# define NBTEXTURES	9
+# define NBHEIGHTS 7
+# define NBOPTIONS 5
+# define NBINSTRUCTS 6
+# define COLOR_HOVER 0x6C1413
+# define COLOR_PRESSED 0xffff00
+# define COLOR_NORMAL 0xff0000
+
 /*
 ** HUD FLAGS
 */
@@ -59,6 +64,7 @@
 # define ROT_MAP_SHOW 1//0x00000001
 # define FIX_MAP_SHOW 2//0x00000010
 # define COLORFLAG 4//0x00000100
+# define HEALTH_STATUS 8//0x00001000
 
 /*
 ** MENU OPTIONS
@@ -73,30 +79,39 @@
 ** VECTOR STRUCTS
 */
 
-struct				s_sector_node;
-struct				s_wall_node;
+struct s_sector_node;
+struct s_wall_node;
+
 
 typedef struct				s_vec
-{		
+{
 	int						x;
 	int						y;
 }							t_vec;
-		
+
 typedef struct				s_vecdb
-{		
+{
 	double					x;
 	double					y;
 }							t_vecdb;
 
+typedef struct				s_enemy_info
+{
+	t_vec					enemy_spawn;
+	int						which_enemy;
+}							t_enemy_info;
+
 typedef struct				s_wall_node
 {
 	struct s_wall_node		*next;
-	//struct s_wall_node	*previous;
-	t_vecdb					start;
+	struct s_wall_node		*previous;
+	t_vecdb					start; // why not t_vec?
 	t_vecdb					end;
 	int						color;
 	int						tex_index;
 	int						sector_index;
+	int 					wall_type; // for editor
+	int	 					type_color;
 	struct s_sector_node	*neighbor_sector;
 	double					length;
 }							t_wall_node;
@@ -106,6 +121,8 @@ typedef struct				s_sector_node
 	struct s_sector_node	*next;
 	t_wall_node				*wall_head;
 	int						wall_num;
+	int						floor_height;
+	int						ceiling_height;
 	t_vecdb					sector_center;
 }							t_sector_node;
 
@@ -137,18 +154,26 @@ typedef struct				s_gamesurfs
 	SDL_Surface				*rot_mmap;
 	SDL_Surface				*perspective_view;
 	SDL_Surface				*weapons;
+	SDL_Surface				*hud_faces_surf;
+	SDL_Surface				*enemy_texture[2];
 
 	SDL_Rect				katana[4];
+	SDL_Rect				hud_faces_rect;
+	int						current_frame;
+	int						anim_timer;
+	int						hud_timer;
 }							t_gamesurfs;
 
 typedef struct				s_data
 {
+	t_enemy_info			*enemy_info;
+	int						num_enemies;
 	char					hud_flags;
 }							t_data;
 
 typedef	struct				s_wall
 {
-	t_vecdb					start;
+	t_vecdb					start; // why not t_vec?
 	t_vecdb					end;
 }							t_wall;
 
@@ -158,6 +183,16 @@ typedef struct				s_view
 	t_vecdb					right;
 	t_vecdb					origin;
 }							t_view;
+
+typedef struct				s_enemy
+{
+	t_vecdb					pos;
+	SDL_Surface				*texture;
+	SDL_Rect				clip_tex;
+	double					angle;
+	int						health;
+	int						state;
+}							t_enemy;
 
 typedef struct				s_player
 {
@@ -170,65 +205,77 @@ typedef struct				s_player
 	t_vecdb					fov;
 	double					true_fov;
 	int						helper;
+	int						health;
 }							t_player;
 
-typedef struct	s_game
+typedef struct				s_game
 {
 	t_gamesurfs				surfs;
 	t_data					data;
 	t_player				player;
+	t_enemy					*enemy;
+	int						(*weapon_anim[4])(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim);
+	int						anim;
 }							t_game;
 
-typedef struct				s_instruct_menu
+typedef struct				s_instr_menu
 {
 	SDL_Surface				*title;
-	SDL_Surface				*instructions[5];
+	SDL_Surface				*instructs[NBINSTRUCTS];
 
 	SDL_Rect				title_rect;
-	SDL_Rect				instruct_rect[5];
+	SDL_Rect				instr_rect[NBINSTRUCTS];
 
 	TTF_Font				*font_title;
 	TTF_Font				*font;
 
 	SDL_Color				text_color;
-}							t_instruct_menu;
+}							t_instr_menu;
 
 typedef struct				s_options_menu
 {
 	SDL_Surface				*title;
 	SDL_Surface				*options[5];
-	SDL_Surface				**wall_textures;
 
 	SDL_Rect				title_rect;
 	SDL_Rect				options_rect[5];
-	SDL_Rect				texture_rect[12];
-	SDL_Rect 				height_rect[7];
+	SDL_Rect				text_rect[NBTEXTURES];
+	SDL_Rect				h_rect[NBHEIGHTS];
+	SDL_Rect 				h_rect_ceiling[2];
+	SDL_Rect 				h_rect_floor[2];
 
 	TTF_Font				*font_title;
 	TTF_Font				*font;
 
 	SDL_Color				text_color;
-	int						border_color_text[12];
-	int						border_color_height[7];
-	int 					activated_texture;
-	int 					activated_height;
+	int						bord_color_text[NBTEXTURES];
+	int						bord_color_h[NBHEIGHTS];
+	int						activ_tex;
+	int						activ_h; // maybe not needed
+	double 					height_ceiling;
+	double						height_floor;
 }							t_options_menu;
 
 typedef struct				s_map
 {
 	t_sector_node			*sector_head;
+	t_enemy_info			*enemy_info;
 	int						num_sectors;
+	int						num_enemies;
 }							t_map;
 
 typedef struct				s_editor
 {
 	SDL_Surface				*editor_surf;
-	SDL_Surface				*options_surf;
-	SDL_Surface				*instruct_surf;
+	SDL_Surface				*opt_surf;
+	SDL_Surface				*instr_surf;
+	SDL_Surface				*mouse_surf;
+	SDL_Surface				**wall_textures;
 
 	SDL_Rect				editor_rect;
 	SDL_Rect				options_rect;
-	SDL_Rect				instruct_rect;
+	SDL_Rect				instr_rect;
+	SDL_Rect				mouse_rect;
 
 	t_sector_node			*current_sector;
 	t_wall_node				*current_wall;
@@ -238,12 +285,11 @@ typedef struct				s_editor
 	int						offset;
 	int						start_sector_reached;
 	int						color_change;
-	int 					current_option;
 	t_vec					grid_values[NBPOINTS];
 	t_vec					start_sector;
 	t_wall_node				wall_tmp;
-	t_instruct_menu			instruct_menu;
-	t_options_menu			options_menu;
+	t_instr_menu			instr_menu;
+	t_options_menu			opt_menu;
 	t_map					edit_map;
 }							t_editor;
 
@@ -286,15 +332,16 @@ void						init_rotate_wall(t_wall *new_wall, const t_wall_node *current_wall, co
 
 int							is_in_map(t_vecdb *player);
 
-SDL_Surface					*load_opti_bmp(char *file, SDL_Surface *win_surf, Uint32 colorkey);
+SDL_Surface					*load_opti_bmp(char *file, SDL_Surface *dst_surf, Uint32 colorkey);
 /*
 ** VECTOR FUNCTIONS
 */
+
 double						get_magnitude(t_vecdb a, t_vecdb b);
 
-void						multvec(t_vecdb *vecdb, double n);
+t_vecdb						multvecdb(t_vecdb vecdb, double n);
 
-t_vec						mult_vec(t_vec vec, int mult);
+t_vec						multvec(t_vec vec, int mult);
 
 t_vec						create_vec(int x, int y);
 
@@ -320,6 +367,8 @@ double						cross_product_len(t_vec a, t_vec b, t_vec c);
 
 double						get_point_distance(t_vecdb a, t_vecdb b);
 
+void						set_vec_values(t_vec *src, t_vec *dst);
+
 /*
 ** INIT FUNCTIONS
 */
@@ -327,7 +376,7 @@ int							init_doom(t_doom *doom);
 
 int							init_sdl_and_ttf();
 
-int							init_game(t_game *game, t_sdlmain *sdlmain);
+int							init_game(t_game *game, t_sdlmain *sdlmain, t_map *map);
 
 int							init_menu(t_menu *menu, t_sdlmain *sdlmain);
 
@@ -339,15 +388,19 @@ int							init_editor_menu(t_editor *editor);
 
 int							init_map(t_map *map);
 
+int							init_wall_textures(SDL_Surface **wall_textures, SDL_Surface *winsurf);
+
 
 /*
 ** INIT STRUCT FUNCTIONS
 */
 int							init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain);
 
-void						init_data_struct(t_data *data);
+void						init_data_struct(t_data *data, t_map *map);
 
 void						init_player_struct(t_player *player);
+
+int							init_enemy_struct(t_game *game);
 
 /*
 ** POLL EVENT FUNCTIONS
@@ -363,6 +416,11 @@ void						check_menu(SDL_Event *event, int *state, int *prev_state_ptr, int prev
 */
 
 void						handle_keys(t_game *game, const Uint8 *keyboard_state);
+
+int							editor_events(t_doom *doom);
+
+int							set_height_test(t_editor *editor);
+
 /*
 ** PRINT MINIMAP FUNCTIONS
 */
@@ -396,6 +454,7 @@ int							blit_editor(t_editor *editor, t_sdlmain *sdlmain);
 
 int							blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf);
 
+int							blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim);
 
 /*
 ** TEXT FUNCTIONS
@@ -435,6 +494,10 @@ int							free_editor(t_editor *editor);
 
 int							free_sdlmain(t_sdlmain *sdlmain);
 
+int							free_wall_textures(SDL_Surface **wall_textures);
+
+int							free_map(t_map *map);
+
 /*
 ** PARSE FUNCTIONS
 */
@@ -451,6 +514,7 @@ SDL_Rect					create_sdlrect(int x, int y, int w, int h);
 
 void						assign_sdlrect(SDL_Rect *rect, t_vec origin, t_vec size);
 
+void						assign_sdlrect_invert(SDL_Rect *rect, t_vec origin, t_vec size);
 
 /*
 ** MOVEMENT
@@ -489,6 +553,7 @@ int							error_return(const char *error_msg, const char *sdl_error);
 ** EDITOR FUNCTIONS
 */
 
+int							reset_init_editor(t_editor *editor, t_sdlmain *sdlmain);
 /*
 ** LINKED LIST FUNCTIONS
 */
@@ -500,6 +565,8 @@ int							error_return(const char *error_msg, const char *sdl_error);
 t_sector_node				*add_sector_node(t_sector_node **sector_head);
 
 void						set_sector_position(t_sector_node *sector_list);
+
+t_sector_node				*get_sector_by_pos(t_sector_node *sector_list, t_vecdb point, double dist);
 
 t_sector_node				*get_sector_by_index(t_sector_node *sector_list, unsigned int index);
 
@@ -523,7 +590,7 @@ void						free_sector_list(t_sector_node **sector_list);
 
 t_wall_node					*add_wall_node(t_wall_node **wall_head, const t_wall_node *node);
 
-t_wall_node					*create_wall_node(t_wall_node **wall_head, t_vecdb a, t_vecdb b, int color);
+t_wall_node					*create_wall_node(t_wall_node **wall_head, t_vecdb a, t_vecdb b, int tex_index);
 
 void						free_wall_list(t_wall_node **wall_list);
 
@@ -533,7 +600,9 @@ t_wall_node					*delete_last_wall(t_wall_node **wall_list);
 
 t_wall_node					*get_last_wall_node(t_wall_node *wall_list);
 
-t_wall_node 				*undo_wall(t_sector_node *node);
+t_wall_node					*undo_wall(t_sector_node *node);
+
+t_wall_node					*copy_wall_node(t_wall_node **wall_head, const t_wall_node *node);
 
 /*
 ** DEBUG FUNCTIONS
@@ -548,4 +617,4 @@ int							wall_loop(t_wall_node *node);
 int							count_walls(t_wall_node *wall_list);
 
 void						set_wall_length(t_wall_node *head);
-#endif		
+#endif

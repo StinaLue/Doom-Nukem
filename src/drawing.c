@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 03:35:35 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/16 14:02:01 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/22 16:55:03 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	draw_border_options(SDL_Rect *rect, int color, SDL_Surface *surf)
 	int i;
 
 	i = 0;
-	while (i < 3)
+	while (i < 2)
 	{
 		give_vec_values(&top_left, rect->x - 1 - i, surf->h - rect->y + i);
 		give_vec_values(&top_right, rect->x + rect->w + i, surf->h - rect->y + i);

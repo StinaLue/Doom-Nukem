@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:06:54 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/14 18:16:36 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/22 17:58:05 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,19 +72,26 @@ void	give_vec_values(t_vec *vec, int x, int y)
 	vec->y = y;
 }
 
+void	set_vec_values(t_vec *src, t_vec *dst)
+{
+	dst->x = src->x;
+	dst->y = src->y;
+}
+
 void	vectorcpy(t_vec *one, const t_vec *two)
 {
 	one->x = two->x;
 	one->y = two->y;
 }
 
-void	multvec(t_vecdb *vecdb, double n)
+t_vecdb	multvecdb(t_vecdb vecdb, double n)
 {
-	vecdb->x *= n;
-	vecdb->y *= n;
+	vecdb.x *= n;
+	vecdb.y *= n;
+	return (vecdb);
 }
 
-t_vec	mult_vec(t_vec vec, int mult)
+t_vec	multvec(t_vec vec, int mult)
 {
 	vec.x *= mult;
 	vec.y *= mult;

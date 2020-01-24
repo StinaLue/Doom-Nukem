@@ -6,11 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-<<<<<<< Updated upstream
-/*   Updated: 2020/01/17 16:15:40 by phaydont         ###   ########.fr       */
-=======
-/*   Updated: 2020/01/22 18:12:05 by phaydont         ###   ########.fr       */
->>>>>>> Stashed changes
+/*   Updated: 2020/01/24 15:48:49 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +30,13 @@ t_vecdb simple_intersect(t_vecdb start, t_vecdb end, t_vecdb cross)
 {
 	t_vecdb	intersection;
 	double	tmp;
+	double	vcp;
 
-	tmp = cross_product(start, end) / vxs(start.x - end.x, start.y - end.y, cross.x, cross.y);
+	//check vxs != 0
+	tmp = 1;
+	vcp = vxs(start.x - end.x, start.y - end.y, cross.x, cross.y);
+	if (vcp != 0)
+		tmp = cross_product(start, end) / vcp;
 	intersection.x = tmp * cross.x;
 	intersection.y = tmp * cross.y;
 	return (intersection);
@@ -125,7 +126,11 @@ void	fill_wall_texture(SDL_Surface *surf, const t_wall3d *display_wall, SDL_Surf
 	t_vec current_bottom;
 	//int current_xtex = display_wall->bottom_left.x;
 	int current_xtex = 0;
-	double step = 1.0 * tex->w / (display_wall->top_right.x - display_wall->top_left.x);
+	double step;
+	if (display_wall->top_right.x - display_wall->top_left.x == 0)
+		step = tex->w;
+	else
+		step = tex->w / (display_wall->top_right.x - display_wall->top_left.x);
 	if (step < 1)
 		step = 1;
 	//printf("step %f\n", step);
@@ -180,24 +185,23 @@ int		intersect_view(t_wall *wall, t_view view)
 	if (cross_product(wall->start, wall->end) > 0)
 		return (0);
 
-	if (cross_product(wall->end, view.right) > 0)
-	{
-		if (cross_product(wall->start, view.right) > 0)
-			return (0);
-		wall->end = simple_intersect(wall->start, wall->end, view.right);
-	}
-	else if (wall->end.y < 0)
-		return (0);
-
 	if (cross_product(wall->start, view.left) < 0)
 	{
 		if (cross_product(wall->end, view.left) < 0)
 			return (0);
 		wall->start = simple_intersect(wall->start, wall->end, view.left);
 	}
-	else if (wall->start.y < 0)
+	else if (wall->start.y <= 0)
 		return (0);
 
+	if (cross_product(wall->end, view.right) > 0)
+	{
+		if (cross_product(wall->start, view.right) > 0)
+			return (0);
+		wall->end = simple_intersect(wall->start, wall->end, view.right);
+	}
+	else if (wall->end.y <= 0)
+		return (0);
 	return (1);
 }
 
@@ -249,8 +253,17 @@ void	draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view 
 	t_wall_node	*current_wall;
 	t_vecdb		tmp_wall;
 	t_view		new_view;
-
 	current_wall = sector->wall_head;
+
+	if (player->helper)
+	{
+		new_view = view;
+		new_view.left.x += surf->w / 2 + 0.5;
+		new_view.left.y += 0.5;
+		new_view.right.x += surf->w / 2;
+		draw_line(create_vec(surf->w / 2, 0), vecdb_to_vec(new_view.left), surf, 0x444444);
+		draw_line(create_vec(surf->w / 2, 0), vecdb_to_vec(new_view.right), surf, 0x333333);
+	}
 
 	while (current_wall != NULL)
 	{
@@ -259,7 +272,7 @@ void	draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view 
 		tmp_wall.y = wall.end.x;
 		if (current_wall->neighbor_sector != NULL)
 		{
-			new_view.left.x = 1;//for debug purposes
+			new_view.left.x = 1; //debug purposes
 		}
 		if ((wall.start.y > 0 || wall.end.y > 0) && intersect_view(&wall, view)) //wall is at least partly in front of us && crosses the field of view
 		{
@@ -275,6 +288,13 @@ void	draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view 
 				//display_wall.start_pos = 1 - (tmp_wall.y - wall.start.x) / (tmp_wall.y - tmp_wall.x);
 				//display_wall.end_pos = (wall.end.x - tmp_wall.x) / (tmp_wall.y - tmp_wall.x);
 				draw_3dwall(display_wall, surf, current_wall, wall_textures);
+
+				if (player->helper)
+				{
+					wall.start.x += surf->w / 2;
+					wall.end.x += surf->w / 2;
+					draw_line(vecdb_to_vec(wall.start), vecdb_to_vec(wall.end), surf, 0xFF0000);
+				}
 			}
 		}
 		current_wall = current_wall->next;

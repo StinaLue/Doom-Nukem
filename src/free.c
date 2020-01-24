@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/15 13:54:14 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/22 18:09:25 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ int		free_sdlmain(t_sdlmain *sdlmain)
 
 int		free_game(t_game *game)
 {
+	int nb_enemy;
+
+	nb_enemy = game->data.num_enemies;
 	SDL_FreeSurface(game->surfs.fixed_mmap);
 	game->surfs.fixed_mmap = NULL;
 	SDL_FreeSurface(game->surfs.rot_mmap);
@@ -43,6 +46,14 @@ int		free_game(t_game *game)
 	game->surfs.perspective_view = NULL;
 	SDL_FreeSurface(game->surfs.weapons);
 	game->surfs.weapons = NULL;
+	SDL_FreeSurface(game->surfs.hud_faces_surf);
+	game->surfs.hud_faces_surf = NULL;
+	SDL_FreeSurface(game->surfs.enemy_texture[0]);
+	game->surfs.enemy_texture[0] = NULL;
+	SDL_FreeSurface(game->surfs.enemy_texture[1]);
+	game->surfs.enemy_texture[1] = NULL;
+	if (nb_enemy >= 0)
+		ft_memdel((void **)&game->enemy);
 	return (EXIT_FAILURE);
 }
 
@@ -66,14 +77,14 @@ int		free_menu(t_menu *menu)
 
 int		free_fonts(t_editor *editor)
 {
-	TTF_CloseFont(editor->options_menu.font);
-	editor->options_menu.font = NULL;
-	TTF_CloseFont(editor->options_menu.font_title);
-	editor->options_menu.font_title = NULL;
-	TTF_CloseFont(editor->instruct_menu.font);
-	editor->instruct_menu.font = NULL;
-	TTF_CloseFont(editor->instruct_menu.font_title);
-	editor->instruct_menu.font_title = NULL;
+	TTF_CloseFont(editor->opt_menu.font);
+	editor->opt_menu.font = NULL;
+	TTF_CloseFont(editor->opt_menu.font_title);
+	editor->opt_menu.font_title = NULL;
+	TTF_CloseFont(editor->instr_menu.font);
+	editor->instr_menu.font = NULL;
+	TTF_CloseFont(editor->instr_menu.font_title);
+	editor->instr_menu.font_title = NULL;
 	return (EXIT_FAILURE);
 }
 
@@ -82,21 +93,21 @@ int		free_fonts_surf(t_editor *editor)
 	int i;
 
 	i = 0;
-	SDL_FreeSurface(editor->instruct_menu.title);
-	editor->instruct_menu.title = NULL;
-	SDL_FreeSurface(editor->options_menu.title);
-	editor->options_menu.title = NULL;
-	while (i < 5)
+	SDL_FreeSurface(editor->instr_menu.title);
+	editor->instr_menu.title = NULL;
+	SDL_FreeSurface(editor->opt_menu.title);
+	editor->opt_menu.title = NULL;
+	while (i < NBOPTIONS)
 	{
-		SDL_FreeSurface(editor->options_menu.options[i]);
-		editor->options_menu.options[i] = NULL;
+		SDL_FreeSurface(editor->opt_menu.options[i]);
+		editor->opt_menu.options[i] = NULL;
 		i++;
 	}
 	i = 0;
-	while (i < 5)
+	while (i < NBINSTRUCTS)
 	{
-		SDL_FreeSurface(editor->instruct_menu.instructions[i]);
-		editor->instruct_menu.instructions[i] = NULL;
+		SDL_FreeSurface(editor->instr_menu.instructs[i]);
+		editor->instr_menu.instructs[i] = NULL;
 		i++;
 	}
 	return (EXIT_FAILURE);
@@ -106,11 +117,36 @@ int		free_editor(t_editor *editor)
 {
 	SDL_FreeSurface(editor->editor_surf);
 	editor->editor_surf = NULL;
-	SDL_FreeSurface(editor->instruct_surf);
-	editor->instruct_surf = NULL;
-	SDL_FreeSurface(editor->options_surf);
-	editor->options_surf = NULL;
+	SDL_FreeSurface(editor->instr_surf);
+	editor->instr_surf = NULL;
+	SDL_FreeSurface(editor->opt_surf);
+	editor->opt_surf = NULL;
 	free_fonts_surf(editor);
 	free_fonts(editor);
+	return (EXIT_FAILURE);
+}
+
+int		free_wall_textures(SDL_Surface **wall_textures)
+{
+	int i;
+
+	i = 0;
+	while (i < 9)
+	{
+		SDL_FreeSurface(wall_textures[i]);
+		wall_textures[i] = NULL;
+		i++;
+	}
+	return (EXIT_FAILURE);
+}
+
+int		free_map(t_map *map)
+{
+	int nb_enemy;
+
+	nb_enemy = map->num_enemies;
+	free_sector_list(&map->sector_head);
+	if (nb_enemy >= 0)
+		ft_memdel((void **)&map->enemy_info);
 	return (EXIT_FAILURE);
 }

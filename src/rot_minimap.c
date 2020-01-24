@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 16:22:14 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/16 16:33:50 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/22 15:47:05 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,12 @@ void	draw_rot_minimap(SDL_Surface *surf, t_player *player, const t_map *map)
 		current_wall = current_sector->wall_head;
 		while (current_wall != NULL)
 		{
-			if (current_wall->neighbor_sector == NULL)
-			{
-				init_rotate_wall(&wall_tmp, current_wall, player);
-				transfo_wall.start.x = map_center.x + wall_tmp.start.x;
-				transfo_wall.start.y = map_center.y + wall_tmp.start.y;
-				transfo_wall.end.x = map_center.x + wall_tmp.end.x;
-				transfo_wall.end.y = map_center.y + wall_tmp.end.y;
-				draw_line(vecdb_to_vec(transfo_wall.start), vecdb_to_vec(transfo_wall.end), surf, current_wall->color);
-			}
+			init_rotate_wall(&wall_tmp, current_wall, player);
+			transfo_wall.start.x = map_center.x + wall_tmp.start.x;
+			transfo_wall.start.y = map_center.y + wall_tmp.start.y;
+			transfo_wall.end.x = map_center.x + wall_tmp.end.x;
+			transfo_wall.end.y = map_center.y + wall_tmp.end.y;
+			draw_line(vecdb_to_vec(transfo_wall.start), vecdb_to_vec(transfo_wall.end), surf, current_wall->neighbor_sector == NULL ? 0xEEEEEE : 0x333333);
 			current_wall = current_wall->next;
 		}
 		current_sector = current_sector->next;
