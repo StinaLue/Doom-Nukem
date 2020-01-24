@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:02:35 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/23 20:28:31 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/24 20:11:21 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,19 @@ int			count_sectors(t_sector_node *sector_list)
 	return (i);
 }
 
+
 //applies a given function to every sector in the list
+int		itt_sectors_true(t_sector_node *sector_node, int (*f)(t_sector_node *))
+{
+	while (sector_node)
+	{
+		if (f(sector_node) == 0)
+			return (0);
+		sector_node = sector_node->next;
+	}
+	return (1);
+}
+
 void		itt_sector_wall_heads(t_sector_node *sector_node, void (*f)(t_wall_node *wall_node))
 {
 	while (sector_node)

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/24 19:59:46 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/24 20:11:50 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -374,6 +374,8 @@ double						get_point_distance(t_vecdb a, t_vecdb b);
 
 void						set_vec_values(t_vec *src, t_vec *dst);
 
+t_vecdb						vecdb_diff(t_vecdb a, t_vecdb b);
+
 /*
 ** INIT FUNCTIONS
 */
@@ -589,6 +591,8 @@ int							count_sectors(t_sector_node *sector_list);
 
 void						itt_sector_wall_heads(t_sector_node *sector_node, void (*f)(t_wall_node *wall_node));
 
+int							itt_sectors_true(t_sector_node *sector_node, int (*f)(t_sector_node *));
+
 void						free_sector_list(t_sector_node **sector_list);
 
 /*
@@ -624,4 +628,11 @@ int							wall_loop(t_wall_node *node);
 int							count_walls(t_wall_node *wall_list);
 
 void						set_wall_length(t_wall_node *head);
+
+/*
+** DEDITOR CHECK FUNCTIONS
+*/
+
+int							check_convex_sector(t_sector_node *sector);
+
 #endif

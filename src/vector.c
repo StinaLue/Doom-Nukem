@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:06:54 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/22 17:58:05 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/24 17:40:02 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,4 +137,13 @@ t_vecdb	vec_to_vecdb(t_vec vector)
 double	get_point_distance(t_vecdb a, t_vecdb b)
 {
 	return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+}
+
+t_vecdb	vecdb_diff(t_vecdb a, t_vecdb b)
+{
+	t_vecdb vector;
+
+	vector.x = a.x - b.x;
+	vector.y = a.y - b.y;
+	return (vector);
 }

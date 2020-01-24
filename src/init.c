@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/24 17:46:24 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/24 20:11:40 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,6 +239,7 @@ int		init_map(t_map *map) //<-- INIT MAP LEAKS
 	current_sector->wall_head->next->next->next->next->neighbor_sector = map->sector_head->next->next;
 
 	itt_sector_wall_heads(map->sector_head, &set_wall_length);
+	itt_sectors_true(map->sector_head, &check_convex_sector);
 
 	return (0);
 }

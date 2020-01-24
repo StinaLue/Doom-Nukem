@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/22 15:09:49 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/24 15:49:11 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,13 @@ int		is_in_range(t_vecdb pos, t_wall_node *wall)
 	return (1);
 }
 
-t_wall_node	*get_collision_wall(t_player *player, t_sector_node *sector, double *min_dist, int depth)
+t_wall_node	*get_collision_wall(t_player *player, t_sector_node *sector, double *min_dist, t_sector_node *last_sector)
 {
 	double dist;
 	t_wall_node	*wall;
 	t_wall_node	*deepest_wall;
 	t_wall_node	*tmp_deepest_wall;
 
-	if (depth == 0)
-		return (NULL);
 	wall = sector->wall_head;
 	deepest_wall = NULL;
 	while (wall != NULL)
@@ -64,9 +62,9 @@ t_wall_node	*get_collision_wall(t_player *player, t_sector_node *sector, double 
 					deepest_wall = wall;
 					*min_dist = dist;
 				}
-				else if (wall->neighbor_sector != player->sector)
+				else if (wall->neighbor_sector != player->sector && wall->neighbor_sector != sector && wall->neighbor_sector != last_sector)
 				{
-					tmp_deepest_wall = get_collision_wall(player, wall->neighbor_sector, min_dist, depth - 1);
+					tmp_deepest_wall = get_collision_wall(player, wall->neighbor_sector, min_dist, sector);
 					if (tmp_deepest_wall != NULL)
 						deepest_wall = tmp_deepest_wall;
 				}
@@ -161,7 +159,7 @@ void	move_player2(t_player *player)
 	tmp_wall = NULL;
 	tmp_distance = PLAYER_RADIUS;
 	col_angle = 0;
-	if ((tmp_wall = get_collision_wall(player, player->sector, &tmp_distance, 6)) != NULL)
+	if ((tmp_wall = get_collision_wall(player, player->sector, &tmp_distance, NULL)) != NULL)
 	{
 		move = collide(tmp_wall, tmp_distance, &col_angle);
 		player->pos.x += move.x;
@@ -170,7 +168,7 @@ void	move_player2(t_player *player)
 
 		tmp_distance = PLAYER_RADIUS;
 		tmp_wall2 = tmp_wall;
-		if ((tmp_wall = get_collision_wall(player, player->sector, &tmp_distance, 5)) != NULL && tmp_wall != tmp_wall2)
+		if ((tmp_wall = get_collision_wall(player, player->sector, &tmp_distance, NULL)) != NULL && tmp_wall != tmp_wall2)
 		{
 			move = move_hyp_length(tmp_wall, tmp_distance, col_angle);
 			player->pos.x += move.x;
