@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/22 18:07:56 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/24 17:46:24 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ int		init_map(t_map *map) //<-- INIT MAP LEAKS
 		map->enemy_info[0].enemy_spawn = create_vec(50, 34);
 		map->enemy_info[0].which_enemy = 1;
 	}
+	map->num_sectors = 8;
 	t_vecdb vec1 = {30, 30};
 	t_vecdb vec2 = {70, 30};
 	t_vecdb vec3 = {70, 10};

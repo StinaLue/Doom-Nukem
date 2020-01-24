@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/24 17:06:10 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/24 19:59:46 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,7 +283,7 @@ typedef struct				s_editor
 	t_wall_node				*current_wall;
 
 	int						clicked;
-	int						num_sectors;
+	//int						num_sectors;
 	int						offset;
 	int						start_sector_reached;
 	int						color_change;

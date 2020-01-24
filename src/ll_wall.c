@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:25:24 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/23 19:26:23 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/24 19:09:00 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,10 @@ int	copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list)
 	int	ret;
 
 	if (wall_list == NULL)
+	{
+		(*new_list) = NULL;
 		return (0);
+	}
 	*new_list = malloc(sizeof(t_wall_node));
 	if (*new_list == NULL)
 		return (-1);

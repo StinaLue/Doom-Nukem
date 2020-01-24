@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/24 17:18:26 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/24 19:58:40 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	check_finished_sect(t_editor *editor)
 	{
 		editor->clicked = 0;
 		editor->start_sector_reached = 1;
-		editor->num_sectors++;
+		//editor->num_sectors++;
+		editor->edit_map.num_sectors++;
 		editor->wall_tmp.start.x = -1;
 		editor->wall_tmp.start.y = -1;
 		set_sector_position(editor->current_sector);
@@ -337,17 +338,28 @@ int	editor_events(t_doom *doom)
 				editor->wall_tmp.type_color = 0xFF00FF;
 			}
 		}
-		if (sdlmain->event.key.keysym.sym == SDLK_r)
+		if (sdlmain->event.key.keysym.sym == SDLK_r && doom->map.sector_head != NULL)
 		{
-			/*if (editor->edit_map.sector_head != NULL)
+			if (editor->edit_map.sector_head != NULL)
 				free_map(&editor->edit_map);
-			copy_map(&doom->map, &editor->edit_map);*/
-			editor->edit_map.sector_head = doom->map.sector_head;
+			//print_map_contents(&editor->edit_map);
+			if (copy_map(&doom->map, &editor->edit_map) != 0)
+				doom->state = QUIT_STATE;
+			//editor->start_sector_reached = 1;
+			//editor->edit_map.sector_head = doom->map.sector_head;
 			//doom->map.sector_head = editor->edit_map.sector_head; 
 			//doom->game.player.sector = doom->map.sector_head;
 			//free(doom->map.sector_head);
 			//doom->map.sector_head = NULL;
 			//doom->map.sector_head = editor->edit_map.sector_head;
+		}
+		if (sdlmain->event.key.keysym.sym == SDLK_l && editor->edit_map.sector_head != NULL)
+		{
+			if (doom->map.sector_head != NULL)
+				free_map(&doom->map);
+			if (copy_map(&editor->edit_map, &doom->map) != 0)
+				doom->state = QUIT_STATE;
+			doom->game.player.sector = doom->map.sector_head;
 		}
 	}
 	if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN \
