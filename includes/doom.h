@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/23 20:22:52 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/24 17:06:10 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -335,6 +335,9 @@ void						init_rotate_wall(t_wall *new_wall, const t_wall_node *current_wall, co
 int							is_in_map(t_vecdb *player);
 
 SDL_Surface					*load_opti_bmp(char *file, SDL_Surface *dst_surf, Uint32 colorkey);
+
+int							copy_map(const t_map *srcmap, t_map *dstmap);
+
 /*
 ** VECTOR FUNCTIONS
 */

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/22 18:09:25 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/24 16:53:06 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,8 +145,9 @@ int		free_map(t_map *map)
 	int nb_enemy;
 
 	nb_enemy = map->num_enemies;
-	free_sector_list(&map->sector_head);
-	if (nb_enemy >= 0)
+	if (map->sector_head != NULL)
+		free_sector_list(&map->sector_head);
+	if (nb_enemy >= 0 && map->enemy_info != NULL)
 		ft_memdel((void **)&map->enemy_info);
 	return (EXIT_FAILURE);
 }

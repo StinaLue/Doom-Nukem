@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/23 21:22:55 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/24 17:18:26 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -339,6 +339,9 @@ int	editor_events(t_doom *doom)
 		}
 		if (sdlmain->event.key.keysym.sym == SDLK_r)
 		{
+			/*if (editor->edit_map.sector_head != NULL)
+				free_map(&editor->edit_map);
+			copy_map(&doom->map, &editor->edit_map);*/
 			editor->edit_map.sector_head = doom->map.sector_head;
 			//doom->map.sector_head = editor->edit_map.sector_head; 
 			//doom->game.player.sector = doom->map.sector_head;
@@ -369,8 +372,11 @@ int	editor_events(t_doom *doom)
 						highlight_sector(editor->selected_sector);
 					//printf("%p\n", get_sector_by_pos(editor->edit_map.sector_head, vec_to_vecdb(sdlmain->mouse_pos), 5));
 					// select "set_height"
-					editor->opt_menu.height_floor = editor->selected_sector->floor_height;
-					editor->opt_menu.height_ceiling = editor->selected_sector->ceiling_height;
+					if (editor->selected_sector != NULL)
+					{
+						editor->opt_menu.height_floor = editor->selected_sector->floor_height;
+						editor->opt_menu.height_ceiling = editor->selected_sector->ceiling_height;
+					}
 					set_height_test(editor);
 				}
 		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
