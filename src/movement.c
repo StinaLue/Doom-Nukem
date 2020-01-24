@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/17 16:43:00 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/24 15:37:07 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ double	wall_distance(t_vecdb point, t_wall_node *wall)
 }
 
 
-t_wall_node	*get_collision_wall(t_vecdb position, t_sector_node *sector, double *min_dist)
+t_wall_node	*get_collision_wall(t_player *player, t_sector_node *sector, double *min_dist, t_sector_node *last_sector)
 {
 	double dist;
 	t_wall_node	*wall;
@@ -35,8 +35,21 @@ t_wall_node	*get_collision_wall(t_vecdb position, t_sector_node *sector, double 
 		dist = wall_distance(position, wall);
 		if (dist < *min_dist && wall->neighbor_sector == NULL)
 		{
-			deepest_wall = wall;
-			*min_dist = dist;
+			dist = wall_distance(player->pos, wall);
+			if (dist < *min_dist)
+			{
+				if (wall->neighbor_sector == NULL)
+				{
+					deepest_wall = wall;
+					*min_dist = dist;
+				}
+				else if (wall->neighbor_sector != player->sector && wall->neighbor_sector != sector && wall->neighbor_sector != last_sector)
+				{
+					tmp_deepest_wall = get_collision_wall(player, wall->neighbor_sector, min_dist, sector);
+					if (tmp_deepest_wall != NULL)
+						deepest_wall = tmp_deepest_wall;
+				}
+			}
 		}
 		wall = wall->next;
 	}
@@ -127,12 +140,29 @@ void	move_player2(t_player *player)
 	tmp_wall = NULL;
 	tmp_distance = PLAYER_RADIUS;
 	col_angle = 0;
+<<<<<<< Updated upstream
 	while ((tmp_wall = get_collision_wall(player->pos, player->sector, &tmp_distance)) != NULL)
+=======
+	if ((tmp_wall = get_collision_wall(player, player->sector, &tmp_distance, NULL)) != NULL)
+>>>>>>> Stashed changes
 	{
 		move = collide(tmp_wall, tmp_distance, &col_angle);
 		player->pos.x += move.x;
 		player->pos.y += move.y;
 		update_sector(player, player->sector->wall_head);
+<<<<<<< Updated upstream
+=======
+
+		tmp_distance = PLAYER_RADIUS;
+		tmp_wall2 = tmp_wall;
+		if ((tmp_wall = get_collision_wall(player, player->sector, &tmp_distance, NULL)) != NULL && tmp_wall != tmp_wall2)
+		{
+			move = move_hyp_length(tmp_wall, tmp_distance, col_angle);
+			player->pos.x += move.x;
+			player->pos.y += move.y;
+			update_sector(player, player->sector->wall_head);
+		}
+>>>>>>> Stashed changes
 	}
 }
 

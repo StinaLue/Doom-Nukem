@@ -6,7 +6,11 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
+<<<<<<< Updated upstream
 /*   Updated: 2020/01/17 16:15:40 by phaydont         ###   ########.fr       */
+=======
+/*   Updated: 2020/01/22 18:12:05 by phaydont         ###   ########.fr       */
+>>>>>>> Stashed changes
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,9 +257,13 @@ void	draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view 
 		init_rotate_wall(&wall, current_wall, player);
 		tmp_wall.x = wall.start.x;
 		tmp_wall.y = wall.end.x;
+		if (current_wall->neighbor_sector != NULL)
+		{
+			new_view.left.x = 1;//for debug purposes
+		}
 		if ((wall.start.y > 0 || wall.end.y > 0) && intersect_view(&wall, view)) //wall is at least partly in front of us && crosses the field of view
 		{
-			if (current_wall->neighbor_sector != NULL)
+			if (current_wall->neighbor_sector != NULL && current_wall->neighbor_sector != sector)
 			{
 				new_view.left = wall.start;
 				new_view.right = wall.end;
@@ -263,7 +271,7 @@ void	draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view 
 			}
 			else
 			{
-				display_wall = create_perspective_wall(wall, surf, player);
+				display_wall = create_perspective_wall(wall, surf, player);//ajouter sector pour les infos de hauteur
 				//display_wall.start_pos = 1 - (tmp_wall.y - wall.start.x) / (tmp_wall.y - tmp_wall.x);
 				//display_wall.end_pos = (wall.end.x - tmp_wall.x) / (tmp_wall.y - tmp_wall.x);
 				draw_3dwall(display_wall, surf, current_wall, wall_textures);

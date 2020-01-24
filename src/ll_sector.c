@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:02:35 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/15 14:59:53 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/24 15:31:41 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ t_sector_node	*add_sector_node(t_sector_node **sector_head)
 	return (new_node);
 }
 
+//wrong
 //deletes a sector and replaces it's adress with the next node in the list
 void		delete_sector(t_sector_node **node)
 {
