@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/24 15:37:07 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/24 15:46:05 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,18 +140,12 @@ void	move_player2(t_player *player)
 	tmp_wall = NULL;
 	tmp_distance = PLAYER_RADIUS;
 	col_angle = 0;
-<<<<<<< Updated upstream
-	while ((tmp_wall = get_collision_wall(player->pos, player->sector, &tmp_distance)) != NULL)
-=======
 	if ((tmp_wall = get_collision_wall(player, player->sector, &tmp_distance, NULL)) != NULL)
->>>>>>> Stashed changes
 	{
 		move = collide(tmp_wall, tmp_distance, &col_angle);
 		player->pos.x += move.x;
 		player->pos.y += move.y;
 		update_sector(player, player->sector->wall_head);
-<<<<<<< Updated upstream
-=======
 
 		tmp_distance = PLAYER_RADIUS;
 		tmp_wall2 = tmp_wall;
@@ -162,7 +156,6 @@ void	move_player2(t_player *player)
 			player->pos.y += move.y;
 			update_sector(player, player->sector->wall_head);
 		}
->>>>>>> Stashed changes
 	}
 }
 
