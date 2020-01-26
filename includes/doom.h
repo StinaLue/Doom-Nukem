@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/24 20:11:50 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/26 02:09:31 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,6 +261,7 @@ typedef struct				s_map
 {
 	t_sector_node			*sector_head;
 	t_enemy_info			*enemy_info;
+	t_vec					player_spawn;
 	int						num_sectors;
 	int						num_enemies;
 }							t_map;
@@ -405,7 +406,7 @@ int							init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain);
 
 void						init_data_struct(t_data *data, t_map *map);
 
-void						init_player_struct(t_player *player);
+void						init_player_struct(t_player *player, t_map *map);
 
 int							init_enemy_struct(t_game *game);
 

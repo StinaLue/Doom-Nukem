@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   perspective_view.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/24 16:46:01 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/26 18:25:37 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,11 @@ void draw_vertical_tex(t_vec top, t_vec bottom, SDL_Surface *surf, SDL_Surface *
 
 	top.y = limit_value(top.y, 0, surf->h - 1);
 	bottom.y = limit_value(bottom.y, 0, surf->h - 1);
-	double step = 1.0 * tex->h / (top.y - bottom.y);
+	double step;
+	if (top.y - bottom.y != 0)
+		step = 1.0 * tex->h / (top.y - bottom.y);
+	else
+		step = tex->h;
 	if (step < 1)
 		step = 1;
 	//printf("current step %f\n", step);

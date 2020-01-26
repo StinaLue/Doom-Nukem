@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/24 20:11:40 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/25 20:14:56 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,8 @@ int		init_map(t_map *map) //<-- INIT MAP LEAKS
 {
 	t_sector_node	*current_sector;
 	map->num_enemies = 1;
+	map->player_spawn.x = 49;
+	map->player_spawn.y = 35;
 
 	if (map->num_enemies >= 1)
 	{
@@ -252,7 +254,7 @@ int	init_game(t_game *game, t_sdlmain *sdlmain, t_map *map)
 	if (init_gamesurfs_struct(&(game->surfs), sdlmain) == 1 || init_enemy_struct(game) == 1)
 		return (1);
 	//init_data_struct(&(game->data, map));
-	init_player_struct(&(game->player));
+	init_player_struct(&(game->player), map);
 	game->weapon_anim[0] = blit_katana;
 	game->anim = 0;
 	return (0);

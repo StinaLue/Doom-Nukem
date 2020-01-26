@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/24 19:58:40 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/26 22:21:24 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -359,7 +359,14 @@ int	editor_events(t_doom *doom)
 				free_map(&doom->map);
 			if (copy_map(&editor->edit_map, &doom->map) != 0)
 				doom->state = QUIT_STATE;
+			doom->game.player.pos.x = doom->map.player_spawn.x;
+			doom->game.player.pos.y = doom->map.player_spawn.y;
 			doom->game.player.sector = doom->map.sector_head;
+		}
+		if (sdlmain->event.key.keysym.sym == SDLK_p)
+		{
+			give_vec_values(&editor->edit_map.player_spawn, sdlmain->mouse_pos.x, sdlmain->mouse_pos.y);
+			//vectorcpy(&doom->game.player.pos, &editor->edit_map.player_spawn);
 		}
 	}
 	if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN \

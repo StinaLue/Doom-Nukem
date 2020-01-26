@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/23 19:10:31 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/25 20:20:19 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,10 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	int i;
 
 	i = 0;
+
+	editor->edit_map.player_spawn.x = -1;
+	editor->edit_map.player_spawn.y = -1;
+
 	editor->edit_map.sector_head = NULL;
 	editor->opt_menu.height_ceiling = 26;
 	editor->opt_menu.height_floor = 26;
