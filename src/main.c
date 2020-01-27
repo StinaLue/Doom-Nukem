@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/27 12:45:23 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/27 17:49:05 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void null_doom_pointers(t_doom *doom)
 	null_editor_pointers(&doom->editor);
 	null_sdlmain_pointers(&doom->sdlmain);
 	null_map_pointers(&doom->map);
+	null_walltextures_pointers(doom->wall_textures);
 	/* doom->game.surfs.fixed_mmap = NULL;
 	doom->game.surfs.rot_mmap = NULL;
 	doom->game.surfs.perspective_view = NULL;

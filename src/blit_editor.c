@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   blit_editor.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/23 11:28:34 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/27 17:44:30 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	blit_textures(t_editor *editor)
 	int i;
 
 	i = 0;
-	while (i < 9)
+	while (i < NB_WALL_TEXTURES)
 	{
 		draw_border_options(&editor->opt_menu.text_rect[i], \
 				editor->opt_menu.bord_color_text[i], editor->opt_surf);
