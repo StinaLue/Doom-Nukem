@@ -6,7 +6,11 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2020/01/27 14:36:35 by phaydont         ###   ########.fr       */
+=======
+/*   Updated: 2020/01/27 17:48:48 by afonck           ###   ########.fr       */
+>>>>>>> master
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +23,7 @@
 
 # define SQRT2 1.4142135623730950488
 # define PLAYER_RADIUS 1
+# define NB_WALL_TEXTURES 9
 
 /*
 ** MAIN LOOP STATES
@@ -486,6 +491,8 @@ void						null_sdlmain_pointers(t_sdlmain *sdlmain);
 
 void						null_map_pointers(t_map *map);
 
+void						null_walltextures_pointers(SDL_Surface **wall_textures);
+
 /*
 ** FREE FUNCTIONS
 */
@@ -629,7 +636,7 @@ int							count_walls(t_wall_node *wall_list);
 void						set_wall_length(t_wall_node *head);
 
 /*
-** DEDITOR CHECK FUNCTIONS
+** EDITOR CHECK FUNCTIONS
 */
 
 int							check_convex_sector(t_sector_node *sector);
