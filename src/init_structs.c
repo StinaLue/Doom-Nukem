@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/25 20:10:46 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/27 13:13:34 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,9 @@ int	init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain)
 	return (0);
 }
 
-void	init_data_struct(t_data *data, t_map *map)
+void	init_data_struct(t_data *data)
 {
 	data->hud_flags = 0;
-	data->num_enemies = map->num_enemies;
-	data->enemy_info = map->enemy_info;
 }
 
 void	init_player_struct(t_player *player, t_map *map)
@@ -103,19 +101,19 @@ void	get_enemysprite_rect(SDL_Rect *rect, int which_enemy, SDL_Surface *sprite_s
 		rect->h = sprite_sheet->h / 11;
 }
 
-int	init_enemy_struct(t_game *game)
+int	init_enemy_struct(t_game *game, t_map *map)
 {
 	int				current_enemy;
 	t_enemy_info	*enemy_info;
 
 	current_enemy = 0;
-	if (game->data.num_enemies <= 0)
+	if (map->num_enemies <= 0)
 		return (0);
-	if ((game->enemy = (t_enemy *)malloc(sizeof(t_enemy) * game->data.num_enemies)) == NULL)
+	if ((game->enemy = (t_enemy *)malloc(sizeof(t_enemy) * map->num_enemies)) == NULL)
 		return (1);
-	while (current_enemy < game->data.num_enemies)
+	while (current_enemy < map->num_enemies)
 	{
-		enemy_info = &game->data.enemy_info[current_enemy];
+		enemy_info = &map->enemy_info[current_enemy];
 		game->enemy[current_enemy].pos = create_vecdb(enemy_info->enemy_spawn.x, enemy_info->enemy_spawn.y);
 		game->enemy[current_enemy].texture = game->surfs.enemy_texture[enemy_info->which_enemy];
 		game->enemy[current_enemy].angle = 0;

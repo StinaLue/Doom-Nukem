@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:27:36 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/22 18:07:45 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/27 12:50:05 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ int	highlight_select(t_menu *menu, t_sdlmain *sdlmain)
 
 int	reset_doom(t_doom *doom)
 {
-	free_game(&doom->game);
+	free_game(&doom->game, &doom->map);
 	free_menu(&doom->menu);
 	free_editor(&doom->editor);
 	free_sdlmain(&doom->sdlmain);
@@ -210,7 +210,7 @@ int	reset_doom(t_doom *doom)
 	if (init_sdl_and_ttf() == 1 \
 		|| init_sdlmain(&doom->sdlmain) == 1 \
 		|| init_gamesurfs_struct(&doom->game.surfs, &doom->sdlmain) == 1 \
-		|| init_enemy_struct(&doom->game) == 1 \
+		|| init_enemy_struct(&doom->game, &doom->map) == 1 \
 		|| init_menu(&doom->menu, &doom->sdlmain) == 1 \
 		|| reset_init_editor(&doom->editor, &doom->sdlmain) == 1) \
 		//|| init_wall_textures(doom->wall_textures, doom->sdlmain.win_surf) == 1)

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/24 19:37:26 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/27 13:05:03 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,11 @@ int		free_sdlmain(t_sdlmain *sdlmain)
 	return (EXIT_FAILURE);
 }
 
-int		free_game(t_game *game)
+int		free_game(t_game *game, t_map *map)
 {
 	int nb_enemy;
 
-	nb_enemy = game->data.num_enemies;
+	nb_enemy = map->num_enemies;
 	SDL_FreeSurface(game->surfs.fixed_mmap);
 	game->surfs.fixed_mmap = NULL;
 	SDL_FreeSurface(game->surfs.rot_mmap);

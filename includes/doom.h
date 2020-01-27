@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/26 02:09:31 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/27 13:24:50 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,8 +166,6 @@ typedef struct				s_gamesurfs
 
 typedef struct				s_data
 {
-	t_enemy_info			*enemy_info;
-	int						num_enemies;
 	char					hud_flags;
 }							t_data;
 
@@ -404,11 +402,11 @@ int							init_wall_textures(SDL_Surface **wall_textures, SDL_Surface *winsurf);
 */
 int							init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain);
 
-void						init_data_struct(t_data *data, t_map *map);
+void						init_data_struct(t_data *data);;
 
 void						init_player_struct(t_player *player, t_map *map);
 
-int							init_enemy_struct(t_game *game);
+int							init_enemy_struct(t_game *game, t_map *map);
 
 /*
 ** POLL EVENT FUNCTIONS
@@ -496,7 +494,7 @@ void						quit_sdl_and_ttf();
 
 int							free_menu(t_menu *menu);
 
-int							free_game(t_game *game);
+int							free_game(t_game *game, t_map *map);
 
 int							free_editor(t_editor *editor);
 

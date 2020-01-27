@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/25 20:14:56 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/27 12:35:03 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,8 +250,8 @@ int	init_game(t_game *game, t_sdlmain *sdlmain, t_map *map)
 {
 	//game->data.num_enemies = map->num_enemies;
 	//game->data.enemy_info = map->enemy_info;
-	init_data_struct(&(game->data), map);
-	if (init_gamesurfs_struct(&(game->surfs), sdlmain) == 1 || init_enemy_struct(game) == 1)
+	init_data_struct(&(game->data));
+	if (init_gamesurfs_struct(&(game->surfs), sdlmain) == 1 || init_enemy_struct(game, map) == 1)
 		return (1);
 	//init_data_struct(&(game->data, map));
 	init_player_struct(&(game->player), map);

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/24 18:50:35 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/27 12:45:23 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	main_loop()
 		if (ret == 1)
 			doom.state = QUIT_STATE;
 	}
-	free_game(&doom.game);
+	free_game(&doom.game, &doom.map);
 	free_menu(&doom.menu);
 	free_editor(&doom.editor);
 	free_sdlmain(&doom.sdlmain);
