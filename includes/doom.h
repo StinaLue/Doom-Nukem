@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/27 13:24:50 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/27 14:36:35 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -633,5 +633,14 @@ void						set_wall_length(t_wall_node *head);
 */
 
 int							check_convex_sector(t_sector_node *sector);
+
+
+/*
+** TEXTURE MAPPING
+*/
+
+void						fill_wall_texture(SDL_Surface *surf, const t_wall3d *display_wall, SDL_Surface *tex);
+
+void						draw_texture(SDL_Surface *surf, SDL_Surface *wall_texture, t_wall3d *display_wall);
 
 #endif

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
+#    By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/01/24 17:08:02 by afonck           ###   ########.fr        #
+#    Updated: 2020/01/27 14:38:08 by phaydont         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,7 +87,8 @@ SOURCES_LIST = main.c \
 			blit_editor.c \
 			new_blit.c \
 			map.c \
-			editor_events.c#\
+			editor_events.c \
+			texture_mapping.c #\
 			map_parser.c \
 	       multithreading.c \
 		   texture.c \
