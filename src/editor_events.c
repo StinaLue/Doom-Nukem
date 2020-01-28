@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/26 22:21:24 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/28 15:09:50 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,10 +236,10 @@ void	find_neighbors(t_doom *doom)
 		current_wall = current_sector->wall_head;
 		while (current_wall != NULL)
 		{
-			//if (current_wall->wall_type == 1)
+			if (current_wall->wall_type == 1)
 				current_wall->neighbor_sector = find_wall_neighbor(current_wall, doom->map.sector_head);
-			//else
-			//	current_wall->neighbor_sector = NULL;
+			else
+				current_wall->neighbor_sector = NULL;
 			current_wall = current_wall->next;
 		}
 		current_sector = current_sector->next;
