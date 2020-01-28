@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   perspective_view.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/27 18:46:23 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/28 11:28:41 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,7 +243,7 @@ void	draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view 
 				else
 				{
 					display_wall.start_pos = (wall.start.x - tmp_wall.x) / (tmp_wall.y - tmp_wall.x);
-					printf("start_pos = %f\n", display_wall.start_pos);
+					//printf("start_pos = %f\n", display_wall.start_pos);
 					display_wall.end_pos = 1 - (wall.end.x - tmp_wall.x) / (tmp_wall.y - tmp_wall.x);
 				}
 				

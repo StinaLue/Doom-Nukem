@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+         #
+#    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/01/27 14:38:08 by phaydont         ###   ########.fr        #
+#    Updated: 2020/01/28 11:36:29 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,8 @@ SDL2_HEADERS_DIRECTORY = $(SDL2_LIB_DIRECTORY)include/SDL2/
 SDL2TTF_HEADERS_DIRECTORY = $(SDL2TTF_LIB_DIRECTORY)include/SDL2/
 SDL2MIXER_HEADERS_DIRECTORY = $(SDL2MIXER_LIB_DIRECTORY)include/SDL2/
 
-HEADERS_LIST = doom.h
+HEADERS_LIST = doom.h \
+			cute_sound.h
 
 HEADERS_DIRECTORY = ./includes/
 HEADERS = $(addprefix $(HEADERS_DIRECTORY), $(HEADERS_LIST))
