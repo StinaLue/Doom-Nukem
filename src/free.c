@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/27 13:05:03 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/27 17:45:08 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ int		free_wall_textures(SDL_Surface **wall_textures)
 	int i;
 
 	i = 0;
-	while (i < 9)
+	while (i < NB_WALL_TEXTURES)
 	{
 		SDL_FreeSurface(wall_textures[i]);
 		wall_textures[i] = NULL;

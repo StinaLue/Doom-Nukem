@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/23 19:19:38 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/27 17:47:53 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,18 @@ void    null_sdlmain_pointers(t_sdlmain *sdlmain)
     sdlmain->win_surf = NULL;
     sdlmain->font = NULL;
     sdlmain->music = NULL;
+}
+
+void	null_walltextures_pointers(SDL_Surface **wall_textures)
+{
+	int i;
+
+	i = 0;
+	while (i < NB_WALL_TEXTURES)
+	{
+		wall_textures[i] = NULL;
+		i++;
+	}
 }
 
 void    null_map_pointers(t_map *map)

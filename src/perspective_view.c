@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/26 18:25:37 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/28 11:28:41 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,30 +66,6 @@ t_vecdb	interpolate_tex(int tex_size, t_vec current_pos)
 	VLineToTextureSizeRatio *= WallTextureVlineMaxValueRatio; // Used to both limit the maximum value (in texture space) of the y co-ord of the wall being drawn in addition to squashing all 
 }
 */
-void draw_vertical_tex(t_vec top, t_vec bottom, SDL_Surface *surf, SDL_Surface *tex, int x)
-{
-	int color;
-	double current_ytex = 0;
-
-	top.y = limit_value(top.y, 0, surf->h - 1);
-	bottom.y = limit_value(bottom.y, 0, surf->h - 1);
-	double step;
-	if (top.y - bottom.y != 0)
-		step = 1.0 * tex->h / (top.y - bottom.y);
-	else
-		step = tex->h;
-	if (step < 1)
-		step = 1;
-	//printf("current step %f\n", step);
-	while (top.y >= bottom.y)
-	{
-		color = ((Uint32 *)tex->pixels)[(int)current_ytex + x];
-		fill_pix(surf, top.x, top.y, color);
-		top.y--;
-		//current_ytex++;
-		current_ytex += step;
-	}
-}
 
 void draw_vertical(t_vec top, t_vec bottom, SDL_Surface *surf, int color)
 {
@@ -119,42 +95,6 @@ void	fill_wall_color(SDL_Surface *surf, const t_wall3d *display_wall, int color)
 			current_bottom.x = x;
 			draw_vertical(current_top, current_bottom, surf, color);
 			x--;
-		}
-	}
-}
-
-void	fill_wall_texture(SDL_Surface *surf, const t_wall3d *display_wall, SDL_Surface *tex)
-{
-	double x;
-	t_vec current_top;
-	t_vec current_bottom;
-	//int current_xtex = display_wall->bottom_left.x;
-	int current_xtex = 0;
-	double step;
-	if (display_wall->top_right.x - display_wall->top_left.x == 0)
-		step = tex->w;
-	else
-		step = tex->w / (display_wall->top_right.x - display_wall->top_left.x);
-	if (step < 1)
-		step = 1;
-	//printf("step %f\n", step);
-	//printf("display_wall x %d bottom right | x %d bottom left\n", display_wall->bottom_left.x, display_wall->bottom_right.x);
-
-	if (display_wall->top_left.x < display_wall->top_right.x)
-	{
-		x = display_wall->top_left.x;
-		while (x < display_wall->top_right.x)
-		{
-			current_top.y = display_wall->top_left.y + (x - display_wall->top_left.x) * (long)(display_wall->top_right.y - display_wall->top_left.y) / (abs(display_wall->top_right.x - display_wall->top_left.x) == 0 ? 1 : (display_wall->top_right.x - display_wall->top_left.x));
-			current_bottom.y = display_wall->bottom_left.y + (x - display_wall->top_left.x) * (long)(display_wall->bottom_right.y - display_wall->bottom_left.y) / (abs(display_wall->top_right.x - display_wall->top_left.x) ==0 ? 1 : (display_wall->top_right.x - display_wall->top_left.x));
-			current_top.x = x;
-			current_bottom.x = x;
-			draw_vertical_tex(current_top, current_bottom, surf, tex, current_xtex * tex->h);
-			x++;
-			//current_xtex++;
-			current_xtex += step;
-			if (current_xtex > tex->w)
-				current_xtex = 0;
 		}
 	}
 }
@@ -243,11 +183,17 @@ t_wall3d	create_perspective_wall(t_wall wall, SDL_Surface *surf, t_player *playe
 void	draw_3dwall(t_wall3d display_wall, SDL_Surface *surf, const t_wall_node *wall, SDL_Surface **wall_textures)
 {
 	if (ft_strncmp(surf->userdata, "yescolor", 8) == 0)
-		fill_wall_texture(surf, &display_wall, wall_textures[wall->tex_index]);
-	draw_line(display_wall.top_left, display_wall.top_right, surf, wall->color); // drawing a line for each line around wall
-	draw_line(display_wall.top_right, display_wall.bottom_right, surf, wall->color);
-	draw_line(display_wall.bottom_right, display_wall.bottom_left, surf, wall->color);
-	draw_line(display_wall.bottom_left, display_wall.top_left, surf, wall->color);
+	{
+		//fill_wall_texture(surf, &display_wall, wall_textures[wall->tex_index]);
+		draw_texture(surf, wall_textures[wall->tex_index], &display_wall);
+	}
+	else
+	{
+		draw_line(display_wall.top_left, display_wall.top_right, surf, wall->color); // drawing a line for each line around wall
+		draw_line(display_wall.top_right, display_wall.bottom_right, surf, wall->color);
+		draw_line(display_wall.bottom_right, display_wall.bottom_left, surf, wall->color);
+		draw_line(display_wall.bottom_left, display_wall.top_left, surf, wall->color);
+	}
 }
 
 void	draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view view, t_sector_node *sector, t_player *player)
@@ -262,11 +208,11 @@ void	draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view 
 	if (player->helper)
 	{
 		new_view = view;
-		new_view.left.x += surf->w / 2 + 0.5;
-		new_view.left.y += 0.5;
 		new_view.right.x += surf->w / 2;
-		draw_line(create_vec(surf->w / 2, 0), vecdb_to_vec(new_view.left), surf, 0x444444);
 		draw_line(create_vec(surf->w / 2, 0), vecdb_to_vec(new_view.right), surf, 0x333333);
+		new_view.left.x += surf->w / 2 - 0.5;
+		new_view.left.y += 0.5;
+		draw_line(create_vec(surf->w / 2 - 0.5, 0), vecdb_to_vec(new_view.left), surf, 0x444444);
 	}
 
 	while (current_wall != NULL)
@@ -289,8 +235,18 @@ void	draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view 
 			else
 			{
 				display_wall = create_perspective_wall(wall, surf, player);//ajouter sector pour les infos de hauteur
-				//display_wall.start_pos = 1 - (tmp_wall.y - wall.start.x) / (tmp_wall.y - tmp_wall.x);
-				//display_wall.end_pos = (wall.end.x - tmp_wall.x) / (tmp_wall.y - tmp_wall.x);
+				if ((tmp_wall.y - tmp_wall.x) == 0)
+				{
+					display_wall.start_pos = 0;
+					display_wall.end_pos = 1;
+				}
+				else
+				{
+					display_wall.start_pos = (wall.start.x - tmp_wall.x) / (tmp_wall.y - tmp_wall.x);
+					//printf("start_pos = %f\n", display_wall.start_pos);
+					display_wall.end_pos = 1 - (wall.end.x - tmp_wall.x) / (tmp_wall.y - tmp_wall.x);
+				}
+				
 				draw_3dwall(display_wall, surf, current_wall, wall_textures);
 
 				if (player->helper)
