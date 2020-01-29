@@ -3,42 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/27 11:59:35 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/29 16:11:13 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "doom.h"
-
-/*
-int is_convex(t_vec a, t_vec b, t_vec c, t_editor *editor)
-{
-	//if (editor->point <= 3)
-	//	return (1);
-	int i;
-
-	i = 0;
-	//int safe_sign = editor->sign_pos;
-	double cross_product;
-	cross_product = cross_product_len(a, b, c);
-	//if (cross_product < 0)
-	//	safe_sign = 0;
-	//else if (cross_product > 0)
-	//	safe_sign = 1;
-	if (safe_sign != editor->sign_pos)
-	{
-		ft_printf("NOT CONVEX\n");
-		editor->sector.num_walls--;
-		editor->point--; // maybe not the best way to do this
-		return (0);
-	}
-	ft_printf("CONVEX\n");
-	return (1);
-}
-*/
 
 int	round_num(double num, int offset)
 {

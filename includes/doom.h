@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/27 18:54:08 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/29 17:14:42 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -582,6 +582,8 @@ t_sector_node				*get_sector_by_index(t_sector_node *sector_list, unsigned int i
 void						delete_sector(t_sector_node **node);
 
 void						delete_sector_by_index(t_sector_node **sector_list,unsigned int index);
+
+void						delete_sector_by_address(t_sector_node **sector_list, t_sector_node *node);
 
 t_sector_node				*get_last_sector(t_sector_node *node);
 

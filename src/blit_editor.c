@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   blit_editor.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/27 17:44:30 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/29 16:33:50 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,10 @@ int	blit_options(t_editor *editor)
 			return (error_return("BlitSurface error = %s\n", SDL_GetError()));
 		i++;
 	}
-	if ((SDL_BlitSurface(editor->wall_textures[editor->opt_menu.activ_tex], NULL,
+	// following is used to set player position in options - maybe not useful
+	/* if ((SDL_BlitSurface(editor->wall_textures[editor->opt_menu.activ_tex], NULL,
 			editor->opt_surf, &editor->opt_menu.player_rect)) < 0)
-			return (error_return("BlitSurface error = %s\n", SDL_GetError()));
+			return (error_return("BlitSurface error = %s\n", SDL_GetError())); */
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/23 11:32:53 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/29 16:34:16 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,20 @@ int	create_opt_str(t_editor *editor, t_vec origin, int i, const char *str)
 
 int	init_instr_menu(t_editor *editor)
 {
-	if ((editor->instr_menu.title = TTF_RenderText_Solid(editor->instr_menu.font_title, "instructs", editor->instr_menu.text_color)) == NULL)
+	if ((editor->instr_menu.title = TTF_RenderText_Solid(editor->instr_menu.font_title, "Instructions", editor->instr_menu.text_color)) == NULL)
 		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
-	assign_sdlrect(&editor->instr_menu.title_rect, create_vec((editor->instr_surf->w - editor->instr_menu.title->w) / 2, (editor->instr_surf->w - editor->instr_menu.title->h) / 20), create_vec(0, 0));
-	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, editor->instr_surf->w / 6), 0, "undo wall: u") != 0)
+	assign_sdlrect(&editor->instr_menu.title_rect, create_vec((editor->instr_surf->w - editor->instr_menu.title->w) / 2, editor->instr_surf->h / 30), create_vec(0, 0));
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, (editor->instr_surf->h / 20) * 5), 0, "undo wall: u") != 0)
 		return (1);
-	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, editor->instr_surf->w / 4), 1, "undo sector: s") != 0)
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, (editor->instr_surf->h / 20) * 8), 1, "undo sector: s") != 0)
 		return (1);
-	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, editor->instr_surf->w / 3), 2, "replace map: r") != 0)
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, (editor->instr_surf->h / 20) * 11), 2, "replace map: r") != 0)
 		return (1);
-	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, editor->instr_surf->w / 6), 3, "create sector: left click") != 0)
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, (editor->instr_surf->h / 20) * 5), 3, "create sector: left click") != 0)
 		return (1);
-	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, editor->instr_surf->w / 4), 4, "create new map: n") != 0)
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, (editor->instr_surf->h / 20) * 8), 4, "create new map: n") != 0)
 		return (1);
-	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, editor->instr_surf->w / 3), 5, "change type of wall: t") != 0)
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, (editor->instr_surf->h / 20) * 11), 5, "change type of wall: t") != 0)
 		return (1);
 	return (0);
 }
@@ -98,7 +98,7 @@ int	init_options_menu(t_editor *editor)
 {
 	if ((editor->opt_menu.title = TTF_RenderText_Solid(editor->opt_menu.font_title, "Options", editor->opt_menu.text_color)) == NULL)
 		return (error_return("TTF_RenderText_Solid error = %s\n", TTF_GetError()));
-	assign_sdlrect(&editor->opt_menu.title_rect, create_vec((editor->opt_surf->w - editor->opt_menu.title->w) / 2, (editor->opt_surf->w - editor->opt_menu.title->h) / 20), create_vec(0, 0));
+	assign_sdlrect(&editor->opt_menu.title_rect, create_vec((editor->opt_surf->w - editor->opt_menu.title->w) / 2, editor->opt_surf->h / 30), create_vec(0, 0));
 	if (create_opt_str(editor, create_vec((editor->opt_surf->h) / 20, ((editor->opt_surf->h) / 20) * 3), 0, "CHOOSE HEIGHT") != 0)
 		return (1);
 	if (create_opt_str(editor, create_vec((editor->opt_surf->h) / 20, ((editor->opt_surf->h) / 20) * 8.5), 1, "CHOOSE TEXTURE") != 0)
@@ -107,7 +107,8 @@ int	init_options_menu(t_editor *editor)
 		return (1);
 	if (create_opt_str(editor, create_vec((editor->opt_surf->w) / 2, ((editor->opt_surf->h) / 20) * 3), 3, "SET PLAYER POSITION") != 0)
 		return (1);
-	assign_sdlrect(&editor->opt_menu.player_rect, create_vec((editor->opt_surf->h / 2), ((editor->opt_surf->h) / 20) * 4), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
+	// following is only used to set player position -> maybe not useful
+	//assign_sdlrect(&editor->opt_menu.player_rect, create_vec((editor->opt_surf->h / 2), ((editor->opt_surf->h) / 20) * 4), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
 	if (create_opt_str(editor, create_vec((editor->opt_surf->w) / 2, ((editor->opt_surf->h) / 20) * 8.5), 4, "CHOOSE OBJECT") != 0)
 		return (1);
 	if (set_textures(editor) != 0)
