@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/26 22:21:24 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/29 15:17:10 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,10 +236,10 @@ void	find_neighbors(t_doom *doom)
 		current_wall = current_sector->wall_head;
 		while (current_wall != NULL)
 		{
-			//if (current_wall->wall_type == 1)
+			if (current_wall->wall_type == 1)
 				current_wall->neighbor_sector = find_wall_neighbor(current_wall, doom->map.sector_head);
-			//else
-			//	current_wall->neighbor_sector = NULL;
+			else
+				current_wall->neighbor_sector = NULL;
 			current_wall = current_wall->next;
 		}
 		current_sector = current_sector->next;
@@ -357,17 +357,20 @@ int	editor_events(t_doom *doom)
 		{
 			if (doom->map.sector_head != NULL)
 				free_map(&doom->map);
+			//doom->map = editor->edit_map;
 			if (copy_map(&editor->edit_map, &doom->map) != 0)
 				doom->state = QUIT_STATE;
-			doom->game.player.pos.x = doom->map.player_spawn.x;
-			doom->game.player.pos.y = doom->map.player_spawn.y;
-			doom->game.player.sector = doom->map.sector_head;
+			//can be put in game loop
+			doom->game.player.pos = vec_to_vecdb(doom->map.player_spawn);
+			doom->game.player.sector = get_sector_by_pos(doom->map.sector_head, doom->game.player.pos, 10);
+			if (doom->game.player.pos.x == -1 && doom->game.player.pos.y == -1)
+			{
+				doom->game.player.sector = doom->map.sector_head;
+				doom->game.player.pos = doom->map.sector_head->sector_center;
+			}
 		}
 		if (sdlmain->event.key.keysym.sym == SDLK_p)
-		{
 			give_vec_values(&editor->edit_map.player_spawn, sdlmain->mouse_pos.x, sdlmain->mouse_pos.y);
-			//vectorcpy(&doom->game.player.pos, &editor->edit_map.player_spawn);
-		}
 	}
 	if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN \
 		|| sdlmain->event.type == SDL_MOUSEMOTION \
@@ -396,6 +399,7 @@ int	editor_events(t_doom *doom)
 						editor->opt_menu.height_floor = editor->selected_sector->floor_height;
 						editor->opt_menu.height_ceiling = editor->selected_sector->ceiling_height;
 					}
+					printf("sel sec: %p\n", editor->selected_sector);
 					set_height_test(editor);
 				}
 		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
