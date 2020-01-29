@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/27 12:35:03 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/29 18:19:09 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,33 @@ int		init_sdl_and_ttf(void)
 		ft_dprintf(STDERR_FILENO, "TTF_Init Error: %{r}s\n", TTF_GetError());
 		error = 1;
 	}
-	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024) != 0)
+	/*if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024) != 0)
 	{
 		ft_dprintf(STDERR_FILENO, "Mix_OpenAudio Error: %{r}s\n", \
 					Mix_GetError());
 		error = 1;
-	}
+	}*/
 	return (error);
+}
+
+int		init_sound(t_sound *sound)
+{
+	if ((sound->device = alcOpenDevice(NULL)) == NULL)
+		return (1);
+	if ((sound->context = alcCreateContext(sound->device, NULL)) == NULL)
+		return (1);
+	alcMakeContextCurrent(sound->context);
+	alListener3f(AL_POSITION, 0, 0, 0);
+	alListener3f(AL_VELOCITY, 0, 0, 0);
+	alListener3f(AL_ORIENTATION, 0, 0, -1);
+	alGenSources(1, &sound->source);
+	alSourcef(sound->source, AL_PITCH, 1);
+	alSourcef(sound->source, AL_GAIN, 1);
+	alSource3f(sound->source, AL_POSITION, 0, 0, 0);
+	alSource3f(sound->source, AL_VELOCITY, 0, 0, 0);
+	alSourcei(sound->source, AL_LOOPING, AL_TRUE);
+	alGenBuffers(1, &sound->buffer);
+	return (0);
 }
 
 int		init_sdlmain(t_sdlmain *sdlmain)
@@ -97,9 +117,11 @@ int		init_sdlmain(t_sdlmain *sdlmain)
 	}
 	if ((sdlmain->font = TTF_OpenFont("assets/fonts/dukes-3d.ttf", 28)) == NULL)
 		return (error_return("TTF_OpenFont error = %s\n", TTF_GetError()));
-	if ((sdlmain->music = Mix_LoadMUS("assets/sounds/beet.wav")) == NULL)
-		return (error_return("Mix_LoadMUS error: %{r}s\n", Mix_GetError()));
-	Mix_PlayMusic(sdlmain->music, -1);
+	if ((init_sound(&sdlmain->sound)) != 0)
+		return (error_return("error during openal sound init\n", NULL));
+	//if ((sdlmain->music = Mix_LoadMUS("assets/sounds/beet.wav")) == NULL)
+	//	return (error_return("Mix_LoadMUS error: %{r}s\n", Mix_GetError()));
+	//Mix_PlayMusic(sdlmain->music, -1);
 	sdlmain->mouse_pos.x = 0;
 	sdlmain->mouse_pos.y = 0;
 	return (EXIT_SUCCESS);

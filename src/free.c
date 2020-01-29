@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/27 17:45:08 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/29 12:17:34 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 void	quit_sdl_and_ttf(void)
 {
-	Mix_CloseAudio();
-	Mix_Quit();
+	//Mix_CloseAudio();
+	//Mix_Quit();
 	TTF_Quit();
 	SDL_Quit();
 }
@@ -28,8 +28,8 @@ int		free_sdlmain(t_sdlmain *sdlmain)
 	sdlmain->win_surf = NULL;
 	TTF_CloseFont(sdlmain->font);
 	sdlmain->font = NULL;
-	Mix_FreeMusic(sdlmain->music);
-	sdlmain->music = NULL;
+	//Mix_FreeMusic(sdlmain->music);
+	//sdlmain->music = NULL;
 	return (EXIT_FAILURE);
 }
 

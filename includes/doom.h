@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/27 18:54:08 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/29 18:19:22 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 # define DOOM_H
 # include "SDL.h"
 # include "SDL_ttf.h"
-# include "SDL_mixer.h"
+# include "al.h"
+# include "alc.h"
 # define TITLE "DOOM"
 
 # define SQRT2 1.4142135623730950488
@@ -137,13 +138,22 @@ typedef struct				s_wall3d
 	double					end_pos;
 }							t_wall3d;
 
+typedef struct				s_sound
+{
+	ALCdevice				*device;
+	ALCcontext				*context;
+	ALuint					source;
+	ALuint					buffer;
+}							t_sound;
+
 typedef struct				s_sdlmain
 {
 	SDL_Window				*win;
 	SDL_Surface				*win_surf;
 	SDL_Event				event;
 	TTF_Font				*font;
-	Mix_Music				*music;
+	//Mix_Music				*music;
+	t_sound					sound;
 	t_vec					mouse_pos;
 	int						win_w;
 	int						win_h;
