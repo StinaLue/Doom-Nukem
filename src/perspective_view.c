@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   perspective_view.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/28 11:28:41 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/30 16:51:45 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,18 +164,21 @@ t_wall3d	create_perspective_wall(t_wall wall, SDL_Surface *surf, t_player *playe
 	y = fov_ratio * surf->w;
 
 	display_wall.top_left.x = x;
-	display_wall.top_left.y = surf->h / 2 - player->view_z + y;
+	display_wall.top_left.y = surf->h / 2 - player->view_z + y / 2;
 	display_wall.bottom_left.x = display_wall.top_left.x;
-	display_wall.bottom_left.y = surf->h / 2 - player->view_z - y;
+	display_wall.bottom_left.y = surf->h / 2 - player->view_z - y / 2;
 
 	fov_ratio = player->fov.y / player->fov.x / wall.end.y;
 	x = surf->w / 2 + wall.end.x * fov_ratio * surf_center;
 	y = fov_ratio * surf->w;
 
 	display_wall.top_right.x = x;
-	display_wall.top_right.y = surf->h / 2 - player->view_z + y;
+	display_wall.top_right.y = surf->h / 2 - player->view_z + y / 2;
 	display_wall.bottom_right.x = display_wall.top_right.x;
-	display_wall.bottom_right.y = surf->h / 2 - player->view_z - y;
+	display_wall.bottom_right.y = surf->h / 2 - player->view_z - y / 2;
+
+	display_wall.dist_left = wall.start.y;
+	display_wall.dist_right = wall.end.y;
 
 	return (display_wall);
 }
@@ -244,7 +247,7 @@ void	draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view 
 				{
 					display_wall.start_pos = (wall.start.x - tmp_wall.x) / (tmp_wall.y - tmp_wall.x);
 					//printf("start_pos = %f\n", display_wall.start_pos);
-					display_wall.end_pos = 1 - (wall.end.x - tmp_wall.x) / (tmp_wall.y - tmp_wall.x);
+					display_wall.end_pos = (tmp_wall.y - wall.end.x) / (tmp_wall.y - tmp_wall.x);
 				}
 				
 				draw_3dwall(display_wall, surf, current_wall, wall_textures);

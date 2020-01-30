@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_keys.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/28 11:28:14 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/30 16:54:04 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	basic_move(t_player *player, const Uint8 *keyboard_state)
 	move.x = 0;
 	move.y = 0;
 	if (keyboard_state[SDL_SCANCODE_W])
-		move.y += 1;
+		move.y +=1;
 	if (keyboard_state[SDL_SCANCODE_S])
 		move.y -= 1;
 	if (keyboard_state[SDL_SCANCODE_A])
@@ -37,10 +37,10 @@ void	basic_look(t_player *player, const Uint8 *keyboard_state)
 		player->view_z -= 1;
 	if (keyboard_state[SDL_SCANCODE_LEFT])
 		player->angle += 0.01;
-		//player->angle += 0.007;
+		//player->angle += 0.005;
 	if (keyboard_state[SDL_SCANCODE_RIGHT])
 		player->angle -= 0.01;
-		//player->angle -= 0.001;
+		//player->angle -= 0.002;
 	player->direc.x = sin(player->angle) * -5 + player->pos.x;
 	player->direc.y = cos(player->angle) * 5 + player->pos.y;
 	if (keyboard_state[SDL_SCANCODE_PAGEUP] && player->true_fov > 1.06)//hardcoded 60deg

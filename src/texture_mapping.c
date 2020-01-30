@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 18:01:04 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/27 18:39:36 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/30 16:50:24 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,31 +83,20 @@ void	fill_wall_texture(SDL_Surface *surf, const t_wall3d *display_wall, SDL_Surf
 	}
 }
 
-double	get_texture_x(int x, t_wall3d *wall)
+double	get_texture_x(double x, t_wall3d *wall)
 {
-	double	proportional_x;
-	double	wall_true_length;
-	
-	proportional_x = ((double)x - wall->top_left.x) / (wall->top_right.x - wall->top_left.x);
-	wall_true_length = 1 - (wall->start_pos + wall->end_pos);
-	proportional_x *= wall_true_length;
-	proportional_x += wall->start_pos;
-	 
-	return (proportional_x);
-}
+	double	top_div;
+	double	bot_div;
 
-int		get_tex_color(double x, double y, SDL_Surface *tex)
-{
-	int	truex;
-	int	truey;
-	int	color;
+	printf("[%.3f]", x);
 
-	truex = x * tex->w;
-	truey = y * tex->h;
-	color = ((Uint32 *)tex->pixels)[truex + truey * tex->w];
-	color &= 0xFFFFFF;
+	top_div = (1-x) * wall->start_pos/wall->dist_left + x * (1-wall->end_pos)/wall->dist_right;
+	bot_div = (1-x) * 1/wall->dist_left + x * 1/wall->dist_right;
 
-	return color;
+	x = top_div / bot_div;
+
+	printf(">%.3f\n", x);
+	return (x);
 }
 
 double	get_texture_y(double y, int top, int bot)
@@ -119,6 +108,20 @@ double	get_texture_y(double y, int top, int bot)
 	return (proportional_y);
 }
 
+int		get_tex_color(double x, double y, SDL_Surface *tex)
+{
+	int	truex;
+	int	truey;
+	int	color;
+
+	truex = x * tex->w - 1;
+	truey = y * tex->h - 1;
+	color = ((Uint32 *)tex->pixels)[(truex + truey * tex->w) % (tex->w * tex->h)];
+	color &= 0xFFFFFF;
+
+	return color;
+}
+
 void	draw_texture(SDL_Surface *surf, SDL_Surface *tex, t_wall3d *wall)
 {
 	int		width;
@@ -128,29 +131,28 @@ void	draw_texture(SDL_Surface *surf, SDL_Surface *tex, t_wall3d *wall)
 	int		x;
 	double	y;
 	Uint32	color = 0;
-	double	tex_x;
-	double	tex_y;
+	t_vecdb	pos;
 
 	width = wall->top_right.x - wall->top_left.x;
 	if (width <= 0)
 		return ;
-	delta = (double)(wall->top_left.y - wall->top_right.y) / width;
+	delta = ((double)(wall->top_left.y - wall->top_right.y)) / width;
 
 	top_limit = wall->top_left.y + 0.5;
 	bot_limit = wall->bottom_left.y - 0.5;
 	x = wall->top_left.x;
-	while (x <= wall->top_right.x)
+	while (x < wall->top_right.x)
 	{
-		tex_x = get_texture_x(x, wall);
-
+		pos.x = get_texture_x(((double)x - wall->top_left.x) / width, wall);
+		pos.x = fmod(pos.x * 4, 1);
 		if (top_limit < surf->h)
 			y = (int)top_limit;
 		else
 			y = surf->h - 1;
 		while (y >= bot_limit && y >= 0)
 		{
-			tex_y = get_texture_y(y, top_limit, bot_limit);
-			color = get_tex_color(tex_x, tex_y, tex);
+			pos.y = get_texture_y(y, (int)top_limit, (int)bot_limit);
+			color = get_tex_color(pos.x, pos.y, tex);
 			fill_pix(surf, x, (int)y, color);
 			y--;
 		}

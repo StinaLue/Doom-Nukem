@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/27 18:54:08 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/30 16:45:37 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # define TITLE "DOOM"
 
 # define SQRT2 1.4142135623730950488
-# define PLAYER_RADIUS 1
+# define PLAYER_RADIUS 0.1
 # define NB_WALL_TEXTURES 9
 
 /*
@@ -135,6 +135,8 @@ typedef struct				s_wall3d
 	t_vec					bottom_right;
 	double					start_pos;
 	double					end_pos;
+	double					dist_left;
+	double					dist_right;
 }							t_wall3d;
 
 typedef struct				s_sdlmain
