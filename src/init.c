@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/29 18:19:09 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/30 14:37:58 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,50 @@ int		init_wall_textures(SDL_Surface **wall_textures, SDL_Surface *winsurf)
 		return (error_return("load mudbrick bmp error = %{r}s\n", SDL_GetError()));
 	return (0);
 }
+/*
+int	loadWAV(char *file)
+{
+	int		fd;
+	char	xbuffer[5];
+
+	if ((fd = open(file, O_RDONLY | O_NOFOLLOW)) == -1)
+		return (-1);
+	xbuffer[4] = '\0';
+	if (read(fd, xbuffer, 4) <= 0 || ft_strncmp(xbuffer, "RIFF", 4) != 0)
+		return (error_return("Not a WAV file", NULL));
+
+	file_read_int32_le(xbuffer, file);
+
+	if (fread(xbuffer, sizeof(char), 4, file) != 4 || strcmp(xbuffer, "WAVE") != 0)
+	        throw "Not a WAV file";
+
+	if (fread(xbuffer, sizeof(char), 4, file) != 4 || strcmp(xbuffer, "fmt ") != 0)
+	        throw "Invalid WAV file";
+
+	file_read_int32_le(xbuffer, file);
+	short audioFormat = file_read_int16_le(xbuffer, file);
+	short channels = file_read_int16_le(xbuffer, file);
+	int sampleRate = file_read_int32_le(xbuffer, file);
+	int byteRate = file_read_int32_le(xbuffer, file);
+	file_read_int16_le(xbuffer, file);
+	short bitsPerSample = file_read_int16_le(xbuffer, file);
+
+	if (audioFormat != 16) {
+	        short extraParams = file_read_int16_le(xbuffer, file);
+	        file_ignore_bytes(file, extraParams);
+	}
+
+	if (fread(xbuffer, sizeof(char), 4, file) != 4 || strcmp(xbuffer, "data") != 0)
+	        throw "Invalid WAV file";
+
+	int dataChunkSize = file_read_int32_le(xbuffer, file);
+	unsigned char* bufferData = file_allocate_and_read_bytes(file, (size_t) dataChunkSize);
+
+	float duration = float(dataChunkSize) / byteRate;
+	alBufferData(buffer, GetFormatFromInfo(channels, bitsPerSample), bufferData, dataChunkSize, sampleRate);
+	free(bufferData);
+	fclose(f);
+}*/
 
 int		init_doom(t_doom *doom)
 {
@@ -95,7 +139,45 @@ int		init_sound(t_sound *sound)
 	alSource3f(sound->source, AL_POSITION, 0, 0, 0);
 	alSource3f(sound->source, AL_VELOCITY, 0, 0, 0);
 	alSourcei(sound->source, AL_LOOPING, AL_TRUE);
+	alGetError();
 	alGenBuffers(1, &sound->buffer);
+	/*
+	if ((sound->error = alGetError()) != AL_NO_ERROR)
+	{
+		DisplayALError("alGenBuffers :", sound->error);
+		return (1);
+	}
+	// Load test.wav
+	loadWAVFile("test.wav",&format,&data,&size,&freq,&loop);
+	if ((error = alGetError()) != AL_NO_ERROR)
+	{
+	 DisplayALError("alutLoadWAVFile test.wav : ", error);
+	 alDeleteBuffers(NUM_BUFFERS, g_Buffers);
+	 return;
+	}
+	// Copy test.wav data into AL Buffer 0
+	alBufferData(g_Buffers[0],format,data,size,freq);
+	if ((error = alGetError()) != AL_NO_ERROR)
+	{
+	 DisplayALError("alBufferData buffer 0 : ", error);
+	 alDeleteBuffers(NUM_BUFFERS, g_Buffers);
+	 return;
+	}
+	// Unload test.wav
+	unloadWAV(format,data,size,freq);
+	if ((error = alGetError()) != AL_NO_ERROR)
+	{
+	 DisplayALError("alutUnloadWAV : ", error);
+	 alDeleteBuffers(NUM_BUFFERS, g_Buffers);
+	 return;
+	}
+	// Generate Sources
+	alGenSources(1,source);
+	if ((error = alGetError()) != AL_NO_ERROR)
+	{
+	 DisplayALError("alGenSources 1 : ", error);
+	 return;
+	} */
 	return (0);
 }
 

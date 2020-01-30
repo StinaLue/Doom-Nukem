@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/01/29 16:52:23 by afonck           ###   ########.fr        #
+#    Updated: 2020/01/30 11:26:12 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -229,6 +229,7 @@ $(DEBUG_NAME): $(SDL2) $(SDL2TTF) $(OPENAL) $(LIBFT) $(LIBBMP) $(OBJECTS_DIRECTO
 	@$(CC) $(INCLUDES) $(OBJECTS_DEBUG) $(LDFLAGS) $(LDLIBS) -o $(DEBUG_NAME)
 	@echo "\n$(DEBUG_NAME): $(GREEN)object debug files were created$(RESET)"
 	@echo "$(DEBUG_NAME): $(GREEN)$(DEBUG_NAME) was created$(RESET)"
+	@install_name_tool -change @rpath/libopenal.1.dylib $(OPENAL_LIB_DIRECTORY)lib/libopenal.dylib $(DEBUG_NAME)
 
 debugclean:
 	@rm -rf $(OBJECTS_DIRECTORY_DEBUG)

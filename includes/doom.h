@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/29 18:19:22 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/30 13:22:33 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,7 @@ typedef struct				s_sound
 	ALCcontext				*context;
 	ALuint					source;
 	ALuint					buffer;
+	ALenum					error;
 }							t_sound;
 
 typedef struct				s_sdlmain
