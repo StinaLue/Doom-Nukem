@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_menu.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/29 16:34:16 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/30 14:29:14 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,9 +136,14 @@ int	init_editor_menu(t_editor *editor)
 		return (error_return("TTF_OpenFont error = %s\n", TTF_GetError()));
 	assign_sdlcolor(&editor->instr_menu.text_color, 255, 0, 0);
 	assign_sdlcolor(&editor->opt_menu.text_color, 255, 0, 0);
-	if (init_instr_menu(editor) != 0)
+    if (init_instr_menu(editor) != 0)
 		return (1);
 	if (init_options_menu(editor) != 0)
 		return (1);
+    if ((editor->alert_surf = \
+		TTF_RenderText_Solid(editor->opt_menu.font, \
+		"lol", editor->opt_menu.text_color)) == NULL)
+		return (error_return("TTF_RenderText_Solid error = %s\n", \
+				TTF_GetError()));
 	return (0);
 }

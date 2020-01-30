@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   blit_editor.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/29 16:33:50 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/30 13:18:31 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
+#include "libft.h"
 
 int	blit_instructs(t_editor *editor)
 {
@@ -113,6 +114,15 @@ int	blit_height(t_editor *editor)
 
 int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 {
+    if (editor->show_alert == 1)
+    {
+        ft_printf("hi");
+        if ((SDL_BlitScaled(editor->wall_textures[editor->opt_menu.activ_tex], NULL,
+			sdlmain->win_surf, &editor->alert_rect)) < 0)
+		return (error_return("SDL_BlitScaled error = %{r}s\n",
+				SDL_GetError()));
+        //editor->show_alert = 0;
+    }
 	if (blit_instructs(editor) != 0)
 		return (1);
 	if (blit_options(editor) != 0)

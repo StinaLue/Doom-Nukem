@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/29 18:01:26 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/30 12:10:34 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@ void	check_finished_sect(t_editor *editor)
 		if (check_convex_sector(editor->current_sector) != 1)
 		{
 			delete_sector_by_address(&editor->edit_map.sector_head, editor->current_sector);
+            editor->show_alert = 1;
 		}
+        else
+            editor->show_alert = 0;
 		editor->clicked = 0;
-		//editor->num_sectors++;
 		editor->edit_map.num_sectors++;
 		editor->wall_tmp.start.x = -1;
 		editor->wall_tmp.start.y = -1;
@@ -284,7 +286,7 @@ int	editor_events(t_doom *doom)
 	{
 		check_menu(&doom->sdlmain.event, &doom->state, \
 					&doom->menu.previous_state, EDITOR_STATE);
-		if (sdlmain->event.key.keysym.sym == SDLK_u)
+		if (sdlmain->event.key.keysym.sym == SDLK_u && editor->start_sector_reached != 1)
 		{
 			previous = undo_wall(editor->edit_map.sector_head);
 			if (previous != NULL) // condition has to be added so walls from sector before get removed, too
@@ -351,7 +353,7 @@ int	editor_events(t_doom *doom)
 			//doom->map.sector_head = editor->edit_map.sector_head;
 		}
 		if (sdlmain->event.key.keysym.sym == SDLK_l && editor->edit_map.sector_head != NULL)
-		{
+		{ // only take into consideration the finished sectors! ****************************
 			if (doom->map.sector_head != NULL)
 				free_map(&doom->map);
 			//doom->map = editor->edit_map;
