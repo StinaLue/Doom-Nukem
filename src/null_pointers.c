@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   null_pointers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/27 17:47:53 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/30 12:40:50 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void null_editor_pointers(t_editor *editor)
     editor->current_sector = NULL;
     editor->current_wall = NULL;
     editor->mouse_surf = NULL;
+    editor->alert_surf = NULL;
     editor->wall_tmp.wall_type = 0;//1;
 	editor->wall_tmp.type_color = 0xFF0000;
     while (i < NBINSTRUCTS)

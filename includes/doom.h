@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/30 16:45:37 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/30 16:56:16 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@
 # define NBTEXTURES	9
 # define NBHEIGHTS 7
 # define NBOPTIONS 5
-# define NBINSTRUCTS 6
+# define NBINSTRUCTS 8
 # define COLOR_HOVER 0x6C1413
 # define COLOR_PRESSED 0xffff00
 # define COLOR_NORMAL 0xff0000
@@ -274,21 +274,23 @@ typedef struct				s_editor
 	SDL_Surface				*instr_surf;
 	SDL_Surface				*mouse_surf;
 	SDL_Surface				**wall_textures;
+    SDL_Surface             *alert_surf;
 
 	SDL_Rect				editor_rect;
 	SDL_Rect				options_rect;
 	SDL_Rect				instr_rect;
 	SDL_Rect				mouse_rect;
+    SDL_Rect                alert_rect;
 
 	t_sector_node			*current_sector;
 	t_sector_node			*selected_sector;
 	t_wall_node				*current_wall;
 
 	int						clicked;
-	//int						num_sectors;
 	int						offset;
 	int						start_sector_reached;
 	int						color_change;
+    int                     show_alert;
 	t_vec					grid_values[NBPOINTS];
 	t_vec					start_sector;
 	t_wall_node				wall_tmp;
@@ -584,6 +586,8 @@ t_sector_node				*get_sector_by_index(t_sector_node *sector_list, unsigned int i
 void						delete_sector(t_sector_node **node);
 
 void						delete_sector_by_index(t_sector_node **sector_list,unsigned int index);
+
+void						delete_sector_by_address(t_sector_node **sector_list, t_sector_node *node);
 
 t_sector_node				*get_last_sector(t_sector_node *node);
 

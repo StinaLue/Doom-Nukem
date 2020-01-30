@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/26 22:21:24 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/30 16:03:32 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,23 @@ void	check_finished_sect(t_editor *editor)
 	if ((editor->start_sector.x == editor->wall_tmp.end.x) \
 		&& (editor->start_sector.y == editor->wall_tmp.end.y))
 	{
+		if (check_convex_sector(editor->current_sector) != 1)
+		{
+			delete_sector_by_address(&editor->edit_map.sector_head, editor->current_sector);
+            editor->show_alert = 1;
+		}
+        else
+		{
+            editor->show_alert = 0;
+			set_sector_position(editor->current_sector);
+			editor->current_sector->floor_height = editor->opt_menu.height_floor;
+			editor->current_sector->ceiling_height = editor->opt_menu.height_ceiling;
+			editor->edit_map.num_sectors++;
+		}
 		editor->clicked = 0;
-		editor->start_sector_reached = 1;
-		//editor->num_sectors++;
-		editor->edit_map.num_sectors++;
 		editor->wall_tmp.start.x = -1;
 		editor->wall_tmp.start.y = -1;
-		set_sector_position(editor->current_sector);
-		editor->current_sector->floor_height = editor->opt_menu.height_floor;
-		editor->current_sector->ceiling_height = editor->opt_menu.height_ceiling;
+		editor->start_sector_reached = 1;
 	}
 }
 
@@ -36,21 +44,12 @@ int	start_wall_exists(t_wall_node *wall)
 	return (0);
 }
 
-/* int is_convex()
-{
-	return(1);
-} */
-
 void	event_editor_surf(t_vec mouse, t_editor *editor)
 {
 	if (start_wall_exists(&editor->wall_tmp) \
 		&& !(mouse.x == editor->wall_tmp.end.x \
 		&& mouse.y == editor->wall_tmp.end.y))
 	{
-		/* if (is_convex())
-			printf("is convex\n");
-		else
-			printf("is not convex\n"); */
 		editor->wall_tmp.end.x = mouse.x;
 		editor->wall_tmp.end.y = mouse.y;
 		editor->wall_tmp.tex_index = editor->opt_menu.activ_tex;
@@ -236,10 +235,10 @@ void	find_neighbors(t_doom *doom)
 		current_wall = current_sector->wall_head;
 		while (current_wall != NULL)
 		{
-			//if (current_wall->wall_type == 1)
+			if (current_wall->wall_type == 1)
 				current_wall->neighbor_sector = find_wall_neighbor(current_wall, doom->map.sector_head);
-			//else
-			//	current_wall->neighbor_sector = NULL;
+			else
+				current_wall->neighbor_sector = NULL;
 			current_wall = current_wall->next;
 		}
 		current_sector = current_sector->next;
@@ -289,7 +288,7 @@ int	editor_events(t_doom *doom)
 	{
 		check_menu(&doom->sdlmain.event, &doom->state, \
 					&doom->menu.previous_state, EDITOR_STATE);
-		if (sdlmain->event.key.keysym.sym == SDLK_u)
+		if (sdlmain->event.key.keysym.sym == SDLK_u && editor->start_sector_reached != 1)
 		{
 			previous = undo_wall(editor->edit_map.sector_head);
 			if (previous != NULL) // condition has to be added so walls from sector before get removed, too
@@ -312,6 +311,8 @@ int	editor_events(t_doom *doom)
 		{
 			if (editor->selected_sector != NULL)
 			{
+				delete_sector_by_address(&editor->edit_map.sector_head, editor->selected_sector);
+				editor->selected_sector = NULL;
 				/*
 				if (editor->selected_sector == editor->edit_map.sector_head)
 					editor->edit_map.sector_head = editor->selected_sector->next;
@@ -354,20 +355,23 @@ int	editor_events(t_doom *doom)
 			//doom->map.sector_head = editor->edit_map.sector_head;
 		}
 		if (sdlmain->event.key.keysym.sym == SDLK_l && editor->edit_map.sector_head != NULL)
-		{
+		{ // only take into consideration the finished sectors! ****************************
 			if (doom->map.sector_head != NULL)
 				free_map(&doom->map);
+			//doom->map = editor->edit_map;
 			if (copy_map(&editor->edit_map, &doom->map) != 0)
 				doom->state = QUIT_STATE;
-			doom->game.player.pos.x = doom->map.player_spawn.x;
-			doom->game.player.pos.y = doom->map.player_spawn.y;
-			doom->game.player.sector = doom->map.sector_head;
+			//can be put in game loop
+			doom->game.player.pos = vec_to_vecdb(doom->map.player_spawn);
+			doom->game.player.sector = get_sector_by_pos(doom->map.sector_head, doom->game.player.pos, 10);
+			if (doom->game.player.pos.x == -1 && doom->game.player.pos.y == -1)
+			{
+				doom->game.player.sector = doom->map.sector_head;
+				doom->game.player.pos = doom->map.sector_head->sector_center;
+			}
 		}
 		if (sdlmain->event.key.keysym.sym == SDLK_p)
-		{
 			give_vec_values(&editor->edit_map.player_spawn, sdlmain->mouse_pos.x, sdlmain->mouse_pos.y);
-			//vectorcpy(&doom->game.player.pos, &editor->edit_map.player_spawn);
-		}
 	}
 	if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN \
 		|| sdlmain->event.type == SDL_MOUSEMOTION \
@@ -396,7 +400,9 @@ int	editor_events(t_doom *doom)
 						editor->opt_menu.height_floor = editor->selected_sector->floor_height;
 						editor->opt_menu.height_ceiling = editor->selected_sector->ceiling_height;
 					}
+					//printf("sel sec: %p\n", editor->selected_sector);
 					set_height_test(editor);
+					check_convex_sector(editor->edit_map.sector_head);
 				}
 		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
 		mouse_in_options(editor, sdlmain);

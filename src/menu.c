@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   menu.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:27:36 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/27 12:50:05 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/29 11:18:09 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ int		menu_events(t_doom *doom)
 
 	menu = &(doom->menu);
 	sdlmain = &(doom->sdlmain);
+	check_quit(&doom->sdlmain.event, &doom->state);
 	if (sdlmain->event.type == SDL_KEYDOWN && sdlmain->event.key.repeat == 0)
 	{
 		if (sdlmain->event.key.keysym.sym == SDLK_TAB)
