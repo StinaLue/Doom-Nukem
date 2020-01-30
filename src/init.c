@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/30 14:37:58 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/31 00:21:10 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,51 +36,134 @@ int		init_wall_textures(SDL_Surface **wall_textures, SDL_Surface *winsurf)
 		return (error_return("load mudbrick bmp error = %{r}s\n", SDL_GetError()));
 	return (0);
 }
-/*
-int	loadWAV(char *file)
+/* 
+ALenum GetFormatFromInfo(short channels, short bitsPerSample)
+{
+	bitsPerSample = 0;
+	if (channels == 1)
+		return AL_FORMAT_MONO16;
+	return AL_FORMAT_STEREO16;
+}
+
+void	endian_swap_short(short *x)
+{
+	*x = (*x>>8) | (*x<<8);
+}
+
+void	endian_swap_int(int *x)
+{
+	*x = (*x>>24) | 
+        ((*x<<8) & 0x00FF0000) |
+        ((*x>>8) & 0x0000FF00) |
+        (*x<<24);
+}
+
+void file_ignore_bytes(int fd, short extraParams)
+{
+	char buf[1];
+
+	while (extraParams > 0)
+	{
+		read(fd, buf, 1);
+		extraParams--;
+	}
+}
+
+int	loadWAV(char *file, ALuint buffer)
 {
 	int		fd;
 	char	xbuffer[5];
+	short audioFormat;
+	short channels;
+	int sampleRate;
+	int byteRate;
+	short bitsPerSample;
+	short extraParams;
+	int dataChunkSize;
+	int offset = 0;
+	//unsigned char* bufferData;
 
 	if ((fd = open(file, O_RDONLY | O_NOFOLLOW)) == -1)
 		return (-1);
 	xbuffer[4] = '\0';
 	if (read(fd, xbuffer, 4) <= 0 || ft_strncmp(xbuffer, "RIFF", 4) != 0)
 		return (error_return("Not a WAV file", NULL));
+	offset += 4;
 
-	file_read_int32_le(xbuffer, file);
+	read(fd, xbuffer, 4);
+	offset += 4;
 
-	if (fread(xbuffer, sizeof(char), 4, file) != 4 || strcmp(xbuffer, "WAVE") != 0)
-	        throw "Not a WAV file";
+	if (read(fd, xbuffer, 4) <= 0 || ft_strncmp(xbuffer, "WAVE", 4) != 0)
+		return (error_return("Not a WAV file", NULL));
 
-	if (fread(xbuffer, sizeof(char), 4, file) != 4 || strcmp(xbuffer, "fmt ") != 0)
-	        throw "Invalid WAV file";
+	offset += 4;
+	if (read(fd, xbuffer, 4) <= 0 || ft_strncmp(xbuffer, "fmt ", 4) != 0)
+		return (error_return("Invalid WAV file", NULL));
 
-	file_read_int32_le(xbuffer, file);
-	short audioFormat = file_read_int16_le(xbuffer, file);
-	short channels = file_read_int16_le(xbuffer, file);
-	int sampleRate = file_read_int32_le(xbuffer, file);
-	int byteRate = file_read_int32_le(xbuffer, file);
-	file_read_int16_le(xbuffer, file);
-	short bitsPerSample = file_read_int16_le(xbuffer, file);
+	offset += 4;
+	read(fd, xbuffer, 4);
+	offset += 4;
+	//short audioFormat = file_read_int16_le(xbuffer, file);
+	//short channels = file_read_int16_le(xbuffer, file);
+	//int sampleRate = file_read_int32_le(xbuffer, file);
+	//int byteRate = file_read_int32_le(xbuffer, file);
+	read(fd, &audioFormat, 2);
+	offset += 2;
+	//endian_swap_short(&audioFormat);
+	read(fd, &channels, 2);
+	offset += 2;
+	//endian_swap_short(&channels);
+	read(fd, &sampleRate, 4);
+	offset += 4;
+	//endian_swap_int(&sampleRate);
+	read(fd, &byteRate, 4);
+	printf("byterate %d at offset %d\n", byteRate, offset);
+	offset += 4;
+	//endian_swap_int(&byteRate);
 
-	if (audioFormat != 16) {
-	        short extraParams = file_read_int16_le(xbuffer, file);
-	        file_ignore_bytes(file, extraParams);
-	}
+	read(fd, xbuffer, 2);
+	offset += 2;
+	//short bitsPerSample = file_read_int16_le(xbuffer, file);
+	read(fd, &bitsPerSample, 2);
+	offset += 2;
+	printf("audio format %hd\n", audioFormat);
+	printf("buffer %s\n", xbuffer);
+//	 if (audioFormat != 16) {
+//	        //short extraParams = file_read_int16_le(xbuffer, file);
+//			read(fd, &extraParams, 2);
+//			offset += 2;
+//			endian_swap_short(&extraParams);
+//			printf("extra params = %hd\n", extraParams);
+//	        //file_ignore_bytes(file, extraParams);
+//			file_ignore_bytes(fd, extraParams);
+//			//read(fd, NULL, extraParams);
+//	}extraParams = 0;
 
-	if (fread(xbuffer, sizeof(char), 4, file) != 4 || strcmp(xbuffer, "data") != 0)
-	        throw "Invalid WAV file";
+	if (read(fd, xbuffer, 4) <= 0 || ft_strncmp(xbuffer, "data", 4) != 0)
+		return (error_return("Invalid WAV file", NULL));
 
-	int dataChunkSize = file_read_int32_le(xbuffer, file);
-	unsigned char* bufferData = file_allocate_and_read_bytes(file, (size_t) dataChunkSize);
+	offset += 4;
+	//int dataChunkSize = file_read_int32_le(xbuffer, file);
+	read(fd, &dataChunkSize, 4);
+	printf("reading data chunk size at offset %d\n", offset);
+	offset += 4;
+	//endian_swap_int(&dataChunkSize);
+	printf("datachunk size %d offset %d\n", dataChunkSize, offset);
+	//unsigned char* bufferData = file_allocate_and_read_bytes(file, (size_t) dataChunkSize);
+	unsigned char *bufferData;
+	bufferData = malloc(dataChunkSize);
+	read(fd, bufferData, dataChunkSize);
+	printf("reading data at offset %d\n", offset);
+	printf("data = %s\n", bufferData);
 
-	float duration = float(dataChunkSize) / byteRate;
+	float duration = (float)dataChunkSize / byteRate;
+	printf("duration %f\n", duration);
 	alBufferData(buffer, GetFormatFromInfo(channels, bitsPerSample), bufferData, dataChunkSize, sampleRate);
 	free(bufferData);
-	fclose(f);
-}*/
-
+	close(fd);
+	return (0);
+}
+*/
 int		init_doom(t_doom *doom)
 {
 	if (init_map(&doom->map) == 1 || init_sdl_and_ttf() == 1 \
@@ -141,6 +224,9 @@ int		init_sound(t_sound *sound)
 	alSourcei(sound->source, AL_LOOPING, AL_TRUE);
 	alGetError();
 	alGenBuffers(1, &sound->buffer);
+	loadWAV("assets/sounds/beet.wav", sound->buffer);
+	alSourcei(sound->source, AL_BUFFER, sound->buffer);
+	alSourcePlay(sound->source);
 	/*
 	if ((sound->error = alGetError()) != AL_NO_ERROR)
 	{

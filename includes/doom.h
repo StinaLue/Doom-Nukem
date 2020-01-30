@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/30 13:22:33 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/31 00:20:15 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -333,7 +333,7 @@ typedef struct				s_doom
 	int						state;
 }							t_doom;
 
-
+int							loadWAV(char *file, ALuint buffer);
 
 int							is_mouse_collide(t_vec mouse_pos, SDL_Rect collide_rect);
 
