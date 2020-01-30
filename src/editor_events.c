@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/30 12:10:34 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/30 16:03:32 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,16 @@ void	check_finished_sect(t_editor *editor)
             editor->show_alert = 1;
 		}
         else
+		{
             editor->show_alert = 0;
+			set_sector_position(editor->current_sector);
+			editor->current_sector->floor_height = editor->opt_menu.height_floor;
+			editor->current_sector->ceiling_height = editor->opt_menu.height_ceiling;
+			editor->edit_map.num_sectors++;
+		}
 		editor->clicked = 0;
-		editor->edit_map.num_sectors++;
 		editor->wall_tmp.start.x = -1;
 		editor->wall_tmp.start.y = -1;
-		set_sector_position(editor->current_sector);
-		editor->current_sector->floor_height = editor->opt_menu.height_floor;
-		editor->current_sector->ceiling_height = editor->opt_menu.height_ceiling;
 		editor->start_sector_reached = 1;
 	}
 }

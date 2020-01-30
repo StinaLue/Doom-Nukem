@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_menu.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/30 14:29:14 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/30 16:29:34 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,15 @@ int	init_instr_menu(t_editor *editor)
 		return (1);
 	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, (editor->instr_surf->h / 20) * 11), 2, "replace map: r") != 0)
 		return (1);
-	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, (editor->instr_surf->h / 20) * 5), 3, "create sector: left click") != 0)
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, (editor->instr_surf->h / 20) * 14), 3, "load map: l") != 0)
 		return (1);
-	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, (editor->instr_surf->h / 20) * 8), 4, "create new map: n") != 0)
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, (editor->instr_surf->h / 20) * 5), 4, "create sector: left click") != 0)
 		return (1);
-	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, (editor->instr_surf->h / 20) * 11), 5, "change type of wall: t") != 0)
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, (editor->instr_surf->h / 20) * 8), 5, "create new map: n") != 0)
+		return (1);
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, (editor->instr_surf->h / 20) * 11), 6, "change type of wall: t") != 0)
+		return (1);
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, (editor->instr_surf->h / 20) * 14), 7, "set player position: p") != 0)
 		return (1);
 	return (0);
 }
@@ -142,8 +146,9 @@ int	init_editor_menu(t_editor *editor)
 		return (1);
     if ((editor->alert_surf = \
 		TTF_RenderText_Solid(editor->opt_menu.font, \
-		"lol", editor->opt_menu.text_color)) == NULL)
+		"Sector has to be convex", editor->opt_menu.text_color)) == NULL)
 		return (error_return("TTF_RenderText_Solid error = %s\n", \
 				TTF_GetError()));
+	assign_sdlrect(&editor->alert_rect, create_vec((editor->editor_surf->w - editor->alert_surf->w) / 2, 0), create_vec(0, 0));
 	return (0);
 }

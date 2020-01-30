@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   blit_editor.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/30 13:18:31 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/30 16:23:47 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,15 +114,6 @@ int	blit_height(t_editor *editor)
 
 int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 {
-    if (editor->show_alert == 1)
-    {
-        ft_printf("hi");
-        if ((SDL_BlitScaled(editor->wall_textures[editor->opt_menu.activ_tex], NULL,
-			sdlmain->win_surf, &editor->alert_rect)) < 0)
-		return (error_return("SDL_BlitScaled error = %{r}s\n",
-				SDL_GetError()));
-        //editor->show_alert = 0;
-    }
 	if (blit_instructs(editor) != 0)
 		return (1);
 	if (blit_options(editor) != 0)
@@ -133,15 +124,23 @@ int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 		return (1);/* 
 	if (blit_height(editor) != 0)
 		return (1); */
+	if (editor->show_alert == 1)
+    {
+        if ((SDL_BlitSurface(editor->alert_surf, NULL,
+			editor->editor_surf, &editor->alert_rect)) < 0)
+		return (error_return("SDL_BlitSurface error = %{r}s\n",
+				SDL_GetError()));
+        //editor->show_alert = 0;
+    }
 	if ((SDL_BlitScaled(editor->editor_surf, NULL,
 			sdlmain->win_surf, &editor->editor_rect)) < 0)
 		return (error_return("SDL_BlitScaled error = %{r}s\n",
 				SDL_GetError()));
-		if ((SDL_BlitScaled(editor->opt_surf, NULL,
+	if ((SDL_BlitScaled(editor->opt_surf, NULL,
 			sdlmain->win_surf, &editor->options_rect)) < 0)
 		return (error_return("SDL_BlitScaled error = %{r}s\n",
 					SDL_GetError()));
-		if ((SDL_BlitScaled(editor->instr_surf, NULL,
+	if ((SDL_BlitScaled(editor->instr_surf, NULL,
 			sdlmain->win_surf, &editor->instr_rect)) < 0)
 		return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
 	if ((SDL_BlitScaled(editor->wall_textures[editor->opt_menu.activ_tex], NULL,

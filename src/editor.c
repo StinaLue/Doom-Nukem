@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/30 12:50:18 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/30 15:55:59 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,8 +223,7 @@ int	editor_loop(t_doom *doom)
 				break ;
 		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
 		assign_sdlrect(&editor->mouse_rect, create_vec(sdlmain->mouse_pos.x - 15, sdlmain->mouse_pos.y - 15), create_vec(15, 15));
-	    assign_sdlrect(&editor->alert_rect, create_vec((editor->editor_surf->w - editor->alert_surf->w) / 2, editor->editor_surf->h / 2), create_vec(0, 0));
-        if (NBPOINTSROW * editor->offset < editor->editor_surf->h)
+		if (NBPOINTSROW * editor->offset < editor->editor_surf->h)
 			offset_border = editor->editor_surf->h \
 						- NBPOINTSROW * editor->offset;
 		sdlmain->mouse_pos.x = round_num(sdlmain->mouse_pos.x, editor->offset);
