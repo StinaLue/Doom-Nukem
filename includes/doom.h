@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 16:35:34 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/31 16:38:34 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ typedef struct				s_wall3d
 	double					end_pos;
 	double					dist_left;
 	double					dist_right;
+	double					length;
 }							t_wall3d;
 
 typedef struct				s_sdlmain
