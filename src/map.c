@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 16:38:33 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/26 13:39:05 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/31 15:54:41 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int		copy_map(const t_map *srcmap, t_map *dstmap)
 	if (srcmap == NULL || dstmap == NULL)
 		return (1);
 	vectorcpy(&dstmap->player_spawn, &srcmap->player_spawn);
+	//dstmap->player_spawn.x = srcmap->player_spawn.x * 10;
+	//dstmap->player_spawn.y = srcmap->player_spawn.y * 10;
 	dstmap->num_sectors = srcmap->num_sectors;
 	dstmap->num_enemies = srcmap->num_enemies;
 	if (srcmap->num_enemies > 0 && srcmap->enemy_info != NULL)

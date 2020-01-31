@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 15:07:26 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/31 15:54:25 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,7 +288,6 @@ typedef struct				s_editor
 	t_sector_node			*selected_sector;
 	t_wall_node				*current_wall;
 
-	int						clicked;
 	int						offset;
 	int						start_sector_reached;
 	int						color_change;

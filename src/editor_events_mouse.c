@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 15:00:03 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/31 15:36:49 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,6 @@ void	check_finished_sect(t_editor *editor)
 			editor->current_sector->ceiling_height = editor->opt_menu.height_ceiling;
 			editor->edit_map.num_sectors++;
 		}
-		editor->clicked = 0;
 		editor->wall_tmp.start.x = -1;
 		editor->wall_tmp.start.y = -1;
 		editor->start_sector_reached = 1;
