@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   null_pointers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/30 12:40:50 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/31 16:41:03 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,11 @@ void null_editor_pointers(t_editor *editor)
     editor->alert_surf = NULL;
     editor->wall_tmp.wall_type = 0;//1;
 	editor->wall_tmp.type_color = 0xFF0000;
+
+	editor->instr_menu.font = NULL;
+	editor->instr_menu.font_title = NULL;
+	editor->instr_menu.title = NULL;
+
     while (i < NBINSTRUCTS)
     {
         editor->instr_menu.instructs[i] = NULL;
@@ -72,7 +77,9 @@ void    null_sdlmain_pointers(t_sdlmain *sdlmain)
     sdlmain->win = NULL;
     sdlmain->win_surf = NULL;
     sdlmain->font = NULL;
-    sdlmain->music = NULL;
+
+	sdlmain->sound.device = NULL;
+	sdlmain->sound.context = NULL;
 }
 
 void	null_walltextures_pointers(SDL_Surface **wall_textures)

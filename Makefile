@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/01/31 14:34:01 by sluetzen         ###   ########.fr        #
+#    Updated: 2020/01/31 16:40:54 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,10 +18,10 @@ CC = clang
 CFLAGS = -Wall -Werror -Wextra -D_THREAD_SAFE -O3
 DEBUGFLAGS = -Wall -Werror -Wextra -D_THREAD_SAFE -g
 
-LDFLAGS = -L$(LIBFT_DIRECTORY) -L$(LIBBMP_DIRECTORY) -L$(SDL2_LIB_DIRECTORY)lib -L$(SDL2TTF_LIB_DIRECTORY)lib -L$(SDL2MIXER_LIB_DIRECTORY)lib
-LDLIBS = -lft -lbmp -lSDL2 -lSDL2_ttf -lSDL2_mixer
+LDFLAGS = -L$(LIBFT_DIRECTORY) -L$(LIBBMP_DIRECTORY) -L$(SDL2_LIB_DIRECTORY)lib -L$(SDL2TTF_LIB_DIRECTORY)lib -L$(OPENAL_LIB_DIRECTORY)lib#-L$(SDL2MIXER_LIB_DIRECTORY)lib
+LDLIBS = -lft -lbmp -lSDL2 -lSDL2_ttf -lopenal
 
-INCLUDES =  -I$(HEADERS_DIRECTORY) -I$(LIBFT_HEADER) -I$(LIBBMP_HEADER) -I$(SDL2_HEADERS_DIRECTORY) -I$(SDL2TTF_HEADERS_DIRECTORY) -I$(SDL2MIXER_HEADERS_DIRECTORY)
+INCLUDES =  -I$(HEADERS_DIRECTORY) -I$(LIBFT_HEADER) -I$(LIBBMP_HEADER) -I$(SDL2_HEADERS_DIRECTORY) -I$(SDL2TTF_HEADERS_DIRECTORY) -I$(OPENAL_HEADERS_DIRECTORY)#-I$(SDL2MIXER_HEADERS_DIRECTORY)
 
 HARD_DBG ?= 1
 
@@ -41,16 +41,16 @@ SDL2_VERSION = 2.0.10
 SDL2TTF = $(SDL2TTF_LIB_DIRECTORY)lib/libSDL2_ttf.dylib
 SDL2TTF_VERSION = 2.0.15
 
-SDL2MIXER = $(SDL2MIXER_LIB_DIRECTORY)lib/libSDL2_mixer.dylib
-SDL2MIXER_VERSION = 2.0.4
+OPENAL = $(OPENAL_LIB_DIRECTORY)lib/libopenal.dylib
+OPENAL_VERSION = 1.20.1
 
 SDL2_LIB_DIRECTORY = ./sdl2_lib/
 SDL2TTF_LIB_DIRECTORY = ./sdl2_ttf_lib/
-SDL2MIXER_LIB_DIRECTORY = ./sdl2_mixer_lib/
+OPENAL_LIB_DIRECTORY = ./openal-soft-lib/
 
 SDL2_HEADERS_DIRECTORY = $(SDL2_LIB_DIRECTORY)include/SDL2/
 SDL2TTF_HEADERS_DIRECTORY = $(SDL2TTF_LIB_DIRECTORY)include/SDL2/
-SDL2MIXER_HEADERS_DIRECTORY = $(SDL2MIXER_LIB_DIRECTORY)include/SDL2/
+OPENAL_HEADERS_DIRECTORY = $(OPENAL_LIB_DIRECTORY)include/AL/
 
 HEADERS_LIST = doom.h
 
@@ -88,6 +88,7 @@ SOURCES_LIST = main.c \
 			new_blit.c \
 			map.c \
 			editor_events.c \
+			wav_parse.c \
 			texture_mapping.c \
 			editor_events_mouse.c \
 			editor_events_keys.c#\
@@ -146,23 +147,23 @@ $(SDL2TTF):
 	cd ../.. && \
 	rm -rf SDL2_ttf-$(SDL2TTF_VERSION);
 
-$(SDL2MIXER):
-	curl -OL http://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-$(SDL2MIXER_VERSION).tar.gz && \
-	tar -xvf SDL2_mixer-$(SDL2MIXER_VERSION).tar.gz && \
-	rm SDL2_mixer-$(SDL2MIXER_VERSION).tar.gz && \
-	export PATH="$(PATH):$(CURRENT_DIR)/$(SDL2_LIB_DIRECTORY)bin" && \
-	mkdir -p $(SDL2MIXER_LIB_DIRECTORY)/build && \
-	cd $(SDL2MIXER_LIB_DIRECTORY)build && \
-	$(CURRENT_DIR)/SDL2_mixer-$(SDL2MIXER_VERSION)/configure --prefix $(CURRENT_DIR)/$(SDL2MIXER_LIB_DIRECTORY) && \
+$(OPENAL):
+	curl -Ol https://kcat.strangesoft.net/openal-releases/openal-soft-1.20.1.tar.bz2 && \
+	tar -xvf openal-soft-$(OPENAL_VERSION).tar.bz2 && \
+	rm openal-soft-$(OPENAL_VERSION).tar.bz2 && \
+	mkdir -p $(OPENAL_LIB_DIRECTORY)/build && \
+	cd $(OPENAL_LIB_DIRECTORY)build && \
+	cmake -DCMAKE_INSTALL_PREFIX:PATH=$(CURRENT_DIR)/$(OPENAL_LIB_DIRECTORY) $(CURRENT_DIR)/openal-soft-$(OPENAL_VERSION) && \
 	make && \
 	make install && \
-	cd ../.. && \
-	rm -rf SDL2_mixer-$(SDL2MIXER_VERSION);
+	cd ../..
+	rm -rf openal-soft-$(OPENAL_VERSION)
 
-$(NAME): $(SDL2) $(SDL2TTF) $(SDL2MIXER) $(LIBFT) $(LIBBMP) $(OBJECTS_DIRECTORY) $(OBJECTS)
+$(NAME): $(SDL2) $(SDL2TTF) $(OPENAL) $(LIBFT) $(LIBBMP) $(OBJECTS_DIRECTORY) $(OBJECTS)
 	@$(CC) $(INCLUDES) $(OBJECTS) $(LDFLAGS) $(LDLIBS) -o $(NAME)
 	@echo "\n$(NAME): $(GREEN)object files were created$(RESET)"
 	@echo "$(NAME): $(GREEN)$(NAME) was created$(RESET)"
+	@install_name_tool -change @rpath/libopenal.1.dylib $(OPENAL_LIB_DIRECTORY)lib/libopenal.dylib $(NAME)
 
 $(OBJECTS_DIRECTORY):
 	@mkdir -p $(OBJECTS_DIRECTORY)
@@ -199,20 +200,21 @@ clean:
 	@rm -rf $(OBJECTS_DIRECTORY)
 	@rm -rf $(SDL2_LIB_DIRECTORY)build
 	@rm -rf $(SDL2TTF_LIB_DIRECTORY)build
-	@rm -rf $(SDL2MIXER_LIB_DIRECTORY)build
+	@rm -rf $(OPENAL_LIB_DIRECTORY)build
 	@echo "$(NAME): $(RED)$(LIBFT_DIRECTORY) and $(LIBBMP_DIRECTORY) were cleaned$(RESET)"
 	@echo "$(NAME): $(RED)$(OBJECTS_DIRECTORY) was deleted$(RESET)"
 	@echo "$(NAME): $(RED)object files were deleted$(RESET)"
 	@echo "$(NAME): $(RED)$(SDL2_LIB_DIRECTORY)build was deleted$(RESET)"
 	@echo "$(NAME): $(RED)$(SDL2TTF_LIB_DIRECTORY)build was deleted$(RESET)"
-	@echo "$(NAME): $(RED)$(SDL2MIXER_LIB_DIRECTORY)build was deleted$(RESET)"
+	@echo "$(NAME): $(RED)$(OPENAL_LIB_DIRECTORY)build was deleted$(RESET)"
 	@echo "$(NAME): $(RED)SDL2 and SDL2TTF object files were deleted$(RESET)"
 
 fclean: clean
 	@rm -rf $(SDL2_LIB_DIRECTORY)
 	@rm -rf $(SDL2TTF_LIB_DIRECTORY)
-	@rm -rf $(SDL2MIXER_LIB_DIRECTORY)
+	@rm -rf $(OPENAL_LIB_DIRECTORY)
 	@echo "$(NAME): $(RED)SDL2 and SDL2TTF was deleted$(RESET)"
+	@echo "$(NAME): $(RED)OPENAL was deleted$(RESET)"
 	@$(MAKE) -sC $(LIBFT_DIRECTORY) fclean
 	@echo "$(NAME): $(RED)$(LIBFT) was deleted$(RESET)"
 	@$(MAKE) -sC $(LIBBMP_DIRECTORY) fclean
@@ -226,10 +228,11 @@ re:
 
 debug: $(DEBUG_NAME)
 
-$(DEBUG_NAME): $(SDL2) $(SDL2TTF) $(SDL2MIXER) $(LIBFT) $(LIBBMP) $(OBJECTS_DIRECTORY_DEBUG) $(OBJECTS_DEBUG)
+$(DEBUG_NAME): $(SDL2) $(SDL2TTF) $(OPENAL) $(LIBFT) $(LIBBMP) $(OBJECTS_DIRECTORY_DEBUG) $(OBJECTS_DEBUG)
 	@$(CC) $(INCLUDES) $(OBJECTS_DEBUG) $(LDFLAGS) $(LDLIBS) -o $(DEBUG_NAME)
 	@echo "\n$(DEBUG_NAME): $(GREEN)object debug files were created$(RESET)"
 	@echo "$(DEBUG_NAME): $(GREEN)$(DEBUG_NAME) was created$(RESET)"
+	@install_name_tool -change @rpath/libopenal.1.dylib $(OPENAL_LIB_DIRECTORY)lib/libopenal.dylib $(DEBUG_NAME)
 
 debugclean:
 	@rm -rf $(OBJECTS_DIRECTORY_DEBUG)
