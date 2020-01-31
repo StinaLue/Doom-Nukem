@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 15:11:15 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/31 17:03:57 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,20 @@
 
 void	quit_sdl_and_ttf(void)
 {
-	Mix_CloseAudio();
-	Mix_Quit();
+	//Mix_CloseAudio();
+	//Mix_Quit();
 	TTF_Quit();
 	SDL_Quit();
+}
+
+void	free_sound(t_sound *sound)
+{
+	alSourcei(sound->source, AL_LOOPING, AL_FALSE);
+	alDeleteSources(1, &sound->source);
+	//alSourceUnqueueBuffers(sound->source, 1, &sound->buffer);
+	alDeleteBuffers(1, &sound->buffer);
+	alcDestroyContext(sound->context);
+	alcCloseDevice(sound->device);
 }
 
 int		free_sdlmain(t_sdlmain *sdlmain)
@@ -28,8 +38,9 @@ int		free_sdlmain(t_sdlmain *sdlmain)
 	sdlmain->win_surf = NULL;
 	TTF_CloseFont(sdlmain->font);
 	sdlmain->font = NULL;
-	Mix_FreeMusic(sdlmain->music);
-	sdlmain->music = NULL;
+	free_sound(&sdlmain->sound);
+	//Mix_FreeMusic(sdlmain->music);
+	//sdlmain->music = NULL;
 	return (EXIT_FAILURE);
 }
 
@@ -153,7 +164,7 @@ int		free_map(t_map *map)
 	nb_enemy = map->num_enemies;
 	if (map->sector_head != NULL)
 		free_sector_list(&map->sector_head);
-	if (nb_enemy >= 0 && map->enemy_info != NULL)
+	if (nb_enemy >= 1 && map->enemy_info != NULL)
 		ft_memdel((void **)&map->enemy_info);
 	map->num_enemies = 0;
 	map->num_sectors = 0;

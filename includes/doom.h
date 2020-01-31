@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 15:54:25 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/31 17:04:39 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 # define DOOM_H
 # include "SDL.h"
 # include "SDL_ttf.h"
-# include "SDL_mixer.h"
+# include "al.h"
+# include "alc.h"
 # define TITLE "DOOM"
 
 # define SQRT2 1.4142135623730950488
-# define PLAYER_RADIUS 1
+# define PLAYER_RADIUS 0.1
 # define NB_WALL_TEXTURES 9
 
 /*
@@ -135,7 +136,19 @@ typedef struct				s_wall3d
 	t_vec					bottom_right;
 	double					start_pos;
 	double					end_pos;
+	double					dist_left;
+	double					dist_right;
+	double					length;
 }							t_wall3d;
+
+typedef struct				s_sound
+{
+	ALCdevice				*device;
+	ALCcontext				*context;
+	ALuint					source;
+	ALuint					buffer;
+	ALenum					error;
+}							t_sound;
 
 typedef struct				s_sdlmain
 {
@@ -143,7 +156,8 @@ typedef struct				s_sdlmain
 	SDL_Surface				*win_surf;
 	SDL_Event				event;
 	TTF_Font				*font;
-	Mix_Music				*music;
+	//Mix_Music				*music;
+	t_sound					sound;
 	t_vec					mouse_pos;
 	int						win_w;
 	int						win_h;
@@ -329,7 +343,7 @@ typedef struct				s_doom
 	int						state;
 }							t_doom;
 
-
+int							loadWAV(char *file, ALuint buffer);
 
 int							is_mouse_collide(t_vec mouse_pos, SDL_Rect collide_rect);
 
