@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:40:34 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/29 15:47:11 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/31 12:21:21 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,6 @@ int			check_convex_sector(t_sector_node *sector)
 			return (0);
 		wall = wall->next;
 	}
-	/* int sign = atan2(cross_product(a,b), dot_product(a,b));
-	if (sign < 1)
-		sign = 1;
-	else
-		sign = -1;
-	printf("sign: %d\n", sign); */
 	return (1);
 }
 
