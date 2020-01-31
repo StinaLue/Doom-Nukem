@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 00:20:15 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/31 16:39:28 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define TITLE "DOOM"
 
 # define SQRT2 1.4142135623730950488
-# define PLAYER_RADIUS 1
+# define PLAYER_RADIUS 0.1
 # define NB_WALL_TEXTURES 9
 
 /*
@@ -54,7 +54,7 @@
 # define NBTEXTURES	9
 # define NBHEIGHTS 7
 # define NBOPTIONS 5
-# define NBINSTRUCTS 6
+# define NBINSTRUCTS 8
 # define COLOR_HOVER 0x6C1413
 # define COLOR_PRESSED 0xffff00
 # define COLOR_NORMAL 0xff0000
@@ -136,6 +136,8 @@ typedef struct				s_wall3d
 	t_vec					bottom_right;
 	double					start_pos;
 	double					end_pos;
+	double					dist_left;
+	double					dist_right;
 }							t_wall3d;
 
 typedef struct				s_sound
@@ -283,21 +285,24 @@ typedef struct				s_editor
 	SDL_Surface				*instr_surf;
 	SDL_Surface				*mouse_surf;
 	SDL_Surface				**wall_textures;
+    SDL_Surface             *alert_surf;
 
 	SDL_Rect				editor_rect;
 	SDL_Rect				options_rect;
 	SDL_Rect				instr_rect;
 	SDL_Rect				mouse_rect;
+    SDL_Rect                alert_rect;
 
 	t_sector_node			*current_sector;
 	t_sector_node			*selected_sector;
 	t_wall_node				*current_wall;
 
 	int						clicked;
-	//int						num_sectors;
 	int						offset;
 	int						start_sector_reached;
 	int						color_change;
+    int                     show_alert_convex;
+	int 					show_alert_loading;
 	t_vec					grid_values[NBPOINTS];
 	t_vec					start_sector;
 	t_wall_node				wall_tmp;
@@ -574,6 +579,8 @@ int							error_return(const char *error_msg, const char *sdl_error);
 */
 
 int							reset_init_editor(t_editor *editor, t_sdlmain *sdlmain);
+void						event_mouse(t_editor *editor, t_sdlmain *sdlmain);
+void						event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain);
 /*
 ** LINKED LIST FUNCTIONS
 */
@@ -593,6 +600,8 @@ t_sector_node				*get_sector_by_index(t_sector_node *sector_list, unsigned int i
 void						delete_sector(t_sector_node **node);
 
 void						delete_sector_by_index(t_sector_node **sector_list,unsigned int index);
+
+void						delete_sector_by_address(t_sector_node **sector_list, t_sector_node *node);
 
 t_sector_node				*get_last_sector(t_sector_node *node);
 

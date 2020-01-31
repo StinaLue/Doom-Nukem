@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 16:19:11 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/31 16:42:01 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,8 @@ int		free_editor(t_editor *editor)
 	editor->instr_surf = NULL;
 	SDL_FreeSurface(editor->opt_surf);
 	editor->opt_surf = NULL;
+	SDL_FreeSurface(editor->alert_surf);
+	editor->alert_surf = NULL;
 	free_fonts_surf(editor);
 	free_fonts(editor);
 	return (EXIT_FAILURE);

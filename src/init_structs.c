@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/27 17:57:40 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/31 12:38:00 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain)
 		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
 	if ((gamesurfs->fixed_mmap = SDL_CreateRGBSurface(0, 128, 128, 32, 0, 0, 0, 0)) == NULL) //--> should be a square that can handle the size of the whole map
 		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
-	if ((gamesurfs->perspective_view = SDL_CreateRGBSurface(0, sdlmain->win_surf->w / 4, sdlmain->win_surf->h / 4, 32, 0, 0, 0, 0)) == NULL)
+	if ((gamesurfs->perspective_view = SDL_CreateRGBSurface(0, sdlmain->win_surf->w/2, sdlmain->win_surf->h/2, 32, 0, 0, 0, 0)) == NULL)
 		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
 	//if ((gamesurfs->weapons = load_bmp("assets/shadow.bmp")) == NULL)
 	if ((gamesurfs->weapons = load_opti_bmp("assets/shadow.bmp", gamesurfs->perspective_view/*sdlmain->win_surf*/, 0x0080FF)) == NULL)

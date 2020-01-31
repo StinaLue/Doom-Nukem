@@ -6,76 +6,12 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/28 15:09:50 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/31 16:39:53 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-void	check_finished_sect(t_editor *editor)
-{
-	if ((editor->start_sector.x == editor->wall_tmp.end.x) \
-		&& (editor->start_sector.y == editor->wall_tmp.end.y))
-	{
-		editor->clicked = 0;
-		editor->start_sector_reached = 1;
-		//editor->num_sectors++;
-		editor->edit_map.num_sectors++;
-		editor->wall_tmp.start.x = -1;
-		editor->wall_tmp.start.y = -1;
-		set_sector_position(editor->current_sector);
-		editor->current_sector->floor_height = editor->opt_menu.height_floor;
-		editor->current_sector->ceiling_height = editor->opt_menu.height_ceiling;
-	}
-}
-
-int	start_wall_exists(t_wall_node *wall)
-{
-	if (wall->start.x > 0 && wall->start.y > 0)
-		return (1);
-	return (0);
-}
-
-/* int is_convex()
-{
-	return(1);
-} */
-
-void	event_editor_surf(t_vec mouse, t_editor *editor)
-{
-	if (start_wall_exists(&editor->wall_tmp) \
-		&& !(mouse.x == editor->wall_tmp.end.x \
-		&& mouse.y == editor->wall_tmp.end.y))
-	{
-		/* if (is_convex())
-			printf("is convex\n");
-		else
-			printf("is not convex\n"); */
-		editor->wall_tmp.end.x = mouse.x;
-		editor->wall_tmp.end.y = mouse.y;
-		editor->wall_tmp.tex_index = editor->opt_menu.activ_tex;
-		editor->current_sector = get_last_sector(editor->edit_map.sector_head);
-		copy_wall_node(&editor->current_sector->wall_head, &editor->wall_tmp);
-		editor->wall_tmp.start.x = editor->wall_tmp.end.x;
-		editor->wall_tmp.start.y = editor->wall_tmp.end.y;
-		check_finished_sect(editor);
-	}
-	else
-	{
-		if (editor->start_sector_reached == 1)
-		{
-			//if (editor->current_sector != NULL)
-			//	set_sector_position(editor->current_sector);
-			add_sector_node(&editor->edit_map.sector_head);
-			set_vec_values(&mouse, &editor->start_sector);
-			editor->wall_tmp.start.x = mouse.x; // set_vec_values can be used if wall_tmp.start is int
-			editor->wall_tmp.start.y = mouse.y;
-			editor->wall_tmp.end.x = mouse.x;
-			editor->wall_tmp.end.y = mouse.y;
-			editor->start_sector_reached = 0;
-		}
-	}
-}
 
 void	special_case_height(t_editor *editor)
 {
@@ -99,101 +35,6 @@ void	special_case_height(t_editor *editor)
 		editor->opt_menu.bord_color_h[3] = COLOR_PRESSED;
 		editor->opt_menu.bord_color_h[6] = COLOR_PRESSED;
 		editor->opt_menu.activ_h = 3;
-	}
-}
-
-void	set_border_color(t_editor *editor, t_vec mouse_pos)
-{
-	int i;
-
-	i = 0;
-	while (i < NBTEXTURES)
-	{
-		if (is_mouse_collide(mouse_pos, editor->opt_menu.text_rect[i]))
-		{
-			if (editor->opt_menu.activ_tex != i)
-				editor->opt_menu.bord_color_text[editor->opt_menu.activ_tex] = COLOR_NORMAL;
-			editor->opt_menu.bord_color_text[i] = COLOR_PRESSED;
-			editor->opt_menu.activ_tex = i;
-		}
-		i++;
-	}
-	i = 0;/* 
-	while (i < NBHEIGHTS)
-	{
-		editor->opt_menu.bord_color_h[i] = COLOR_NORMAL;
-		if (is_mouse_collide(mouse_pos, editor->opt_menu.h_rect[i]))
-			editor->opt_menu.activ_h = i;
-		i++;
-	} */
-	editor->opt_menu.bord_color_h[editor->opt_menu.activ_h] = COLOR_PRESSED;
-}
-
-void change_size(t_editor *editor, t_sdlmain *sdlmain)
-{
-	if (editor->selected_sector != NULL)
-	{
-		editor->opt_menu.height_floor = editor->selected_sector->floor_height;
-		editor->opt_menu.height_ceiling = editor->selected_sector->ceiling_height;
-		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_floor[1]) && sdlmain->event.wheel.y > 0 && editor->opt_menu.height_floor > 10)
-		{
-			//editor->opt_menu.height_floor--; // makes floor lower
-			editor->selected_sector->floor_height--;
-		}
-		else if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_floor[1]) && sdlmain->event.wheel.y < 0 && editor->opt_menu.height_floor < 50)
-		{
-			//editor->opt_menu.height_floor++;
-			editor->selected_sector->floor_height++;
-		}
-		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_ceiling[1]) && sdlmain->event.wheel.y > 0 && editor->opt_menu.height_ceiling < 50)
-		{
-			//printf("ceil %f\n", editor->opt_menu.height_ceiling);
-			//editor->opt_menu.height_ceiling++;
-			editor->selected_sector->ceiling_height++;
-		}
-		else if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_ceiling[1]) && sdlmain->event.wheel.y < 0 && editor->opt_menu.height_ceiling > 12)
-		{
-			//editor->opt_menu.height_ceiling--;
-			editor->selected_sector->ceiling_height--;
-		}
-		//editor->opt_menu.height_floor = editor->selected_sector->floor_height;
-		//editor->opt_menu.height_ceiling = editor->selected_sector->ceiling_height;
-		set_height_test(editor);
-	}
-}
-
-void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
-{
-	int i;
-
-	i = 0;
-	if (is_mouse_collide(sdlmain->mouse_pos, editor->options_rect))
-	{
-		sdlmain->mouse_pos.x -= editor->editor_rect.w;
-		if (sdlmain->event.button.button == SDL_BUTTON_LEFT)
-		{
-			set_border_color(editor, sdlmain->mouse_pos);
-			//special_case_height(editor);
-		}
-		while (i < NBTEXTURES)
-		{
-			if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.text_rect[i]) && i != editor->opt_menu.activ_tex)
-				editor->opt_menu.bord_color_text[i] = COLOR_HOVER;
-			else if (!is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.text_rect[i]) && i != editor->opt_menu.activ_tex)
-				editor->opt_menu.bord_color_text[i] = COLOR_NORMAL;
-			i++;
-		}
-		/*
-		i = 0; 
-		while (i < NBHEIGHTS)
-		{
-			if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect[i]) && i != editor->opt_menu.activ_h)
-				editor->opt_menu.bord_color_h[i] = COLOR_HOVER;
-			else if (!is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect[i]) && i != editor->opt_menu.activ_h)
-				editor->opt_menu.bord_color_h[i] = COLOR_NORMAL;
-			special_case_height(editor);
-			i++;
-		} */
 	}
 }
 
@@ -246,162 +87,21 @@ void	find_neighbors(t_doom *doom)
 	}
 }
 
-void	highlight_sector(t_sector_node *selected_sector)
-{
-	t_wall_node *current_wall;
-
-	if (selected_sector == NULL)
-		return ;
-	current_wall = selected_sector->wall_head;
-	while (current_wall != NULL)
-	{
-		current_wall->color = current_wall->type_color;
-		current_wall->type_color = 0xFFFFFF;
-		current_wall = current_wall->next;
-	}
-}
-
-void	remove_highlight_sector(t_sector_node *sector)
-{
-	t_wall_node *current_wall;
-
-	if (sector == NULL)
-		return ;
-	current_wall = sector->wall_head;
-	while (current_wall != NULL)
-	{
-		current_wall->type_color = current_wall->color;
-		current_wall->color = 0xFFFFFF;
-		current_wall = current_wall->next;
-	}
-}
-
 int	editor_events(t_doom *doom)
 {
 	t_editor	*editor;
 	t_sdlmain	*sdlmain;
-	t_wall_node	*previous;
 
 	editor = &(doom->editor);
 	sdlmain = &(doom->sdlmain);
 	check_quit(&doom->sdlmain.event, &doom->state);
 	if (sdlmain->event.type == SDL_KEYDOWN)
 	{
-		check_menu(&doom->sdlmain.event, &doom->state, \
-					&doom->menu.previous_state, EDITOR_STATE);
-		if (sdlmain->event.key.keysym.sym == SDLK_u)
-		{
-			previous = undo_wall(editor->edit_map.sector_head);
-			if (previous != NULL) // condition has to be added so walls from sector before get removed, too
-			{
-				editor->wall_tmp.start.x = previous->end.x;
-				editor->wall_tmp.start.y = previous->end.y;
-				editor->wall_tmp.end.x = previous->end.x;
-				editor->wall_tmp.end.y = previous->end.y;
-			}
-			else
-			{
-				editor->wall_tmp.start.x = -1;
-				editor->wall_tmp.start.y = -1;
-				editor->wall_tmp.end.x = -1;
-				editor->wall_tmp.end.y = -1;
-				editor->start_sector_reached = 1; // only works when there's only one sector 
-			}
-		}
-		if (sdlmain->event.key.keysym.sym == SDLK_s)
-		{
-			if (editor->selected_sector != NULL)
-			{
-				/*
-				if (editor->selected_sector == editor->edit_map.sector_head)
-					editor->edit_map.sector_head = editor->selected_sector->next;
-				t_sector_node *previous_node;
-				previous_node = get_previous_sector(editor->edit_map.sector_head, editor->selected_sector);
-				//previous_node = editor->selected_sector->next;
-				delete_sector(&editor->selected_sector);
-				previous_node = editor->selected_sector;
-				*/
-				;
-			}
-		}
-		if (sdlmain->event.key.keysym.sym == SDLK_t \
-			&& sdlmain->event.key.repeat == 0)
-		{
-			if (editor->wall_tmp.wall_type == 1)
-			{
-				editor->wall_tmp.wall_type = 0;
-				editor->wall_tmp.type_color = 0xFF0000;
-			}
-			else
-			{
-				editor->wall_tmp.wall_type = 1;
-				editor->wall_tmp.type_color = 0xFF00FF;
-			}
-		}
-		if (sdlmain->event.key.keysym.sym == SDLK_r && doom->map.sector_head != NULL)
-		{
-			if (editor->edit_map.sector_head != NULL)
-				free_map(&editor->edit_map);
-			//print_map_contents(&editor->edit_map);
-			if (copy_map(&doom->map, &editor->edit_map) != 0)
-				doom->state = QUIT_STATE;
-			//editor->start_sector_reached = 1;
-			//editor->edit_map.sector_head = doom->map.sector_head;
-			//doom->map.sector_head = editor->edit_map.sector_head; 
-			//doom->game.player.sector = doom->map.sector_head;
-			//free(doom->map.sector_head);
-			//doom->map.sector_head = NULL;
-			//doom->map.sector_head = editor->edit_map.sector_head;
-		}
-		if (sdlmain->event.key.keysym.sym == SDLK_l && editor->edit_map.sector_head != NULL)
-		{
-			if (doom->map.sector_head != NULL)
-				free_map(&doom->map);
-			if (copy_map(&editor->edit_map, &doom->map) != 0)
-				doom->state = QUIT_STATE;
-			doom->game.player.pos.x = doom->map.player_spawn.x;
-			doom->game.player.pos.y = doom->map.player_spawn.y;
-			doom->game.player.sector = doom->map.sector_head;
-		}
-		if (sdlmain->event.key.keysym.sym == SDLK_p)
-		{
-			give_vec_values(&editor->edit_map.player_spawn, sdlmain->mouse_pos.x, sdlmain->mouse_pos.y);
-			//vectorcpy(&doom->game.player.pos, &editor->edit_map.player_spawn);
-		}
+		event_keydown(editor, doom, sdlmain);
 	}
-	if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN \
-		|| sdlmain->event.type == SDL_MOUSEMOTION \
-		|| sdlmain->event.type == SDL_MOUSEWHEEL)
+	if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN || sdlmain->event.type == SDL_MOUSEMOTION || sdlmain->event.type == SDL_MOUSEWHEEL)
 	{
-		if (sdlmain->event.button.button == SDL_BUTTON_LEFT \
-				&& sdlmain->mouse_pos.x <= NBPOINTSROW \
-				&& sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
-			event_editor_surf(sdlmain->mouse_pos, editor);
-		if (sdlmain->event.button.button == SDL_BUTTON_RIGHT \
-				&& sdlmain->mouse_pos.x <= NBPOINTSROW \
-				&& sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
-				{
-					t_sector_node *tmp_sector = editor->selected_sector;
-					//selected_sector = get_sector_by_pos(editor->current_sector, vec_to_vecdb(sdlmain->mouse_pos), 10);
-					//highlight_sector(selected_sector);
-					editor->selected_sector = get_sector_by_pos(editor->edit_map.sector_head, vec_to_vecdb(sdlmain->mouse_pos), 10);
-					if (tmp_sector != NULL && tmp_sector != editor->selected_sector)
-						remove_highlight_sector(tmp_sector);
-					if (tmp_sector != editor->selected_sector)
-						highlight_sector(editor->selected_sector);
-					//printf("%p\n", get_sector_by_pos(editor->edit_map.sector_head, vec_to_vecdb(sdlmain->mouse_pos), 5));
-					// select "set_height"
-					if (editor->selected_sector != NULL)
-					{
-						editor->opt_menu.height_floor = editor->selected_sector->floor_height;
-						editor->opt_menu.height_ceiling = editor->selected_sector->ceiling_height;
-					}
-					set_height_test(editor);
-				}
-		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
-		mouse_in_options(editor, sdlmain);
-		if (sdlmain->event.type == SDL_MOUSEWHEEL)
-			change_size(editor, sdlmain);
+		event_mouse(editor, sdlmain);
 	}/* 
 	if (sdlmain->event.type == SDL_MOUSEWHEEL || sdlmain->event.type == SDL_MOUSEMOTION)
 		change_size(editor, sdlmain); */

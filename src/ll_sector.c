@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_sector.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:02:35 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/24 20:11:21 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/29 17:40:25 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void		delete_sector(t_sector_node **node)
 
 //deletes sector at given index in list and relinks the list
 //return next sector adress from the list
-void		delete_sector_by_index(t_sector_node **sector_list,unsigned int index)
+void		delete_sector_by_index(t_sector_node **sector_list, unsigned int index)
 {
 	if (*sector_list == NULL)
 		return ;
@@ -76,6 +76,16 @@ void		delete_sector_by_index(t_sector_node **sector_list,unsigned int index)
 		delete_sector(sector_list);
 	else
 		delete_sector_by_index(&(*sector_list)->next, index - 1);
+}
+
+void 		delete_sector_by_address(t_sector_node **sector_list, t_sector_node *node)
+{
+	if (*sector_list == NULL || node == NULL)
+		return ;
+	else if (node == *sector_list)
+		delete_sector(sector_list);
+	else
+		delete_sector_by_address(&(*sector_list)->next, node);
 }
 
 //return sector adress by index or NULL if index out of range
