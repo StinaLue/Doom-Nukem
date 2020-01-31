@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/29 12:25:29 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/31 14:24:58 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,11 @@ void null_editor_pointers(t_editor *editor)
     editor->mouse_surf = NULL;
     editor->wall_tmp.wall_type = 0;//1;
 	editor->wall_tmp.type_color = 0xFF0000;
+
+	editor->instr_menu.font = NULL;
+	editor->instr_menu.font_title = NULL;
+	editor->instr_menu.title = NULL;
+
     while (i < NBINSTRUCTS)
     {
         editor->instr_menu.instructs[i] = NULL;
