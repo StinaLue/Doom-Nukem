@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/30 16:56:16 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/31 16:34:32 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,7 +290,8 @@ typedef struct				s_editor
 	int						offset;
 	int						start_sector_reached;
 	int						color_change;
-    int                     show_alert;
+    int                     show_alert_convex;
+	int 					show_alert_loading;
 	t_vec					grid_values[NBPOINTS];
 	t_vec					start_sector;
 	t_wall_node				wall_tmp;
@@ -567,6 +568,8 @@ int							error_return(const char *error_msg, const char *sdl_error);
 */
 
 int							reset_init_editor(t_editor *editor, t_sdlmain *sdlmain);
+void						event_mouse(t_editor *editor, t_sdlmain *sdlmain);
+void						event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain);
 /*
 ** LINKED LIST FUNCTIONS
 */
