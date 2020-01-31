@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 16:39:53 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/31 17:04:04 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
-
 
 void	special_case_height(t_editor *editor)
 {
@@ -71,6 +70,7 @@ void	find_neighbors(t_doom *doom)
 {
 	t_sector_node	*current_sector;
 	t_wall_node		*current_wall;
+
 	current_sector = doom->map.sector_head;
 	while (current_sector != NULL)
 	{
@@ -96,13 +96,14 @@ int	editor_events(t_doom *doom)
 	sdlmain = &(doom->sdlmain);
 	check_quit(&doom->sdlmain.event, &doom->state);
 	if (sdlmain->event.type == SDL_KEYDOWN)
-	{
 		event_keydown(editor, doom, sdlmain);
-	}
-	if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN || sdlmain->event.type == SDL_MOUSEMOTION || sdlmain->event.type == SDL_MOUSEWHEEL)
+	if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN \
+		|| sdlmain->event.type == SDL_MOUSEMOTION \
+		|| sdlmain->event.type == SDL_MOUSEWHEEL)
 	{
 		event_mouse(editor, sdlmain);
-	}/* 
+	}
+	/* 
 	if (sdlmain->event.type == SDL_MOUSEWHEEL || sdlmain->event.type == SDL_MOUSEMOTION)
 		change_size(editor, sdlmain); */
 	if (doom->state != EDITOR_STATE)

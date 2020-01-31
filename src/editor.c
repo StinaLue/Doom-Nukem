@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 13:56:51 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/31 15:22:04 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,9 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	editor->wall_tmp.end.y = -1;
 	editor->wall_tmp.wall_type = 0;
 	editor->start_sector_reached = 1;
-    editor->show_alert_convex = 0;
+	editor->show_convex_alert = 0;
+	editor->show_loading_alert = 0;
+	editor->loading_success = 0;
 	init_colors(editor);
 	return (0);
 }
@@ -99,12 +101,12 @@ int	reset_init_editor(t_editor *editor, t_sdlmain *sdlmain)
 		editor->grid_values[i].y = 0;
 		i++;
 	}
-	editor->wall_tmp.start.x = -1;   //not sure if needed
-	editor->wall_tmp.start.y = -1;   //not sure if needed
-	editor->wall_tmp.end.x = -1;   //not sure if needed
-	editor->wall_tmp.end.y = -1;   //not sure if needed
-	editor->wall_tmp.wall_type = 0;   //not sure if needed
-	editor->start_sector_reached = 1;   //not sure if needed
+	//editor->wall_tmp.start.x = -1;   //not sure if needed
+	//editor->wall_tmp.start.y = -1;   //not sure if needed
+	//editor->wall_tmp.end.x = -1;   //not sure if needed
+	//editor->wall_tmp.end.y = -1;   //not sure if needed
+	//editor->wall_tmp.wall_type = 0;   //not sure if needed
+	//editor->start_sector_reached = 1;   //not sure if needed
 	return (0);
 }
 
@@ -211,7 +213,6 @@ int	editor_loop(t_doom *doom)
 
 	editor = &(doom->editor);
 	sdlmain = &(doom->sdlmain);
-	//SDL_WarpMouseInWindow(sdlmain->win, sdlmain->win_surf->w / 2, sdlmain->win_surf->h / 2);
 	if (editor->editor_surf->w < editor->editor_surf->h)
 		editor->offset = editor->editor_surf->w / NBPOINTSROW;
 	else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_wall.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:25:24 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/26 22:12:03 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/31 15:54:58 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,10 +199,10 @@ int	copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list)
 	*new_list = malloc(sizeof(t_wall_node));
 	if (*new_list == NULL)
 		return (-1);
-	(*new_list)->start.x = wall_list->start.x;
-	(*new_list)->start.y = wall_list->start.y;
-	(*new_list)->end.x = wall_list->end.x;
-	(*new_list)->end.y = wall_list->end.y;
+	(*new_list)->start.x = wall_list->start.x/*  * 10 */;
+	(*new_list)->start.y = wall_list->start.y/*  * 10 */;
+	(*new_list)->end.x = wall_list->end.x/*  * 10 */;
+	(*new_list)->end.y = wall_list->end.y/*  * 10 */;
 	(*new_list)->color = wall_list->color;
 	(*new_list)->length = wall_list->length;
 	(*new_list)->sector_index = wall_list->sector_index;
