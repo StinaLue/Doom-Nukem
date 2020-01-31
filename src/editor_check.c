@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:40:34 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/31 16:48:57 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/31 17:13:11 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int			check_convex_sector(t_sector_node *sector)
 		a = vecdb_diff(wall->end, wall->start);
 		b = vecdb_diff(wall->next->end, wall->next->start);
 		angle = atan2(cross_product(a,b), dot_product(a,b));
-		if (fabs(total_angle) > fabs(total_angle + angle))
+		if (fabs(total_angle) > fabs(total_angle + angle) || fabs(angle) > 3.1415926)
 			return (0);
 		total_angle += angle;
 		if (fabs(total_angle) > M_PI * 2)

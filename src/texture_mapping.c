@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_mapping.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 18:01:04 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/31 16:47:44 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/31 17:09:58 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ void	draw_texture(SDL_Surface *surf, SDL_Surface *tex, t_wall3d *wall)
 	while (win.x < wall->top_right.x)
 	{
 		pos.x = get_texture_x((double)(win.x - wall->top_left.x) / width, wall);
-		//pos.x = fmod(pos.x * 4, 1);
 		pos.x *= (int)(wall->length / 4 + 0.5);
 		if (top_limit < surf->h)
 			win.y = top_limit;
