@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/30 11:51:31 by afonck           ###   ########.fr       */
+/*   Updated: 2020/01/31 16:19:11 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,16 @@ void	quit_sdl_and_ttf(void)
 	SDL_Quit();
 }
 
+void	free_sound(t_sound *sound)
+{
+	alSourcei(sound->source, AL_LOOPING, AL_FALSE);
+	alDeleteSources(1, &sound->source);
+	//alSourceUnqueueBuffers(sound->source, 1, &sound->buffer);
+	alDeleteBuffers(1, &sound->buffer);
+	alcDestroyContext(sound->context);
+	alcCloseDevice(sound->device);
+}
+
 int		free_sdlmain(t_sdlmain *sdlmain)
 {
 	SDL_DestroyWindow(sdlmain->win);
@@ -28,6 +38,7 @@ int		free_sdlmain(t_sdlmain *sdlmain)
 	sdlmain->win_surf = NULL;
 	TTF_CloseFont(sdlmain->font);
 	sdlmain->font = NULL;
+	free_sound(&sdlmain->sound);
 	//Mix_FreeMusic(sdlmain->music);
 	//sdlmain->music = NULL;
 	return (EXIT_FAILURE);
