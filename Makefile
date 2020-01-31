@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+         #
+#    By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/01/27 14:38:08 by phaydont         ###   ########.fr        #
+#    Updated: 2020/01/31 14:34:01 by sluetzen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -88,7 +88,9 @@ SOURCES_LIST = main.c \
 			new_blit.c \
 			map.c \
 			editor_events.c \
-			texture_mapping.c #\
+			texture_mapping.c \
+			editor_events_mouse.c \
+			editor_events_keys.c#\
 			map_parser.c \
 	       multithreading.c \
 		   texture.c \
