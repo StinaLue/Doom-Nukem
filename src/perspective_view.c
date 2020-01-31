@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 16:06:47 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/01/31 16:39:20 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,7 @@ void		draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view
 			else
 			{
 				display_wall = create_perspective_wall(wall, surf, player, sector);//ajouter sector pour les infos de hauteur
+				display_wall.length = current_wall->length;
 				set_wall_cuts(wall, tmp_wall, &display_wall);
 				draw_3dwall(display_wall, surf, current_wall, wall_textures);
 				/*if (player->helper)
