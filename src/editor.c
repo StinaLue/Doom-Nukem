@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 13:56:51 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/31 15:08:45 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,9 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	editor->wall_tmp.end.y = -1;
 	editor->wall_tmp.wall_type = 0;
 	editor->start_sector_reached = 1;
-    editor->show_alert_convex = 0;
+    editor->show_convex_alert = 0;
+	editor->show_loading_alert = 0;
+	editor->loading_success = 0;
 	init_colors(editor);
 	return (0);
 }

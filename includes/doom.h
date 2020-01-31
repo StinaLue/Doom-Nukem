@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 14:34:16 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/31 15:07:26 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,13 +272,17 @@ typedef struct				s_editor
 	SDL_Surface				*instr_surf;
 	SDL_Surface				*mouse_surf;
 	SDL_Surface				**wall_textures;
-    SDL_Surface             *alert_surf;
+    SDL_Surface             *alert_convex_surf;
+	SDL_Surface             *alert_loading_surf;
+	SDL_Surface             *loading_success_surf;
 
 	SDL_Rect				editor_rect;
 	SDL_Rect				options_rect;
 	SDL_Rect				instr_rect;
 	SDL_Rect				mouse_rect;
-    SDL_Rect                alert_rect;
+    SDL_Rect                alert_convex_rect;
+	SDL_Rect                alert_loading_rect;
+	SDL_Rect                loading_success_rect;
 
 	t_sector_node			*current_sector;
 	t_sector_node			*selected_sector;
@@ -288,8 +292,9 @@ typedef struct				s_editor
 	int						offset;
 	int						start_sector_reached;
 	int						color_change;
-    int                     show_alert_convex;
-	int 					show_alert_loading;
+    int                     show_convex_alert;
+	int 					show_loading_alert;
+	int 					loading_success;
 	t_vec					grid_values[NBPOINTS];
 	t_vec					start_sector;
 	t_wall_node				wall_tmp;
@@ -566,7 +571,9 @@ int							error_return(const char *error_msg, const char *sdl_error);
 */
 
 int							reset_init_editor(t_editor *editor, t_sdlmain *sdlmain);
+
 void						event_mouse(t_editor *editor, t_sdlmain *sdlmain);
+
 void						event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain);
 /*
 ** LINKED LIST FUNCTIONS

@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 14:33:45 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/31 15:11:51 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,13 @@ void 	key_event_l(t_editor *editor, t_doom *doom)
 			doom->game.player.sector = doom->map.sector_head;
 			doom->game.player.pos = doom->map.sector_head->sector_center;
 		}
+		editor->loading_success = 1;
+		editor->show_loading_alert = 0;
 	}
 	else
 	{
+		editor->show_loading_alert = 1;
+		//editor->show_convex_alert = 0;
 		//alert saying can't be loaded because sector not finished
 	}
 }

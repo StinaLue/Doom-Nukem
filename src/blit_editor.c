@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 13:56:42 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/31 15:07:54 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,12 +124,34 @@ int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 		return (1);/* 
 	if (blit_height(editor) != 0)
 		return (1); */
-	if (editor->show_alert_convex == 1)
+	if (editor->show_convex_alert == 1)
     {
-        if ((SDL_BlitSurface(editor->alert_surf, NULL,
-			editor->editor_surf, &editor->alert_rect)) < 0)
+        if ((SDL_BlitSurface(editor->alert_convex_surf, NULL,
+			editor->editor_surf, &editor->alert_convex_rect)) < 0)
 		return (error_return("SDL_BlitSurface error = %{r}s\n",
 				SDL_GetError()));
+		editor->show_loading_alert = 0;
+		editor->loading_success = 0;
+        //editor->show_alert = 0;
+    }
+	else if (editor->show_loading_alert == 1)
+    {
+        if ((SDL_BlitSurface(editor->alert_loading_surf, NULL,
+			editor->editor_surf, &editor->alert_loading_rect)) < 0)
+		return (error_return("SDL_BlitSurface error = %{r}s\n",
+				SDL_GetError()));
+		editor->show_convex_alert = 0;
+		editor->loading_success = 0;
+        //editor->show_alert = 0;
+    }
+	else if (editor->loading_success == 1)
+    {
+        if ((SDL_BlitSurface(editor->loading_success_surf, NULL,
+			editor->editor_surf, &editor->loading_success_rect)) < 0)
+		return (error_return("SDL_BlitSurface error = %{r}s\n",
+				SDL_GetError()));
+		editor->show_convex_alert = 0;
+		editor->show_loading_alert = 0;
         //editor->show_alert = 0;
     }
 	if ((SDL_BlitScaled(editor->editor_surf, NULL,

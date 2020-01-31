@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/30 16:29:34 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/31 15:10:44 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,15 +140,27 @@ int	init_editor_menu(t_editor *editor)
 		return (error_return("TTF_OpenFont error = %s\n", TTF_GetError()));
 	assign_sdlcolor(&editor->instr_menu.text_color, 255, 0, 0);
 	assign_sdlcolor(&editor->opt_menu.text_color, 255, 0, 0);
-    if (init_instr_menu(editor) != 0)
+	if (init_instr_menu(editor) != 0)
 		return (1);
 	if (init_options_menu(editor) != 0)
 		return (1);
-    if ((editor->alert_surf = \
+	if ((editor->alert_convex_surf = \
 		TTF_RenderText_Solid(editor->opt_menu.font, \
 		"Sector has to be convex", editor->opt_menu.text_color)) == NULL)
 		return (error_return("TTF_RenderText_Solid error = %s\n", \
 				TTF_GetError()));
-	assign_sdlrect(&editor->alert_rect, create_vec((editor->editor_surf->w - editor->alert_surf->w) / 2, 0), create_vec(0, 0));
+	assign_sdlrect(&editor->alert_convex_rect, create_vec((editor->editor_surf->w - editor->alert_convex_surf->w) / 2, 0), create_vec(0, 0));
+	if ((editor->alert_loading_surf = \
+		TTF_RenderText_Solid(editor->opt_menu.font, \
+		"Couldn't load because sector wasn't finished yet", editor->opt_menu.text_color)) == NULL)
+		return (error_return("TTF_RenderText_Solid error = %s\n", \
+				TTF_GetError()));
+	assign_sdlrect(&editor->alert_loading_rect, create_vec((editor->editor_surf->w - editor->alert_loading_surf->w) / 2, 0), create_vec(0, 0));
+	if ((editor->loading_success_surf = \
+		TTF_RenderText_Solid(editor->opt_menu.font, \
+		"Loading map successful", editor->opt_menu.text_color)) == NULL)
+		return (error_return("TTF_RenderText_Solid error = %s\n", \
+				TTF_GetError()));
+	assign_sdlrect(&editor->loading_success_rect, create_vec((editor->editor_surf->w - editor->loading_success_surf->w) / 2, 0), create_vec(0, 0));
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 14:38:59 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/31 15:00:03 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,11 +117,11 @@ void	check_finished_sect(t_editor *editor)
 		if (check_convex_sector(editor->current_sector) != 1)
 		{
 			delete_sector_by_address(&editor->edit_map.sector_head, editor->current_sector);
-            editor->show_alert_convex = 1;
+            editor->show_convex_alert = 1;
 		}
         else
 		{
-            editor->show_alert_convex = 0;
+            editor->show_convex_alert = 0;
 			set_sector_position(editor->current_sector);
 			editor->current_sector->floor_height = editor->opt_menu.height_floor;
 			editor->current_sector->ceiling_height = editor->opt_menu.height_ceiling;
