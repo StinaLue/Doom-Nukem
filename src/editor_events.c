@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/30 16:03:32 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/01/31 13:38:08 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -354,7 +354,7 @@ int	editor_events(t_doom *doom)
 			//doom->map.sector_head = NULL;
 			//doom->map.sector_head = editor->edit_map.sector_head;
 		}
-		if (sdlmain->event.key.keysym.sym == SDLK_l && editor->edit_map.sector_head != NULL)
+		if (sdlmain->event.key.keysym.sym == SDLK_l && editor->edit_map.sector_head != NULL && editor->start_sector_reached == 1)
 		{ // only take into consideration the finished sectors! ****************************
 			if (doom->map.sector_head != NULL)
 				free_map(&doom->map);
