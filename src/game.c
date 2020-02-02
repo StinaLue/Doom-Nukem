@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/23 19:28:42 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/01 19:44:47 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,17 @@
 #include "doom.h"
 #include "libbmp.h"
 
-int blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)
+int blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim, t_sound *sound)
 {
 	if (*anim == 1)
 	{
 		if (gamesurfs->current_frame == 0 && gamesurfs->anim_timer == 0)
+		{
 			gamesurfs->anim_timer = SDL_GetTicks();
+			alSourcef(sound->source[1], AL_PITCH, 1.3);
+			alSourcei(sound->source[1], AL_BUFFER, sound->buffer[1]);
+			alSourcePlay(sound->source[1]);
+		}
 		if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->katana[gamesurfs->current_frame], dest, NULL) != 0)
 			return (error_return("SDL_BlitScaled error: %s\n", SDL_GetError()));
 		if ((SDL_GetTicks() - gamesurfs->anim_timer) >= 150)
@@ -43,11 +48,11 @@ int blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)
 	return (0);
 }
 
-int	blit_weapon(t_game *game, SDL_Surface *dest, int weapon)
+int	blit_weapon(t_game *game, SDL_Surface *dest, int weapon, t_sound *sound)
 {
 	int return_val;
 
-	return_val = (*game->weapon_anim[weapon])(&game->surfs, dest, &game->anim);
+	return_val = (*game->weapon_anim[weapon])(&game->surfs, dest, &game->anim, sound);
 	return (return_val);
 }
 
@@ -122,7 +127,10 @@ int game_loop(t_doom *doom)
 		while (SDL_PollEvent(&(sdlmain->event)) != 0)
 			if (handle_events(doom) != 0)
 				break ;
-		handle_keys(game, SDL_GetKeyboardState(NULL));
+		handle_keys(game, SDL_GetKeyboardState(NULL), &sdlmain->sound);
+		alListener3f(AL_POSITION, game->player.pos.x, game->player.pos.y, 0);
+		alSource3f(sdlmain->sound.source[0], AL_POSITION, doom->map.sector_head->wall_head->start.x, doom->map.sector_head->wall_head->start.y, 0);
+		alSource3f(sdlmain->sound.source[1], AL_POSITION, doom->map.sector_head->wall_head->end.x, doom->map.sector_head->wall_head->end.y, 0);
 		if (game->data.hud_flags & COLORFLAG)
 			game->surfs.perspective_view->userdata = "yescolor";
 		else
@@ -149,8 +157,8 @@ int game_loop(t_doom *doom)
 		draw_view_recursive(game->surfs.perspective_view, doom->wall_textures, view, doom->game.player.sector, &doom->game.player);
 		//if (blit_enemies(game, game->surfs.perspective_view) != 0)
 		//	return (error_return("Blit enemies error\n", NULL));
-		//if (blit_weapon(game, game->surfs.perspective_view, 0) != 0)
-		//	return (error_return("Blit weapon error\n", NULL));
+		if (blit_weapon(game, game->surfs.perspective_view, 0, &sdlmain->sound) != 0)
+			return (error_return("Blit weapon error\n", NULL));
 
 		if ((blit_hud_faces(game)) == 1)
 			return (error_return("error during blit_hud_faces\n", NULL));

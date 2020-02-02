@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 17:03:57 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/02 02:14:50 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@ void	quit_sdl_and_ttf(void)
 
 void	free_sound(t_sound *sound)
 {
-	alSourcei(sound->source, AL_LOOPING, AL_FALSE);
-	alDeleteSources(1, &sound->source);
+	alSourcei(sound->source[0], AL_LOOPING, AL_FALSE);
+	alSourcei(sound->source[2], AL_LOOPING, AL_FALSE);
+	alDeleteSources(NB_SOUND_SOURCES, sound->source);
 	//alSourceUnqueueBuffers(sound->source, 1, &sound->buffer);
-	alDeleteBuffers(1, &sound->buffer);
+	alDeleteBuffers(NB_SOUND_BUFFERS, sound->buffer);
 	alcDestroyContext(sound->context);
 	alcCloseDevice(sound->device);
 }

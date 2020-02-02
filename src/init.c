@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 15:54:48 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/02 01:20:04 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,19 +88,35 @@ int		init_sound(t_sound *sound)
 	alcMakeContextCurrent(sound->context);
 	alListener3f(AL_POSITION, 0, 0, 0);
 	alListener3f(AL_VELOCITY, 0, 0, 0);
-	//alListener3f(AL_ORIENTATION, 0, 0, -1);
-	alGenSources(1, &sound->source);
-	alSourcef(sound->source, AL_PITCH, 1);
-	alSourcef(sound->source, AL_GAIN, 1);
-	alSource3f(sound->source, AL_POSITION, 0, 0, 0);
-	alSource3f(sound->source, AL_VELOCITY, 0, 0, 0);
-	alSourcei(sound->source, AL_LOOPING, AL_TRUE);
+	//alListener3f(AL_ORIENTATION, 0, 1, 0);
+	alGenSources(NB_SOUND_SOURCES, sound->source);
+	alSourcef(sound->source[0], AL_PITCH, 1);
+	alSourcef(sound->source[0], AL_GAIN, 0.3);
+	alSource3f(sound->source[0], AL_POSITION, 0, 0, 0);
+	alSource3f(sound->source[0], AL_VELOCITY, 0, 0, 0);
+	alSourcei(sound->source[0], AL_LOOPING, AL_TRUE);
+	alSourcef(sound->source[1], AL_PITCH, 1);
+	alSourcef(sound->source[1], AL_GAIN, 1);
+	alSource3f(sound->source[1], AL_POSITION, 0, 0, 0);
+	alSource3f(sound->source[1], AL_VELOCITY, 0, 0, 0);
+	alSourcei(sound->source[1], AL_LOOPING, AL_FALSE);
+	alSourcef(sound->source[2], AL_PITCH, 1.5);
+	alSourcef(sound->source[2], AL_GAIN, 1);
+	alSource3f(sound->source[2], AL_POSITION, 0, 0, 0);
+	alSource3f(sound->source[2], AL_VELOCITY, 0, 0, 0);
+	alSourcei(sound->source[2], AL_LOOPING, AL_TRUE);
 	alGetError();
-	alGenBuffers(1, &sound->buffer);
-	if ((loadWAV("assets/sounds/beet.wav", sound->buffer)) != 0)
-		return (error_return("error loading %{r}s\n", "assets/sounds/beet.wav"));
-	alSourcei(sound->source, AL_BUFFER, sound->buffer);
-	alSourcePlay(sound->source);
+	alGenBuffers(NB_SOUND_BUFFERS, sound->buffer);
+	if ((loadWAV("assets/sounds/beet.wav", sound->buffer[0])) != 0)
+		return (error_return("error loading %{r}s\n", "beet.wav"));
+	if ((loadWAV("assets/sounds/niceswordsound.wav", sound->buffer[1])) != 0)
+		return (error_return("error loading %{r}s\n", "niceswordsound.wav"));
+	if ((loadWAV("assets/sounds/footsteps-1.wav", sound->buffer[2])) != 0)
+		return (error_return("error loading %{r}s\n", "footsteps-1.wav"));
+	alSourcei(sound->source[0], AL_BUFFER, sound->buffer[0]);
+	alSourcei(sound->source[2], AL_BUFFER, sound->buffer[2]);
+	alSourcePlay(sound->source[0]);
+	//alSourcePlay(sound->source[1]);
 	/*
 	if ((sound->error = alGetError()) != AL_NO_ERROR)
 	{

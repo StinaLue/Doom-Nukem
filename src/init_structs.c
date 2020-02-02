@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 12:38:00 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/01 19:50:23 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ void	init_player_struct(t_player *player, t_map *map)
 	player->fov.y = 100;
 	player->true_fov = 1.5708; //hardcoded 90deg
 	player->health = 100;
+	player->is_moving = 0;
 }
 
 void	get_enemysprite_rect(SDL_Rect *rect, int which_enemy, SDL_Surface *sprite_sheet)

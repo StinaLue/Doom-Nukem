@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   handle_keys.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/31 14:53:50 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/02 00:33:48 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-void	basic_move(t_player *player, const Uint8 *keyboard_state)
+void	basic_move(t_player *player, const Uint8 *keyboard_state, t_sound *sound)
 {
 	t_vecdb	move;
 
@@ -26,6 +26,16 @@ void	basic_move(t_player *player, const Uint8 *keyboard_state)
 		move.x -= 1;
 	if (keyboard_state[SDL_SCANCODE_D])
 		move.x += 1;
+	if (player->is_moving == 0 && (move.x != 0 || move.y != 0))
+	{
+		player->is_moving = 1;
+		alSourcePlay(sound->source[2]);
+	}
+	else if (move.x == 0 && move.y == 0)
+	{
+		player->is_moving = 0;
+		alSourcePause(sound->source[2]);
+	}
 	movement(player, move);
 }
 
@@ -55,9 +65,9 @@ void	basic_look(t_player *player, const Uint8 *keyboard_state)
 		player->helper = 0;
 }
 
-void	handle_keys(t_game *game, const Uint8 *keyboard_state)
+void	handle_keys(t_game *game, const Uint8 *keyboard_state, t_sound *sound)
 {
 	//which order is the right one ?
 	basic_look(&game->player, keyboard_state);
-	basic_move(&game->player, keyboard_state);
+	basic_move(&game->player, keyboard_state, sound);
 }

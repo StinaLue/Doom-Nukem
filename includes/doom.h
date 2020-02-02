@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 17:04:39 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/01 19:49:39 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # define SQRT2 1.4142135623730950488
 # define PLAYER_RADIUS 0.1
 # define NB_WALL_TEXTURES 9
+# define NB_SOUND_SOURCES 3
+# define NB_SOUND_BUFFERS 3
 
 /*
 ** MAIN LOOP STATES
@@ -145,8 +147,8 @@ typedef struct				s_sound
 {
 	ALCdevice				*device;
 	ALCcontext				*context;
-	ALuint					source;
-	ALuint					buffer;
+	ALuint					source[NB_SOUND_SOURCES];
+	ALuint					buffer[NB_SOUND_BUFFERS];
 	ALenum					error;
 }							t_sound;
 
@@ -219,6 +221,7 @@ typedef struct				s_player
 	double					true_fov;
 	int						helper;
 	int						health;
+	int						is_moving;
 }							t_player;
 
 typedef struct				s_game
@@ -227,7 +230,7 @@ typedef struct				s_game
 	t_data					data;
 	t_player				player;
 	t_enemy					*enemy;
-	int						(*weapon_anim[4])(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim);
+	int						(*weapon_anim[4])(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim, t_sound *sound);
 	int						anim;
 }							t_game;
 
@@ -443,7 +446,7 @@ void						check_menu(SDL_Event *event, int *state, int *prev_state_ptr, int prev
 ** EVENT FUNCTIONS
 */
 
-void						handle_keys(t_game *game, const Uint8 *keyboard_state);
+void						handle_keys(t_game *game, const Uint8 *keyboard_state, t_sound *sound);
 
 int							editor_events(t_doom *doom);
 
@@ -482,7 +485,7 @@ int							blit_editor(t_editor *editor, t_sdlmain *sdlmain);
 
 int							blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf);
 
-int							blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim);
+int							blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim, t_sound *sound);
 
 /*
 ** TEXT FUNCTIONS
