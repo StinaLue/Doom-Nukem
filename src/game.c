@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/01 19:44:47 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/02 23:24:14 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ int blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim, t_sound *s
 			alSourcei(sound->source[1], AL_BUFFER, sound->buffer[1]);
 			alSourcePlay(sound->source[1]);
 		}
-		if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->katana[gamesurfs->current_frame], dest, NULL) != 0)
+		gamesurfs->katana.x = gamesurfs->current_frame * gamesurfs->katana.w;
+		//gamesurfs->katana.y = gamesurfs->katana.h * 2;
+		//if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->katana[gamesurfs->current_frame], dest, NULL) != 0)
+		if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->katana, dest, NULL) != 0)
 			return (error_return("SDL_BlitScaled error: %s\n", SDL_GetError()));
 		if ((SDL_GetTicks() - gamesurfs->anim_timer) >= 150)
 		{
@@ -35,12 +38,13 @@ int blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim, t_sound *s
 		if (gamesurfs->current_frame >= 4)
 		{
 			gamesurfs->current_frame = 0;
+			gamesurfs->katana.x = 0;
 			*anim = 0;
 		}
 	}
 	else
 	{
-		if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->katana[0], dest, NULL) != 0)
+		if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->katana, dest, NULL) != 0)
 			return (error_return("SDL_BlitScaled error: %s\n", SDL_GetError()));
 		gamesurfs->anim_timer = 0;
 	}

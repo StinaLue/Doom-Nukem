@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/01 19:49:39 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/02 20:34:50 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ typedef struct				s_gamesurfs
 	SDL_Surface				*hud_faces_surf;
 	SDL_Surface				*enemy_texture[2];
 
-	SDL_Rect				katana[4];
+	SDL_Rect				katana;
 	SDL_Rect				hud_faces_rect;
 	int						current_frame;
 	int						anim_timer;
