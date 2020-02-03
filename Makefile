@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
+#    By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/01/31 16:40:54 by afonck           ###   ########.fr        #
+#    Updated: 2020/02/03 15:45:13 by phaydont         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,7 +91,8 @@ SOURCES_LIST = main.c \
 			wav_parse.c \
 			texture_mapping.c \
 			editor_events_mouse.c \
-			editor_events_keys.c#\
+			editor_events_keys.c \
+			mouse_movement.c #\
 			map_parser.c \
 	       multithreading.c \
 		   texture.c \
