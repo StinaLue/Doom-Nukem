@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/03 16:28:10 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/03 16:35:33 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,5 +285,6 @@ int game_loop(t_doom *doom)
 			startclock = SDL_GetTicks();
 		}
 	}
+	SDL_SetRelativeMouseMode(SDL_FALSE);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:40:34 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/03 13:57:05 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/03 16:37:53 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,15 @@ int			get_sign(double num)
 	if (num < 0)
 		return -1;
 	return (0);
+}
+
+int			is_same_sign(double a, double b)
+{
+	if (a > 0 && b < 0)
+		return (0);
+	if (a < 0 && b > 0)
+		return (0);
+	return (1);
 }
 
 //checks if the list of walls is closed (loop)
@@ -57,7 +66,7 @@ int			check_convex_sector(t_sector_node *sector)
 		a = vecdb_diff(wall->end, wall->start);
 		b = vecdb_diff(wall->next->end, wall->next->start);
 		angle = atan2(cross_product(a,b), dot_product(a,b));
-		if (fabs(total_angle) > fabs(total_angle + angle) || fabs(angle) > 3.1415926)
+		if (!is_same_sign(angle, total_angle) || fabs(angle) > 3.1415926)
 			return (0);
 		total_angle += angle;
 		if (fabs(total_angle) > M_PI * 2)
