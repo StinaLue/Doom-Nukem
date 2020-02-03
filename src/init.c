@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/03 01:07:28 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/03 13:51:38 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,8 @@ int		init_sound(t_sound *sound)
 		return (error_return("error loading %{r}s\n", "niceswordsound.wav"));
 	if ((loadWAV("assets/sounds/footsteps-1.wav", sound->buffer[2])) != 0)
 		return (error_return("error loading %{r}s\n", "footsteps-1.wav"));
+	if ((loadWAV("assets/sounds/uzi.wav", sound->buffer[3])) != 0)
+		return (error_return("error loading %{r}s\n", "uzi.wav"));
 	alSourcei(sound->source[0], AL_BUFFER, sound->buffer[0]);
 	alSourcei(sound->source[2], AL_BUFFER, sound->buffer[2]);
 	alSourcePlay(sound->source[0]);
@@ -336,6 +338,6 @@ int	init_game(t_game *game, t_sdlmain *sdlmain, t_map *map)
 	//init_data_struct(&(game->data, map));
 	init_player_struct(&(game->player), map);
 	game->weapon_anim[0] = blit_katana;
-	game->anim = 0;
+	game->weapon_anim[1] = blit_uzi;
 	return (0);
 }

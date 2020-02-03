@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/02 23:20:22 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/03 13:35:42 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain)
 		return (error_return("load UndeadWarrior surf error\n", NULL));
 	if ((gamesurfs->enemy_texture[1] = load_opti_bmp("assets/enemy_sprites/Ogre.bmp", gamesurfs->perspective_view, 0x00FFFF)) == NULL)
 		return (error_return("load Ogre surf error\n", NULL));
-	gamesurfs->katana = create_sdlrect(0, 0, 232, 200);
+	gamesurfs->weapons_rect = create_sdlrect(0, 0, 232, 200);
 	gamesurfs->hud_faces_rect = create_sdlrect(0, 0, gamesurfs->hud_faces_surf->w / 3, gamesurfs->hud_faces_surf->h / 5);
 	gamesurfs->anim_timer = 0;
 	gamesurfs->hud_timer = 0;
@@ -86,6 +86,8 @@ void	init_player_struct(t_player *player, t_map *map)
 	player->true_fov = 1.5708; //hardcoded 90deg
 	player->health = 100;
 	player->is_moving = 0;
+	player->anim = 0;
+	player->current_weapon = 0;
 }
 
 void	get_enemysprite_rect(SDL_Rect *rect, int which_enemy, SDL_Surface *sprite_sheet)

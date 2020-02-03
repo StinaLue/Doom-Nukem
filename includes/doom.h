@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/03 00:57:53 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/03 13:51:06 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # define PLAYER_RADIUS 0.1
 # define NB_WALL_TEXTURES 9
 # define NB_SOUND_SOURCES 3
-# define NB_SOUND_BUFFERS 3
+# define NB_SOUND_BUFFERS 4
 
 /*
 ** MAIN LOOP STATES
@@ -174,7 +174,7 @@ typedef struct				s_gamesurfs
 	SDL_Surface				*hud_faces_surf;
 	SDL_Surface				*enemy_texture[2];
 
-	SDL_Rect				katana;
+	SDL_Rect				weapons_rect;
 	SDL_Rect				hud_faces_rect;
 	int						current_frame;
 	int						anim_timer;
@@ -222,6 +222,8 @@ typedef struct				s_player
 	int						helper;
 	int						health;
 	int						is_moving;
+	int						anim;
+	int						current_weapon;
 }							t_player;
 
 typedef struct				s_game
@@ -231,7 +233,6 @@ typedef struct				s_game
 	t_player				player;
 	t_enemy					*enemy;
 	int						(*weapon_anim[4])(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim);//, t_sound *sound);
-	int						anim;
 }							t_game;
 
 typedef struct				s_instr_menu
@@ -487,6 +488,7 @@ int							blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf);
 
 int							blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim);//, t_sound *sound);
 
+int							blit_uzi(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim);//, t_sound *sound)
 /*
 ** TEXT FUNCTIONS
 */

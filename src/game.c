@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/03 01:05:45 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/03 14:24:35 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 #include "doom.h"
 #include "libbmp.h"
 
-int blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)//, t_sound *sound)
+int blit_uzi(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)//, t_sound *sound)
 {
+	gamesurfs->weapons_rect.x = gamesurfs->current_frame * gamesurfs->weapons_rect.w;
+	gamesurfs->weapons_rect.y = gamesurfs->weapons_rect.h * 2;
 	if (*anim == 1)
 	{
 		if (gamesurfs->current_frame == 0 && gamesurfs->anim_timer == 0)
@@ -25,10 +27,46 @@ int blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)//, t_sound
 			//alSourcei(sound->source[1], AL_BUFFER, sound->buffer[1]);
 			//alSourcePlay(sound->source[1]);
 		}
-		gamesurfs->katana.x = gamesurfs->current_frame * gamesurfs->katana.w;
-		//gamesurfs->katana.y = gamesurfs->katana.h * 2;
 		//if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->katana[gamesurfs->current_frame], dest, NULL) != 0)
-		if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->katana, dest, NULL) != 0)
+		if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->weapons_rect, dest, NULL) != 0)
+			return (error_return("SDL_BlitScaled error: %s\n", SDL_GetError()));
+		if ((SDL_GetTicks() - gamesurfs->anim_timer) >= 150)
+		{
+			gamesurfs->current_frame++;
+			gamesurfs->anim_timer = SDL_GetTicks();
+		}
+		if (gamesurfs->current_frame >= 3)
+		{
+			gamesurfs->current_frame = 0;
+			gamesurfs->weapons_rect.x = 0;
+			*anim = 0;
+		}
+	}
+	else
+	{
+		if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->weapons_rect, dest, NULL) != 0)
+			return (error_return("SDL_BlitScaled error: %s\n", SDL_GetError()));
+		gamesurfs->anim_timer = 0;
+	}
+	
+	return (0);
+}
+
+int blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)//, t_sound *sound)
+{
+	gamesurfs->weapons_rect.x = gamesurfs->current_frame * gamesurfs->weapons_rect.w;
+	gamesurfs->weapons_rect.y = 0;
+	if (*anim == 1)
+	{
+		if (gamesurfs->current_frame == 0 && gamesurfs->anim_timer == 0)
+		{
+			gamesurfs->anim_timer = SDL_GetTicks();
+			//alSourcef(sound->source[1], AL_PITCH, 1.3);
+			//alSourcei(sound->source[1], AL_BUFFER, sound->buffer[1]);
+			//alSourcePlay(sound->source[1]);
+		}
+		//if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->katana[gamesurfs->current_frame], dest, NULL) != 0)
+		if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->weapons_rect, dest, NULL) != 0)
 			return (error_return("SDL_BlitScaled error: %s\n", SDL_GetError()));
 		if ((SDL_GetTicks() - gamesurfs->anim_timer) >= 150)
 		{
@@ -38,13 +76,13 @@ int blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)//, t_sound
 		if (gamesurfs->current_frame >= 4)
 		{
 			gamesurfs->current_frame = 0;
-			gamesurfs->katana.x = 0;
+			gamesurfs->weapons_rect.x = 0;
 			*anim = 0;
 		}
 	}
 	else
 	{
-		if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->katana, dest, NULL) != 0)
+		if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->weapons_rect, dest, NULL) != 0)
 			return (error_return("SDL_BlitScaled error: %s\n", SDL_GetError()));
 		gamesurfs->anim_timer = 0;
 	}
@@ -56,7 +94,7 @@ int	blit_weapon(t_game *game, SDL_Surface *dest, int weapon)//, t_sound *sound)
 {
 	int return_val;
 
-	return_val = (*game->weapon_anim[weapon])(&game->surfs, dest, &game->anim);//, sound);
+	return_val = (*game->weapon_anim[weapon])(&game->surfs, dest, &game->player.anim);//, sound);
 	return (return_val);
 }
 
@@ -128,14 +166,29 @@ int	play_sound(t_game *game, t_sdlmain *sdlmain)
 	gamesurfs = &game->surfs;
 	sound = &sdlmain->sound;
 	player = &game->player;
-	if (game->anim == 1 && gamesurfs->current_frame == 0 && gamesurfs->anim_timer == 0 && !is_source_playing(sound->source[1]))
+	if (player->current_weapon == 0)
 	{
-		alSourcef(sound->source[1], AL_PITCH, 1.3);
-		alSourcei(sound->source[1], AL_BUFFER, sound->buffer[1]);
-		alSourcePlay(sound->source[1]);
+		if (player->anim == 1 && gamesurfs->current_frame == 0 && gamesurfs->anim_timer == 0 && !is_source_playing(sound->source[1]))
+		{
+			alSourcef(sound->source[1], AL_PITCH, 1.6);
+			alSourcei(sound->source[1], AL_BUFFER, sound->buffer[1]);
+			alSourcePlay(sound->source[1]);
+		}
+		else if (player->anim == 0 && gamesurfs->current_frame == 0 && gamesurfs->anim_timer == 0 && is_source_playing(sound->source[1]))
+			alSourceStop(sound->source[1]);
+	}
+	if (player->current_weapon == 1)
+	{
+		if (player->anim == 1 && gamesurfs->current_frame == 0 && gamesurfs->anim_timer == 0 && !is_source_playing(sound->source[1]))
+		{
+			alSourcef(sound->source[1], AL_PITCH, 1);
+			alSourcei(sound->source[1], AL_BUFFER, sound->buffer[3]);
+			alSourcePlay(sound->source[1]);
+		}
+		else if (player->anim == 0 && gamesurfs->current_frame == 0 && gamesurfs->anim_timer == 0 && is_source_playing(sound->source[1]))
+			alSourceStop(sound->source[1]);
 	}
 	if (player->is_moving == 1 && !is_source_playing(sound->source[2]))
-		//printf("HALLO\n");
 		alSourcePlay(sound->source[2]);
 	else if (player->is_moving == 0)
 		alSourcePause(sound->source[2]);
@@ -192,7 +245,7 @@ int game_loop(t_doom *doom)
 		draw_view_recursive(game->surfs.perspective_view, doom->wall_textures, view, doom->game.player.sector, &doom->game.player);
 		//if (blit_enemies(game, game->surfs.perspective_view) != 0)
 		//	return (error_return("Blit enemies error\n", NULL));
-		if (blit_weapon(game, game->surfs.perspective_view, 0) != 0)//, &sdlmain->sound) != 0)
+		if (blit_weapon(game, game->surfs.perspective_view, game->player.current_weapon) != 0)//, &sdlmain->sound) != 0)
 			return (error_return("Blit weapon error\n", NULL));
 
 		if ((blit_hud_faces(game)) == 1)

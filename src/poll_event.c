@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   poll_event.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:22:12 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/29 11:19:37 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/03 14:23:57 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ void	check_anim(SDL_Event *event, t_game *game)
 	{
 		if (game->surfs.current_frame == 0)
 		{
-			if (game->anim == 1)
-				game->anim = 0;
+			if (game->player.anim == 1)
+				game->player.anim = 0;
 			else
-				game->anim = 1;
+				game->player.anim = 1;
 		}
 	}
 }
@@ -80,6 +80,24 @@ void	handle_hud(SDL_Event *event, char *hud_flags)
 	}
 }
 
+void	check_weapon(SDL_Event *event, t_game *game)
+{
+	if (event->key.keysym.sym == SDLK_1 && game->player.current_weapon != 0 && game->player.anim == 0)
+	{
+		game->player.current_weapon = 0;
+		game->surfs.anim_timer = 0;
+		game->surfs.current_frame = 0;
+		game->player.anim = 0;
+	}
+	else if (event->key.keysym.sym == SDLK_2 && game->player.current_weapon != 1 && game->player.anim == 0)
+	{
+		game->player.current_weapon = 1;
+		game->surfs.anim_timer = 0;
+		game->surfs.current_frame = 0;
+		game->player.anim = 0;
+	}
+}
+
 int    handle_events(t_doom *doom)
 {
 	check_quit(&doom->sdlmain.event, &doom->state);
@@ -87,6 +105,7 @@ int    handle_events(t_doom *doom)
 	{
 		check_menu(&doom->sdlmain.event, &doom->state, &doom->menu.previous_state, GAME_STATE);
 		check_anim(&doom->sdlmain.event, &doom->game);
+		check_weapon(&doom->sdlmain.event, &doom->game);
 		handle_hud(&doom->sdlmain.event, &doom->game.data.hud_flags);
 	}
 	if (doom->state != GAME_STATE)
