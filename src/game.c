@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/03 14:24:35 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/03 14:48:33 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,11 +90,30 @@ int blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)//, t_sound
 	return (0);
 }
 
+void	draw_crosshair(SDL_Surface *dest)
+{
+	t_vec top_cross;
+	t_vec bottom_cross;
+	t_vec left_cross;
+	t_vec right_cross;
+	top_cross.x = dest->w / 2;
+	top_cross.y = (dest->h / 2) + 10;
+	bottom_cross.x = dest->w / 2;
+	bottom_cross.y = (dest->h / 2) - 10;
+	left_cross.x = (dest->w / 2) - 10;
+	left_cross.y = dest->h / 2;
+	right_cross.x = (dest->w / 2) + 10;
+	right_cross.y = dest->h / 2;
+	draw_line(top_cross, bottom_cross, dest, 0xFFFFFF);
+	draw_line(left_cross, right_cross, dest, 0xFFFFFF);
+}
+
 int	blit_weapon(t_game *game, SDL_Surface *dest, int weapon)//, t_sound *sound)
 {
 	int return_val;
 
 	return_val = (*game->weapon_anim[weapon])(&game->surfs, dest, &game->player.anim);//, sound);
+	draw_crosshair(dest);
 	return (return_val);
 }
 
