@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_mapping.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 18:01:04 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/03 00:39:36 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/03 16:25:17 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,8 @@ void	draw_texture(SDL_Surface *surf, SDL_Surface *tex, t_wall3d *wall)
 		while (win.y >= bot_limit && win.y >= 0)
 		{
 			pos.y = get_texture_y(win.y, top_limit, bot_limit);
-			//if (win.x < 0 || win.x >= surf->w || win.y < 0 || win.y >= surf->h)
-			//	printf("pixel outside of screen\n");
+			if (win.x < 0 || win.x >= surf->w || win.y < 0 || win.y >= surf->h)
+				printf("pixel outside of screen\n");
 			fill_pix(surf, win.x, win.y, get_tex_color(pos.x, pos.y, tex));
 			win.y--;
 		}
