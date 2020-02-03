@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/03 14:03:53 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/03 17:15:14 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,22 @@ void	special_case_height(t_editor *editor)
 	if (editor->opt_menu.activ_h == 1 \
 		|| editor->opt_menu.activ_h == 4)
 	{
-		editor->opt_menu.bord_color_h[1] = COLOR_PRESSED;
-		editor->opt_menu.bord_color_h[4] = COLOR_PRESSED;
+		editor->opt_menu.bord_color_h = COLOR_PRESSED;
+		editor->opt_menu.bord_color_h = COLOR_PRESSED;
 		editor->opt_menu.activ_h = 1;
 	}
 	if (editor->opt_menu.activ_h == 2 \
 		|| editor->opt_menu.activ_h == 5)
 	{
-		editor->opt_menu.bord_color_h[2] = COLOR_PRESSED;
-		editor->opt_menu.bord_color_h[5] = COLOR_PRESSED;
+		editor->opt_menu.bord_color_h = COLOR_PRESSED;
+		editor->opt_menu.bord_color_h = COLOR_PRESSED;
 		editor->opt_menu.activ_h = 2;
 	}
 	if (editor->opt_menu.activ_h == 3 \
 		|| editor->opt_menu.activ_h == 6)
 	{
-		editor->opt_menu.bord_color_h[3] = COLOR_PRESSED;
-		editor->opt_menu.bord_color_h[6] = COLOR_PRESSED;
+		editor->opt_menu.bord_color_h = COLOR_PRESSED;
+		editor->opt_menu.bord_color_h = COLOR_PRESSED;
 		editor->opt_menu.activ_h = 3;
 	}
 }

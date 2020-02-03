@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/03 14:48:33 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/03 15:22:48 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,8 @@ void	draw_crosshair(SDL_Surface *dest)
 	left_cross.y = dest->h / 2;
 	right_cross.x = (dest->w / 2) + 10;
 	right_cross.y = dest->h / 2;
-	draw_line(top_cross, bottom_cross, dest, 0xFFFFFF);
-	draw_line(left_cross, right_cross, dest, 0xFFFFFF);
+	draw_line(top_cross, bottom_cross, dest, 0xff0000);
+	draw_line(left_cross, right_cross, dest, 0xff0000);
 }
 
 int	blit_weapon(t_game *game, SDL_Surface *dest, int weapon)//, t_sound *sound)

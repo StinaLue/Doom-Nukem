@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/31 17:04:23 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/03 18:31:15 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,9 @@ void null_editor_pointers(t_editor *editor)
     editor->wall_tmp.wall_type = 0;//1;
 	editor->wall_tmp.type_color = 0xFF0000;
 
+    editor->opt_menu.title = NULL;
+    editor->opt_menu.ceiling_h_surf = NULL;
+    editor->opt_menu.floor_h_surf = NULL;
 	editor->instr_menu.font = NULL;
 	editor->instr_menu.font_title = NULL;
 	editor->instr_menu.title = NULL;

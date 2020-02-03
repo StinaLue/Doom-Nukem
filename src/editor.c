@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 15:22:04 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/03 17:14:46 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ void	init_colors(t_editor *editor)
 
 	i = 0;
 	editor->color_change = 0;
-	editor->opt_menu.activ_tex = 0;
-	editor->opt_menu.activ_h = 1;
 	i = 0;
 	while (i < NBTEXTURES)
 	{
@@ -38,12 +36,12 @@ void	init_colors(t_editor *editor)
 	i = 0;
 	while (i < NBHEIGHTS)
 	{
-		editor->opt_menu.bord_color_h[i] = COLOR_NORMAL;
+		editor->opt_menu.bord_color_h = COLOR_NORMAL;
 		i++;
 	}
 	editor->opt_menu.bord_color_text[0] = COLOR_PRESSED;
-	editor->opt_menu.bord_color_h[1] = COLOR_PRESSED;
-	editor->opt_menu.bord_color_h[4] = COLOR_PRESSED;
+	editor->opt_menu.bord_color_h = COLOR_PRESSED;
+	editor->opt_menu.bord_color_h = COLOR_PRESSED;
 }
 
 int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
@@ -57,8 +55,10 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 
 	editor->edit_map.sector_head = NULL;
 	editor->edit_map.num_enemies = 0;
-	editor->opt_menu.height_ceiling = 26;
-	editor->opt_menu.height_floor = 26;
+	editor->opt_menu.height_ceiling = 40;
+	editor->opt_menu.height_floor = 2;
+	editor->opt_menu.activ_tex = 0;
+	editor->opt_menu.activ_h = 1;
 
 	editor->current_sector = NULL;
 	editor->current_wall = NULL;

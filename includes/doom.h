@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/03 14:28:00 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/03 18:30:39 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@
 # define NBPOINTSROW 50 // NBPOINTS = NBPOINTSROW * NBPOINTSROW
 # define NBTEXTURES	9
 # define NBHEIGHTS 7
-# define NBOPTIONS 5
+# define NBOPTIONS 7
 # define NBINSTRUCTS 8
 # define COLOR_HOVER 0x6C1413
 # define COLOR_PRESSED 0xffff00
@@ -252,14 +252,16 @@ typedef struct				s_instr_menu
 typedef struct				s_options_menu
 {
 	SDL_Surface				*title;
-	SDL_Surface				*options[5];
+	SDL_Surface				*options[NBOPTIONS];
+	SDL_Surface 			*ceiling_h_surf;
+	SDL_Surface 			*floor_h_surf;
 
 	SDL_Rect				title_rect;
-	SDL_Rect				options_rect[5];
+	SDL_Rect				options_rect[NBOPTIONS];
 	SDL_Rect				text_rect[NBTEXTURES];
 	SDL_Rect				h_rect[NBHEIGHTS];
-	SDL_Rect 				h_rect_ceiling[2];
-	SDL_Rect 				h_rect_floor[2];
+	SDL_Rect 				h_rect_ceiling;
+	SDL_Rect 				h_rect_floor;
 	SDL_Rect  				player_rect;
 
 	TTF_Font				*font_title;
@@ -267,7 +269,7 @@ typedef struct				s_options_menu
 
 	SDL_Color				text_color;
 	int						bord_color_text[NBTEXTURES];
-	int						bord_color_h[NBHEIGHTS];
+	int						bord_color_h;
 	int						activ_tex;
 	int						activ_h; // maybe not needed
 	double 					height_ceiling;

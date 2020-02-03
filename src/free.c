@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/02 02:14:50 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/03 18:31:15 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,10 @@ int		free_editor(t_editor *editor)
 	editor->alert_loading_surf = NULL;
 	SDL_FreeSurface(editor->loading_success_surf);
 	editor->loading_success_surf = NULL;
+	SDL_FreeSurface(editor->opt_menu.floor_h_surf);
+	editor->opt_menu.floor_h_surf = NULL;
+	SDL_FreeSurface(editor->opt_menu.ceiling_h_surf);
+	editor->opt_menu.ceiling_h_surf = NULL;
 	free_fonts_surf(editor);
 	free_fonts(editor);
 	return (EXIT_FAILURE);

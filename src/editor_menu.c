@@ -6,11 +6,12 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 16:44:28 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/03 19:17:56 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
+#include "libft.h"
 
 int	create_instruct_str(t_editor *editor, t_vec origin, int i, const char *str)
 {
@@ -33,6 +34,65 @@ int	create_opt_str(t_editor *editor, t_vec origin, int i, const char *str)
 				TTF_GetError()));
 		assign_sdlrect(&editor->opt_menu.options_rect[i], origin, \
 					create_vec(0, 0));
+	return (0);
+}
+
+int	create_floor_height(t_editor *editor)
+{
+	int i;
+	const char *num;
+
+	i = 0;
+	while (i < 49)
+	{
+		if (i == editor->opt_menu.height_floor)
+		{
+			if ((num = ft_itoa(i)) == NULL)
+				return (1);
+			if ((editor->opt_menu.floor_h_surf = \
+			TTF_RenderText_Solid(editor->opt_menu.font, \
+			num, editor->opt_menu.text_color)) == NULL)
+			{
+				ft_memdel((void **)&num);
+				return (error_return("TTF_RenderText_Solid error = %s\n", \
+						TTF_GetError()));
+			}
+			else
+				ft_memdel((void **)&num);
+			//assign_sdlrect(&editor->opt_menu.h_rect_floor, origin, \
+			//			create_vec(0, 0));
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	create_ceiling_height(t_editor *editor)
+{
+	int i;
+	const char *num;
+
+	i = 1;
+	while (i < 50)
+	{
+		if (i == editor->opt_menu.height_ceiling)
+		{
+			num = ft_itoa(i);
+			if ((editor->opt_menu.ceiling_h_surf = \
+			TTF_RenderText_Solid(editor->opt_menu.font, \
+			num, editor->opt_menu.text_color)) == NULL)
+			{
+				ft_memdel((void **)&num);
+				return (error_return("TTF_RenderText_Solid error = %s\n", \
+					TTF_GetError()));
+			}
+			else
+				ft_memdel((void **)&num);
+			//assign_sdlrect(&editor->opt_menu.h_rect_ceiling, origin, \
+			//			create_vec(0, 0));
+		}
+		i++;
+	}
 	return (0);
 }
 
@@ -74,10 +134,10 @@ int set_height(t_editor *editor)
 
 int set_height_test(t_editor *editor)
 {
-	assign_sdlrect(&editor->opt_menu.h_rect_floor[0], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 6), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / editor->opt_menu.height_floor));
-	assign_sdlrect(&editor->opt_menu.h_rect_floor[1], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 6), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / 10));
-	assign_sdlrect_invert(&editor->opt_menu.h_rect_ceiling[0], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 6), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / editor->opt_menu.height_ceiling));
-	assign_sdlrect_invert(&editor->opt_menu.h_rect_ceiling[1], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 6), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / 12));
+	//assign_sdlrect(&editor->opt_menu.h_rect_floor[0], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 6), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / editor->opt_menu.height_floor));
+	assign_sdlrect(&editor->opt_menu.h_rect_ceiling, create_vec((editor->opt_surf->h / 20) * 7, ((editor->opt_surf->h) / 20) * 5), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / 11));
+	//assign_sdlrect_invert(&editor->opt_menu.h_rect_ceiling[0], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 6), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / editor->opt_menu.height_ceiling));
+	assign_sdlrect/* _invert */(&editor->opt_menu.h_rect_floor, create_vec((editor->opt_surf->h / 20) * 7, ((editor->opt_surf->h) / 20) * 6), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / 11));
 	return (0);
 }
 
@@ -113,6 +173,14 @@ int	init_options_menu(t_editor *editor)
 		return (1);
 	if (create_opt_str(editor, create_vec((editor->opt_surf->w) / 2, ((editor->opt_surf->h) / 20) * 8.5), 4, "CHOOSE OBJECT") != 0)
 		return (1);
+	if (create_opt_str(editor, create_vec((editor->opt_surf->h) / 20, ((editor->opt_surf->h) / 20) * 5), 5, "height ceiling:") != 0)
+		return (1);
+	if (create_opt_str(editor, create_vec((editor->opt_surf->h / 20), ((editor->opt_surf->h) / 20) * 6), 6, "height floor:") != 0)
+		return (1);
+	if (create_ceiling_height(editor) != 0)
+		return(1);
+	if (create_floor_height(editor) != 0)
+		return(1);
 	if (set_textures(editor) != 0)
 		return (1);
 	if (set_height_test(editor) != 0)

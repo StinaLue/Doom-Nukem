@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 15:36:49 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/03 19:16:59 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,25 +19,24 @@ void change_size(t_editor *editor, t_sdlmain *sdlmain)
 	{
 		editor->opt_menu.height_floor = editor->selected_sector->floor_height;
 		editor->opt_menu.height_ceiling = editor->selected_sector->ceiling_height;
-		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_floor[1]) && sdlmain->event.wheel.y > 0 && editor->opt_menu.height_floor > 10)
+		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_floor) && sdlmain->event.wheel.y > 0 && editor->opt_menu.height_floor > 0)
 		{
-			//editor->opt_menu.height_floor--; // makes floor lower
+			editor->opt_menu.height_floor--; // makes floor lower
 			editor->selected_sector->floor_height--;
 		}
-		else if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_floor[1]) && sdlmain->event.wheel.y < 0 && editor->opt_menu.height_floor < 50)
+		else if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_floor) && sdlmain->event.wheel.y < 0 && editor->opt_menu.height_floor < 49 && editor->opt_menu.height_floor < editor->opt_menu.height_ceiling - 1)
 		{
-			//editor->opt_menu.height_floor++;
+			editor->opt_menu.height_floor++;
 			editor->selected_sector->floor_height++;
 		}
-		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_ceiling[1]) && sdlmain->event.wheel.y > 0 && editor->opt_menu.height_ceiling < 50)
+		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_ceiling) && sdlmain->event.wheel.y < 0 && editor->opt_menu.height_ceiling < 50)
 		{
-			//printf("ceil %f\n", editor->opt_menu.height_ceiling);
-			//editor->opt_menu.height_ceiling++;
+			editor->opt_menu.height_ceiling++;
 			editor->selected_sector->ceiling_height++;
 		}
-		else if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_ceiling[1]) && sdlmain->event.wheel.y < 0 && editor->opt_menu.height_ceiling > 12)
+		else if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_ceiling) && sdlmain->event.wheel.y > 0 && editor->opt_menu.height_ceiling > 1 && editor->opt_menu.height_floor < 49 && editor->opt_menu.height_ceiling > editor->opt_menu.height_floor + 1)
 		{
-			//editor->opt_menu.height_ceiling--;
+			editor->opt_menu.height_ceiling--;
 			editor->selected_sector->ceiling_height--;
 		}
 		//editor->opt_menu.height_floor = editor->selected_sector->floor_height;
@@ -71,7 +70,7 @@ void	set_border_color(t_editor *editor, t_vec mouse_pos)
 			editor->opt_menu.activ_h = i;
 		i++;
 	} */
-	editor->opt_menu.bord_color_h[editor->opt_menu.activ_h] = COLOR_PRESSED;
+	editor->opt_menu.bord_color_h = COLOR_PRESSED;
 }
 
 void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
