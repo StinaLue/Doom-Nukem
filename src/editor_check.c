@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:40:34 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/31 17:13:11 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/03 13:57:05 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,58 @@ int			check_convex_sector(t_sector_node *sector)
 	return (1);
 }
 
-//is clockwise?
-
 void		set_wall_length(t_wall_node *head)
 {
 	if (head == NULL)
 		return ;
 	head->length = get_point_distance(head->start, head->end);
 	set_wall_length(head->next);
+}
+
+int			check_clockwise_sector(t_sector_node *sector)
+{
+	t_wall_node	*wall;
+	t_vecdb		a;
+	t_vecdb		b;
+	double		angle;
+
+	if (sector == NULL || sector->wall_head == NULL)
+		return (-1);
+	wall = sector->wall_head;
+	while (wall->next != NULL)
+	{
+		a = vecdb_diff(wall->end, wall->start);
+		b = vecdb_diff(wall->next->end, wall->next->start);
+		angle = atan2(cross_product(a,b), dot_product(a,b));
+		if (angle > 0)
+			return (0);
+		wall = wall->next;
+	}
+	return (1);
+}
+
+void		flip_walls(t_sector_node *sector)
+{
+	t_wall_node	*wall;
+	t_vecdb		tmp;
+
+	if (sector == NULL)
+		return ;
+	wall = sector->wall_head;
+	while (wall != NULL)
+	{
+		tmp = wall->start;
+		wall->start = wall->end;
+		wall->end = tmp;
+		wall = wall->next;
+	}
+}
+
+void	set_sectors_clockwise(t_sector_node *sector_head)
+{
+	if (sector_head == NULL)
+		return ;
+	if (check_clockwise_sector(sector_head) == 0)
+		flip_walls(sector_head);
+	set_sectors_clockwise(sector_head->next);
 }

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/03 13:51:06 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/03 14:28:00 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -669,6 +669,11 @@ void						set_wall_length(t_wall_node *head);
 
 int							check_convex_sector(t_sector_node *sector);
 
+void						set_wall_length(t_wall_node *head);
+
+int							check_clockwise_sector(t_sector_node *sector);
+
+void						set_sectors_clockwise(t_sector_node *sector_head);
 
 /*
 ** TEXTURE MAPPING
