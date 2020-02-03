@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/02 23:24:14 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/03 01:05:45 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 #include "doom.h"
 #include "libbmp.h"
 
-int blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim, t_sound *sound)
+int blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)//, t_sound *sound)
 {
 	if (*anim == 1)
 	{
 		if (gamesurfs->current_frame == 0 && gamesurfs->anim_timer == 0)
 		{
 			gamesurfs->anim_timer = SDL_GetTicks();
-			alSourcef(sound->source[1], AL_PITCH, 1.3);
-			alSourcei(sound->source[1], AL_BUFFER, sound->buffer[1]);
-			alSourcePlay(sound->source[1]);
+			//alSourcef(sound->source[1], AL_PITCH, 1.3);
+			//alSourcei(sound->source[1], AL_BUFFER, sound->buffer[1]);
+			//alSourcePlay(sound->source[1]);
 		}
 		gamesurfs->katana.x = gamesurfs->current_frame * gamesurfs->katana.w;
 		//gamesurfs->katana.y = gamesurfs->katana.h * 2;
@@ -52,11 +52,11 @@ int blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim, t_sound *s
 	return (0);
 }
 
-int	blit_weapon(t_game *game, SDL_Surface *dest, int weapon, t_sound *sound)
+int	blit_weapon(t_game *game, SDL_Surface *dest, int weapon)//, t_sound *sound)
 {
 	int return_val;
 
-	return_val = (*game->weapon_anim[weapon])(&game->surfs, dest, &game->anim, sound);
+	return_val = (*game->weapon_anim[weapon])(&game->surfs, dest, &game->anim);//, sound);
 	return (return_val);
 }
 
@@ -112,6 +112,36 @@ int	blit_enemies(t_game *game, SDL_Surface *dest)
 	return (0);
 }
 
+int is_source_playing(ALuint source)
+{
+	ALenum state;
+	alGetSourcei(source, AL_SOURCE_STATE, &state);
+	return (state == AL_PLAYING);
+}
+
+int	play_sound(t_game *game, t_sdlmain *sdlmain)
+{
+	t_gamesurfs *gamesurfs;
+	t_sound		*sound;
+	t_player	*player;
+
+	gamesurfs = &game->surfs;
+	sound = &sdlmain->sound;
+	player = &game->player;
+	if (game->anim == 1 && gamesurfs->current_frame == 0 && gamesurfs->anim_timer == 0 && !is_source_playing(sound->source[1]))
+	{
+		alSourcef(sound->source[1], AL_PITCH, 1.3);
+		alSourcei(sound->source[1], AL_BUFFER, sound->buffer[1]);
+		alSourcePlay(sound->source[1]);
+	}
+	if (player->is_moving == 1 && !is_source_playing(sound->source[2]))
+		//printf("HALLO\n");
+		alSourcePlay(sound->source[2]);
+	else if (player->is_moving == 0)
+		alSourcePause(sound->source[2]);
+	return (0);
+}
+
 int game_loop(t_doom *doom)
 {
 	t_game		*game;
@@ -131,7 +161,8 @@ int game_loop(t_doom *doom)
 		while (SDL_PollEvent(&(sdlmain->event)) != 0)
 			if (handle_events(doom) != 0)
 				break ;
-		handle_keys(game, SDL_GetKeyboardState(NULL), &sdlmain->sound);
+		play_sound(game, sdlmain);
+		handle_keys(game, SDL_GetKeyboardState(NULL));//, &sdlmain->sound);
 		alListener3f(AL_POSITION, game->player.pos.x, game->player.pos.y, 0);
 		alSource3f(sdlmain->sound.source[0], AL_POSITION, doom->map.sector_head->wall_head->start.x, doom->map.sector_head->wall_head->start.y, 0);
 		alSource3f(sdlmain->sound.source[1], AL_POSITION, doom->map.sector_head->wall_head->end.x, doom->map.sector_head->wall_head->end.y, 0);
@@ -161,7 +192,7 @@ int game_loop(t_doom *doom)
 		draw_view_recursive(game->surfs.perspective_view, doom->wall_textures, view, doom->game.player.sector, &doom->game.player);
 		//if (blit_enemies(game, game->surfs.perspective_view) != 0)
 		//	return (error_return("Blit enemies error\n", NULL));
-		if (blit_weapon(game, game->surfs.perspective_view, 0, &sdlmain->sound) != 0)
+		if (blit_weapon(game, game->surfs.perspective_view, 0) != 0)//, &sdlmain->sound) != 0)
 			return (error_return("Blit weapon error\n", NULL));
 
 		if ((blit_hud_faces(game)) == 1)

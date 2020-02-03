@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/02 20:34:50 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/03 00:57:53 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,7 +230,7 @@ typedef struct				s_game
 	t_data					data;
 	t_player				player;
 	t_enemy					*enemy;
-	int						(*weapon_anim[4])(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim, t_sound *sound);
+	int						(*weapon_anim[4])(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim);//, t_sound *sound);
 	int						anim;
 }							t_game;
 
@@ -446,7 +446,7 @@ void						check_menu(SDL_Event *event, int *state, int *prev_state_ptr, int prev
 ** EVENT FUNCTIONS
 */
 
-void						handle_keys(t_game *game, const Uint8 *keyboard_state, t_sound *sound);
+void						handle_keys(t_game *game, const Uint8 *keyboard_state);//, t_sound *sound);
 
 int							editor_events(t_doom *doom);
 
@@ -485,7 +485,7 @@ int							blit_editor(t_editor *editor, t_sdlmain *sdlmain);
 
 int							blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf);
 
-int							blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim, t_sound *sound);
+int							blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim);//, t_sound *sound);
 
 /*
 ** TEXT FUNCTIONS
