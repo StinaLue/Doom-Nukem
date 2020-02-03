@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/24 15:49:11 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/03 12:36:07 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ void	update_sector(t_player *player, t_wall_node *wall)
 {
 	while (wall != NULL)
 	{
-		if (wall->neighbor_sector != NULL && wall_distance(player->pos, wall) <= 0)
+		if (wall->neighbor_sector != NULL && wall_distance(player->pos, wall) <= 0 && is_in_range(player->pos, wall))
 		{
 			player->sector = wall->neighbor_sector;
 			return ;
