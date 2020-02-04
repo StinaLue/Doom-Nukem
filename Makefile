@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/01/31 16:40:54 by afonck           ###   ########.fr        #
+#    Updated: 2020/02/03 18:04:49 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,6 +87,8 @@ SOURCES_LIST = main.c \
 			blit_editor.c \
 			new_blit.c \
 			map.c \
+			map_reader.c \
+			map_writer.c \
 			editor_events.c \
 			wav_parse.c \
 			texture_mapping.c \

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/03 14:28:00 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/03 19:29:46 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,6 +276,7 @@ typedef struct				s_options_menu
 
 typedef struct				s_map
 {
+	char					name[16];
 	t_sector_node			*sector_head;
 	t_enemy_info			*enemy_info;
 	t_vec					player_spawn;
@@ -346,6 +347,10 @@ typedef struct				s_doom
 	SDL_Surface				*wall_textures[10];
 	int						state;
 }							t_doom;
+
+int		write_map(t_map *map);
+
+int		read_map(const char *path, t_map *map);
 
 int							loadWAV(char *file, ALuint buffer);
 
@@ -646,6 +651,8 @@ t_wall_node					*delete_last_wall(t_wall_node **wall_list);
 t_wall_node					*get_last_wall_node(t_wall_node *wall_list);
 
 t_wall_node					*undo_wall(t_sector_node *node);
+
+t_wall_node					*insert_wall_node(t_wall_node **wall_list);
 
 t_wall_node					*copy_wall_node(t_wall_node **wall_head, const t_wall_node *node);
 

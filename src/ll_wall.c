@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_wall.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:25:24 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/31 15:54:58 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/03 20:20:20 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ t_wall_node	*insert_wall_node(t_wall_node **wall_list)
 	if (*wall_list == NULL)
 	{
 		*wall_list = malloc(sizeof(t_wall_node));
+		if (*wall_list)
+			(*wall_list)->next = NULL;
 		return (*wall_list);
 	}
 	else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_sector.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:02:35 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/29 17:40:25 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/03 20:18:28 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ t_sector_node	*insert_sector_node(t_sector_node **sector_list)
 	if(*sector_list == NULL)
 	{
 		*sector_list = malloc(sizeof(t_sector_node));
+		if (*sector_list)
+			(*sector_list)->next = NULL;
 		return (*sector_list);
 	}
 	else
@@ -48,7 +50,7 @@ t_sector_node	*add_sector_node(t_sector_node **sector_head)
 		return (NULL);
 	new_node->next = NULL;
 	new_node->wall_head = NULL;
-	new_node->wall_num = -1;
+	new_node->wall_num = 0;
 	new_node->sector_center.x = -1;
 	new_node->sector_center.y = -1;
 	return (new_node);
