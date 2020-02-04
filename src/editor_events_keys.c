@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_keys.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 16:14:43 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 00:55:29 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
+#include "libft.h"
 
 void	key_event_u(t_editor *editor)
 {
@@ -126,7 +127,35 @@ void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 	if (sdlmain->event.key.keysym.sym == SDLK_l \
 					&& editor->edit_map.sector_head != NULL)
 		key_event_l(editor, doom);
+	if (sdlmain->event.key.keysym.sym == SDLK_1 && editor->edit_map.sector_head != NULL)
+	{
+		scanf("%s", editor->edit_map.name);
+		//read(0, editor->edit_map.name, 15);
+		if (write_map(&editor->edit_map) != 0)
+			printf("error in write map\n");
+	}
+	if (sdlmain->event.key.keysym.sym == SDLK_2)
+	{
+		char name[16];
+
+		ft_bzero(name, 16);
+		scanf("%s", name);
+		//read(0, name, 15);
+		free_map(&doom->map);
+		printf("name of file is %s\n", name);
+		if (read_map(name, &doom->map))
+			printf("error in read map\n");
+		doom->game.player.pos = vec_to_vecdb(doom->map.player_spawn);
+		doom->game.player.sector = get_sector_by_pos(doom->map.sector_head, \
+													doom->game.player.pos, 10);
+		if (doom->game.player.pos.x == -1 && doom->game.player.pos.y == -1)
+		{
+			doom->game.player.sector = doom->map.sector_head;
+			doom->game.player.pos = doom->map.sector_head->sector_center;
+		}
+	}
 	if (sdlmain->event.key.keysym.sym == SDLK_p)
 		give_vec_values(&editor->edit_map.player_spawn, \
 						sdlmain->mouse_pos.x, sdlmain->mouse_pos.y);
+	//printf("%c\n", (char)sdlmain->event.key.keysym.sym);
 }
