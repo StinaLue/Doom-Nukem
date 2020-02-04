@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 15:35:14 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 17:58:53 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	key_event_r(t_editor *editor, t_doom *doom)
 	//print_map_contents(&editor->edit_map);
 	if (copy_map(&doom->map, &editor->edit_map) != 0)
 		doom->state = QUIT_STATE;
+	editor->selected_sector = NULL;
 	//editor->start_sector_reached = 1;
 	//editor->edit_map.sector_head = doom->map.sector_head;
 	//doom->map.sector_head = editor->edit_map.sector_head;
