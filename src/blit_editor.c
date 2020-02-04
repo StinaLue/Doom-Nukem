@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 15:48:36 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 20:11:27 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,10 @@ int	blit_editor_surf(t_editor *editor, t_sdlmain *sdlmain)
 
 int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 {
+	fill_pix(editor->editor_surf, editor->edit_map.player_spawn.x, editor->edit_map.player_spawn.y, 0x00ff00);
+	SDL_Rect testface = {editor->edit_map.player_spawn.x, editor->editor_surf->h - editor->edit_map.player_spawn.y, 20, 20};
+	if (SDL_BlitScaled(editor->player_face_surf, &editor->player_face_rec, editor->editor_surf, &testface) < 0)
+		return (1);
 	if (blit_instructs(editor) != 0)
 		return (1);
 	if (blit_options(editor) != 0)

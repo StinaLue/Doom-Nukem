@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 17:06:03 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/04 20:03:53 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,11 +298,13 @@ typedef struct				s_editor
     SDL_Surface             *alert_convex_surf;
 	SDL_Surface             *alert_loading_surf;
 	SDL_Surface             *loading_success_surf;
+	SDL_Surface 			*player_face_surf;
 
 	SDL_Rect				editor_rect;
 	SDL_Rect				options_rect;
 	SDL_Rect				instr_rect;
 	SDL_Rect				mouse_rect;
+	SDL_Rect 				player_face_rec;
     SDL_Rect                alert_convex_rect;
 	SDL_Rect                alert_loading_rect;
 	SDL_Rect                loading_success_rect;

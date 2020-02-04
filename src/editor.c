@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 16:49:05 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/04 20:23:53 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,8 @@ void	fill_area(SDL_Surface *surf, t_wall_node *wall, t_editor *editor)
 	color = (editor->start_sector.x == wall->start.x \
 			&& editor->start_sector.y == wall->start.y) ? 0X00FF00 : 0XB11226;
 	j = 0;
-	tmp_wall.x = wall->start.x * editor->offset;
-	tmp_wall.y = wall->start.y * editor->offset;
+	tmp_wall.x = wall->start.x;// * editor->offset;
+	tmp_wall.y = wall->start.y;// * editor->offset;
 	while (j < 4)
 	{
 		i = 0;
@@ -152,8 +152,10 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 		return ;
 	tmp_sect = editor->edit_map.sector_head;
 	if (editor->start_sector_reached == 0)
-		draw_line(multvec(sdlmain->mouse_pos, editor->offset),
-			multvec(vecdb_to_vec(editor->wall_tmp.end), editor->offset), editor_surf, editor->wall_tmp.type_color);
+		draw_line(multvec(sdlmain->mouse_pos, editor->offset), \
+			vecdb_to_vec(editor->wall_tmp.end), editor_surf, editor->wall_tmp.type_color);
+		/*draw_line(multvec(sdlmain->mouse_pos, editor->offset),
+			multvec(vecdb_to_vec(editor->wall_tmp.end), editor->offset), editor_surf, editor->wall_tmp.type_color);*/
 	fill_area(editor_surf, &editor->wall_tmp, editor);
 	while (tmp_sect != NULL)
 	{
@@ -161,8 +163,10 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 		while (tmp_wall != NULL)
 		{
 			fill_area(editor_surf, tmp_wall, editor);
-			draw_line(multvec(vecdb_to_vec(tmp_wall->end), editor->offset),
-				multvec(vecdb_to_vec(tmp_wall->start), editor->offset), editor_surf, tmp_wall->type_color);
+			draw_line(vecdb_to_vec(tmp_wall->end), \
+				vecdb_to_vec(tmp_wall->start), editor_surf, tmp_wall->type_color);
+			/*draw_line(multvec(vecdb_to_vec(tmp_wall->end), editor->offset),
+				multvec(vecdb_to_vec(tmp_wall->start), editor->offset), editor_surf, tmp_wall->type_color);*/
 			i++;
 			tmp_wall = tmp_wall->next;
 		}
@@ -220,6 +224,7 @@ int	editor_loop(t_doom *doom)
 		editor->offset = editor->editor_surf->w / NBPOINTSROW;
 	else
 		editor->offset = editor->editor_surf->h / NBPOINTSROW;
+	printf("offset: %d\n", editor->offset);
 	while (doom->state == EDITOR_STATE)
 	{
 		while (SDL_PollEvent(&sdlmain->event) != 0)
@@ -244,6 +249,11 @@ int	editor_loop(t_doom *doom)
 		draw_border(editor->opt_surf, 0xB12211);
 		draw_border(editor->instr_surf, 0xB12211);
 		draw_lines(editor, editor->editor_surf, sdlmain);
+		editor->player_face_surf = doom->game.surfs.hud_faces_surf;
+		editor->player_face_rec.x = doom->game.surfs.hud_faces_rect.x;
+		editor->player_face_rec.y = doom->game.surfs.hud_faces_rect.y;
+		editor->player_face_rec.h = doom->game.surfs.hud_faces_rect.h;
+		editor->player_face_rec.w = doom->game.surfs.hud_faces_rect.w;
 		if (blit_editor(editor, sdlmain) != 0)
 			return (1);
 	}
