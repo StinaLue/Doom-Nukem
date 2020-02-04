@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 15:40:39 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 17:06:03 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -351,6 +351,8 @@ typedef struct				s_doom
 	SDL_Surface				*wall_textures[10];
 	int						state;
 }							t_doom;
+
+void	prepend_str(const char *to_prepend, const char *str, char *new_str, int full_size);
 
 int		write_map(t_map *map);
 

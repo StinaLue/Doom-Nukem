@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/03 17:39:25 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/03 20:22:50 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/04 17:08:16 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,12 +116,15 @@ int		read_map(const char *path, t_map *map)
 {
 	int fd;
     char buf[8];
+	char full_path[22];
 
     buf[7] = '\0';
 	//if (map != NULL || path == NULL)
 	if (path == NULL)
 		return (error_return("map is not NULL or path is NULL\n", NULL));
-	if ((fd = open(path, O_RDONLY | O_NOFOLLOW)) == -1)
+	prepend_str(".maps/", path, full_path, 22);
+	//if ((fd = open(path, O_RDONLY | O_NOFOLLOW)) == -1)
+	if ((fd = open(full_path, O_RDONLY | O_NOFOLLOW)) == -1)
 		return (error_return("open error %s\n", strerror(errno)));
 
 	if (read(fd, buf, 4) != 4 || ft_strncmp(buf, "DOOM", 4) != 0)

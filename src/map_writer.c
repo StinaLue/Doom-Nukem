@@ -6,12 +6,14 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/03 17:54:01 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/04 00:44:05 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/04 17:20:18 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 #include "libft.h"
+#include "errno.h"
+#include "sys/stat.h"
 
 int		write_walls(int fd, t_wall_node *wall_head, int nb_walls_file)
 {
@@ -104,16 +106,30 @@ int		write_enemies_info(int fd, t_enemy_info *enemies_info, int num_enemies_file
 	return (0);
 }
 
+void	prepend_str(const char *to_prepend, const char *str, char *new_str, int full_size)
+{
+	ft_bzero(new_str, full_size);
+	ft_strncpy(new_str, to_prepend, ft_strlen(to_prepend));
+	ft_strncat(new_str, str, ft_strlen(str));
+	new_str[full_size - 1] = '\0';
+}
+
 int		write_map(t_map *map)
 {
 	int fd;
+	char full_path[22];
 
+	prepend_str(".maps/", map->name, full_path, 22);
 	if (map == NULL)
 		return (error_return("map is NULL\n", NULL));
+	if (access(full_path, 0) != 0)
+		mkdir(".maps", 0700);
 	//if ((fd = open(map->name, O_CREAT | O_WRONLY | O_RDONLY)) == -1)
 	//if ((fd = open(map->name, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR)) == -1)
-	if ((fd = open(map->name, O_CREAT | O_WRONLY, S_IRUSR)) == -1)
-		return (error_return("error opening %s\n", map->name));
+	//if ((fd = open(map->name, O_CREAT | O_WRONLY | O_TRUNC | O_NOFOLLOW, S_IRUSR)) == -1)
+	if ((fd = open(full_path, O_CREAT | O_WRONLY | O_TRUNC | O_NOFOLLOW, S_IRUSR)) == -1)
+		return (error_return("error opening: %s\n", strerror(errno)));
+		//return (error_return("error opening %s\n", map->name));
 
 	if (write(fd, "DOOM", 4) != 4)
 		return (error_return("Error writing file signature\n", NULL));

@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 17:58:53 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 18:01:20 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	key_event_r(t_editor *editor, t_doom *doom)
 
 void	key_event_l(t_editor *editor, t_doom *doom)
 {
-	if (editor->start_sector_reached == 1)
+	if (editor->start_sector_reached == 1 && get_sector_by_pos(editor->edit_map.sector_head, vec_to_vecdb(editor->edit_map.player_spawn), 10) != NULL)
 	{
 		if (doom->map.sector_head != NULL)
 			free_map(&doom->map);
@@ -128,7 +128,7 @@ void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 	if (sdlmain->event.key.keysym.sym == SDLK_l \
 					&& editor->edit_map.sector_head != NULL)
 		key_event_l(editor, doom);
-	if (sdlmain->event.key.keysym.sym == SDLK_1 && editor->opt_menu.typing_filename == 0)// editor->edit_map.sector_head != NULL)
+	/*if (sdlmain->event.key.keysym.sym == SDLK_1 && editor->opt_menu.typing_filename == 0)// editor->edit_map.sector_head != NULL)
 	{
 		if (editor->edit_map.sector_head == NULL)
 			ft_printf("no sector in map to save\n");
@@ -138,7 +138,7 @@ void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 		//read(0, editor->edit_map.name, 15);
 		if (write_map(&editor->edit_map) != 0)
 			printf("error in write map\n");
-	}
+	}*/
 	/*
 	if (sdlmain->event.key.keysym.sym == SDLK_2)
 	{
@@ -160,8 +160,9 @@ void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 			doom->game.player.pos = doom->map.sector_head->sector_center;
 		}
 	}*/
-	if (sdlmain->event.key.keysym.sym == SDLK_p)
-		give_vec_values(&editor->edit_map.player_spawn, \
-						sdlmain->mouse_pos.x, sdlmain->mouse_pos.y);
+	if (sdlmain->event.key.keysym.sym == SDLK_p && editor->selected_sector != NULL)
+	{
+			editor->edit_map.player_spawn = vecdb_to_vec(editor->selected_sector->sector_center);
+	}
 	//printf("%c\n", (char)sdlmain->event.key.keysym.sym);
 }

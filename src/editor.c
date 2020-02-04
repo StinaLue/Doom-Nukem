@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 14:55:30 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 16:49:05 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	editor->opt_menu.activ_tex = 0;
 	editor->opt_menu.typing_filename = 0;
 	ft_bzero(editor->opt_menu.file_name, 16);
-	ft_strncpy(editor->opt_menu.file_name, "doom_", 5);
+	ft_strncpy(editor->opt_menu.file_name, ".doom_", 6);
 	//editor->opt_menu.file_name[0] = ' ';
 
 	editor->current_sector = NULL;
