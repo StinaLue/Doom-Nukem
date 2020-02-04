@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 14:30:07 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 15:40:39 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@
 # define NBPOINTSROW 50 // NBPOINTS = NBPOINTSROW * NBPOINTSROW
 # define NBTEXTURES	9
 # define NBHEIGHTS 7
-# define NBOPTIONS 8
+# define NBOPTIONS 10
 # define NBINSTRUCTS 8
 # define COLOR_HOVER 0x6C1413
 # define COLOR_PRESSED 0xffff00

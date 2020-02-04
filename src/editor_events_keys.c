@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 16:06:06 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/04 16:17:45 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,8 +137,7 @@ void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 		//read(0, editor->edit_map.name, 15);
 		if (write_map(&editor->edit_map) != 0)
 			printf("error in write map\n");
-	}//IMPORTANT FOR SAVING MAP
-	
+	}
 	/*
 	if (sdlmain->event.key.keysym.sym == SDLK_2)
 	{
