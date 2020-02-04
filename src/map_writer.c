@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/03 17:54:01 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/04 17:20:18 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/04 19:56:42 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int		write_walls(int fd, t_wall_node *wall_head, int nb_walls_file)
 
 	nb_walls = 0;
 	if (wall_head == NULL)
-		return (1);
+		return (error_return("wall head is NULL\n", NULL));
 	while (wall_head != NULL)
 	{
 		if (write(fd, &wall_head->start.x, sizeof(double)) != sizeof(double))

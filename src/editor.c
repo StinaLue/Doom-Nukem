@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 16:49:05 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/04 19:13:26 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,8 +231,9 @@ int	editor_loop(t_doom *doom)
 			offset_border = editor->editor_surf->h \
 						- NBPOINTSROW * editor->offset;
 		sdlmain->mouse_pos.x = round_num(sdlmain->mouse_pos.x, editor->offset);
-		sdlmain->mouse_pos.y = round_num(sdlmain->mouse_pos.y - offset_border \
-											+ editor->offset, editor->offset);
+		sdlmain->mouse_pos.y = round_num(sdlmain->mouse_pos.y, editor->offset);
+		//sdlmain->mouse_pos.y = round_num(sdlmain->mouse_pos.y - offset_border \
+											//+ editor->offset, editor->offset);
 		ft_bzero(editor->editor_surf->pixels, \
 					editor->editor_surf->h * editor->editor_surf->pitch);
 		ft_bzero(editor->opt_surf->pixels, \

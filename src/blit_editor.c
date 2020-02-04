@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   blit_editor.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 15:48:36 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 18:59:59 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int	blit_options(t_editor *editor)
 			return (error_return("BlitSurface error = %s\n", SDL_GetError()));
 		i++;
 	}
+	SDL_FreeSurface(editor->opt_menu.options[7]);
 	editor->opt_menu.options[7] = TTF_RenderText_Solid(editor->opt_menu.font, editor->opt_menu.file_name, editor->opt_menu.text_color);
 	draw_border_options(&editor->opt_menu.options_rect[7], 0xffff00, editor->opt_surf);
 	draw_border_options(&editor->opt_menu.options_rect[8], 0xffff00, editor->opt_surf);

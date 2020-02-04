@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/03 13:51:38 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/04 20:40:12 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int		init_doom(t_doom *doom)
 		|| init_wall_textures(doom->wall_textures, doom->sdlmain.win_surf) == 1)
 		return (1);
 	//degeulasse PLEASE REMOVE ASAP
-	doom->game.player.sector = doom->map.sector_head->next;
+	//doom->game.player.sector = doom->map.sector_head->next;
 
 
 	doom->editor.wall_textures = doom->wall_textures;
@@ -187,6 +187,13 @@ int		init_sdlmain(t_sdlmain *sdlmain)
 	return (EXIT_SUCCESS);
 }
 
+int		init_map(t_map *map)
+{
+	if (read_map(".doom_1", map))
+		return (1);
+	return (0);
+}
+/*
 int		init_map(t_map *map) //<-- INIT MAP LEAKS
 {
 	t_sector_node	*current_sector;
@@ -327,7 +334,7 @@ int		init_map(t_map *map) //<-- INIT MAP LEAKS
 
 	return (0);
 }
-
+*/
 int	init_game(t_game *game, t_sdlmain *sdlmain, t_map *map)
 {
 	//game->data.num_enemies = map->num_enemies;

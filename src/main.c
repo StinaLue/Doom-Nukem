@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/27 17:49:05 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/04 20:30:51 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ int	main_loop()
 	}
 	while (doom.state != QUIT_STATE)
 	{
+		if (doom.state == GAME_STATE && (doom.map.sector_head == NULL || doom.game.player.sector == NULL))
+			doom.state = EDITOR_STATE;
 		if (doom.state == GAME_STATE)
 			ret = game_loop(&doom);
 		else if (doom.state == MENU_STATE)

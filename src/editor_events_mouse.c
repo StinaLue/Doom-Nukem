@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 16:30:25 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/04 19:46:06 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,11 @@ void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
 			editor->opt_menu.typing_filename = 1;
 			//editor->opt_menu.bord_color_text[i] = COLOR_HOVER;
 		}
-		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.options_rect[8]) && sdlmain->event.button.button == SDL_BUTTON_LEFT && editor->opt_menu.typing_filename == 0)
+		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.options_rect[8]) && sdlmain->event.button.button == SDL_BUTTON_LEFT)
 		{
+			if (editor->selected_sector != NULL)
+				remove_highlight_sector(editor->selected_sector);
+			editor->selected_sector = NULL;
 			printf("saved\n"); // SAVE MAP
 			if (editor->edit_map.sector_head == NULL)
 				ft_printf("no sector in map to save\n");
@@ -106,8 +109,11 @@ void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
 			//editor->opt_menu.typing_filename = 1;
 			//editor->opt_menu.bord_color_text[i] = COLOR_HOVER;
 		}
-		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.options_rect[9]) && sdlmain->event.button.button == SDL_BUTTON_LEFT && editor->opt_menu.typing_filename == 0)
+		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.options_rect[9]) && sdlmain->event.button.button == SDL_BUTTON_LEFT)
 		{
+			if (editor->selected_sector != NULL)
+				remove_highlight_sector(editor->selected_sector);
+			editor->selected_sector = NULL;
 			printf("loaded\n"); // LOAD MAP
 			free_map(&editor->edit_map);
 			if (read_map(editor->opt_menu.file_name, &editor->edit_map))
