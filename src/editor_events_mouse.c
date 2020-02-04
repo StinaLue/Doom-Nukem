@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_mouse.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 15:50:40 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 16:30:25 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
-
+#include "libft.h"
 
 void change_size(t_editor *editor, t_sdlmain *sdlmain)
 {
@@ -92,15 +92,26 @@ void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
 			editor->opt_menu.typing_filename = 1;
 			//editor->opt_menu.bord_color_text[i] = COLOR_HOVER;
 		}
-		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.options_rect[8]) && sdlmain->event.button.button == SDL_BUTTON_LEFT)
+		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.options_rect[8]) && sdlmain->event.button.button == SDL_BUTTON_LEFT && editor->opt_menu.typing_filename == 0)
 		{
 			printf("saved\n"); // SAVE MAP
+			if (editor->edit_map.sector_head == NULL)
+				ft_printf("no sector in map to save\n");
+			if (ft_strlen(editor->edit_map.name) <= 5)
+				ft_printf("wrong map name to save\n");
+			//scanf("%s", editor->edit_map.name);
+			//read(0, editor->edit_map.name, 15);
+			if (write_map(&editor->edit_map) != 0)
+				printf("error in write map\n");
 			//editor->opt_menu.typing_filename = 1;
 			//editor->opt_menu.bord_color_text[i] = COLOR_HOVER;
 		}
-		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.options_rect[9]) && sdlmain->event.button.button == SDL_BUTTON_LEFT)
+		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.options_rect[9]) && sdlmain->event.button.button == SDL_BUTTON_LEFT && editor->opt_menu.typing_filename == 0)
 		{
 			printf("loaded\n"); // LOAD MAP
+			free_map(&editor->edit_map);
+			if (read_map(editor->opt_menu.file_name, &editor->edit_map))
+				printf("error in read map\n");
 			//editor->opt_menu.typing_filename = 1;
 			//editor->opt_menu.bord_color_text[i] = COLOR_HOVER;
 		}
