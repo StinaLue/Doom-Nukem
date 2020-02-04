@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 17:19:53 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/04 17:33:51 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,12 @@ int	editor_events(t_doom *doom)
 	if (sdlmain->event.type == SDL_KEYDOWN && sdlmain->event.key.keysym.sym == SDLK_RETURN)
 	{
 		if (ft_strlen(editor->opt_menu.file_name) > 5)
-			ft_strncpy(editor->edit_map.name, editor->opt_menu.file_name, 16);
+			ft_strncpy(editor->edit_map.name, editor->opt_menu.file_name, 15);
 		editor->opt_menu.typing_filename = 0;
 	}
 	else if (sdlmain->event.type == SDL_KEYDOWN && (sdlmain->event.key.keysym.sym == SDLK_DELETE || sdlmain->event.key.keysym.sym == SDLK_BACKSPACE))
 		del_last_char(editor->opt_menu.file_name);
-	else if (editor->opt_menu.typing_filename == 1 && sdlmain->event.type == SDL_TEXTINPUT && ft_strlen(editor->opt_menu.file_name) < 16)
+	else if (editor->opt_menu.typing_filename == 1 && sdlmain->event.type == SDL_TEXTINPUT && ft_strlen(editor->opt_menu.file_name) < 15)
 	{
 		//if (sdlmain->event.key.keysym.sym == SDLK_RETURN)
 		//if (ft_strlen(editor->opt_menu.file_name) == 1 && editor->opt_menu.file_name[0] == ' ')
