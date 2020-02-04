@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_keys.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 00:55:29 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/04 15:17:10 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,13 +127,19 @@ void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 	if (sdlmain->event.key.keysym.sym == SDLK_l \
 					&& editor->edit_map.sector_head != NULL)
 		key_event_l(editor, doom);
-	if (sdlmain->event.key.keysym.sym == SDLK_1 && editor->edit_map.sector_head != NULL)
+	/* if (sdlmain->event.key.keysym.sym == SDLK_1 && editor->opt_menu.typing_filename == 0)// editor->edit_map.sector_head != NULL)
 	{
-		scanf("%s", editor->edit_map.name);
+		if (editor->edit_map.sector_head == NULL)
+			ft_printf("no sector in map to save\n");
+		if (ft_strlen(editor->edit_map.name) <= 5)
+			ft_printf("wrong map name to save\n");
+		//scanf("%s", editor->edit_map.name);
 		//read(0, editor->edit_map.name, 15);
 		if (write_map(&editor->edit_map) != 0)
 			printf("error in write map\n");
-	}
+	} */ //IMPORTANT FOR SAVING MAP
+	
+	/*
 	if (sdlmain->event.key.keysym.sym == SDLK_2)
 	{
 		char name[16];
@@ -153,7 +159,7 @@ void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 			doom->game.player.sector = doom->map.sector_head;
 			doom->game.player.pos = doom->map.sector_head->sector_center;
 		}
-	}
+	}*/
 	if (sdlmain->event.key.keysym.sym == SDLK_p)
 		give_vec_values(&editor->edit_map.player_spawn, \
 						sdlmain->mouse_pos.x, sdlmain->mouse_pos.y);

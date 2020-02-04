@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/03 17:14:46 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 14:55:30 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,10 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	editor->opt_menu.height_ceiling = 40;
 	editor->opt_menu.height_floor = 2;
 	editor->opt_menu.activ_tex = 0;
-	editor->opt_menu.activ_h = 1;
+	editor->opt_menu.typing_filename = 0;
+	ft_bzero(editor->opt_menu.file_name, 16);
+	ft_strncpy(editor->opt_menu.file_name, "doom_", 5);
+	//editor->opt_menu.file_name[0] = ' ';
 
 	editor->current_sector = NULL;
 	editor->current_wall = NULL;

@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 11:13:50 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 14:30:27 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void change_size(t_editor *editor, t_sdlmain *sdlmain)
 		}
 		//editor->opt_menu.height_floor = editor->selected_sector->floor_height;
 		//editor->opt_menu.height_ceiling = editor->selected_sector->ceiling_height;
-		set_height_test(editor);
+		set_height(editor);
 	}
 }
 
@@ -62,14 +62,6 @@ void	set_border_color(t_editor *editor, t_vec mouse_pos)
 		i++;
 	}
 	i = 0;
-	/* 
-	while (i < NBHEIGHTS)
-	{
-		editor->opt_menu.bord_color_h[i] = COLOR_NORMAL;
-		if (is_mouse_collide(mouse_pos, editor->opt_menu.h_rect[i]))
-			editor->opt_menu.activ_h = i;
-		i++;
-	} */
 	editor->opt_menu.bord_color_h = COLOR_PRESSED;
 }
 
@@ -94,17 +86,12 @@ void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
 				editor->opt_menu.bord_color_text[i] = COLOR_NORMAL;
 			i++;
 		}
-		/*
-		i = 0; 
-		while (i < NBHEIGHTS)
+		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.options_rect[7]) && sdlmain->event.button.button == SDL_BUTTON_LEFT/*  && i != editor->opt_menu.activ_tex */)
 		{
-			if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect[i]) && i != editor->opt_menu.activ_h)
-				editor->opt_menu.bord_color_h[i] = COLOR_HOVER;
-			else if (!is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect[i]) && i != editor->opt_menu.activ_h)
-				editor->opt_menu.bord_color_h[i] = COLOR_NORMAL;
-			special_case_height(editor);
-			i++;
-		} */
+			//printf("is selected\n");
+			editor->opt_menu.typing_filename = 1;
+			//editor->opt_menu.bord_color_text[i] = COLOR_HOVER;
+		}
 	}
 }
 
@@ -219,7 +206,7 @@ void 	mouse_click_right(t_editor *editor, t_sdlmain *sdlmain)
 		editor->opt_menu.height_ceiling = editor->selected_sector->ceiling_height;
 	}
 	//printf("sel sec: %p\n", editor->selected_sector);
-	set_height_test(editor);
+	set_height(editor);
 	check_convex_sector(editor->edit_map.sector_head);
 }
 

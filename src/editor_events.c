@@ -6,36 +6,12 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/03 17:15:14 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 15:01:25 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
-
-void	special_case_height(t_editor *editor)
-{
-	if (editor->opt_menu.activ_h == 1 \
-		|| editor->opt_menu.activ_h == 4)
-	{
-		editor->opt_menu.bord_color_h = COLOR_PRESSED;
-		editor->opt_menu.bord_color_h = COLOR_PRESSED;
-		editor->opt_menu.activ_h = 1;
-	}
-	if (editor->opt_menu.activ_h == 2 \
-		|| editor->opt_menu.activ_h == 5)
-	{
-		editor->opt_menu.bord_color_h = COLOR_PRESSED;
-		editor->opt_menu.bord_color_h = COLOR_PRESSED;
-		editor->opt_menu.activ_h = 2;
-	}
-	if (editor->opt_menu.activ_h == 3 \
-		|| editor->opt_menu.activ_h == 6)
-	{
-		editor->opt_menu.bord_color_h = COLOR_PRESSED;
-		editor->opt_menu.bord_color_h = COLOR_PRESSED;
-		editor->opt_menu.activ_h = 3;
-	}
-}
+#include "libft.h"
 
 int	compare_walls(t_wall_node *current_wall, t_wall_node *wall)
 {
@@ -86,6 +62,16 @@ void	find_neighbors(t_doom *doom)
 		current_sector = current_sector->next;
 	}
 }
+void del_last_char(char *str)
+{
+	int len;
+
+	if (str == NULL)
+		return ;
+	len = ft_strlen(str);
+	if (len > 5)
+		str[len - 1] = '\0';
+}
 
 int	editor_events(t_doom *doom)
 {
@@ -95,13 +81,33 @@ int	editor_events(t_doom *doom)
 	editor = &(doom->editor);
 	sdlmain = &(doom->sdlmain);
 	check_quit(&doom->sdlmain.event, &doom->state);
-	if (sdlmain->event.type == SDL_KEYDOWN)
-		event_keydown(editor, doom, sdlmain);
-	if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN \
-		|| sdlmain->event.type == SDL_MOUSEMOTION \
-		|| sdlmain->event.type == SDL_MOUSEWHEEL)
+	if (sdlmain->event.type == SDL_KEYDOWN && sdlmain->event.key.keysym.sym == SDLK_RETURN)
 	{
-		event_mouse(editor, sdlmain);
+		if (ft_strlen(editor->opt_menu.file_name) > 5)
+			ft_strncpy(editor->edit_map.name, editor->opt_menu.file_name, 16);
+		editor->opt_menu.typing_filename = 0;
+	}
+	else if (sdlmain->event.type == SDL_KEYDOWN && (sdlmain->event.key.keysym.sym == SDLK_DELETE || sdlmain->event.key.keysym.sym == SDLK_BACKSPACE))
+		del_last_char(editor->opt_menu.file_name);
+	else if (editor->opt_menu.typing_filename == 1 && sdlmain->event.type == SDL_TEXTINPUT && ft_strlen(editor->opt_menu.file_name) < 16)
+	{
+		//if (sdlmain->event.key.keysym.sym == SDLK_RETURN)
+		//if (ft_strlen(editor->opt_menu.file_name) == 1 && editor->opt_menu.file_name[0] == ' ')
+		//	editor->opt_menu.file_name[0] = sdlmain->event.key.keysym.sym;
+		//else
+		ft_strncat(editor->opt_menu.file_name, sdlmain->event.text.text, 1);
+			//ft_strcat(editor->opt_menu.file_name, (char *)&sdlmain->event.key.keysym.sym);
+	}
+	else if (editor->opt_menu.typing_filename == 0)
+	{
+		if (sdlmain->event.type == SDL_KEYDOWN)
+			event_keydown(editor, doom, sdlmain);
+		if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN \
+			|| sdlmain->event.type == SDL_MOUSEMOTION \
+			|| sdlmain->event.type == SDL_MOUSEWHEEL)
+		{
+			event_mouse(editor, sdlmain);
+		}
 	}
 	/* 
 	if (sdlmain->event.type == SDL_MOUSEWHEEL || sdlmain->event.type == SDL_MOUSEMOTION)

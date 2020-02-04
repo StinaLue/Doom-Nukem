@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/03 19:21:35 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 14:36:43 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,9 @@ int	blit_options(t_editor *editor)
 			return (error_return("BlitSurface error = %s\n", SDL_GetError()));
 		i++;
 	}
+	editor->opt_menu.options[7] = TTF_RenderText_Solid(editor->opt_menu.font, editor->opt_menu.file_name, editor->opt_menu.text_color);
+	draw_border_options(&editor->opt_menu.options_rect[7], 0xffff00, editor->opt_surf);
+	//SDL_FreeSurface(editor->opt_menu.options[7]);
 	return (0);
 }
 
@@ -162,9 +165,12 @@ int	blit_editor_surf(t_editor *editor, t_sdlmain *sdlmain)
 		if ((SDL_BlitScaled(editor->instr_surf, NULL,
 			sdlmain->win_surf, &editor->instr_rect)) < 0)
 		return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
-	if ((SDL_BlitScaled(editor->wall_textures[editor->opt_menu.activ_tex], NULL,
+		if (sdlmain->mouse_pos.x * editor->offset < editor->editor_surf->w)
+		{
+			if ((SDL_BlitScaled(editor->wall_textures[editor->opt_menu.activ_tex], NULL,
 			sdlmain->win_surf, &editor->mouse_rect)) < 0)
-		return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
+				return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
+		}
 	return (0);
 }
 

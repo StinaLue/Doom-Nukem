@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/03 19:17:56 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 14:29:32 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	create_opt_str(t_editor *editor, t_vec origin, int i, const char *str)
 		str, editor->opt_menu.text_color)) == NULL)
 		return (error_return("TTF_RenderText_Solid error = %s\n", \
 				TTF_GetError()));
-		assign_sdlrect(&editor->opt_menu.options_rect[i], origin, \
+	assign_sdlrect(&editor->opt_menu.options_rect[i], origin, \
 					create_vec(0, 0));
 	return (0);
 }
@@ -42,57 +42,52 @@ int	create_floor_height(t_editor *editor)
 	int i;
 	const char *num;
 
-	i = 0;
-	while (i < 49)
-	{
-		if (i == editor->opt_menu.height_floor)
+	i = (int)editor->opt_menu.height_floor;
+	if ((num = ft_itoa(i)) == NULL)
+		return (1);
+	if ((editor->opt_menu.floor_h_surf = \
+		TTF_RenderText_Solid(editor->opt_menu.font, \
+		num, editor->opt_menu.text_color)) == NULL)
 		{
-			if ((num = ft_itoa(i)) == NULL)
-				return (1);
-			if ((editor->opt_menu.floor_h_surf = \
-			TTF_RenderText_Solid(editor->opt_menu.font, \
-			num, editor->opt_menu.text_color)) == NULL)
-			{
-				ft_memdel((void **)&num);
-				return (error_return("TTF_RenderText_Solid error = %s\n", \
-						TTF_GetError()));
-			}
-			else
-				ft_memdel((void **)&num);
-			//assign_sdlrect(&editor->opt_menu.h_rect_floor, origin, \
-			//			create_vec(0, 0));
+			ft_memdel((void **)&num);
+			return (error_return("TTF_RenderText_Solid error = %s\n", \
+					TTF_GetError()));
 		}
-		i++;
-	}
+	else
+		ft_memdel((void **)&num);
 	return (0);
 }
+/* 
+int fill_file_name(t_editor *editor)
+{
+	//draw_border(editor->opt_menu.options[7], 0xff0000);
+	if ((editor->opt_menu.options[7] = \
+		TTF_RenderText_Solid(editor->opt_menu.font, \
+		editor->opt_menu.file_name, editor->opt_menu.text_color)) == NULL)
+			return (error_return("TTF_RenderText_Solid error = %s\n", \
+					TTF_GetError()));
+	assign_sdlrect(&editor->opt_menu.file_name_rect, create_vec((editor->instr_surf->w - editor->instr_menu.title->w) / 2, editor->instr_surf->h / 30), create_vec(0, 0));
+	return (0);
+} */
 
 int	create_ceiling_height(t_editor *editor)
 {
 	int i;
 	const char *num;
 
-	i = 1;
-	while (i < 50)
-	{
-		if (i == editor->opt_menu.height_ceiling)
+	i = (int)editor->opt_menu.height_ceiling;
+	if ((num = ft_itoa(i)) == NULL)
+		return (1);
+	if ((editor->opt_menu.ceiling_h_surf = \
+		TTF_RenderText_Solid(editor->opt_menu.font, \
+		num, editor->opt_menu.text_color)) == NULL)
 		{
-			num = ft_itoa(i);
-			if ((editor->opt_menu.ceiling_h_surf = \
-			TTF_RenderText_Solid(editor->opt_menu.font, \
-			num, editor->opt_menu.text_color)) == NULL)
-			{
-				ft_memdel((void **)&num);
-				return (error_return("TTF_RenderText_Solid error = %s\n", \
-					TTF_GetError()));
-			}
-			else
-				ft_memdel((void **)&num);
-			//assign_sdlrect(&editor->opt_menu.h_rect_ceiling, origin, \
-			//			create_vec(0, 0));
+			ft_memdel((void **)&num);
+			return (error_return("TTF_RenderText_Solid error = %s\n", \
+				TTF_GetError()));
 		}
-		i++;
-	}
+	else
+		ft_memdel((void **)&num);
 	return (0);
 }
 
@@ -121,18 +116,6 @@ int	init_instr_menu(t_editor *editor)
 }
 
 int set_height(t_editor *editor)
-{
-	assign_sdlrect(&editor->opt_menu.h_rect[0], create_vec((editor->opt_surf->h / 20), ((editor->opt_surf->h) / 20) * 7), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 26));
-	assign_sdlrect(&editor->opt_menu.h_rect[1], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 6.5), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 18));
-	assign_sdlrect(&editor->opt_menu.h_rect[2], create_vec((editor->opt_surf->h / 20) * 5, ((editor->opt_surf->h) / 20) * 6), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 14));
-	assign_sdlrect(&editor->opt_menu.h_rect[3], create_vec((editor->opt_surf->h / 20) * 7, ((editor->opt_surf->h) / 20) * 5.5), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 10));
-	assign_sdlrect(&editor->opt_menu.h_rect[4], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 7), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 26));
-	assign_sdlrect(&editor->opt_menu.h_rect[5], create_vec((editor->opt_surf->h / 20) * 5, ((editor->opt_surf->h) / 20) * 7), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 26));
-	assign_sdlrect(&editor->opt_menu.h_rect[6], create_vec((editor->opt_surf->h / 20) * 7, ((editor->opt_surf->h) / 20) * 7), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 26));
-	return (0);
-}
-
-int set_height_test(t_editor *editor)
 {
 	//assign_sdlrect(&editor->opt_menu.h_rect_floor[0], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 6), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / editor->opt_menu.height_floor));
 	assign_sdlrect(&editor->opt_menu.h_rect_ceiling, create_vec((editor->opt_surf->h / 20) * 7, ((editor->opt_surf->h) / 20) * 5), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / 11));
@@ -177,16 +160,27 @@ int	init_options_menu(t_editor *editor)
 		return (1);
 	if (create_opt_str(editor, create_vec((editor->opt_surf->h / 20), ((editor->opt_surf->h) / 20) * 6), 6, "height floor:") != 0)
 		return (1);
+	//if (ft_strlen(editor->opt_menu.file_name) != 0)
+	//{
+	if (create_opt_str(editor, create_vec((editor->opt_surf->h / 20), ((editor->opt_surf->h) / 20) * 17), 7, editor->opt_menu.file_name) != 0)
+		return (1);
+	//}
+	//else
+	//{
+	//	if (create_opt_str(editor, create_vec((editor->opt_surf->h / 20), ((editor->opt_surf->h) / 20) * 17), 7, " ") != 0)
+	//	return (1);
+	//}
+	
 	if (create_ceiling_height(editor) != 0)
 		return(1);
 	if (create_floor_height(editor) != 0)
 		return(1);
+	//if (fill_file_name(editor) != 0)
+	//	return (1);
 	if (set_textures(editor) != 0)
 		return (1);
-	if (set_height_test(editor) != 0)
+	if (set_height(editor) != 0)
 		return (1);
-	/* if (set_height(editor) != 0)
-		return (1); */
 	return (0);
 }
 

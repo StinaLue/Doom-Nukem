@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 11:13:42 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 14:30:07 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@
 # define NBPOINTSROW 50 // NBPOINTS = NBPOINTSROW * NBPOINTSROW
 # define NBTEXTURES	9
 # define NBHEIGHTS 7
-# define NBOPTIONS 7
+# define NBOPTIONS 8
 # define NBINSTRUCTS 8
 # define COLOR_HOVER 0x6C1413
 # define COLOR_PRESSED 0xffff00
@@ -263,6 +263,7 @@ typedef struct				s_options_menu
 	SDL_Rect 				h_rect_ceiling;
 	SDL_Rect 				h_rect_floor;
 	SDL_Rect  				player_rect;
+	SDL_Rect 				file_name_rect;
 
 	TTF_Font				*font_title;
 	TTF_Font				*font;
@@ -271,9 +272,10 @@ typedef struct				s_options_menu
 	int						bord_color_text[NBTEXTURES];
 	int						bord_color_h;
 	int						activ_tex;
-	int						activ_h; // maybe not needed
+	int 					typing_filename;
 	double 					height_ceiling;
-	double						height_floor;
+	double					height_floor;
+	char 					file_name[16];
 }							t_options_menu;
 
 typedef struct				s_map
@@ -458,7 +460,7 @@ void	handle_keys(t_doom *doom, const Uint8 *keyboard_state);
 
 int							editor_events(t_doom *doom);
 
-int							set_height_test(t_editor *editor);
+int							set_height(t_editor *editor);
 
 /*
 ** PRINT MINIMAP FUNCTIONS
