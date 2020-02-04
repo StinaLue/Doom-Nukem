@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   poll_event.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:22:12 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/03 14:23:57 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/03 16:23:05 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,9 @@ void	check_weapon(SDL_Event *event, t_game *game)
 	}
 }
 
-int    handle_events(t_doom *doom)
+int		handle_events(t_doom *doom)
 {
+	//SDL_WarpMouseInWindow(doom->sdlmain.win, doom->sdlmain.win_surf->w / 2, doom->sdlmain.win_surf->h / 2);
 	check_quit(&doom->sdlmain.event, &doom->state);
 	if (doom->sdlmain.event.type == SDL_KEYDOWN && doom->sdlmain.event.key.repeat == 0)
 	{
@@ -107,6 +108,10 @@ int    handle_events(t_doom *doom)
 		check_anim(&doom->sdlmain.event, &doom->game);
 		check_weapon(&doom->sdlmain.event, &doom->game);
 		handle_hud(&doom->sdlmain.event, &doom->game.data.hud_flags);
+	}
+	if (doom->sdlmain.event.type == SDL_MOUSEMOTION)
+	{
+		mouse_movement(doom->sdlmain.event.motion, doom);
 	}
 	if (doom->state != GAME_STATE)
 		return (1);

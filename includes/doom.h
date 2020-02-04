@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/03 19:29:46 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/04 01:06:38 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -452,7 +452,7 @@ void						check_menu(SDL_Event *event, int *state, int *prev_state_ptr, int prev
 ** EVENT FUNCTIONS
 */
 
-void						handle_keys(t_game *game, const Uint8 *keyboard_state);//, t_sound *sound);
+void	handle_keys(t_doom *doom, const Uint8 *keyboard_state);
 
 int							editor_events(t_doom *doom);
 
@@ -561,6 +561,8 @@ void						assign_sdlrect_invert(SDL_Rect *rect, t_vec origin, t_vec size);
 */
 
 void						movement(t_player *player, t_vecdb move);
+
+void						mouse_movement(SDL_MouseMotionEvent event,t_doom *doom);
 
 /*
 ** MENU FUNCTIONS

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/03 14:48:33 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/03 16:35:33 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,6 +225,7 @@ int game_loop(t_doom *doom)
 	game = &(doom->game);
 	sdlmain = &(doom->sdlmain);
 
+	SDL_SetRelativeMouseMode(SDL_TRUE);
 	SDL_WarpMouseInWindow(sdlmain->win, sdlmain->win_surf->w / 2, sdlmain->win_surf->h / 2);
 	startclock = SDL_GetTicks();
 	while (doom->state == GAME_STATE)
@@ -234,7 +235,7 @@ int game_loop(t_doom *doom)
 			if (handle_events(doom) != 0)
 				break ;
 		play_sound(game, sdlmain);
-		handle_keys(game, SDL_GetKeyboardState(NULL));//, &sdlmain->sound);
+		handle_keys(doom, SDL_GetKeyboardState(NULL));//, &sdlmain->sound);
 		alListener3f(AL_POSITION, game->player.pos.x, game->player.pos.y, 0);
 		alSource3f(sdlmain->sound.source[0], AL_POSITION, doom->map.sector_head->wall_head->start.x, doom->map.sector_head->wall_head->start.y, 0);
 		alSource3f(sdlmain->sound.source[1], AL_POSITION, doom->map.sector_head->wall_head->end.x, doom->map.sector_head->wall_head->end.y, 0);
@@ -284,5 +285,6 @@ int game_loop(t_doom *doom)
 			startclock = SDL_GetTicks();
 		}
 	}
+	SDL_SetRelativeMouseMode(SDL_FALSE);
 	return (0);
 }

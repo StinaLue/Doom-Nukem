@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_keys.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/03 00:57:39 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/03 16:22:32 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,8 @@ void	basic_look(t_player *player, const Uint8 *keyboard_state)
 		player->view_z -= 1;
 	if (keyboard_state[SDL_SCANCODE_LEFT])
 		player->angle += 0.01;
-		//player->angle += 0.005;
 	if (keyboard_state[SDL_SCANCODE_RIGHT])
 		player->angle -= 0.01;
-		//player->angle -= 0.002;
 	player->direc.x = sin(player->angle) * -5 + player->pos.x;
 	player->direc.y = cos(player->angle) * 5 + player->pos.y;
 	if (keyboard_state[SDL_SCANCODE_PAGEUP] && player->true_fov > 1.06)//hardcoded 60deg
@@ -65,9 +63,8 @@ void	basic_look(t_player *player, const Uint8 *keyboard_state)
 		player->helper = 0;
 }
 
-void	handle_keys(t_game *game, const Uint8 *keyboard_state)//, t_sound *sound)
+void	handle_keys(t_doom *doom, const Uint8 *keyboard_state)//, t_sound *sound)
 {
-	//which order is the right one ?
-	basic_look(&game->player, keyboard_state);
-	basic_move(&game->player, keyboard_state);//, sound);
+	basic_look(&doom->game.player, keyboard_state);
+	basic_move(&doom->game.player, keyboard_state);//, sound);
 }
