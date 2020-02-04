@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_menu.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 15:42:07 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 22:26:31 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,18 +57,6 @@ int	create_floor_height(t_editor *editor)
 		ft_memdel((void **)&num);
 	return (0);
 }
-/* 
-int fill_file_name(t_editor *editor)
-{
-	//draw_border(editor->opt_menu.options[7], 0xff0000);
-	if ((editor->opt_menu.options[7] = \
-		TTF_RenderText_Solid(editor->opt_menu.font, \
-		editor->opt_menu.file_name, editor->opt_menu.text_color)) == NULL)
-			return (error_return("TTF_RenderText_Solid error = %s\n", \
-					TTF_GetError()));
-	assign_sdlrect(&editor->opt_menu.file_name_rect, create_vec((editor->instr_surf->w - editor->instr_menu.title->w) / 2, editor->instr_surf->h / 30), create_vec(0, 0));
-	return (0);
-} */
 
 int	create_ceiling_height(t_editor *editor)
 {
@@ -166,18 +154,10 @@ int	init_options_menu(t_editor *editor)
 		return (1);
 	if (create_opt_str(editor, create_vec((editor->opt_surf->h / 20) * 7, ((editor->opt_surf->h) / 20) * 18.5), 9, "LOAD MAP") != 0)
 		return (1);
-	//else
-	//{
-	//	if (create_opt_str(editor, create_vec((editor->opt_surf->h / 20), ((editor->opt_surf->h) / 20) * 17), 7, " ") != 0)
-	//	return (1);
-	//}
-	
 	if (create_ceiling_height(editor) != 0)
 		return(1);
 	if (create_floor_height(editor) != 0)
 		return(1);
-	//if (fill_file_name(editor) != 0)
-	//	return (1);
 	if (set_textures(editor) != 0)
 		return (1);
 	if (set_height(editor) != 0)
