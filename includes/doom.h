@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 14:30:07 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 16:48:45 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define TITLE "DOOM"
 
 # define SQRT2 1.4142135623730950488
-# define PLAYER_RADIUS 0.1
+# define PLAYER_RADIUS 0.3
 # define NB_WALL_TEXTURES 9
 # define NB_SOUND_SOURCES 3
 # define NB_SOUND_BUFFERS 4
@@ -109,7 +109,7 @@ typedef struct				s_wall_node
 {
 	struct s_wall_node		*next;
 	struct s_wall_node		*previous;
-	t_vecdb					start; // why not t_vec?
+	t_vecdb					start;
 	t_vecdb					end;
 	int						color;
 	int						tex_index;
@@ -211,15 +211,14 @@ typedef struct				s_enemy
 
 typedef struct				s_player
 {
-	t_vecdb					pos;
 	t_sector_node			*sector;
-	t_vecdb					direc;
+	t_vecdb					pos;
+	t_vecdb					move;
 	t_vecdb					inertia;
 	double					angle;
 	double					view_z;
 	t_vecdb					fov;
 	double					true_fov;
-	int						helper;
 	int						health;
 	int						is_moving;
 	int						anim;
@@ -409,6 +408,11 @@ double						get_point_distance(t_vecdb a, t_vecdb b);
 void						set_vec_values(t_vec *src, t_vec *dst);
 
 t_vecdb						vecdb_diff(t_vecdb a, t_vecdb b);
+t_vec						vec_diff(t_vec a, t_vec b);
+t_vecdb						vecdb_mult(t_vecdb a, t_vecdb b);
+t_vec						vec_mult(t_vec a, t_vec b);
+t_vecdb						vecdb_add(t_vecdb a, t_vecdb b);
+t_vec						vec_add(t_vec a, t_vec b);
 
 /*
 ** INIT FUNCTIONS
@@ -687,6 +691,8 @@ void						set_wall_length(t_wall_node *head);
 int							check_clockwise_sector(t_sector_node *sector);
 
 void						set_sectors_clockwise(t_sector_node *sector_head);
+
+void						flip_walls(t_sector_node *sector);
 
 /*
 ** TEXTURE MAPPING

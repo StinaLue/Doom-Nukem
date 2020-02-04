@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_mouse.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 14:30:27 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 17:13:16 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,12 +103,14 @@ void	check_finished_sect(t_editor *editor)
 		if (check_convex_sector(editor->current_sector) != 1)
 		{
 			delete_sector_by_address(&editor->edit_map.sector_head, editor->current_sector);
-            editor->show_convex_alert = 1;
+			editor->show_convex_alert = 1;
 		}
-        else
+		else
 		{
-            editor->show_convex_alert = 0;
+			editor->show_convex_alert = 0;
 			set_sector_position(editor->current_sector);
+			if (check_clockwise_sector(editor->current_sector) == 0)
+				flip_walls(editor->current_sector);
 			editor->current_sector->floor_height = editor->opt_menu.height_floor;
 			editor->current_sector->ceiling_height = editor->opt_menu.height_ceiling;
 			editor->edit_map.num_sectors++;
@@ -207,7 +209,7 @@ void 	mouse_click_right(t_editor *editor, t_sdlmain *sdlmain)
 	}
 	//printf("sel sec: %p\n", editor->selected_sector);
 	set_height(editor);
-	check_convex_sector(editor->edit_map.sector_head);
+	//check_convex_sector(editor->edit_map.sector_head);
 }
 
 void event_mouse(t_editor *editor, t_sdlmain *sdlmain)

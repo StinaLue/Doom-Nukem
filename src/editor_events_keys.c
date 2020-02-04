@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_keys.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 15:17:10 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 15:29:13 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 	if (sdlmain->event.key.keysym.sym == SDLK_l \
 					&& editor->edit_map.sector_head != NULL)
 		key_event_l(editor, doom);
-	/* if (sdlmain->event.key.keysym.sym == SDLK_1 && editor->opt_menu.typing_filename == 0)// editor->edit_map.sector_head != NULL)
+	if (sdlmain->event.key.keysym.sym == SDLK_1 && editor->opt_menu.typing_filename == 0)// editor->edit_map.sector_head != NULL)
 	{
 		if (editor->edit_map.sector_head == NULL)
 			ft_printf("no sector in map to save\n");
@@ -137,7 +137,7 @@ void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 		//read(0, editor->edit_map.name, 15);
 		if (write_map(&editor->edit_map) != 0)
 			printf("error in write map\n");
-	} */ //IMPORTANT FOR SAVING MAP
+	} //IMPORTANT FOR SAVING MAP
 	
 	/*
 	if (sdlmain->event.key.keysym.sym == SDLK_2)

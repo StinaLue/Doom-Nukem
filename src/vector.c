@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:06:54 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/03 16:25:31 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/04 16:46:34 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,5 +154,43 @@ t_vec	vec_diff(t_vec a, t_vec b)
 
 	vector.x = a.x - b.x;
 	vector.y = a.y - b.y;
+	return (vector);
+}
+
+t_vecdb	vecdb_add(t_vecdb a, t_vecdb b)
+{
+	t_vecdb vector;
+
+	vector.x = a.x + b.x;
+	vector.y = a.y + b.y;
+	return (vector);
+}
+
+t_vec	vec_add(t_vec a, t_vec b)
+{
+	t_vec vector;
+
+	vector.x = a.x + b.x;
+	vector.y = a.y + b.y;
+	return (vector);
+}
+
+
+t_vecdb	vecdb_mult(t_vecdb a, t_vecdb b)
+{
+	t_vecdb vector;
+
+	vector.x = a.x * b.x;
+	vector.y = a.y * b.y;
+	return (vector);
+}
+
+
+t_vec	vec_mult(t_vec a, t_vec b)
+{
+	t_vec vector;
+
+	vector.x = a.x * b.x;
+	vector.y = a.y * b.y;
 	return (vector);
 }

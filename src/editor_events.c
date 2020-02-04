@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 15:01:25 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 17:19:53 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ int	editor_events(t_doom *doom)
 		change_size(editor, sdlmain); */
 	if (doom->state != EDITOR_STATE)
 	{
-		set_sectors_clockwise(doom->map.sector_head);
+		//set_sectors_clockwise(doom->map.sector_head); checked live, dont use this!
 		find_neighbors(doom);
 		itt_sector_wall_heads(doom->map.sector_head, &set_wall_length);
 		return (1);

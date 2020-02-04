@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 16:23:32 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/16 16:33:38 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/04 16:33:55 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	draw_fixed_minimap(SDL_Surface *surf, t_player *player, const t_map *map)
 		}
 		current_sector = current_sector->next;
 	}
-	draw_line(vecdb_to_vec(player->pos), vecdb_to_vec(player->direc), surf, 0xFF0000);
 	fill_pix(surf, (int)player->pos.x, (int)player->pos.y, 0xFFFF00);
 }
 

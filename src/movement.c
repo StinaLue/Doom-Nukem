@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/03 12:36:07 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/04 17:31:01 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,18 @@ int		is_in_range(t_vecdb pos, t_wall_node *wall)
 	return (1);
 }
 
-t_wall_node	*get_collision_wall(t_player *player, t_sector_node *sector, double *min_dist, t_sector_node *last_sector)
+int		is_in_direction(t_vecdb move, t_wall_node *wall)
+{
+	t_vecdb wall_vec;
+
+	wall_vec = vecdb_diff(wall->end, wall->start);
+
+	if (cross_product(wall_vec, move) > 0)
+		return (1);
+	return (0);
+}
+
+t_wall_node	*get_collision_wall(t_player *player, t_sector_node *sector, double *min_dist)
 {
 	double dist;
 	t_wall_node	*wall;
@@ -52,9 +63,9 @@ t_wall_node	*get_collision_wall(t_player *player, t_sector_node *sector, double 
 	deepest_wall = NULL;
 	while (wall != NULL)
 	{
-		if (is_in_range(player->pos, wall))
+		if (is_in_direction(player->move, wall) && is_in_range(vecdb_add(player->pos, player->move), wall))
 		{
-			dist = wall_distance(player->pos, wall);
+			dist = wall_distance(vecdb_add(player->pos, player->move), wall);
 			if (dist < *min_dist)
 			{
 				if (wall->neighbor_sector == NULL)
@@ -62,9 +73,9 @@ t_wall_node	*get_collision_wall(t_player *player, t_sector_node *sector, double 
 					deepest_wall = wall;
 					*min_dist = dist;
 				}
-				else if (wall->neighbor_sector != player->sector && wall->neighbor_sector != sector && wall->neighbor_sector != last_sector)
+				else
 				{
-					tmp_deepest_wall = get_collision_wall(player, wall->neighbor_sector, min_dist, sector);
+					tmp_deepest_wall = get_collision_wall(player, wall->neighbor_sector, min_dist);
 					if (tmp_deepest_wall != NULL)
 						deepest_wall = tmp_deepest_wall;
 				}
@@ -88,19 +99,20 @@ t_vecdb	corner_collision(t_player *player, t_sector_node *sector)
 	while (wall != NULL)
 	{
 		vec = wall->start;
-		dist = get_point_distance(player->pos, vec);
+		dist = get_point_distance(vecdb_add(player->pos, player->move), vec);
 		if (dist < PLAYER_RADIUS)
 			break ;
 		vec = wall->end;
-		dist = get_point_distance(player->pos, vec);
+		dist = get_point_distance(vecdb_add(player->pos, player->move), vec);
 		if (dist < PLAYER_RADIUS)
 			break ;
 		wall = wall->next;
 	}
 	if (wall == NULL)
 		return (move);
-	move.x = (player->pos.x - vec.x) / dist * PLAYER_RADIUS - (player->pos.x - vec.x);
-	move.y = (player->pos.y - vec.y) / dist * PLAYER_RADIUS - (player->pos.y - vec.y);
+	move.x = (player->pos.x + player->move.x - vec.x) / dist * PLAYER_RADIUS - (player->pos.x + player->move.x - vec.x);
+	move.y = (player->pos.y + player->move.y - vec.y) / dist * PLAYER_RADIUS - (player->pos.y + player->move.y - vec.y);
+	//move = vecdb_diff(multvecdb(vecdb_add(player->pos, player->move), 1 / dist * PLAYER_RADIUS), vecdb_diff(vecdb_add(player->pos, player->move), vec));
 	return (move);
 }
 
@@ -139,7 +151,7 @@ void	update_sector(t_player *player, t_wall_node *wall)
 {
 	while (wall != NULL)
 	{
-		if (wall->neighbor_sector != NULL && wall_distance(player->pos, wall) <= 0 && is_in_range(player->pos, wall))
+		if (wall->neighbor_sector != NULL && is_in_direction(player->move, wall) && is_in_range(vecdb_add(player->pos, player->move), wall) && wall_distance(player->pos, wall) < 0)
 		{
 			player->sector = wall->neighbor_sector;
 			return ;
@@ -148,7 +160,7 @@ void	update_sector(t_player *player, t_wall_node *wall)
 	}
 }
 
-void	move_player2(t_player *player)
+void	move_player(t_player *player)
 {
 	t_wall_node		*tmp_wall;
 	t_wall_node		*tmp_wall2;
@@ -159,45 +171,40 @@ void	move_player2(t_player *player)
 	tmp_wall = NULL;
 	tmp_distance = PLAYER_RADIUS;
 	col_angle = 0;
-	if ((tmp_wall = get_collision_wall(player, player->sector, &tmp_distance, NULL)) != NULL)
+	if ((tmp_wall = get_collision_wall(player, player->sector, &tmp_distance)) != NULL)
 	{
 		move = collide(tmp_wall, tmp_distance, &col_angle);
-		player->pos.x += move.x;
-		player->pos.y += move.y;
+		player->move.x += move.x;
+		player->move.y += move.y;
 		update_sector(player, player->sector->wall_head);
 
 		tmp_distance = PLAYER_RADIUS;
 		tmp_wall2 = tmp_wall;
-		if ((tmp_wall = get_collision_wall(player, player->sector, &tmp_distance, NULL)) != NULL && tmp_wall != tmp_wall2)
+		if ((tmp_wall = get_collision_wall(player, player->sector, &tmp_distance)) != NULL && tmp_wall != tmp_wall2)
 		{
 			move = move_hyp_length(tmp_wall, tmp_distance, col_angle);
-			player->pos.x += move.x;
-			player->pos.y += move.y;
+			player->move.x += move.x;
+			player->move.y += move.y;
 			update_sector(player, player->sector->wall_head);
 		}
 	}
 	move = corner_collision(player, player->sector);
-	player->pos.x += move.x;
-	player->pos.y += move.y;
+	player->move.x += move.x;
+	player->move.y += move.y;
 	update_sector(player, player->sector->wall_head);
 }
 
 void	movement(t_player *player, t_vecdb move)
 {
-	double	movespeed = 0.005;
-	t_vecdb	old_position;
+	double	movespeed = 0.003;
 
 	if (fabs(move.x) + fabs(move.y) > 1)
 		move = multvecdb(move, 1 / SQRT2);//change later to actually calculate velocity
 	move = rotate2d(move, player->angle);
 	move = multvecdb(move, movespeed);
-
-	old_position = player->pos;
-	player->pos.x += move.x + player->inertia.x;
-	player->pos.y += move.y + player->inertia.y;
+	player->move = vecdb_add(move, player->inertia);
 	update_sector(player, player->sector->wall_head);
-	move_player2(player);
-	//printf("Px:%.15f\nPy:%.15f\n", player->pos.x, player->pos.y);
-	player->inertia.x = (player->pos.x - old_position.x) * 0.96;
-	player->inertia.y = (player->pos.y - old_position.y) * 0.96;
+	move_player(player);
+	player->pos = vecdb_add(player->pos, player->move);
+	player->inertia = multvecdb(player->move, 0.96);
 }
