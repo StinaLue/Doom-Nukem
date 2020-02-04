@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 14:29:32 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 15:42:07 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ int	init_options_menu(t_editor *editor)
 		return (1);
 	if (create_opt_str(editor, create_vec((editor->opt_surf->h) / 20, ((editor->opt_surf->h) / 20) * 8.5), 1, "CHOOSE TEXTURE") != 0)
 		return (1);
-	if (create_opt_str(editor, create_vec((editor->opt_surf->h) / 20, ((editor->opt_surf->h) / 20) * 16), 2, "ENTER SOMETHING") != 0)
+	if (create_opt_str(editor, create_vec((editor->opt_surf->h) / 20, ((editor->opt_surf->h) / 20) * 16), 2, "ENTER MAP NAME") != 0)
 		return (1);
 	if (create_opt_str(editor, create_vec((editor->opt_surf->w) / 2, ((editor->opt_surf->h) / 20) * 3), 3, "SET PLAYER POSITION") != 0)
 		return (1);
@@ -160,11 +160,12 @@ int	init_options_menu(t_editor *editor)
 		return (1);
 	if (create_opt_str(editor, create_vec((editor->opt_surf->h / 20), ((editor->opt_surf->h) / 20) * 6), 6, "height floor:") != 0)
 		return (1);
-	//if (ft_strlen(editor->opt_menu.file_name) != 0)
-	//{
 	if (create_opt_str(editor, create_vec((editor->opt_surf->h / 20), ((editor->opt_surf->h) / 20) * 17), 7, editor->opt_menu.file_name) != 0)
 		return (1);
-	//}
+	if (create_opt_str(editor, create_vec((editor->opt_surf->h / 20), ((editor->opt_surf->h) / 20) * 18.5), 8, "SAVE MAP") != 0)
+		return (1);
+	if (create_opt_str(editor, create_vec((editor->opt_surf->h / 20) * 7, ((editor->opt_surf->h) / 20) * 18.5), 9, "LOAD MAP") != 0)
+		return (1);
 	//else
 	//{
 	//	if (create_opt_str(editor, create_vec((editor->opt_surf->h / 20), ((editor->opt_surf->h) / 20) * 17), 7, " ") != 0)

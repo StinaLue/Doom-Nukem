@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 14:30:27 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 15:50:40 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,18 @@ void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
 		{
 			//printf("is selected\n");
 			editor->opt_menu.typing_filename = 1;
+			//editor->opt_menu.bord_color_text[i] = COLOR_HOVER;
+		}
+		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.options_rect[8]) && sdlmain->event.button.button == SDL_BUTTON_LEFT)
+		{
+			printf("saved\n"); // SAVE MAP
+			//editor->opt_menu.typing_filename = 1;
+			//editor->opt_menu.bord_color_text[i] = COLOR_HOVER;
+		}
+		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.options_rect[9]) && sdlmain->event.button.button == SDL_BUTTON_LEFT)
+		{
+			printf("loaded\n"); // LOAD MAP
+			//editor->opt_menu.typing_filename = 1;
 			//editor->opt_menu.bord_color_text[i] = COLOR_HOVER;
 		}
 	}

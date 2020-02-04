@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 14:36:43 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/04 15:48:36 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int	blit_options(t_editor *editor)
 	}
 	editor->opt_menu.options[7] = TTF_RenderText_Solid(editor->opt_menu.font, editor->opt_menu.file_name, editor->opt_menu.text_color);
 	draw_border_options(&editor->opt_menu.options_rect[7], 0xffff00, editor->opt_surf);
+	draw_border_options(&editor->opt_menu.options_rect[8], 0xffff00, editor->opt_surf);
+	draw_border_options(&editor->opt_menu.options_rect[9], 0xffff00, editor->opt_surf);
 	//SDL_FreeSurface(editor->opt_menu.options[7]);
 	return (0);
 }
@@ -69,7 +71,7 @@ int	blit_textures(t_editor *editor)
 	return (0);
 }
 
-int	blit_test_height(t_editor *editor)
+int	blit_height(t_editor *editor)
 {
 	const char *num_ceil;
 	const char *num_floor;
@@ -95,28 +97,6 @@ int	blit_test_height(t_editor *editor)
 		return (1);
 	ft_memdel((void **)&num_floor);
 	ft_memdel((void **)&num_ceil);
-	return (0);
-}
-
-int	blit_height(t_editor *editor)
-{
-	int i;
-
-	i = 0;
-	while (i < NBHEIGHTS)
-	{
-		draw_border_options(&editor->opt_menu.h_rect[i], \
-				editor->opt_menu.bord_color_h, editor->opt_surf);
-		i++;
-	}
-	i = 0;
-	while (i < NBHEIGHTS)
-	{
-		if ((SDL_BlitScaled(editor->wall_textures[editor->opt_menu.activ_tex], \
-			NULL, editor->opt_surf, &editor->opt_menu.h_rect[i])) < 0)
-			return (error_return("BlitScaled error = %s\n", SDL_GetError()));
-		i++;
-	}
 	return (0);
 }
 
@@ -182,11 +162,8 @@ int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 		return (1);
 	if (blit_textures(editor) != 0)
 		return (1);
-	if (blit_test_height(editor) != 0)
-		return (1);
-	/*
 	if (blit_height(editor) != 0)
-		return (1); */
+		return (1);
 	if (blit_alert(editor) != 0)
 		return (1);
 	if (blit_editor_surf(editor, sdlmain) != 0)
