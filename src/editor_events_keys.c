@@ -3,15 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_keys.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 14:51:14 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/05 19:23:38 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 #include "libft.h"
+
+int		is_sector_occupied(t_sector_node *sector, t_map *map)
+{
+	int i;
+
+	i = 0;
+	t_vec center;
+	center = vecdb_to_vec(sector->sector_center);
+	if (map->num_enemies >= 1)
+	{
+		while (i < map->num_enemies)
+		{
+			if (center.x == map->enemy_info[i].enemy_spawn.x && center.y == map->enemy_info[i].enemy_spawn.y)
+				return (1);
+			i++;
+		}
+	}
+	if (center.x == map->player_spawn.x && center.y == map->player_spawn.y)
+		return (1);
+	return (0);
+}
 
 void	key_event_u(t_editor *editor)
 {
@@ -56,7 +77,7 @@ void	key_event_t(t_editor *editor)
 
 void	key_event_s(t_editor *editor)
 {
-	if (editor->selected_sector != NULL)
+	if (editor->selected_sector != NULL && !is_sector_occupied(editor->selected_sector, &editor->edit_map))
 	{
 		delete_sector_by_address(&editor->edit_map.sector_head, \
 									editor->selected_sector);
@@ -74,7 +95,7 @@ void	key_event_s(t_editor *editor)
 	}
 }
 
-void	key_event_r(t_editor *editor, t_doom *doom)
+void	key_event_m(t_editor *editor, t_doom *doom)
 {
 	if (editor->edit_map.sector_head != NULL)
 		free_map(&editor->edit_map);
@@ -117,6 +138,94 @@ void	key_event_l(t_editor *editor, t_doom *doom)
 	}
 }
 
+int		add_enemy_info(t_map *map, t_vec newspawn, int new_which_enem)
+{
+	int i;
+	t_enemy_info *new_enemy_info;
+
+	i = 0;
+	if (map->num_enemies <= 0)
+		return (0);
+	if (map->enemy_info == NULL)
+		return (1);
+	if ((new_enemy_info = malloc(sizeof(t_enemy_info) * map->num_enemies)) == NULL)
+	{
+		ft_memdel((void **)&map->enemy_info);
+		return (1);
+	}
+	while (i < (map->num_enemies - 1))
+	{
+		new_enemy_info[i] = map->enemy_info[i];
+		i++;
+	}
+	new_enemy_info[i].enemy_spawn = newspawn;
+	new_enemy_info[i].which_enemy = new_which_enem;
+	ft_memdel((void **)&map->enemy_info);
+	//free(map->enemy_info);
+	//map->enemy_info = NULL;
+	map->enemy_info = new_enemy_info;
+	return (0);
+}
+/*
+int		is_sector_occupied(t_sector_node *sector, t_map *map)
+{
+	int i;
+
+	i = 0;
+	t_vec center;
+	center = vecdb_to_vec(sector->sector_center);
+	if (map->num_enemies >= 1)
+	{
+		while (i < map->num_enemies)
+		{
+			if (center.x == map->enemy_info[i].enemy_spawn.x && center.y == map->enemy_info[i].enemy_spawn.y)
+				return (1);
+			i++;
+		}
+	}
+	if (center.x == map->player_spawn.x && center.y == map->player_spawn.y)
+		return (1);
+	return (0);
+}*/
+
+int	delete_enemy_info(t_map *map, t_vec delspawn)
+{
+	int i;
+	int j;
+	t_enemy_info *new_enemy_info;
+
+	i = 0;
+	j = 0;
+	if (map->num_enemies == 1)
+	{
+		ft_memdel((void **)&map->enemy_info);
+		map->num_enemies--;
+		return (0);
+	}
+	map->num_enemies--;
+	if (map->enemy_info == NULL)
+		return (1);
+	if ((new_enemy_info = malloc(sizeof(t_enemy_info) * map->num_enemies)) == NULL)
+	{
+		ft_memdel((void **)&map->enemy_info);
+		return (1);
+	}
+	while (j < map->num_enemies + 1)
+	{
+		if (delspawn.x == map->enemy_info[j].enemy_spawn.x && delspawn.y == map->enemy_info[j].enemy_spawn.y)
+			j++;
+		else
+		{
+			new_enemy_info[i] = map->enemy_info[j];
+			i++;
+			j++;
+		}
+	}
+	ft_memdel((void **)&map->enemy_info);
+	map->enemy_info = new_enemy_info;
+	return (0);
+}
+
 void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 {
 	check_menu(&doom->sdlmain.event, &doom->state, \
@@ -129,12 +238,84 @@ void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 	if (sdlmain->event.key.keysym.sym == SDLK_t \
 					&& sdlmain->event.key.repeat == 0)
 		key_event_t(editor);
-	if (sdlmain->event.key.keysym.sym == SDLK_r \
+	if (sdlmain->event.key.keysym.sym == SDLK_m \
 					&& doom->map.sector_head != NULL)
-		key_event_r(editor, doom);
+		key_event_m(editor, doom);
 	if (sdlmain->event.key.keysym.sym == SDLK_l \
 					&& editor->edit_map.sector_head != NULL)
 		key_event_l(editor, doom);
 	if (sdlmain->event.key.keysym.sym == SDLK_p && editor->selected_sector != NULL)
-		editor->edit_map.player_spawn = vecdb_to_vec(editor->selected_sector->sector_center);
+	{
+		if (is_sector_occupied(editor->selected_sector, &editor->edit_map) == 0)
+			editor->edit_map.player_spawn = vecdb_to_vec(editor->selected_sector->sector_center);
+	}
+
+	if (sdlmain->event.key.keysym.sym == SDLK_e && editor->selected_sector != NULL)
+	{
+		if (is_sector_occupied(editor->selected_sector, &editor->edit_map) == 0)
+		{
+			editor->edit_map.num_enemies++;
+			if (editor->edit_map.enemy_info != NULL)
+			{
+				if (add_enemy_info(&editor->edit_map, vecdb_to_vec(editor->selected_sector->sector_center), 0) != 0)
+				{
+					printf("EROORROROROROOR\n");
+					doom->state = QUIT_STATE;
+				}
+			}
+			else if (editor->edit_map.enemy_info == NULL && editor->edit_map.num_enemies == 1)
+			{
+				if ((editor->edit_map.enemy_info = malloc(sizeof(t_enemy_info))) == NULL)
+				{
+					printf("EROORROROROROOR\n");
+					doom->state = QUIT_STATE;
+					return ;
+				}
+				editor->edit_map.enemy_info[0].enemy_spawn = vecdb_to_vec(editor->selected_sector->sector_center);
+				editor->edit_map.enemy_info[0].which_enemy = 0;
+			}
+		}
+	}
+	if (sdlmain->event.key.keysym.sym == SDLK_b && editor->selected_sector != NULL)
+	{
+		if (is_sector_occupied(editor->selected_sector, &editor->edit_map) == 0)
+		{
+			editor->edit_map.num_enemies++;
+			if (editor->edit_map.enemy_info != NULL)
+			{
+				if (add_enemy_info(&editor->edit_map, vecdb_to_vec(editor->selected_sector->sector_center), 1) != 0)
+				{
+					printf("EROORROROROROOR\n");
+					doom->state = QUIT_STATE;
+				}
+			}
+			else if (editor->edit_map.enemy_info == NULL && editor->edit_map.num_enemies == 1)
+			{
+				if ((editor->edit_map.enemy_info = malloc(sizeof(t_enemy_info))) == NULL)
+				{
+					printf("EROORROROROROOR\n");
+					doom->state = QUIT_STATE;
+					return ;
+				}
+				editor->edit_map.enemy_info[0].enemy_spawn = vecdb_to_vec(editor->selected_sector->sector_center);
+				editor->edit_map.enemy_info[0].which_enemy = 1;
+			}
+		}
+	}
+	if (sdlmain->event.key.keysym.sym == SDLK_r && editor->selected_sector != NULL)
+	{
+		t_vec center;
+
+		center = vecdb_to_vec(editor->selected_sector->sector_center);
+		if (center.x == editor->edit_map.player_spawn.x && center.y == editor->edit_map.player_spawn.y)
+			give_vec_values(&editor->edit_map.player_spawn, -1, -1);
+		else if (is_sector_occupied(editor->selected_sector, &editor->edit_map))
+		{
+			if ((delete_enemy_info(&editor->edit_map, center)) != 0)
+			{
+				printf("EROOROROEOROEROE\n");
+				doom->state = QUIT_STATE;
+			}
+		}
+	}
 }

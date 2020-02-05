@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 15:13:32 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/05 16:33:02 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,6 +295,7 @@ typedef struct				s_editor
 	SDL_Surface				*instr_surf;
 	SDL_Surface				*mouse_surf;
 	SDL_Surface				**wall_textures;
+	SDL_Surface 			**enemy_textures;
     SDL_Surface             *alert_convex_surf;
 	SDL_Surface             *alert_loading_surf;
 	SDL_Surface             *loading_success_surf;
@@ -308,10 +309,12 @@ typedef struct				s_editor
     SDL_Rect                alert_convex_rect;
 	SDL_Rect                alert_loading_rect;
 	SDL_Rect                loading_success_rect;
+	SDL_Rect 				enemy_rect[2];
 
 	t_sector_node			*current_sector;
 	t_sector_node			*selected_sector;
 	t_wall_node				*current_wall;
+	//t_enemy 				*enemy;
 
 	int						offset;
 	int						start_sector_reached;
@@ -353,6 +356,10 @@ typedef struct				s_doom
 	SDL_Surface				*wall_textures[10];
 	int						state;
 }							t_doom;
+
+int		copy_enemy_info(const t_enemy_info *src, t_enemy_info **dst, int num_enemies);
+
+void	get_enemysprite_rect(SDL_Rect *rect, int which_enemy, SDL_Surface *sprite_sheet);
 
 void	remove_highlight_sector(t_sector_node *sector);
 

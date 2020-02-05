@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 11:25:43 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/05 16:32:01 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@ int		init_doom(t_doom *doom)
 
 
 	doom->editor.wall_textures = doom->wall_textures;
+	doom->editor.enemy_textures = doom->game.surfs.enemy_texture;
+	get_enemysprite_rect(&doom->editor.enemy_rect[0], 0, doom->editor.enemy_textures[0]);
+	get_enemysprite_rect(&doom->editor.enemy_rect[1], 1, doom->editor.enemy_textures[1]);
 	if (init_editor(&doom->editor, &doom->sdlmain) == 1)
 		return (1);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 14:54:48 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/05 19:04:38 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,9 +163,22 @@ int	blit_editor_surf(t_editor *editor, t_sdlmain *sdlmain)
 
 int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 {
-	SDL_Rect testface = {editor->edit_map.player_spawn.x * editor->offset / MAPMULTIPLIER - 10, editor->editor_surf->h - editor->edit_map.player_spawn.y * editor->offset / MAPMULTIPLIER - 10, 20, 20};
-    if (SDL_BlitScaled(editor->player_face_surf, &editor->player_face_rec, editor->editor_surf, &testface) < 0)
-		return (1);
+	int i;
+
+	i = 0;
+	if (editor->edit_map.player_spawn.x != -1 && editor->edit_map.player_spawn.y != -1)
+	{
+		SDL_Rect testface = {editor->edit_map.player_spawn.x * editor->offset / MAPMULTIPLIER - 10, editor->editor_surf->h - editor->edit_map.player_spawn.y * editor->offset / MAPMULTIPLIER - 10, 20, 20};
+    	if (SDL_BlitScaled(editor->player_face_surf, &editor->player_face_rec, editor->editor_surf, &testface) < 0)
+			return (1);
+	}
+	while (i < editor->edit_map.num_enemies && editor->edit_map.enemy_info != NULL)
+	{
+		SDL_Rect testenemy = {editor->edit_map.enemy_info[i].enemy_spawn.x * editor->offset / MAPMULTIPLIER - 40, editor->editor_surf->h - editor->edit_map.enemy_info[i].enemy_spawn.y * editor->offset / MAPMULTIPLIER - 40, 80, 80};
+		 if (SDL_BlitScaled(editor->enemy_textures[editor->edit_map.enemy_info[i].which_enemy], &editor->enemy_rect[editor->edit_map.enemy_info[i].which_enemy], editor->editor_surf, &testenemy) < 0)
+			return (1);
+		i++;
+	}
 	if (blit_instructs(editor) != 0)
 		return (1);
 	if (blit_options(editor) != 0)
