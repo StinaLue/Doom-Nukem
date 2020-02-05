@@ -3,17 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   null_pointers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/03 18:31:15 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/05 01:39:06 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
+#include "libft.h"
 
 void null_game_pointers(t_game *game)
 {
+    int i;
+
+    i = 0;
     game->surfs.fixed_mmap = NULL;
     game->surfs.rot_mmap = NULL;
     game->surfs.perspective_view = NULL;
@@ -22,6 +26,11 @@ void null_game_pointers(t_game *game)
 	game->surfs.enemy_texture[0] = NULL;
 	game->surfs.enemy_texture[1] = NULL;
 	game->enemy = NULL;
+    while (i < 4)
+    {
+        game->weapon_anim[i] = NULL;
+        i++;
+    }
 }
 
 void null_menu_pointers(t_menu *menu)
@@ -38,11 +47,40 @@ void null_menu_pointers(t_menu *menu)
     }
 }
 
-void null_editor_pointers(t_editor *editor)
+void    null_option_pointers(t_editor *editor)
 {
     int i;
 
     i = 0;
+    while (i < NBOPTIONS)
+    {
+        editor->opt_menu.options[i] = NULL;
+        i++;
+    }
+    editor->opt_menu.title = NULL;
+    editor->opt_menu.ceiling_h_surf = NULL;
+    editor->opt_menu.floor_h_surf = NULL;
+    editor->opt_menu.font = NULL;
+    editor->opt_menu.font_title = NULL;
+}
+
+void    null_instr_pointers(t_editor *editor)
+{
+    int i;
+
+    i = 0;
+    while (i < NBINSTRUCTS)
+    {
+        editor->instr_menu.instructs[i] = NULL;
+        i++;
+    }
+	editor->instr_menu.font = NULL;
+	editor->instr_menu.font_title = NULL;
+	editor->instr_menu.title = NULL;
+}
+
+void    null_editor_pointers(t_editor *editor)
+{
     editor->editor_surf = NULL;
     editor->opt_surf = NULL;
     editor->instr_surf = NULL;
@@ -54,26 +92,10 @@ void null_editor_pointers(t_editor *editor)
     editor->loading_success_surf = NULL;
     editor->wall_tmp.wall_type = 0;//1;
 	editor->wall_tmp.type_color = 0xFF0000;
-
-    editor->opt_menu.title = NULL;
-    editor->opt_menu.ceiling_h_surf = NULL;
-    editor->opt_menu.floor_h_surf = NULL;
-	editor->instr_menu.font = NULL;
-	editor->instr_menu.font_title = NULL;
-	editor->instr_menu.title = NULL;
-
-    while (i < NBINSTRUCTS)
-    {
-        editor->instr_menu.instructs[i] = NULL;
-        i++;
-    }
-    i = 0;
-    while (i < NBOPTIONS)
-    {
-        editor->opt_menu.options[i] = NULL;
-        i++;
-    }
-    i = 0;
+    editor->wall_textures = NULL;
+    editor->selected_sector = NULL;
+    null_option_pointers(editor);
+    null_instr_pointers(editor);
     null_map_pointers(&editor->edit_map);
 }
 
@@ -103,4 +125,9 @@ void    null_map_pointers(t_map *map)
 {
 	map->sector_head = NULL;
 	map->enemy_info = NULL;
+    map->num_enemies = 0;
+    map->num_sectors = 0;
+    ft_bzero(map->name, 16);
+    map->player_spawn.x = 0;
+    map->player_spawn.y = 0;
 }
