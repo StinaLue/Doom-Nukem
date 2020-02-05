@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/04 17:31:01 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/04 18:24:46 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ void	update_sector(t_player *player, t_wall_node *wall)
 {
 	while (wall != NULL)
 	{
-		if (wall->neighbor_sector != NULL && is_in_direction(player->move, wall) && is_in_range(vecdb_add(player->pos, player->move), wall) && wall_distance(player->pos, wall) < 0)
+		if (wall->neighbor_sector != NULL && is_in_direction(player->move, wall) && is_in_range(vecdb_add(player->pos, player->move), wall) && wall_distance(player->pos, wall) <= 0)
 		{
 			player->sector = wall->neighbor_sector;
 			return ;
@@ -176,7 +176,7 @@ void	move_player(t_player *player)
 		move = collide(tmp_wall, tmp_distance, &col_angle);
 		player->move.x += move.x;
 		player->move.y += move.y;
-		update_sector(player, player->sector->wall_head);
+		//update_sector(player, player->sector->wall_head);
 
 		tmp_distance = PLAYER_RADIUS;
 		tmp_wall2 = tmp_wall;
@@ -185,26 +185,32 @@ void	move_player(t_player *player)
 			move = move_hyp_length(tmp_wall, tmp_distance, col_angle);
 			player->move.x += move.x;
 			player->move.y += move.y;
-			update_sector(player, player->sector->wall_head);
+			//update_sector(player, player->sector->wall_head);
+		}
+		if (tmp_wall2 && wall_distance(player->pos, tmp_wall2) < 0)
+		{
+			player->pos = vecdb_add(player->pos, player->move);
+			player->move = multvecdb(move, 0);
 		}
 	}
 	move = corner_collision(player, player->sector);
 	player->move.x += move.x;
 	player->move.y += move.y;
-	update_sector(player, player->sector->wall_head);
+	//update_sector(player, player->sector->wall_head);
 }
 
 void	movement(t_player *player, t_vecdb move)
 {
-	double	movespeed = 0.003;
+	double	movespeed = 0.01;
 
 	if (fabs(move.x) + fabs(move.y) > 1)
 		move = multvecdb(move, 1 / SQRT2);//change later to actually calculate velocity
 	move = rotate2d(move, player->angle);
 	move = multvecdb(move, movespeed);
 	player->move = vecdb_add(move, player->inertia);
-	update_sector(player, player->sector->wall_head);
+	//update_sector(player, player->sector->wall_head);
 	move_player(player);
 	player->pos = vecdb_add(player->pos, player->move);
 	player->inertia = multvecdb(player->move, 0.96);
+	update_sector(player, player->sector->wall_head);
 }
