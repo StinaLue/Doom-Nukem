@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_mouse.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 15:13:40 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/05 19:57:15 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,7 +252,8 @@ void 	mouse_click_right(t_editor *editor, t_sdlmain *sdlmain)
     tmp_mouse.x = tmp_mouse.x * MAPMULTIPLIER/*  * editor->offset */;
     tmp_mouse.y = tmp_mouse.y * MAPMULTIPLIER/*  * editor->offset */; 
 	//editor->selected_sector = get_sector_by_pos(editor->current_sector, vec_to_vecdb(tmp_mouse));
-    editor->selected_sector = get_sector_by_pos(editor->edit_map.sector_head, vec_to_vecdb(tmp_mouse));
+	if (editor->start_sector_reached == 1)
+    	editor->selected_sector = get_sector_by_pos(editor->edit_map.sector_head, vec_to_vecdb(tmp_mouse));
 	//highlight_sector(selected_sector);
 	//printf("mouse x %d, mouse y %d\n", tmp_mouse.x, tmp_mouse.y);
 	//editor->selected_sector = get_sector_by_pos(editor->edit_map.sector_head, vec_to_vecdb(multvec(sdlmain->mouse_pos, editor->offset)));
