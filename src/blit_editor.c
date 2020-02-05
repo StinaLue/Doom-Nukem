@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   blit_editor.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 15:48:36 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/05 01:40:03 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int	blit_options(t_editor *editor)
 			return (error_return("BlitSurface error = %s\n", SDL_GetError()));
 		i++;
 	}
+	SDL_FreeSurface(editor->opt_menu.options[7]);
 	editor->opt_menu.options[7] = TTF_RenderText_Solid(editor->opt_menu.font, editor->opt_menu.file_name, editor->opt_menu.text_color);
 	draw_border_options(&editor->opt_menu.options_rect[7], 0xffff00, editor->opt_surf);
 	draw_border_options(&editor->opt_menu.options_rect[8], 0xffff00, editor->opt_surf);
@@ -156,6 +157,10 @@ int	blit_editor_surf(t_editor *editor, t_sdlmain *sdlmain)
 
 int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 {
+	//fill_pix(editor->editor_surf, editor->edit_map.player_spawn.x * editor->offset / MAPMULTIPLIER, editor->edit_map.player_spawn.y * editor->offset / MAPMULTIPLIER, 0x00ff00);
+	SDL_Rect testface = {editor->edit_map.player_spawn.x * editor->offset / MAPMULTIPLIER - 10, editor->editor_surf->h - editor->edit_map.player_spawn.y * editor->offset / MAPMULTIPLIER - 10, 20, 20};
+    if (SDL_BlitScaled(editor->player_face_surf, &editor->player_face_rec, editor->editor_surf, &testface) < 0)
+		return (1);
 	if (blit_instructs(editor) != 0)
 		return (1);
 	if (blit_options(editor) != 0)
@@ -171,5 +176,5 @@ int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 	if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)
 		return (error_return("SDL_UpdateWindowSurface error = %{r}s\n",
 			SDL_GetError()));
-		return (0);
+	return (0);
 }

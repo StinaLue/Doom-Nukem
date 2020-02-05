@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 17:33:40 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/05 11:23:45 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	key_event_r(t_editor *editor, t_doom *doom)
 	//print_map_contents(&editor->edit_map);
 	if (copy_map(&doom->map, &editor->edit_map) != 0)
 		doom->state = QUIT_STATE;
+	editor->selected_sector = NULL;
 	//editor->start_sector_reached = 1;
 	//editor->edit_map.sector_head = doom->map.sector_head;
 	//doom->map.sector_head = editor->edit_map.sector_head;
@@ -90,6 +91,7 @@ void	key_event_l(t_editor *editor, t_doom *doom)
 	{
 		if (doom->map.sector_head != NULL)
 			free_map(&doom->map);
+		set_sectors_clockwise(editor->edit_map.sector_head);
 		if (copy_map(&editor->edit_map, &doom->map) != 0)
 			doom->state = QUIT_STATE;
 		doom->game.player.pos = vec_to_vecdb(doom->map.player_spawn);
@@ -161,8 +163,5 @@ void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 		}
 	}*/
 	if (sdlmain->event.key.keysym.sym == SDLK_p && editor->selected_sector != NULL)
-	{
-			editor->edit_map.player_spawn = vecdb_to_vec(editor->selected_sector->sector_center);
-	}
-	//printf("%c\n", (char)sdlmain->event.key.keysym.sym);
+		editor->edit_map.player_spawn = vecdb_to_vec(editor->selected_sector->sector_center);
 }

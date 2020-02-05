@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/03 13:35:42 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/04 21:54:42 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,9 @@ void	init_data_struct(t_data *data)
 
 void	init_player_struct(t_player *player, t_map *map)
 {
-	player->sector = NULL;
 	player->pos.x = map->player_spawn.x;//49;
 	player->pos.y = map->player_spawn.y;//35;
+	player->sector = get_sector_by_pos(map->sector_head, player->pos, 10);
 	player->angle = 0;
 	player->view_z = 0;
 	player->inertia.x = 0;
