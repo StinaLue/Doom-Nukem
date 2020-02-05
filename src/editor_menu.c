@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 14:48:45 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/05 19:35:29 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,17 +100,21 @@ int	init_instr_menu(t_editor *editor)
 		return (1);
 	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, (editor->instr_surf->h / 20) * 8), 1, "undo sector: s") != 0)
 		return (1);
-	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, (editor->instr_surf->h / 20) * 11), 2, "replace map: r") != 0)
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, (editor->instr_surf->h / 20) * 11), 2, "replace map: m") != 0)
 		return (1);
 	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, (editor->instr_surf->h / 20) * 14), 3, "load map into game: l") != 0)
 		return (1);
-	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, (editor->instr_surf->h / 20) * 5), 4, "choose sector: left click") != 0)
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, (editor->instr_surf->h / 20) * 5), 4, "choose sector: right click") != 0)
 		return (1);
 	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, (editor->instr_surf->h / 20) * 8), 5, "create new map: n") != 0)
 		return (1);
 	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, (editor->instr_surf->h / 20) * 11), 6, "change type of wall: t") != 0)
 		return (1);
 	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, (editor->instr_surf->h / 20) * 14), 7, "set player position: p") != 0)
+		return (1);
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, (editor->instr_surf->h / 20) * 17), 8, "set enemy: b/e") != 0)
+		return (1);
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, (editor->instr_surf->h / 20) * 17), 9, "remove enemy: r") != 0)
 		return (1);
 	return (0);
 }
