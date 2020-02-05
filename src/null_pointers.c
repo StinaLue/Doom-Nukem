@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/05 01:30:09 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/05 01:39:06 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,40 @@ void null_menu_pointers(t_menu *menu)
     }
 }
 
-void null_editor_pointers(t_editor *editor)
+void    null_option_pointers(t_editor *editor)
 {
     int i;
 
     i = 0;
+    while (i < NBOPTIONS)
+    {
+        editor->opt_menu.options[i] = NULL;
+        i++;
+    }
+    editor->opt_menu.title = NULL;
+    editor->opt_menu.ceiling_h_surf = NULL;
+    editor->opt_menu.floor_h_surf = NULL;
+    editor->opt_menu.font = NULL;
+    editor->opt_menu.font_title = NULL;
+}
+
+void    null_instr_pointers(t_editor *editor)
+{
+    int i;
+
+    i = 0;
+    while (i < NBINSTRUCTS)
+    {
+        editor->instr_menu.instructs[i] = NULL;
+        i++;
+    }
+	editor->instr_menu.font = NULL;
+	editor->instr_menu.font_title = NULL;
+	editor->instr_menu.title = NULL;
+}
+
+void    null_editor_pointers(t_editor *editor)
+{
     editor->editor_surf = NULL;
     editor->opt_surf = NULL;
     editor->instr_surf = NULL;
@@ -63,31 +92,10 @@ void null_editor_pointers(t_editor *editor)
     editor->loading_success_surf = NULL;
     editor->wall_tmp.wall_type = 0;//1;
 	editor->wall_tmp.type_color = 0xFF0000;
-
     editor->wall_textures = NULL;
     editor->selected_sector = NULL;
-
-    editor->opt_menu.title = NULL;
-    editor->opt_menu.ceiling_h_surf = NULL;
-    editor->opt_menu.floor_h_surf = NULL;
-    editor->opt_menu.font = NULL;
-    editor->opt_menu.font_title = NULL;
-	editor->instr_menu.font = NULL;
-	editor->instr_menu.font_title = NULL;
-	editor->instr_menu.title = NULL;
-
-    while (i < NBINSTRUCTS)
-    {
-        editor->instr_menu.instructs[i] = NULL;
-        i++;
-    }
-    i = 0;
-    while (i < NBOPTIONS)
-    {
-        editor->opt_menu.options[i] = NULL;
-        i++;
-    }
-    i = 0;
+    null_option_pointers(editor);
+    null_instr_pointers(editor);
     null_map_pointers(&editor->edit_map);
 }
 

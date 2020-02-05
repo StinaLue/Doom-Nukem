@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 22:18:49 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/05 01:39:28 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,8 +168,8 @@ void	event_editor_surf(t_vec mouse, t_editor *editor)
 		&& !(mouse.x == editor->wall_tmp.end.x \
 		&& mouse.y == editor->wall_tmp.end.y))
 	{
-		editor->wall_tmp.end.x = mouse.x;
-		editor->wall_tmp.end.y = mouse.y;
+		editor->wall_tmp.end.x = mouse.x * MAPMULTIPLIER;// * editor->offset;
+		editor->wall_tmp.end.y = mouse.y * MAPMULTIPLIER;// * editor->offset;
 		editor->wall_tmp.tex_index = editor->opt_menu.activ_tex;
 		editor->current_sector = get_last_sector(editor->edit_map.sector_head);
 		copy_wall_node(&editor->current_sector->wall_head, &editor->wall_tmp);
@@ -185,11 +185,13 @@ void	event_editor_surf(t_vec mouse, t_editor *editor)
 			//if (editor->current_sector != NULL)
 			//	set_sector_position(editor->current_sector);
 			add_sector_node(&editor->edit_map.sector_head);
-			set_vec_values(&mouse, &editor->start_sector);
-			editor->wall_tmp.start.x = mouse.x; // set_vec_values can be used if wall_tmp.start is int
-			editor->wall_tmp.start.y = mouse.y;
-			editor->wall_tmp.end.x = mouse.x;
-			editor->wall_tmp.end.y = mouse.y;
+			//set_vec_values(&mouse, &editor->start_sector);
+			editor->start_sector.x = mouse.x * MAPMULTIPLIER;// * editor->offset;
+			editor->start_sector.y = mouse.y * MAPMULTIPLIER;// * editor->offset;
+			editor->wall_tmp.start.x = mouse.x * MAPMULTIPLIER;// * editor->offset; // set_vec_values can be used if wall_tmp.start is int
+			editor->wall_tmp.start.y = mouse.y * MAPMULTIPLIER;// * editor->offset;
+			editor->wall_tmp.end.x = mouse.x * MAPMULTIPLIER;// * editor->offset;
+			editor->wall_tmp.end.y = mouse.y * MAPMULTIPLIER;// * editor->offset;
 			editor->start_sector_reached = 0;
 		}
 	}
@@ -228,21 +230,26 @@ void	remove_highlight_sector(t_sector_node *sector)
 void 	mouse_click_right(t_editor *editor, t_sdlmain *sdlmain)
 {
 	t_sector_node *tmp_sector = editor->selected_sector;
-	//selected_sector = get_sector_by_pos(editor->current_sector, vec_to_vecdb(sdlmain->mouse_pos), 10);
+    t_vec tmp_mouse = sdlmain->mouse_pos;
+    tmp_mouse.x = tmp_mouse.x * MAPMULTIPLIER/*  * editor->offset */;
+    tmp_mouse.y = tmp_mouse.y * MAPMULTIPLIER/*  * editor->offset */; 
+	editor->selected_sector = get_sector_by_pos(editor->current_sector, vec_to_vecdb(tmp_mouse), 10);
+    //editor->selected_sector = get_sector_by_pos(editor->edit_map.sector_head, vec_to_vecdb(tmp_mouse), 10);
 	//highlight_sector(selected_sector);
-	editor->selected_sector = get_sector_by_pos(editor->edit_map.sector_head, vec_to_vecdb(sdlmain->mouse_pos), 10);
+	//printf("mouse x %d, mouse y %d\n", tmp_mouse.x, tmp_mouse.y);
+	//editor->selected_sector = get_sector_by_pos(editor->edit_map.sector_head, vec_to_vecdb(multvec(sdlmain->mouse_pos, editor->offset)), 100);
+	
 	if (tmp_sector != NULL && tmp_sector != editor->selected_sector)
 		remove_highlight_sector(tmp_sector);
 	if (tmp_sector != editor->selected_sector)
 		highlight_sector(editor->selected_sector);
-	//printf("%p\n", get_sector_by_pos(editor->edit_map.sector_head, vec_to_vecdb(sdlmain->mouse_pos), 5));
+	//printf("%p\n", editor->selected_sector);
 	// select "set_height"
 	if (editor->selected_sector != NULL)
 	{
 		editor->opt_menu.height_floor = editor->selected_sector->floor_height;
 		editor->opt_menu.height_ceiling = editor->selected_sector->ceiling_height;
 	}
-	//printf("sel sec: %p\n", editor->selected_sector);
 	set_height(editor);
 	check_convex_sector(editor->edit_map.sector_head);
 }

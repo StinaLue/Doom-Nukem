@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 19:46:37 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/05 01:40:21 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@
 # define NBHEIGHTS 7
 # define NBOPTIONS 10
 # define NBINSTRUCTS 8
+# define MAPMULTIPLIER 5
 # define COLOR_HOVER 0x6C1413
 # define COLOR_PRESSED 0xffff00
 # define COLOR_NORMAL 0xff0000
@@ -298,11 +299,13 @@ typedef struct				s_editor
     SDL_Surface             *alert_convex_surf;
 	SDL_Surface             *alert_loading_surf;
 	SDL_Surface             *loading_success_surf;
+	SDL_Surface 			*player_face_surf;
 
 	SDL_Rect				editor_rect;
 	SDL_Rect				options_rect;
 	SDL_Rect				instr_rect;
 	SDL_Rect				mouse_rect;
+	SDL_Rect 				player_face_rec;
     SDL_Rect                alert_convex_rect;
 	SDL_Rect                alert_loading_rect;
 	SDL_Rect                loading_success_rect;
