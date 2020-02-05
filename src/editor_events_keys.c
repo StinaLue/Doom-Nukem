@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_keys.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 19:56:27 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/05 01:05:58 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,5 +161,5 @@ void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 		}
 	}*/
 	if (sdlmain->event.key.keysym.sym == SDLK_p && editor->selected_sector != NULL)
-			editor->edit_map.player_spawn = vecdb_to_vec(editor->selected_sector->sector_center);
+		editor->edit_map.player_spawn = vecdb_to_vec(editor->selected_sector->sector_center);
 }
