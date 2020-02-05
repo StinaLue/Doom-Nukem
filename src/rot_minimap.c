@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 16:22:14 by phaydont          #+#    #+#             */
-/*   Updated: 2020/01/22 15:47:05 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/05 11:44:29 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ void	draw_rot_minimap(SDL_Surface *surf, t_player *player, const t_map *map)
 	t_wall_node *current_wall;
 	t_sector_node *current_sector;
 	
-	map_center.x = surf->w / 2 +0.5;
-	map_center.y = surf->h / 2 +0.5;
+	map_center.x = surf->w / 2 + 0.5;
+	map_center.y = surf->h / 2 + 0.5;
 	transfo_direc.x = player->inertia.x * 100;
 	transfo_direc.y = player->inertia.y * 100;
 	transfo_direc = rotate2d(transfo_direc, -player->angle);
@@ -47,6 +47,8 @@ void	draw_rot_minimap(SDL_Surface *surf, t_player *player, const t_map *map)
 		while (current_wall != NULL)
 		{
 			init_rotate_wall(&wall_tmp, current_wall, player);
+			wall_tmp.start = multvecdb(wall_tmp.start, 0.25);
+			wall_tmp.end = multvecdb(wall_tmp.end, 0.25);
 			transfo_wall.start.x = map_center.x + wall_tmp.start.x;
 			transfo_wall.start.y = map_center.y + wall_tmp.start.y;
 			transfo_wall.end.x = map_center.x + wall_tmp.end.x;

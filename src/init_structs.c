@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 21:54:42 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/05 13:01:29 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	init_player_struct(t_player *player, t_map *map)
 {
 	player->pos.x = map->player_spawn.x;//49;
 	player->pos.y = map->player_spawn.y;//35;
-	player->sector = get_sector_by_pos(map->sector_head, player->pos, 10);
+	player->sector = get_sector_by_pos(map->sector_head, player->pos);
 	player->angle = 0;
 	player->view_z = 0;
 	player->inertia.x = 0;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_sector.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:02:35 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/03 20:18:28 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/05 13:01:03 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,15 +111,45 @@ void		set_sector_position(t_sector_node *sector_list)
 	set_sector_position(sector_list->next);
 }
 
-//return first sector that it within a radius r of the given position or NULL if none is found
-t_sector_node	*get_sector_by_pos(t_sector_node *sector_list, t_vecdb point, double dist)
+int				point_in_sector(t_sector_node *sector, t_vecdb point)
 {
-	if (sector_list == NULL)
-		return (NULL);
-	else if (get_point_distance(sector_list->sector_center, point) <= dist)
-		return (sector_list);
-	else
-		return (get_sector_by_pos(sector_list->next, point, dist));
+	t_wall_node *wall;
+
+	t_vecdb		a;
+	t_vecdb		b;
+
+	wall = sector->wall_head;
+	while(wall != NULL)
+	{
+		a = vecdb_diff(wall->end, wall->start);
+		b = vecdb_diff(point, wall->start);
+		if (cross_product(a, b) > 0)
+			return (0);
+		wall = wall->next;
+	}
+	return (1);
+}
+
+//return first sector that it within a radius r of the given position or NULL if none is found
+t_sector_node	*get_sector_by_pos(t_sector_node *sector_head, t_vecdb point)
+{
+	double			dist;
+	t_sector_node	*sector;
+	t_sector_node	*closest_sector;
+
+	dist = 1000;
+	closest_sector = NULL;
+	sector = sector_head;
+	while (sector != NULL)
+	{
+		if (point_in_sector(sector, point) && get_point_distance(sector->sector_center, point) < dist)
+		{
+			closest_sector = sector;
+			dist = get_point_distance(sector->sector_center, point);
+		}
+		sector = sector->next;
+	}
+	return (closest_sector);
 }
 
 
