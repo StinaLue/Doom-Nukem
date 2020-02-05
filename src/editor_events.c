@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 16:52:28 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/04 22:13:26 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,19 @@ t_sector_node	*find_wall_neighbor(t_wall_node *wall, t_sector_node *sector_list)
 	return (NULL);
 }
 
-void	find_neighbors(t_doom *doom)
+void	find_neighbors(t_map *map)
 {
 	t_sector_node	*current_sector;
 	t_wall_node		*current_wall;
 
-	current_sector = doom->map.sector_head;
+	current_sector = map->sector_head;
 	while (current_sector != NULL)
 	{
 		current_wall = current_sector->wall_head;
 		while (current_wall != NULL)
 		{
 			if (current_wall->wall_type == 1)
-				current_wall->neighbor_sector = find_wall_neighbor(current_wall, doom->map.sector_head);
+				current_wall->neighbor_sector = find_wall_neighbor(current_wall, map->sector_head);
 			else
 				current_wall->neighbor_sector = NULL;
 			current_wall = current_wall->next;
@@ -112,11 +112,17 @@ int	editor_events(t_doom *doom)
 	/* 
 	if (sdlmain->event.type == SDL_MOUSEWHEEL || sdlmain->event.type == SDL_MOUSEMOTION)
 		change_size(editor, sdlmain); */
+	//set_sectors_clockwise(doom->map.sector_head);
+	set_sectors_clockwise(editor->edit_map.sector_head);
+	//find_neighbors(&doom->map);
+	find_neighbors(&editor->edit_map);
+	//itt_sector_wall_heads(doom->map.sector_head, &set_wall_length);
+	itt_sector_wall_heads(editor->edit_map.sector_head, &set_wall_length);
 	if (doom->state != EDITOR_STATE)
 	{
-		set_sectors_clockwise(doom->map.sector_head);
-		find_neighbors(doom);
-		itt_sector_wall_heads(doom->map.sector_head, &set_wall_length);
+		//set_sectors_clockwise(doom->map.sector_head);
+		//find_neighbors(doom);
+		//itt_sector_wall_heads(doom->map.sector_head, &set_wall_length);
 		return (1);
 	}
 	return (0);

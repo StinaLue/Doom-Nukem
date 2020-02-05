@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 20:40:12 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/05 01:30:25 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,8 +189,9 @@ int		init_sdlmain(t_sdlmain *sdlmain)
 
 int		init_map(t_map *map)
 {
-	if (read_map(".doom_1", map))
-		return (1);
+	//if (read_map(".doom_1", map))
+	//	return (1);
+	(void)map;
 	return (0);
 }
 /*

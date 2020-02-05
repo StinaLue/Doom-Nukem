@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:25:24 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/03 20:20:20 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/05 01:08:55 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ t_wall_node	*insert_wall_node(t_wall_node **wall_list)
 	{
 		*wall_list = malloc(sizeof(t_wall_node));
 		if (*wall_list)
+		{
 			(*wall_list)->next = NULL;
+			(*wall_list)->neighbor_sector = NULL;
+		}
 		return (*wall_list);
 	}
 	else
