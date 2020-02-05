@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 22:13:26 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/05 02:00:55 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,14 +113,14 @@ int	editor_events(t_doom *doom)
 	if (sdlmain->event.type == SDL_MOUSEWHEEL || sdlmain->event.type == SDL_MOUSEMOTION)
 		change_size(editor, sdlmain); */
 	//set_sectors_clockwise(doom->map.sector_head);
-	set_sectors_clockwise(editor->edit_map.sector_head);
+	//set_sectors_clockwise(editor->edit_map.sector_head);
 	//find_neighbors(&doom->map);
 	find_neighbors(&editor->edit_map);
 	//itt_sector_wall_heads(doom->map.sector_head, &set_wall_length);
 	itt_sector_wall_heads(editor->edit_map.sector_head, &set_wall_length);
 	if (doom->state != EDITOR_STATE)
 	{
-		//set_sectors_clockwise(doom->map.sector_head);
+		set_sectors_clockwise(editor->edit_map.sector_head);
 		//find_neighbors(doom);
 		//itt_sector_wall_heads(doom->map.sector_head, &set_wall_length);
 		return (1);

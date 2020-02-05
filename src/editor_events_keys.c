@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_keys.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 01:05:58 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/05 02:05:23 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void	key_event_l(t_editor *editor, t_doom *doom)
 	{
 		if (doom->map.sector_head != NULL)
 			free_map(&doom->map);
+		set_sectors_clockwise(editor->edit_map.sector_head);
 		if (copy_map(&editor->edit_map, &doom->map) != 0)
 			doom->state = QUIT_STATE;
 		doom->game.player.pos = vec_to_vecdb(doom->map.player_spawn);
