@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 11:23:40 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/05 13:01:53 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
 			//read(0, editor->edit_map.name, 15);
 			if (editor->edit_map.player_spawn.x == -1 && editor->edit_map.player_spawn.y == -1)
 				editor->edit_map.player_spawn = vecdb_to_vec(editor->edit_map.sector_head->sector_center);
-			set_sectors_clockwise(editor->edit_map.sector_head);
+			//set_sectors_clockwise(editor->edit_map.sector_head);
 			if (write_map(&editor->edit_map) != 0)
 				printf("error in write map\n");
 			//editor->opt_menu.typing_filename = 1;
@@ -236,11 +236,11 @@ void 	mouse_click_right(t_editor *editor, t_sdlmain *sdlmain)
     t_vec tmp_mouse = sdlmain->mouse_pos;
     tmp_mouse.x = tmp_mouse.x * MAPMULTIPLIER/*  * editor->offset */;
     tmp_mouse.y = tmp_mouse.y * MAPMULTIPLIER/*  * editor->offset */; 
-	//editor->selected_sector = get_sector_by_pos(editor->current_sector, vec_to_vecdb(tmp_mouse), 10);
-    editor->selected_sector = get_sector_by_pos(editor->edit_map.sector_head, vec_to_vecdb(tmp_mouse), 10);
+	//editor->selected_sector = get_sector_by_pos(editor->current_sector, vec_to_vecdb(tmp_mouse));
+    editor->selected_sector = get_sector_by_pos(editor->edit_map.sector_head, vec_to_vecdb(tmp_mouse));
 	//highlight_sector(selected_sector);
 	//printf("mouse x %d, mouse y %d\n", tmp_mouse.x, tmp_mouse.y);
-	//editor->selected_sector = get_sector_by_pos(editor->edit_map.sector_head, vec_to_vecdb(multvec(sdlmain->mouse_pos, editor->offset)), 100);
+	//editor->selected_sector = get_sector_by_pos(editor->edit_map.sector_head, vec_to_vecdb(multvec(sdlmain->mouse_pos, editor->offset)));
 	
 	if (tmp_sector != NULL && tmp_sector != editor->selected_sector)
 		remove_highlight_sector(tmp_sector);

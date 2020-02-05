@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 11:23:45 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/05 13:01:55 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,16 +87,16 @@ void	key_event_r(t_editor *editor, t_doom *doom)
 
 void	key_event_l(t_editor *editor, t_doom *doom)
 {
-	if (editor->start_sector_reached == 1 && get_sector_by_pos(editor->edit_map.sector_head, vec_to_vecdb(editor->edit_map.player_spawn), 10) != NULL)
+	if (editor->start_sector_reached == 1 && get_sector_by_pos(editor->edit_map.sector_head, vec_to_vecdb(editor->edit_map.player_spawn)) != NULL)
 	{
 		if (doom->map.sector_head != NULL)
 			free_map(&doom->map);
-		set_sectors_clockwise(editor->edit_map.sector_head);
+		//set_sectors_clockwise(editor->edit_map.sector_head);
 		if (copy_map(&editor->edit_map, &doom->map) != 0)
 			doom->state = QUIT_STATE;
 		doom->game.player.pos = vec_to_vecdb(doom->map.player_spawn);
 		doom->game.player.sector = get_sector_by_pos(doom->map.sector_head, \
-													doom->game.player.pos, 10);
+													doom->game.player.pos);
 		if (doom->game.player.pos.x == -1 && doom->game.player.pos.y == -1)
 		{
 			doom->game.player.sector = doom->map.sector_head;
@@ -155,7 +155,7 @@ void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 			printf("error in read map\n");
 		doom->game.player.pos = vec_to_vecdb(doom->map.player_spawn);
 		doom->game.player.sector = get_sector_by_pos(doom->map.sector_head, \
-													doom->game.player.pos, 10);
+													doom->game.player.pos);
 		if (doom->game.player.pos.x == -1 && doom->game.player.pos.y == -1)
 		{
 			doom->game.player.sector = doom->map.sector_head;
