@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_mouse.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 11:23:40 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/05 14:54:51 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,22 +19,22 @@ void change_size(t_editor *editor, t_sdlmain *sdlmain)
 	{
 		editor->opt_menu.height_floor = editor->selected_sector->floor_height;
 		editor->opt_menu.height_ceiling = editor->selected_sector->ceiling_height;
-		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_floor) && sdlmain->event.wheel.y > 0 && editor->opt_menu.height_floor > 0)
+		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.height_rect[1]) && sdlmain->event.wheel.y > 0 && editor->opt_menu.height_floor > 0)
 		{
 			editor->opt_menu.height_floor--; // makes floor lower
 			editor->selected_sector->floor_height--;
 		}
-		else if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_floor) && sdlmain->event.wheel.y < 0 && editor->opt_menu.height_floor < 49 && editor->opt_menu.height_floor < editor->opt_menu.height_ceiling - 1)
+		else if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.height_rect[1]) && sdlmain->event.wheel.y < 0 && editor->opt_menu.height_floor < 49 && editor->opt_menu.height_floor < editor->opt_menu.height_ceiling - 1)
 		{
 			editor->opt_menu.height_floor++;
 			editor->selected_sector->floor_height++;
 		}
-		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_ceiling) && sdlmain->event.wheel.y < 0 && editor->opt_menu.height_ceiling < 50)
+		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.height_rect[0]) && sdlmain->event.wheel.y < 0 && editor->opt_menu.height_ceiling < 50)
 		{
 			editor->opt_menu.height_ceiling++;
 			editor->selected_sector->ceiling_height++;
 		}
-		else if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.h_rect_ceiling) && sdlmain->event.wheel.y > 0 && editor->opt_menu.height_ceiling > 1 && editor->opt_menu.height_floor < 49 && editor->opt_menu.height_ceiling > editor->opt_menu.height_floor + 1)
+		else if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.height_rect[0]) && sdlmain->event.wheel.y > 0 && editor->opt_menu.height_ceiling > 1 && editor->opt_menu.height_floor < 49 && editor->opt_menu.height_ceiling > editor->opt_menu.height_floor + 1)
 		{
 			editor->opt_menu.height_ceiling--;
 			editor->selected_sector->ceiling_height--;
@@ -62,7 +62,7 @@ void	set_border_color(t_editor *editor, t_vec mouse_pos)
 		i++;
 	}
 	i = 0;
-	editor->opt_menu.bord_color_h = COLOR_PRESSED;
+	//editor->opt_menu.bord_color_opt = COLOR_PRESSED;
 }
 
 void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
@@ -86,13 +86,27 @@ void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
 				editor->opt_menu.bord_color_text[i] = COLOR_NORMAL;
 			i++;
 		}
-		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.options_rect[7]) && sdlmain->event.button.button == SDL_BUTTON_LEFT/*  && i != editor->opt_menu.activ_tex */)
+		i = 0;
+		while (i < 2)
 		{
-			//printf("is selected\n");
-			editor->opt_menu.typing_filename = 1;
-			//editor->opt_menu.bord_color_text[i] = COLOR_HOVER;
+			if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.height_rect[i]))
+				editor->opt_menu.bord_color_opt[i] = COLOR_PRESSED;
+			i++;
 		}
-		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.options_rect[8]) && sdlmain->event.button.button == SDL_BUTTON_LEFT)
+		i = 0;
+		while (i < NBHOVEROPTIONS)
+		{
+			if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.hover_options_rect[i]))
+				editor->opt_menu.bord_hover_color_opt[i] = COLOR_PRESSED;
+			i++;
+		}
+
+		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.hover_options_rect[0]) && sdlmain->event.button.button == SDL_BUTTON_LEFT/*  && i != editor->opt_menu.activ_tex */)
+		{
+			editor->opt_menu.typing_filename = 1;
+			//editor->opt_menu.bord_color_opt[1] = COLOR_HOVER;
+		}
+		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.hover_options_rect[1]) && sdlmain->event.button.button == SDL_BUTTON_LEFT)
 		{
 			if (editor->selected_sector != NULL)
 				remove_highlight_sector(editor->selected_sector);
@@ -118,7 +132,7 @@ void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
 			//editor->opt_menu.typing_filename = 1;
 			//editor->opt_menu.bord_color_text[i] = COLOR_HOVER;
 		}
-		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.options_rect[9]) && sdlmain->event.button.button == SDL_BUTTON_LEFT)
+		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.hover_options_rect[2]) && sdlmain->event.button.button == SDL_BUTTON_LEFT)
 		{
 			if (editor->selected_sector != NULL)
 				remove_highlight_sector(editor->selected_sector);
@@ -265,6 +279,12 @@ void event_mouse(t_editor *editor, t_sdlmain *sdlmain)
 	{
 		mouse_click_right(editor, sdlmain);
 	}
+	editor->opt_menu.bord_color_opt[0] = COLOR_CHOOSE;
+	editor->opt_menu.bord_color_opt[1] = COLOR_CHOOSE;
+
+	editor->opt_menu.bord_hover_color_opt[0] = COLOR_CHOOSE;
+	editor->opt_menu.bord_hover_color_opt[1] = COLOR_CHOOSE;
+	editor->opt_menu.bord_hover_color_opt[2] = COLOR_CHOOSE;
 	SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
 	mouse_in_options(editor, sdlmain);
 	if (sdlmain->event.type == SDL_MOUSEWHEEL)

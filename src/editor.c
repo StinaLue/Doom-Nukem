@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 01:39:46 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/05 14:52:14 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,12 @@ void	init_colors(t_editor *editor)
 		i++;
 	}
 	i = 0;
-	while (i < NBHEIGHTS)
-	{
-		editor->opt_menu.bord_color_h = COLOR_NORMAL;
-		i++;
-	}
 	editor->opt_menu.bord_color_text[0] = COLOR_PRESSED;
-	editor->opt_menu.bord_color_h = COLOR_PRESSED;
-	editor->opt_menu.bord_color_h = COLOR_PRESSED;
+	editor->opt_menu.bord_hover_color_opt[0] = COLOR_CHOOSE;
+	editor->opt_menu.bord_hover_color_opt[1] = COLOR_CHOOSE;
+	editor->opt_menu.bord_hover_color_opt[2] = COLOR_CHOOSE;
+	editor->opt_menu.bord_color_opt[0] = COLOR_CHOOSE;
+	editor->opt_menu.bord_color_opt[1] = COLOR_CHOOSE;
 }
 
 int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
@@ -104,12 +102,6 @@ int	reset_init_editor(t_editor *editor, t_sdlmain *sdlmain)
 		editor->grid_values[i].y = 0;
 		i++;
 	}
-	//editor->wall_tmp.start.x = -1;   //not sure if needed
-	//editor->wall_tmp.start.y = -1;   //not sure if needed
-	//editor->wall_tmp.end.x = -1;   //not sure if needed
-	//editor->wall_tmp.end.y = -1;   //not sure if needed
-	//editor->wall_tmp.wall_type = 0;   //not sure if needed
-	//editor->start_sector_reached = 1;   //not sure if needed
 	return (0);
 }
 
@@ -159,8 +151,6 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 	if (editor->start_sector_reached == 0)
 		draw_line(multvec(sdlmain->mouse_pos, editor->offset),
 			multvec(vecdb_to_vec(tmptest), editor->offset), editor_surf, editor->wall_tmp.type_color);
-		//draw_line(multvec(sdlmain->mouse_pos, editor->offset), \
-		//	vecdb_to_vec(editor->wall_tmp.end), editor_surf, editor->wall_tmp.type_color);
 	fill_area(editor_surf, &editor->wall_tmp, editor);
 	while (tmp_sect != NULL)
 	{
@@ -168,8 +158,6 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 		while (tmp_wall != NULL)
 		{
 			fill_area(editor_surf, tmp_wall, editor);
-			//draw_line(vecdb_to_vec(tmp_wall->end), \
-			//	vecdb_to_vec(tmp_wall->start), editor_surf, tmp_wall->type_color);
             tmptest = tmp_wall->end;
             tempstart = tmp_wall->start;
             tmptest.x /= MAPMULTIPLIER;

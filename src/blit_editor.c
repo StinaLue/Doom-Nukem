@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   blit_editor.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 01:40:03 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/05 14:54:48 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,17 @@ int	blit_options(t_editor *editor)
 			return (error_return("BlitSurface error = %s\n", SDL_GetError()));
 		i++;
 	}
-	SDL_FreeSurface(editor->opt_menu.options[7]);
-	editor->opt_menu.options[7] = TTF_RenderText_Solid(editor->opt_menu.font, editor->opt_menu.file_name, editor->opt_menu.text_color);
-	draw_border_options(&editor->opt_menu.options_rect[7], 0xffff00, editor->opt_surf);
-	draw_border_options(&editor->opt_menu.options_rect[8], 0xffff00, editor->opt_surf);
-	draw_border_options(&editor->opt_menu.options_rect[9], 0xffff00, editor->opt_surf);
-	//SDL_FreeSurface(editor->opt_menu.options[7]);
+	i = 0;
+	while (i < NBHOVEROPTIONS)
+	{
+		if ((SDL_BlitSurface(editor->opt_menu.hover_options[i], NULL,
+			editor->opt_surf, &editor->opt_menu.hover_options_rect[i])) < 0)
+			return (error_return("BlitSurface error = %s\n", SDL_GetError()));
+		draw_border_options(&editor->opt_menu.hover_options_rect[i], editor->opt_menu.bord_hover_color_opt[i], editor->opt_surf);
+		i++;
+	}
+	SDL_FreeSurface(editor->opt_menu.hover_options[0]);
+	editor->opt_menu.hover_options[0] = TTF_RenderText_Solid(editor->opt_menu.font, editor->opt_menu.file_name, editor->opt_menu.text_color);
 	return (0);
 }
 
@@ -76,25 +81,26 @@ int	blit_height(t_editor *editor)
 {
 	const char *num_ceil;
 	const char *num_floor;
-	if ((SDL_BlitSurface(editor->opt_menu.ceiling_h_surf, \
-			NULL, editor->opt_surf, &editor->opt_menu.h_rect_ceiling)) < 0)
+
+	if ((SDL_BlitSurface(editor->opt_menu.height_surf[0], \
+			NULL, editor->opt_surf, &editor->opt_menu.height_rect[0])) < 0)
 		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
-	if ((SDL_BlitSurface(editor->opt_menu.floor_h_surf, \
-			NULL, editor->opt_surf, &editor->opt_menu.h_rect_floor)) < 0)
+	if ((SDL_BlitSurface(editor->opt_menu.height_surf[1], \
+			NULL, editor->opt_surf, &editor->opt_menu.height_rect[1])) < 0)
 		return (error_return("BlitSurface error = %s\n", SDL_GetError()));
-	draw_border_options(&editor->opt_menu.h_rect_ceiling, \
-				editor->opt_menu.bord_color_h, editor->opt_surf);
-	draw_border_options(&editor->opt_menu.h_rect_floor, \
-				editor->opt_menu.bord_color_h, editor->opt_surf);
-	SDL_FreeSurface(editor->opt_menu.ceiling_h_surf);
-	SDL_FreeSurface(editor->opt_menu.floor_h_surf);
+	draw_border_options(&editor->opt_menu.height_rect[0], \
+				editor->opt_menu.bord_color_opt[0], editor->opt_surf);
+	draw_border_options(&editor->opt_menu.height_rect[1], \
+				editor->opt_menu.bord_color_opt[1], editor->opt_surf);
+	SDL_FreeSurface(editor->opt_menu.height_surf[0]);
+	SDL_FreeSurface(editor->opt_menu.height_surf[1]);
 	if ((num_floor = ft_itoa((int)editor->opt_menu.height_floor)) == NULL)
 		return (1);
 	if ((num_ceil = ft_itoa((int)editor->opt_menu.height_ceiling)) == NULL)
 		return (1);
-	if ((editor->opt_menu.ceiling_h_surf = TTF_RenderText_Solid(editor->opt_menu.font, num_ceil, editor->opt_menu.text_color)) == NULL)
+	if ((editor->opt_menu.height_surf[0] = TTF_RenderText_Solid(editor->opt_menu.font, num_ceil, editor->opt_menu.text_color)) == NULL)
 		return (1);
-	if ((editor->opt_menu.floor_h_surf = TTF_RenderText_Solid(editor->opt_menu.font, num_floor, editor->opt_menu.text_color)) == NULL)
+	if ((editor->opt_menu.height_surf[1] = TTF_RenderText_Solid(editor->opt_menu.font, num_floor, editor->opt_menu.text_color)) == NULL)
 		return (1);
 	ft_memdel((void **)&num_floor);
 	ft_memdel((void **)&num_ceil);
@@ -157,7 +163,6 @@ int	blit_editor_surf(t_editor *editor, t_sdlmain *sdlmain)
 
 int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 {
-	//fill_pix(editor->editor_surf, editor->edit_map.player_spawn.x * editor->offset / MAPMULTIPLIER, editor->edit_map.player_spawn.y * editor->offset / MAPMULTIPLIER, 0x00ff00);
 	SDL_Rect testface = {editor->edit_map.player_spawn.x * editor->offset / MAPMULTIPLIER - 10, editor->editor_surf->h - editor->edit_map.player_spawn.y * editor->offset / MAPMULTIPLIER - 10, 20, 20};
     if (SDL_BlitScaled(editor->player_face_surf, &editor->player_face_rec, editor->editor_surf, &testface) < 0)
 		return (1);

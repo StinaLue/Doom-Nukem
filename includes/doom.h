@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 11:24:31 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/05 15:01:31 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,14 @@
 # define NBPOINTS 2501 // map has 50 * 50 points
 # define NBPOINTSROW 50 // NBPOINTS = NBPOINTSROW * NBPOINTSROW
 # define NBTEXTURES	9
-# define NBHEIGHTS 7
-# define NBOPTIONS 10
+# define NBOPTIONS 8
+# define NBHOVEROPTIONS 3
 # define NBINSTRUCTS 8
 # define MAPMULTIPLIER 5
 # define COLOR_HOVER 0x6C1413
-# define COLOR_PRESSED 0xffff00
+# define COLOR_PRESSED 0x00FF00
 # define COLOR_NORMAL 0xff0000
+# define COLOR_CHOOSE 0xffff00
 
 /*
 ** HUD FLAGS
@@ -253,24 +254,23 @@ typedef struct				s_options_menu
 {
 	SDL_Surface				*title;
 	SDL_Surface				*options[NBOPTIONS];
-	SDL_Surface 			*ceiling_h_surf;
-	SDL_Surface 			*floor_h_surf;
+	SDL_Surface 			*hover_options[NBHOVEROPTIONS];
+	SDL_Surface 			*height_surf[2];
 
 	SDL_Rect				title_rect;
 	SDL_Rect				options_rect[NBOPTIONS];
+	SDL_Rect 				hover_options_rect[NBHOVEROPTIONS];
 	SDL_Rect				text_rect[NBTEXTURES];
-	SDL_Rect				h_rect[NBHEIGHTS];
-	SDL_Rect 				h_rect_ceiling;
-	SDL_Rect 				h_rect_floor;
+	SDL_Rect 				height_rect[2];
 	SDL_Rect  				player_rect;
-	SDL_Rect 				file_name_rect;
 
 	TTF_Font				*font_title;
 	TTF_Font				*font;
 
 	SDL_Color				text_color;
 	int						bord_color_text[NBTEXTURES];
-	int						bord_color_h;
+	int						bord_color_opt[5];
+	int 					bord_hover_color_opt[NBHOVEROPTIONS];
 	int						activ_tex;
 	int 					typing_filename;
 	double 					height_ceiling;

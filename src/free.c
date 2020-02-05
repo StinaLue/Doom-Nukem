@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/03 18:31:15 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/05 14:54:54 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,13 @@ int		free_fonts_surf(t_editor *editor)
 		i++;
 	}
 	i = 0;
+	while (i < NBHOVEROPTIONS)
+	{
+		SDL_FreeSurface(editor->opt_menu.hover_options[i]);
+		editor->opt_menu.hover_options[i] = NULL;
+		i++;
+	}
+	i = 0;
 	while (i < NBINSTRUCTS)
 	{
 		SDL_FreeSurface(editor->instr_menu.instructs[i]);
@@ -139,10 +146,10 @@ int		free_editor(t_editor *editor)
 	editor->alert_loading_surf = NULL;
 	SDL_FreeSurface(editor->loading_success_surf);
 	editor->loading_success_surf = NULL;
-	SDL_FreeSurface(editor->opt_menu.floor_h_surf);
-	editor->opt_menu.floor_h_surf = NULL;
-	SDL_FreeSurface(editor->opt_menu.ceiling_h_surf);
-	editor->opt_menu.ceiling_h_surf = NULL;
+	SDL_FreeSurface(editor->opt_menu.height_surf[1]);
+	editor->opt_menu.height_surf[1] = NULL;
+	SDL_FreeSurface(editor->opt_menu.height_surf[0]);
+	editor->opt_menu.height_surf[0] = NULL;
 	free_fonts_surf(editor);
 	free_fonts(editor);
 	return (EXIT_FAILURE);
