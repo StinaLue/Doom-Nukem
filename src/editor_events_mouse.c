@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_mouse.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 11:23:40 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/05 14:27:00 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ void	check_finished_sect(t_editor *editor)
 		if (check_convex_sector(editor->current_sector) != 1)
 		{
 			delete_sector_by_address(&editor->edit_map.sector_head, editor->current_sector);
+			editor->current_sector = NULL;
 			editor->show_convex_alert = 1;
 		}
 		else

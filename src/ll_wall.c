@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:25:24 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/05 01:08:55 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/05 13:10:49 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,5 +241,7 @@ t_wall_node	*undo_wall(t_sector_node *node)
 		return (NULL);
 	while (node->next != NULL)
 		node = node->next;
+	if (node->wall_num > 0)
+		node->wall_num--;
 	return (delete_last_wall(&node->wall_head));
 }
