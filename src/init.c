@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 01:30:25 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/05 11:25:43 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,7 +234,7 @@ int		init_map(t_map *map) //<-- INIT MAP LEAKS
 
 	t_vecdb vec18 = {70, 60};
 
-	t_vecdb vec19 = {51, 110}; //triangle top
+	t_vecdb vec19 = {50, 110}; //triangle top
 	t_vecdb vec20 = {49, 150};
 	t_vecdb vec21 = {100, 60};
 
