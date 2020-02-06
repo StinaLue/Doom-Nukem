@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 12:17:43 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 12:27:24 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@
 # define NBOPTIONS 8
 # define NBHOVEROPTIONS 5
 # define NBINSTRUCTS 10
-# define MAPMULTIPLIER 5
+# define MAPMULTIPLIER 4
 # define COLOR_HOVER 0x6C1413
 # define COLOR_PRESSED 0x00FF00
 # define COLOR_NORMAL 0xff0000

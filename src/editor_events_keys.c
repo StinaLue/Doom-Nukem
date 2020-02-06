@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_keys.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 19:23:38 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 11:28:43 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,15 +63,20 @@ void	key_event_u(t_editor *editor)
 
 void	key_event_t(t_editor *editor)
 {
-	if (editor->wall_tmp.wall_type == 1)
-	{
-		editor->wall_tmp.wall_type = 0;
-		editor->wall_tmp.type_color = 0xFF0000;
-	}
-	else
+	if (editor->wall_tmp.wall_type == 0)
 	{
 		editor->wall_tmp.wall_type = 1;
 		editor->wall_tmp.type_color = 0xFF00FF;
+	}
+	else if (editor->wall_tmp.wall_type == 1)
+	{
+		editor->wall_tmp.wall_type = 2;
+		editor->wall_tmp.type_color = 0x0080FF;
+	}
+	else if (editor->wall_tmp.wall_type == 2)
+	{
+		editor->wall_tmp.wall_type = 0;
+		editor->wall_tmp.type_color = 0xFF0000;
 	}
 }
 
