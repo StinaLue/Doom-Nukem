@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 17:00:28 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 17:53:34 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,23 +137,23 @@ void	set_height(t_options_menu *menu, SDL_Surface *surf)
 
 void	set_textures(SDL_Rect *text_rect, SDL_Surface *surf)
 {
-	int height;
-	int width;
+	int h;
+	int w;
 
-	height = surf->h / 20;
-	width = surf->w / 16;
-	assign_sdlrect(&text_rect[0], create_vec(height, height * 10), create_vec(width, width));
-	assign_sdlrect(&text_rect[1], create_vec(height, height * 12), create_vec(width, width));
-	assign_sdlrect(&text_rect[2], create_vec(height, height * 14), create_vec(width, width));
-	assign_sdlrect(&text_rect[3], create_vec(height * 3, height * 10), create_vec(width, width));
-	assign_sdlrect(&text_rect[4], create_vec(height * 3, height * 12), create_vec(width, width));
-	assign_sdlrect(&text_rect[5], create_vec(height * 3, height * 14), create_vec(width, width));
-	assign_sdlrect(&text_rect[6], create_vec(height * 5, height * 10), create_vec(width, width));
-	assign_sdlrect(&text_rect[7], create_vec(height * 5, height * 12), create_vec(width, width));
-	assign_sdlrect(&text_rect[8], create_vec(height * 5, height * 14), create_vec(width, width));
-	//assign_sdlrect(&menu->text_rect[9], create_vec((height) * 7, (height) * 10), create_vec(width, width));
-	//assign_sdlrect(&menu->text_rect[10], create_vec((height) * 7, (height) * 12), create_vec(width, width));
-	//assign_sdlrect(&menu->text_rect[11], create_vec((height) * 7, (height) * 14), create_vec(width, width));
+	h = surf->h / 20;
+	w = surf->w / 16;
+	assign_sdlrect(&text_rect[0], create_vec(h, h * 10), create_vec(w, w));
+	assign_sdlrect(&text_rect[1], create_vec(h, h * 12), create_vec(w, w));
+	assign_sdlrect(&text_rect[2], create_vec(h, h * 14), create_vec(w, w));
+	assign_sdlrect(&text_rect[3], create_vec(h * 3, h * 10), create_vec(w, w));
+	assign_sdlrect(&text_rect[4], create_vec(h * 3, h * 12), create_vec(w, w));
+	assign_sdlrect(&text_rect[5], create_vec(h * 3, h * 14), create_vec(w, w));
+	assign_sdlrect(&text_rect[6], create_vec(h * 5, h * 10), create_vec(w, w));
+	assign_sdlrect(&text_rect[7], create_vec(h * 5, h * 12), create_vec(w, w));
+	assign_sdlrect(&text_rect[8], create_vec(h * 5, h * 14), create_vec(w, w));
+	//assign_sdlrect(&menu->text_rect[9], create_vec((h) * 7, (h) * 10), create_vec(w, w));
+	//assign_sdlrect(&menu->text_rect[10], create_vec((h) * 7, (h) * 12), create_vec(w, w));
+	//assign_sdlrect(&menu->text_rect[11], create_vec((h) * 7, (h) * 14), create_vec(w, w));
 }
 
 void	set_weapon_textures(t_options_menu *menu, SDL_Surface *surf)

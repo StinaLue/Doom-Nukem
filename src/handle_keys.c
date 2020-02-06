@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_keys.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/04 16:34:55 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/06 17:31:40 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	basic_move(t_player *player, const Uint8 *keyboard_state)//, t_sound *sound
 	move.x = 0;
 	move.y = 0;
 	if (keyboard_state[SDL_SCANCODE_W])
-		move.y +=1;
+		move.y += 1;
 	if (keyboard_state[SDL_SCANCODE_S])
 		move.y -= 1;
 	if (keyboard_state[SDL_SCANCODE_A])

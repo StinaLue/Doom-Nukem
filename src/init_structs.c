@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 00:51:01 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/06 17:33:56 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "doom.h"
 #include "libbmp.h"
 
-SDL_Surface *load_opti_bmp(char *file, SDL_Surface *dst_surf, Uint32 colorkey)
+SDL_Surface	*load_opti_bmp(char *file, SDL_Surface *dst_surf, Uint32 colorkey)
 {
 	SDL_Surface *opti_surf;
 	SDL_Surface *surf;
@@ -34,7 +34,8 @@ SDL_Surface *load_opti_bmp(char *file, SDL_Surface *dst_surf, Uint32 colorkey)
 	{
 		if ((SDL_SetColorKey(opti_surf, SDL_TRUE, colorkey)) != 0)
 		{
-			ft_dprintf(STDERR_FILENO, "SetColorKey err = %{r}s\n", SDL_GetError());
+			ft_dprintf(STDERR_FILENO, "SetColorKey err = %{r}s\n", \
+						SDL_GetError());
 			SDL_FreeSurface(opti_surf);
 			return (NULL);
 		}
@@ -48,7 +49,7 @@ int	init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain)
 		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
 	if ((gamesurfs->fixed_mmap = SDL_CreateRGBSurface(0, 51 * MAPMULTIPLIER, 51 * MAPMULTIPLIER, 32, 0, 0, 0, 0)) == NULL) //--> should be a square that can handle the size of the whole map
 		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
-	if ((gamesurfs->perspective_view = SDL_CreateRGBSurface(0, sdlmain->win_surf->w/2, sdlmain->win_surf->h/2, 32, 0, 0, 0, 0)) == NULL)
+	if ((gamesurfs->perspective_view = SDL_CreateRGBSurface(0, sdlmain->win_surf->w / 2, sdlmain->win_surf->h / 2, 32, 0, 0, 0, 0)) == NULL)
 		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
 	//if ((gamesurfs->weapons = load_bmp("assets/shadow.bmp")) == NULL)
 	if ((gamesurfs->weapons = load_opti_bmp("assets/weapons/weapons.bmp", gamesurfs->perspective_view/*sdlmain->win_surf*/, 0xFFFFFF)) == NULL)
@@ -74,8 +75,8 @@ void	init_data_struct(t_data *data)
 
 void	init_player_struct(t_player *player, t_map *map)
 {
-	player->pos.x = map->player_spawn.x;//49;
-	player->pos.y = map->player_spawn.y;//35;
+	player->pos.x = map->player_spawn.x;
+	player->pos.y = map->player_spawn.y;
 	player->sector = get_sector_by_pos(map->sector_head, player->pos);
 	player->angle = 0;
 	player->view_z = 0;
@@ -90,7 +91,8 @@ void	init_player_struct(t_player *player, t_map *map)
 	player->current_weapon = 0;
 }
 
-void	get_enemysprite_rect(SDL_Rect *rect, int which_enemy, SDL_Surface *sprite_sheet)
+void	get_enemysprite_rect(SDL_Rect *rect, int which_enemy, \
+									SDL_Surface *sprite_sheet)
 {
 	rect->x = 0;
 	rect->y = 0;
@@ -109,7 +111,8 @@ int	init_enemy_struct(t_game *game, t_map *map)
 	current_enemy = 0;
 	if (map->num_enemies <= 0)
 		return (0);
-	if ((game->enemy = (t_enemy *)malloc(sizeof(t_enemy) * map->num_enemies)) == NULL)
+	if ((game->enemy = \
+		(t_enemy *)malloc(sizeof(t_enemy) * map->num_enemies)) == NULL)
 		return (1);
 	while (current_enemy < map->num_enemies)
 	{

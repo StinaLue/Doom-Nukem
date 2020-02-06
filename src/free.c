@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 12:16:30 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 17:25:51 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 
 void	quit_sdl_and_ttf(void)
 {
-	//Mix_CloseAudio();
-	//Mix_Quit();
 	TTF_Quit();
 	SDL_Quit();
 }
@@ -40,8 +38,6 @@ int		free_sdlmain(t_sdlmain *sdlmain)
 	TTF_CloseFont(sdlmain->font);
 	sdlmain->font = NULL;
 	free_sound(&sdlmain->sound);
-	//Mix_FreeMusic(sdlmain->music);
-	//sdlmain->music = NULL;
 	return (EXIT_FAILURE);
 }
 
