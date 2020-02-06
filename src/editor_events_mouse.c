@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 15:59:35 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 16:18:51 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	change_size(t_editor *editor, t_sdlmain *sdlmain, t_options_menu *menu)
 			menu->height_ceiling--;
 			editor->selected_sector->ceiling_height--;
 		}
-		set_height(editor);
+		set_height(&editor->opt_menu, editor->opt_surf);
 	}
 }
 
@@ -267,7 +267,7 @@ void	mouse_click_right(t_editor *editor, t_sdlmain *sdlmain)
 		editor->opt_menu.height_ceiling = \
 			editor->selected_sector->ceiling_height;
 	}
-	set_height(editor);
+	set_height(&editor->opt_menu, editor->opt_surf);
 }
 
 void	event_mouse(t_editor *editor, t_sdlmain *sdlmain)

@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 15:43:58 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 16:31:33 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -488,7 +488,7 @@ void						handle_keys(t_doom *doom, \
 
 int							editor_events(t_doom *doom);
 
-int							set_height(t_editor *editor);
+void						set_height(t_options_menu *menu, SDL_Surface *surf);
 
 /*
 ** PRINT MINIMAP FUNCTIONS
