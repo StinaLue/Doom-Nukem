@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 16:57:30 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/06 18:39:49 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,10 @@ void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
 				editor->edit_map.player_spawn = vecdb_to_vec(editor->edit_map.sector_head->sector_center);
 			//set_sectors_clockwise(editor->edit_map.sector_head);
 			if (write_map(&editor->edit_map) != 0)
-				printf("error in write map\n");
+			{
+				ft_dprintf(STDERR_FILENO, "error in write map\n"); //THIS IS NOT SECURE YET
+				return ;
+			}
 			//editor->opt_menu.typing_filename = 1;
 			//editor->opt_menu.bord_color_text[i] = COLOR_HOVER;
 		}
@@ -140,7 +143,10 @@ void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
 			printf("loaded\n"); // LOAD MAP
 			free_map(&editor->edit_map);
 			if (read_map(editor->opt_menu.file_name, &editor->edit_map))
-				printf("error in read map\n");
+			{
+				ft_dprintf(STDERR_FILENO, "error in read map\n"); //THIS IS NOT SECURE YET
+				return ;
+			}
 			//editor->opt_menu.typing_filename = 1;
 			//editor->opt_menu.bord_color_text[i] = COLOR_HOVER;
 		}

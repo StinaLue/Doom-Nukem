@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 17:53:23 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/06 18:40:10 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,8 +232,8 @@ typedef struct				s_game
 	t_data					data;
 	t_player				player;
 	t_enemy					*enemy;
-	int						(*weapon_anim[4])(t_gamesurfs *gamesurfs, \
-												SDL_Surface *dest, int *anim);
+	int						(*weapon_anim[2])(t_gamesurfs *gamesurfs, \
+								SDL_Surface *dest, int *anim);
 }							t_game;
 
 typedef struct				s_instr_menu

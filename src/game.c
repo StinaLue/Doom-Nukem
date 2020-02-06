@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/06 18:03:55 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/06 19:27:13 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,6 +242,14 @@ void	play_enemies_sound(t_enemy *enemies, ALuint *buffers, t_map *map)
 	}
 }
 
+int	is_buffer_playing(ALuint src, ALuint buffer)
+{
+	ALint playing_buffer;
+
+	alGetSourcei(src, AL_BUFFER, &playing_buffer);
+	return ((ALuint)playing_buffer == buffer);
+}
+
 int	play_sound(t_game *game, t_sdlmain *sdlmain, t_map *map)
 {
 	t_gamesurfs *gamesurfs;
@@ -257,6 +265,10 @@ int	play_sound(t_game *game, t_sdlmain *sdlmain, t_map *map)
 		alSourcePlay(sound->source[2]);
 	else if (player->is_moving == 0)
 		alSourcePause(sound->source[2]);
+	if (player->health <= 0 && is_buffer_playing(sdlmain->sound.source[0], sdlmain->sound.buffer[0]))
+	{
+		alSourceStop(sdlmain->sound.source[0]);
+	}
 	return (0);
 }
 
