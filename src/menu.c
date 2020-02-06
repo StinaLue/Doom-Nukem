@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   menu.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:27:36 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/06 18:21:18 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 20:35:58 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,6 @@ void	browse_options(t_sdlmain *sdlmain, t_menu *menu, \
 void	change_win_dimensions(int *width, int *height)
 {
 	if (*width == HD_W && *height == HD_H)
-	{
-		*width = WSXGA_W;
-		*height = WSXGA_H;
-	}
-	else if (*width == WSXGA_W && *height == WSXGA_H)
 	{
 		*width = FHD_W;
 		*height = FHD_H;

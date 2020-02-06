@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 19:46:21 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 00:08:48 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,6 @@
 */
 # define HD_W 1280
 # define HD_H 720
-
-# define WSXGA_W 1680
-# define WSXGA_H 1050
 
 # define FHD_W 1920
 # define FHD_H 1080
@@ -623,7 +620,7 @@ int							error_return(const char *error_msg, const char *sdl_error);
 */
 int							reset_init_editor(t_editor *editor, t_sdlmain *sdlmain);
 
-void						event_mouse(t_editor *editor, t_sdlmain *sdlmain);
+void						event_mouse(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain);
 
 void						event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain);
 

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 19:46:06 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 00:35:43 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,7 +261,7 @@ void	key_event_r(t_editor *editor, t_doom *doom)
 	{
 		if ((delete_enemy_info(&editor->edit_map, center)) != 0)
 		{
-			printf("EROOROROEOROEROE\n");
+			ft_dprintf(STDERR_FILENO, "malloc error while updating enemies info\n");
 			doom->state = QUIT_STATE;
 		}
 	}

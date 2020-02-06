@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/06 20:03:55 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 00:37:00 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,11 +165,16 @@ int	blit_hud_faces(t_game *game)
 	return (0);
 }
 
-SDL_Rect find_rect_enemy(t_enemy *enemy)
+SDL_Rect find_rect_enemy(t_enemy *enemy, t_player *player, SDL_Surface *dest)
 {
 	SDL_Rect return_rect;
 
-	return_rect.x = enemy->pos.x;
+	return_rect.w = enemy->clip_tex.w / ((get_point_distance(player->pos, enemy->pos)) - 10);
+	return_rect.h = enemy->clip_tex.h / ((get_point_distance(player->pos, enemy->pos)) - 10);
+	return_rect.x = (dest->w / 2) - (return_rect.w / 2);//enemy->pos.x - player->pos.x;
+	return_rect.y = 0;//enemy->pos.y - player->pos.y;
+	player->anim = player->anim;
+	return (return_rect);
 }
 
 int	blit_enemies(t_game *game, SDL_Surface *dest, t_map *map)
@@ -180,8 +185,8 @@ int	blit_enemies(t_game *game, SDL_Surface *dest, t_map *map)
 	i = 0;
 	while (i < map->num_enemies)
 	{
-		destrect = find_rect_enemy(&game->enemy[i]);
-		if ((SDL_BlitScaled(game->enemy[i].texture, &game->enemy[i].clip_tex, dest, NULL)) != 0)
+		destrect = find_rect_enemy(&game->enemy[i], &game->player, dest);
+		if ((SDL_BlitScaled(game->enemy[i].texture, &game->enemy[i].clip_tex, dest, &destrect)) != 0)
 			return (error_return("SDL_BlitScaled error: %{r}s\n", SDL_GetError()));
 		i++;
 	}

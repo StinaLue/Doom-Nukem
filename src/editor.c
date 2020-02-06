@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 19:10:18 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 00:19:07 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	round_num(double num, int offset)
 {
 	double result;
 
-	result = num / offset;
+	result = num / (double)offset;
 	return (num < 0 ? result - 0.5 : result + 0.5);
 }
 
@@ -228,6 +228,9 @@ int	editor_loop(t_doom *doom)
 		editor->offset = editor->editor_surf->w / NBPOINTSROW;
 	else
 		editor->offset = editor->editor_surf->h / NBPOINTSROW;
+	//if (NBPOINTSROW * editor->offset < editor->editor_surf->h)
+	offset_border = editor->editor_surf->h \
+			- NBPOINTSROW * editor->offset;
 	while (doom->state == EDITOR_STATE)
 	{
 		while (SDL_PollEvent(&sdlmain->event) != 0)
@@ -236,11 +239,9 @@ int	editor_loop(t_doom *doom)
 		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
 		assign_sdlrect(&editor->mouse_rect, create_vec(sdlmain->mouse_pos.x \
 						- 15, sdlmain->mouse_pos.y - 15), create_vec(15, 15));
-		if (NBPOINTSROW * editor->offset < editor->editor_surf->h)
-			offset_border = editor->editor_surf->h \
-						- NBPOINTSROW * editor->offset;
+		
 		sdlmain->mouse_pos.x = round_num(sdlmain->mouse_pos.x, editor->offset);
-		sdlmain->mouse_pos.y = round_num(sdlmain->mouse_pos.y, editor->offset);
+		sdlmain->mouse_pos.y = round_num(sdlmain->mouse_pos.y - offset_border + editor->offset, editor->offset);
 		ft_bzero(editor->editor_surf->pixels, \
 					editor->editor_surf->h * editor->editor_surf->pitch);
 		ft_bzero(editor->opt_surf->pixels, \
