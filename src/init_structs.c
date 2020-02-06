@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 13:01:29 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/06 12:17:47 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,12 @@ void	init_data_struct(t_data *data)
 
 void	init_player_struct(t_player *player, t_map *map)
 {
-	player->pos.x = map->player_spawn.x;//49;
-	player->pos.y = map->player_spawn.y;//35;
+	player->pos.x = map->player_spawn.x;
+	player->pos.y = map->player_spawn.y;
 	player->sector = get_sector_by_pos(map->sector_head, player->pos);
 	player->angle = 0;
+	player->posz = 0;
+	player->height = 10;
 	player->view_z = 0;
 	player->inertia.x = 0;
 	player->inertia.y = 0;

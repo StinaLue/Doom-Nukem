@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/01/31 16:39:20 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/06 12:18:07 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,37 +70,37 @@ int			intersect_view(t_wall *wall, t_view view)
 t_wall3d	create_perspective_wall(t_wall wall, SDL_Surface *surf, t_player *player, t_sector_node *sector)
 {
 	double		fov_ratio;
-	int			x;
-	int			y;
-	double		surf_center;
+	double		x;
+	double		top;
+	double		bot;
 	t_wall3d	display_wall;
 
-	sector = NULL;
-	surf_center = ((double)surf->w - 1) / 2;
+	fov_ratio = player->fov.y / player->fov.x / wall.start.y * surf->w;
+	x = wall.start.x * fov_ratio;
+	top = (sector->ceiling_height - (player->posz + player->height)) * fov_ratio;
+	bot = (sector->floor_height - (player->posz + player->height)) * fov_ratio;
 
-	fov_ratio = player->fov.y / player->fov.x / wall.start.y;
-	x = surf->w / 2 + wall.start.x * fov_ratio * surf_center;
-	y = fov_ratio * surf->w;
-
-	display_wall.top_left.x = x;
-	display_wall.top_left.y = surf->h / 2 - player->view_z + y;
+	display_wall.top_left.x = surf->w / 2 + x / 2;
+	display_wall.top_left.y = surf->h / 2 + top / 2 - player->view_z;
 	display_wall.bottom_left.x = display_wall.top_left.x;
-	display_wall.bottom_left.y = surf->h / 2 - player->view_z - y;
+	display_wall.bottom_left.y = surf->h / 2 + bot / 2 - player->view_z;
 
-	fov_ratio = player->fov.y / player->fov.x / wall.end.y;
-	x = surf->w / 2 + wall.end.x * fov_ratio * surf_center;
-	y = fov_ratio * surf->w;
+	fov_ratio = player->fov.y / player->fov.x / wall.end.y * surf->w;
+	x = wall.end.x * fov_ratio;
+	top = (sector->ceiling_height - (player->posz + player->height)) * fov_ratio;
+	bot = (sector->floor_height - (player->posz + player->height)) * fov_ratio;
 
-	display_wall.top_right.x = x;
-	display_wall.top_right.y = surf->h / 2 - player->view_z + y;
+	display_wall.top_right.x = surf->w / 2 + x / 2;
+	display_wall.top_right.y = surf->h / 2 + top / 2 - player->view_z;
 	display_wall.bottom_right.x = display_wall.top_right.x;
-	display_wall.bottom_right.y = surf->h / 2 - player->view_z - y;
+	display_wall.bottom_right.y = surf->h / 2 + bot / 2 - player->view_z;
 
 	display_wall.dist_left = wall.start.y;
 	display_wall.dist_right = wall.end.y;
 	display_wall.start_pos = 0;
 	display_wall.end_pos = 1;
 
+	//sector = NULL;
 	return (display_wall);
 }
 

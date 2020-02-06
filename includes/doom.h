@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 12:59:54 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/05 15:25:53 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,6 +217,8 @@ typedef struct				s_player
 	t_vecdb					move;
 	t_vecdb					inertia;
 	double					angle;
+	double					posz;
+	double					height;
 	double					view_z;
 	t_vecdb					fov;
 	double					true_fov;
