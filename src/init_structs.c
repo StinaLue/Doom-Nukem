@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 12:33:02 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/06 15:03:26 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ void	init_player_struct(t_player *player, t_map *map)
 	player->view_z = 0;
 	player->inertia.x = 0;
 	player->inertia.y = 0;
-	player->fov.x = 100;
-	player->fov.y = 100;
+	/*player->view.x = 100;
+	player->fov.y = 100;*/
 	player->true_fov = 1.5708; //hardcoded 90deg
 	player->health = 100;
 	player->is_moving = 0;

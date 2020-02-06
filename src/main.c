@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 01:23:53 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/06 17:00:15 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int	main_loop()
 
 int	verify_defines()
 {
+	return (0);
 	if (SQRT2 != 1.4142135623730950488 || PLAYER_RADIUS != 0.3 || NB_WALL_TEXTURES != 9 \
 	|| NB_SOUND_SOURCES != 3 || NB_SOUND_BUFFERS != 4 || QUIT_STATE != 0 || GAME_STATE != 1 \
 	|| MENU_STATE != 2 || EDITOR_STATE != 3 || HD_W != 1280 || HD_H != 720 || WSXGA_W != 1680 \
