@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 11:25:43 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/05 20:04:58 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@ int		init_doom(t_doom *doom)
 
 
 	doom->editor.wall_textures = doom->wall_textures;
+	doom->editor.enemy_textures = doom->game.surfs.enemy_texture;
+	get_enemysprite_rect(&doom->editor.enemy_rect[0], 0, doom->editor.enemy_textures[0]);
+	get_enemysprite_rect(&doom->editor.enemy_rect[1], 1, doom->editor.enemy_textures[1]);
 	if (init_editor(&doom->editor, &doom->sdlmain) == 1)
 		return (1);
 	return (0);
@@ -107,13 +110,13 @@ int		init_sound(t_sound *sound)
 	alSourcei(sound->source[2], AL_LOOPING, AL_TRUE);
 	alGetError();
 	alGenBuffers(NB_SOUND_BUFFERS, sound->buffer);
-	if ((loadWAV("assets/sounds/beet.wav", sound->buffer[0])) != 0)
+	if ((load_wav("assets/sounds/beet.wav", sound->buffer[0])) != 0)
 		return (error_return("error loading %{r}s\n", "beet.wav"));
-	if ((loadWAV("assets/sounds/niceswordsound.wav", sound->buffer[1])) != 0)
+	if ((load_wav("assets/sounds/niceswordsound.wav", sound->buffer[1])) != 0)
 		return (error_return("error loading %{r}s\n", "niceswordsound.wav"));
-	if ((loadWAV("assets/sounds/footsteps-1.wav", sound->buffer[2])) != 0)
+	if ((load_wav("assets/sounds/footsteps-1.wav", sound->buffer[2])) != 0)
 		return (error_return("error loading %{r}s\n", "footsteps-1.wav"));
-	if ((loadWAV("assets/sounds/uzi.wav", sound->buffer[3])) != 0)
+	if ((load_wav("assets/sounds/uzi.wav", sound->buffer[3])) != 0)
 		return (error_return("error loading %{r}s\n", "uzi.wav"));
 	alSourcei(sound->source[0], AL_BUFFER, sound->buffer[0]);
 	alSourcei(sound->source[2], AL_BUFFER, sound->buffer[2]);
@@ -126,10 +129,10 @@ int		init_sound(t_sound *sound)
 		return (1);
 	}
 	// Load test.wav
-	loadWAVFile("test.wav",&format,&data,&size,&freq,&loop);
+	load_wavFile("test.wav",&format,&data,&size,&freq,&loop);
 	if ((error = alGetError()) != AL_NO_ERROR)
 	{
-	 DisplayALError("alutLoadWAVFile test.wav : ", error);
+	 DisplayALError("alutload_wavFile test.wav : ", error);
 	 alDeleteBuffers(NUM_BUFFERS, g_Buffers);
 	 return;
 	}
@@ -142,10 +145,10 @@ int		init_sound(t_sound *sound)
 	 return;
 	}
 	// Unload test.wav
-	unloadWAV(format,data,size,freq);
+	unload_wav(format,data,size,freq);
 	if ((error = alGetError()) != AL_NO_ERROR)
 	{
-	 DisplayALError("alutUnloadWAV : ", error);
+	 DisplayALError("alutUnload_wav : ", error);
 	 alDeleteBuffers(NUM_BUFFERS, g_Buffers);
 	 return;
 	}

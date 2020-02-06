@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/05 01:29:22 by afonck           ###   ########.fr        #
+#    Updated: 2020/02/05 19:48:07 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,11 +18,10 @@ CC = clang
 CFLAGS = -Wall -Werror -Wextra -D_THREAD_SAFE -O3
 DEBUGFLAGS = -Wall -Werror -Wextra -D_THREAD_SAFE -g
 
-LDFLAGS = -L$(LIBFT_DIRECTORY) -L$(LIBBMP_DIRECTORY) -L$(SDL2_LIB_DIRECTORY)lib -L$(SDL2TTF_LIB_DIRECTORY)lib -L$(OPENAL_LIB_DIRECTORY)lib#-L$(SDL2MIXER_LIB_DIRECTORY)lib
+LDFLAGS = -L$(LIBFT_DIRECTORY) -L$(LIBBMP_DIRECTORY) -L$(SDL2_LIB_DIRECTORY)lib -L$(SDL2TTF_LIB_DIRECTORY)lib -L$(OPENAL_LIB_DIRECTORY)lib
 LDLIBS = -lft -lbmp -lSDL2 -lSDL2_ttf -lopenal
 
-INCLUDES =  -I$(HEADERS_DIRECTORY) -I$(LIBFT_HEADER) -I$(LIBBMP_HEADER) -I$(SDL2_HEADERS_DIRECTORY) -I$(SDL2TTF_HEADERS_DIRECTORY) -I$(OPENAL_HEADERS_DIRECTORY)#-I$(SDL2MIXER_HEADERS_DIRECTORY)
-
+INCLUDES =  -I$(HEADERS_DIRECTORY) -I$(LIBFT_HEADER) -I$(LIBBMP_HEADER) -I$(SDL2_HEADERS_DIRECTORY) -I$(SDL2TTF_HEADERS_DIRECTORY) -I$(OPENAL_HEADERS_DIRECTORY)
 HARD_DBG ?= 1
 
 CURRENT_DIR = $(shell pwd)
@@ -179,7 +178,7 @@ $(OBJECTS_DIRECTORY_DEBUG):
 
 $(OBJECTS_DIRECTORY)%.o : $(SOURCES_DIRECTORY)%.c $(HEADERS)
 	@$(CC) $(CFLAGS) -c $(INCLUDES) $< -o $@
-	@echo "$(GREEN).$(RESET)\c"
+	@echo "$(GREEN).\n$(RESET)\c"
 
 $(OBJECTS_DIRECTORY_DEBUG)%.o : $(SOURCES_DIRECTORY)%.c $(HEADERS)
 ifeq ($(HARD_DBG), 1)
@@ -188,7 +187,7 @@ ifeq ($(HARD_DBG), 1)
 endif
 
 	@$(CC) $(DEBUGFLAGS) -c $(INCLUDES) $< -o $@
-	@echo "$(GREEN).$(RESET)\c"
+	@echo "$(GREEN).\n$(RESET)\c"
 
 $(LIBFT):
 	@echo "$(NAME): $(GREEN)Creating $(LIBFT)...$(RESET)"

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/03 19:28:52 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/05 21:22:24 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,8 +146,10 @@ int	blit_hud_faces(t_game *game)
 	if ((data->hud_flags & HEALTH_STATUS))
 	{
 		surfs->hud_faces_rect.y = player_hurt_anim(game->player.health, &surfs->hud_faces_rect);
-		dst.x = surfs->perspective_view->w - surfs->hud_faces_rect.w;
 		dst.y = 0;
+		dst.w = surfs->perspective_view->w / 8;
+		dst.x = surfs->perspective_view->w - dst.w;
+		dst.h = surfs->perspective_view->h / 6;
 		if ((SDL_GetTicks() - surfs->hud_timer) >= 1000)
 		{
 			surfs->hud_timer = SDL_GetTicks();
@@ -156,7 +158,7 @@ int	blit_hud_faces(t_game *game)
 			else
 				surfs->hud_faces_rect.x = 0;
 		}
-		if ((SDL_BlitSurface(surfs->hud_faces_surf, &surfs->hud_faces_rect, surfs->perspective_view, &dst)) != 0)
+		if ((SDL_BlitScaled(surfs->hud_faces_surf, &surfs->hud_faces_rect, surfs->perspective_view, &dst)) != 0)
 			return (1);
 	}
 	return (0);

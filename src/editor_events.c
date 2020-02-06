@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 11:24:21 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/06 11:33:19 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	find_neighbors(t_map *map)
 		current_wall = current_sector->wall_head;
 		while (current_wall != NULL)
 		{
-			if (current_wall->wall_type == 1)
+			if (current_wall->wall_type == 1 || current_wall->wall_type == 2)
 				current_wall->neighbor_sector = find_wall_neighbor(current_wall, map->sector_head);
 			else
 				current_wall->neighbor_sector = NULL;
@@ -62,14 +62,14 @@ void	find_neighbors(t_map *map)
 		current_sector = current_sector->next;
 	}
 }
-void del_last_char(char *str)
+void del_last_char(char *str, int min_len)
 {
 	int len;
 
 	if (str == NULL)
 		return ;
 	len = ft_strlen(str);
-	if (len > 5)
+	if (len > (min_len + 1))
 		str[len - 1] = '\0';
 }
 
@@ -88,7 +88,7 @@ int	editor_events(t_doom *doom)
 		editor->opt_menu.typing_filename = 0;
 	}
 	else if (sdlmain->event.type == SDL_KEYDOWN && (sdlmain->event.key.keysym.sym == SDLK_DELETE || sdlmain->event.key.keysym.sym == SDLK_BACKSPACE))
-		del_last_char(editor->opt_menu.file_name);
+		del_last_char(editor->opt_menu.file_name, 5);
 	else if (editor->opt_menu.typing_filename == 1 && sdlmain->event.type == SDL_TEXTINPUT && ft_strlen(editor->opt_menu.file_name) < 15)
 	{
 		//if (sdlmain->event.key.keysym.sym == SDLK_RETURN)

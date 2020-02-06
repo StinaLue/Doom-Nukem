@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 20:30:51 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/06 01:23:53 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,28 @@ int	main_loop()
 	return (0);
 }
 
+int	verify_defines()
+{
+	if (SQRT2 != 1.4142135623730950488 || PLAYER_RADIUS != 0.3 || NB_WALL_TEXTURES != 9 \
+	|| NB_SOUND_SOURCES != 3 || NB_SOUND_BUFFERS != 4 || QUIT_STATE != 0 || GAME_STATE != 1 \
+	|| MENU_STATE != 2 || EDITOR_STATE != 3 || HD_W != 1280 || HD_H != 720 || WSXGA_W != 1680 \
+	|| WSXGA_H != 1050 || FHD_W != 1920 || FHD_H != 1080 || QHD_W != 2560 || QHD_H != 1440 \
+	|| OFFSET != 20 || NBPOINTS != 2501 || NBPOINTSROW != 50 || NBTEXTURES != 9 || NBOPTIONS != 8 \
+	|| NBHOVEROPTIONS != 3 || NBINSTRUCTS != 10 || MAPMULTIPLIER != 4 || COLOR_HOVER != 0x6C1413 \
+	|| COLOR_PRESSED != 0x00FF00 || COLOR_NORMAL != 0xff0000 || COLOR_CHOOSE != 0xffff00 \
+	|| ROT_MAP_SHOW != 1 || FIX_MAP_SHOW != 2 || COLORFLAG != 4 || HEALTH_STATUS != 8 \
+	|| FIRST_OPTION_SELECT != 1 || SECOND_OPTION_SELECT != 2 || THIRD_OPTION_SELECT != 3 || FOURTH_OPTION_SELECT != 4)
+		return (1);
+	else
+		return (0);
+}
+
 int main(/*int argc, char *argv[]*/)
 {
 	//if (WIN_W > 1920 || WIN_H > 1080 || WIN_W < 100 || WIN_H < 100)
 	//	return (1);
+	if (verify_defines() != 0)
+		return (error_return("Some defines should %{r}s be changed, please\n", "NOT"));
 	if (main_loop() == 1)
 		return (error_return("The program %{r}s 😢\n", "FAILED"));
 	return (EXIT_SUCCESS);

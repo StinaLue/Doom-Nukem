@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2020/02/05 15:25:53 by phaydont         ###   ########.fr       */
+=======
+/*   Updated: 2020/02/06 00:53:18 by afonck           ###   ########.fr       */
+>>>>>>> master
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +31,6 @@
 /*
 ** MAIN LOOP STATES
 */
-
 # define QUIT_STATE 0
 # define GAME_STATE 1
 # define MENU_STATE 2
@@ -36,7 +39,6 @@
 /*
 ** DIMENSIONS
 */
-
 # define HD_W 1280
 # define HD_H 720
 
@@ -51,21 +53,25 @@
 
 # define OFFSET 20
 
-# define NBPOINTS 2501 // map has 50 * 50 points
-# define NBPOINTSROW 50 // NBPOINTS = NBPOINTSROW * NBPOINTSROW
+/*
+**	map has 50 * 50 points
+**	- > nbpoints = npointsrow (points per row) * nbpointsrow
+*/
+# define NBPOINTS 2501
+# define NBPOINTSROW 50
 # define NBTEXTURES	9
-# define NBHEIGHTS 7
-# define NBOPTIONS 10
-# define NBINSTRUCTS 8
-# define MAPMULTIPLIER 5
+# define NBOPTIONS 8
+# define NBHOVEROPTIONS 3
+# define NBINSTRUCTS 10
+# define MAPMULTIPLIER 4
 # define COLOR_HOVER 0x6C1413
-# define COLOR_PRESSED 0xffff00
+# define COLOR_PRESSED 0x00FF00
 # define COLOR_NORMAL 0xff0000
+# define COLOR_CHOOSE 0xffff00
 
 /*
 ** HUD FLAGS
 */
-
 # define ROT_MAP_SHOW 1//0x00000001
 # define FIX_MAP_SHOW 2//0x00000010
 # define COLORFLAG 4//0x00000100
@@ -74,7 +80,6 @@
 /*
 ** MENU OPTIONS
 */
-
 # define FIRST_OPTION_SELECT 1
 # define SECOND_OPTION_SELECT 2
 # define THIRD_OPTION_SELECT 3
@@ -86,7 +91,6 @@
 
 struct s_sector_node;
 struct s_wall_node;
-
 
 typedef struct				s_vec
 {
@@ -115,8 +119,8 @@ typedef struct				s_wall_node
 	int						color;
 	int						tex_index;
 	int						sector_index;
-	int 					wall_type; // for editor --> 0 == normal wall / 1 == portal
-	int	 					type_color;
+	int						wall_type;
+	int						type_color;
 	struct s_sector_node	*neighbor_sector;
 	double					length;
 }							t_wall_node;
@@ -159,7 +163,6 @@ typedef struct				s_sdlmain
 	SDL_Surface				*win_surf;
 	SDL_Event				event;
 	TTF_Font				*font;
-	//Mix_Music				*music;
 	t_sound					sound;
 	t_vec					mouse_pos;
 	int						win_w;
@@ -189,7 +192,7 @@ typedef struct				s_data
 
 typedef	struct				s_wall
 {
-	t_vecdb					start; // why not t_vec?
+	t_vecdb					start;
 	t_vecdb					end;
 }							t_wall;
 
@@ -234,7 +237,8 @@ typedef struct				s_game
 	t_data					data;
 	t_player				player;
 	t_enemy					*enemy;
-	int						(*weapon_anim[4])(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim);//, t_sound *sound);
+	int						(*weapon_anim[4])(t_gamesurfs *gamesurfs, \
+												SDL_Surface *dest, int *anim);
 }							t_game;
 
 typedef struct				s_instr_menu
@@ -255,29 +259,28 @@ typedef struct				s_options_menu
 {
 	SDL_Surface				*title;
 	SDL_Surface				*options[NBOPTIONS];
-	SDL_Surface 			*ceiling_h_surf;
-	SDL_Surface 			*floor_h_surf;
+	SDL_Surface				*hover_options[NBHOVEROPTIONS];
+	SDL_Surface				*height_surf[2];
 
 	SDL_Rect				title_rect;
 	SDL_Rect				options_rect[NBOPTIONS];
+	SDL_Rect				hover_options_rect[NBHOVEROPTIONS];
 	SDL_Rect				text_rect[NBTEXTURES];
-	SDL_Rect				h_rect[NBHEIGHTS];
-	SDL_Rect 				h_rect_ceiling;
-	SDL_Rect 				h_rect_floor;
-	SDL_Rect  				player_rect;
-	SDL_Rect 				file_name_rect;
+	SDL_Rect				height_rect[2];
+	SDL_Rect				player_rect;
 
 	TTF_Font				*font_title;
 	TTF_Font				*font;
 
 	SDL_Color				text_color;
 	int						bord_color_text[NBTEXTURES];
-	int						bord_color_h;
+	int						bord_color_opt[5];
+	int						bord_hover_color_opt[NBHOVEROPTIONS];
 	int						activ_tex;
-	int 					typing_filename;
-	double 					height_ceiling;
+	int						typing_filename;
+	double					height_ceiling;
 	double					height_floor;
-	char 					file_name[16];
+	char					file_name[16];
 }							t_options_menu;
 
 typedef struct				s_map
@@ -297,19 +300,21 @@ typedef struct				s_editor
 	SDL_Surface				*instr_surf;
 	SDL_Surface				*mouse_surf;
 	SDL_Surface				**wall_textures;
-    SDL_Surface             *alert_convex_surf;
-	SDL_Surface             *alert_loading_surf;
-	SDL_Surface             *loading_success_surf;
-	SDL_Surface 			*player_face_surf;
+	SDL_Surface				**enemy_textures;
+	SDL_Surface				*alert_convex_surf;
+	SDL_Surface				*alert_loading_surf;
+	SDL_Surface				*loading_success_surf;
+	SDL_Surface				*player_face_surf;
 
 	SDL_Rect				editor_rect;
 	SDL_Rect				options_rect;
 	SDL_Rect				instr_rect;
 	SDL_Rect				mouse_rect;
-	SDL_Rect 				player_face_rec;
-    SDL_Rect                alert_convex_rect;
-	SDL_Rect                alert_loading_rect;
-	SDL_Rect                loading_success_rect;
+	SDL_Rect				player_face_rec;
+	SDL_Rect				alert_convex_rect;
+	SDL_Rect				alert_loading_rect;
+	SDL_Rect				loading_success_rect;
+	SDL_Rect				enemy_rect[2];
 
 	t_sector_node			*current_sector;
 	t_sector_node			*selected_sector;
@@ -318,9 +323,9 @@ typedef struct				s_editor
 	int						offset;
 	int						start_sector_reached;
 	int						color_change;
-    int                     show_convex_alert;
-	int 					show_loading_alert;
-	int 					loading_success;
+	int						show_convex_alert;
+	int						show_loading_alert;
+	int						loading_success;
 	t_vec					grid_values[NBPOINTS];
 	t_vec					start_sector;
 	t_wall_node				wall_tmp;
@@ -356,34 +361,35 @@ typedef struct				s_doom
 	int						state;
 }							t_doom;
 
-void	remove_highlight_sector(t_sector_node *sector);
+void						prepend_str(const char *to_prepend, const char *str, char *new_str, int full_size);
 
-void	prepend_str(const char *to_prepend, const char *str, char *new_str, int full_size);
+int							write_map(t_map *map);
 
-int		write_map(t_map *map);
+int							read_map(const char *path, t_map *map);
 
-int		read_map(const char *path, t_map *map);
+int							load_wav(char *file, ALuint buffer);
 
-int							loadWAV(char *file, ALuint buffer);
+int							is_mouse_collide(t_vec mouse_pos, \
+												SDL_Rect collide_rect);
 
-int							is_mouse_collide(t_vec mouse_pos, SDL_Rect collide_rect);
+int							check_collision(double pos_x, double pos_y, \
+											t_wall *walls);
 
-int 						check_collision(double pos_x, double pos_y, t_wall *walls);
-
-int							blit(SDL_Surface *src, SDL_Rect *src_rect, SDL_Surface *dst, SDL_Rect *dst_rect);
+int							blit(SDL_Surface *src, SDL_Rect *src_rect, \
+									SDL_Surface *dst, SDL_Rect *dst_rect);
 
 void						init_rotate_wall(t_wall *new_wall, const t_wall_node *current_wall, const t_player *player);
 
 int							is_in_map(t_vecdb *player);
 
-SDL_Surface					*load_opti_bmp(char *file, SDL_Surface *dst_surf, Uint32 colorkey);
+SDL_Surface					*load_opti_bmp(char *file, SDL_Surface *dst_surf, \
+											Uint32 colorkey);
 
 int							copy_map(const t_map *srcmap, t_map *dstmap);
 
 /*
 ** VECTOR FUNCTIONS
 */
-
 double						get_magnitude(t_vecdb a, t_vecdb b);
 
 t_vecdb						multvecdb(t_vecdb vecdb, double n);
@@ -417,10 +423,15 @@ double						get_point_distance(t_vecdb a, t_vecdb b);
 void						set_vec_values(t_vec *src, t_vec *dst);
 
 t_vecdb						vecdb_diff(t_vecdb a, t_vecdb b);
+
 t_vec						vec_diff(t_vec a, t_vec b);
+
 t_vecdb						vecdb_mult(t_vecdb a, t_vecdb b);
+
 t_vec						vec_mult(t_vec a, t_vec b);
+
 t_vecdb						vecdb_add(t_vecdb a, t_vecdb b);
+
 t_vec						vec_add(t_vec a, t_vec b);
 
 /*
@@ -444,13 +455,12 @@ int							init_map(t_map *map);
 
 int							init_wall_textures(SDL_Surface **wall_textures, SDL_Surface *winsurf);
 
-
 /*
 ** INIT STRUCT FUNCTIONS
 */
 int							init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain);
 
-void						init_data_struct(t_data *data);;
+void						init_data_struct(t_data *data);
 
 void						init_player_struct(t_player *player, t_map *map);
 
@@ -468,8 +478,7 @@ void						check_menu(SDL_Event *event, int *state, int *prev_state_ptr, int prev
 /*
 ** EVENT FUNCTIONS
 */
-
-void	handle_keys(t_doom *doom, const Uint8 *keyboard_state);
+void						handle_keys(t_doom *doom, const Uint8 *keyboard_state);
 
 int							editor_events(t_doom *doom);
 
@@ -478,7 +487,6 @@ int							set_height(t_editor *editor);
 /*
 ** PRINT MINIMAP FUNCTIONS
 */
-
 int							draw_map(t_sdlmain *sdlmain, t_game *game, const t_map *map, char *hud_flags);
 
 int							draw_full_fixedmap(SDL_Surface *surf, t_player *player, const t_map *map, SDL_Surface *winsurf);
@@ -487,11 +495,11 @@ int							draw_full_rotmap(SDL_Surface *surf, t_player *player, const t_map *map
 
 void						draw_perspective_view(SDL_Surface *surf, t_player *player, SDL_Surface **wall_textures);
 
-void							draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view view, t_sector_node *sector, t_player *player);
+void						draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view view, t_sector_node *sector, t_player *player);
+
 /*
 ** DRAWING FUNCTIONS
 */
-
 void						fill_pix(SDL_Surface *surf, int x, int y, int color);
 
 void						draw_line(const t_vec a, const t_vec b, SDL_Surface *surf, int color);
@@ -503,7 +511,6 @@ void						draw_border_options(SDL_Rect *rect, int color, SDL_Surface *surf);
 /*
 **	BLIT FUNCTIONS
 */
-
 int							blit_editor(t_editor *editor, t_sdlmain *sdlmain);
 
 int							blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf);
@@ -511,10 +518,10 @@ int							blit_in_rect(SDL_Surface *surf, SDL_Surface *winsurf, int whichsurf);
 int							blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim);//, t_sound *sound);
 
 int							blit_uzi(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim);//, t_sound *sound)
+
 /*
 ** TEXT FUNCTIONS
 */
-
 int							highlight_text(TTF_Font **font, SDL_Surface **surf, SDL_Color *color, char *text);
 
 int							reset_text(TTF_Font **font, SDL_Surface **surf, SDL_Color *color, char *text);
@@ -522,7 +529,6 @@ int							reset_text(TTF_Font **font, SDL_Surface **surf, SDL_Color *color, char
 /*
 ** NULL INIT FUNCTIONS
 */
-
 void						null_doom_pointers(t_doom *doom);
 
 void						null_game_pointers(t_game *game);
@@ -540,7 +546,6 @@ void						null_walltextures_pointers(SDL_Surface **wall_textures);
 /*
 ** FREE FUNCTIONS
 */
-
 void						quit_sdl_and_ttf();
 
 int							free_menu(t_menu *menu);
@@ -564,7 +569,6 @@ int							free_map(t_map *map);
 /*
 ** SDL_SUB_FUNCTIONS
 */
-
 void						assign_sdlcolor(SDL_Color *color, Uint8 red, Uint8 green, Uint8 blue);
 
 SDL_Rect					create_sdlrect(int x, int y, int w, int h);
@@ -576,7 +580,6 @@ void						assign_sdlrect_invert(SDL_Rect *rect, t_vec origin, t_vec size);
 /*
 ** MOVEMENT
 */
-
 void						movement(t_player *player, t_vecdb move);
 
 void						mouse_movement(SDL_MouseMotionEvent event,t_doom *doom);
@@ -588,13 +591,11 @@ void						mouse_movement(SDL_MouseMotionEvent event,t_doom *doom);
 /*
 ** CREATE SURFACES
 */
-
 int							create_surfaces_editor(t_editor *editor, t_sdlmain *sdlmain);
 
 /*
 ** LOOPS
 */
-
 int							game_loop(t_doom *doom);
 
 int 						menu_loop(t_doom *doom);
@@ -604,19 +605,23 @@ int							editor_loop(t_doom *doom);
 /*
 ** ERROR FUNCTIONS
 */
-
 int							error_return(const char *error_msg, const char *sdl_error);
 
 
 /*
 ** EDITOR FUNCTIONS
 */
-
 int							reset_init_editor(t_editor *editor, t_sdlmain *sdlmain);
 
 void						event_mouse(t_editor *editor, t_sdlmain *sdlmain);
 
 void						event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain);
+
+int							copy_enemy_info(const t_enemy_info *src, t_enemy_info **dst, int num_enemies);
+
+void						get_enemysprite_rect(SDL_Rect *rect, int which_enemy, SDL_Surface *sprite_sheet);
+
+void						remove_highlight_sector(t_sector_node *sector);
 /*
 ** LINKED LIST FUNCTIONS
 */
@@ -624,7 +629,6 @@ void						event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain);
 /*
 ** SECTORS NODE FUNCTIONS
 */
-
 t_sector_node				*add_sector_node(t_sector_node **sector_head);
 
 void						set_sector_position(t_sector_node *sector_list);
@@ -656,7 +660,6 @@ void						free_sector_list(t_sector_node **sector_list);
 /*
 ** WALL NODE FUNCTIONS
 */
-
 t_wall_node					*add_wall_node(t_wall_node **wall_head, const t_wall_node *node);
 
 t_wall_node					*create_wall_node(t_wall_node **wall_head, t_vecdb a, t_vecdb b, int tex_index);
@@ -678,7 +681,6 @@ t_wall_node					*copy_wall_node(t_wall_node **wall_head, const t_wall_node *node
 /*
 ** DEBUG FUNCTIONS
 */
-
 void						print_map_contents(const t_map *map);
 
 int							copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list);
@@ -692,7 +694,6 @@ void						set_wall_length(t_wall_node *head);
 /*
 ** EDITOR CHECK FUNCTIONS
 */
-
 int							check_convex_sector(t_sector_node *sector);
 
 void						set_wall_length(t_wall_node *head);
@@ -706,7 +707,6 @@ void						flip_walls(t_sector_node *sector);
 /*
 ** TEXTURE MAPPING
 */
-
 void						fill_wall_texture(SDL_Surface *surf, const t_wall3d *display_wall, SDL_Surface *tex);
 
 void						draw_texture(SDL_Surface *surf, SDL_Surface *wall_texture, t_wall3d *display_wall);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_menu.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/04 22:26:31 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/05 19:35:29 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,18 @@ int	create_opt_str(t_editor *editor, t_vec origin, int i, const char *str)
 	return (0);
 }
 
+int	create_hover_opt(t_editor *editor, t_vec origin, int i, const char *str)
+{
+	if ((editor->opt_menu.hover_options[i] = \
+		TTF_RenderText_Solid(editor->opt_menu.font, \
+		str, editor->opt_menu.text_color)) == NULL)
+		return (error_return("TTF_RenderText_Solid error = %s\n", \
+				TTF_GetError()));
+	assign_sdlrect(&editor->opt_menu.hover_options_rect[i], origin, \
+					create_vec(0, 0));
+	return (0);
+}
+
 int	create_floor_height(t_editor *editor)
 {
 	int i;
@@ -45,7 +57,7 @@ int	create_floor_height(t_editor *editor)
 	i = (int)editor->opt_menu.height_floor;
 	if ((num = ft_itoa(i)) == NULL)
 		return (1);
-	if ((editor->opt_menu.floor_h_surf = \
+	if ((editor->opt_menu.height_surf[1] = \
 		TTF_RenderText_Solid(editor->opt_menu.font, \
 		num, editor->opt_menu.text_color)) == NULL)
 		{
@@ -66,7 +78,7 @@ int	create_ceiling_height(t_editor *editor)
 	i = (int)editor->opt_menu.height_ceiling;
 	if ((num = ft_itoa(i)) == NULL)
 		return (1);
-	if ((editor->opt_menu.ceiling_h_surf = \
+	if ((editor->opt_menu.height_surf[0] = \
 		TTF_RenderText_Solid(editor->opt_menu.font, \
 		num, editor->opt_menu.text_color)) == NULL)
 		{
@@ -88,11 +100,11 @@ int	init_instr_menu(t_editor *editor)
 		return (1);
 	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, (editor->instr_surf->h / 20) * 8), 1, "undo sector: s") != 0)
 		return (1);
-	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, (editor->instr_surf->h / 20) * 11), 2, "replace map: r") != 0)
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, (editor->instr_surf->h / 20) * 11), 2, "replace map: m") != 0)
 		return (1);
-	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, (editor->instr_surf->h / 20) * 14), 3, "load map: l") != 0)
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, (editor->instr_surf->h / 20) * 14), 3, "load map into game: l") != 0)
 		return (1);
-	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, (editor->instr_surf->h / 20) * 5), 4, "create sector: left click") != 0)
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, (editor->instr_surf->h / 20) * 5), 4, "choose sector: right click") != 0)
 		return (1);
 	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, (editor->instr_surf->h / 20) * 8), 5, "create new map: n") != 0)
 		return (1);
@@ -100,32 +112,34 @@ int	init_instr_menu(t_editor *editor)
 		return (1);
 	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, (editor->instr_surf->h / 20) * 14), 7, "set player position: p") != 0)
 		return (1);
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 18, (editor->instr_surf->h / 20) * 17), 8, "set enemy: b/e") != 0)
+		return (1);
+	if (create_instruct_str(editor, create_vec(editor->instr_surf->w / 2, (editor->instr_surf->h / 20) * 17), 9, "remove enemy: r") != 0)
+		return (1);
 	return (0);
 }
 
 int set_height(t_editor *editor)
 {
-	//assign_sdlrect(&editor->opt_menu.h_rect_floor[0], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 6), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / editor->opt_menu.height_floor));
-	assign_sdlrect(&editor->opt_menu.h_rect_ceiling, create_vec((editor->opt_surf->h / 20) * 7, ((editor->opt_surf->h) / 20) * 5), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / 11));
-	//assign_sdlrect_invert(&editor->opt_menu.h_rect_ceiling[0], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 6), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / editor->opt_menu.height_ceiling));
-	assign_sdlrect/* _invert */(&editor->opt_menu.h_rect_floor, create_vec((editor->opt_surf->h / 20) * 7, ((editor->opt_surf->h) / 20) * 6), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / 11));
+	assign_sdlrect(&editor->opt_menu.height_rect[0], create_vec((editor->opt_surf->h / 20) * 7, ((editor->opt_surf->h) / 20) * 5), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / 11));
+	assign_sdlrect/* _invert */(&editor->opt_menu.height_rect[1], create_vec((editor->opt_surf->h / 20) * 7, ((editor->opt_surf->h) / 20) * 6), create_vec((editor->opt_surf->w) / 7, (editor->opt_surf->w) / 11));
 	return (0);
 }
 
 int set_textures(t_editor *editor)
 {
-	assign_sdlrect(&editor->opt_menu.text_rect[0], create_vec((editor->opt_surf->h / 20), ((editor->opt_surf->h) / 20) * 9.5), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
-	assign_sdlrect(&editor->opt_menu.text_rect[1], create_vec((editor->opt_surf->h / 20), ((editor->opt_surf->h) / 20) * 11.5), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
-	assign_sdlrect(&editor->opt_menu.text_rect[2], create_vec((editor->opt_surf->h / 20), ((editor->opt_surf->h) / 20) * 13.5), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
-	assign_sdlrect(&editor->opt_menu.text_rect[3], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 9.5), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
-	assign_sdlrect(&editor->opt_menu.text_rect[4], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 11.5), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
-	assign_sdlrect(&editor->opt_menu.text_rect[5], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 13.5), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
-	assign_sdlrect(&editor->opt_menu.text_rect[6], create_vec((editor->opt_surf->h / 20) * 5, ((editor->opt_surf->h) / 20) * 9.5), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
-	assign_sdlrect(&editor->opt_menu.text_rect[7], create_vec((editor->opt_surf->h / 20) * 5, ((editor->opt_surf->h) / 20) * 11.5), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
-	assign_sdlrect(&editor->opt_menu.text_rect[8], create_vec((editor->opt_surf->h / 20) * 5, ((editor->opt_surf->h) / 20) * 13.5), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
-	//assign_sdlrect(&editor->opt_menu.text_rect[9], create_vec((editor->opt_surf->h / 20) * 7, ((editor->opt_surf->h) / 20) * 9.5), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
-	//assign_sdlrect(&editor->opt_menu.text_rect[10], create_vec((editor->opt_surf->h / 20) * 7, ((editor->opt_surf->h) / 20) * 11.5), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
-	//assign_sdlrect(&editor->opt_menu.text_rect[11], create_vec((editor->opt_surf->h / 20) * 7, ((editor->opt_surf->h) / 20) * 13.5), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
+	assign_sdlrect(&editor->opt_menu.text_rect[0], create_vec((editor->opt_surf->h / 20), ((editor->opt_surf->h) / 20) * 10), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
+	assign_sdlrect(&editor->opt_menu.text_rect[1], create_vec((editor->opt_surf->h / 20), ((editor->opt_surf->h) / 20) * 12), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
+	assign_sdlrect(&editor->opt_menu.text_rect[2], create_vec((editor->opt_surf->h / 20), ((editor->opt_surf->h) / 20) * 14), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
+	assign_sdlrect(&editor->opt_menu.text_rect[3], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 10), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
+	assign_sdlrect(&editor->opt_menu.text_rect[4], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 12), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
+	assign_sdlrect(&editor->opt_menu.text_rect[5], create_vec((editor->opt_surf->h / 20) * 3, ((editor->opt_surf->h) / 20) * 14), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
+	assign_sdlrect(&editor->opt_menu.text_rect[6], create_vec((editor->opt_surf->h / 20) * 5, ((editor->opt_surf->h) / 20) * 10), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
+	assign_sdlrect(&editor->opt_menu.text_rect[7], create_vec((editor->opt_surf->h / 20) * 5, ((editor->opt_surf->h) / 20) * 12), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
+	assign_sdlrect(&editor->opt_menu.text_rect[8], create_vec((editor->opt_surf->h / 20) * 5, ((editor->opt_surf->h) / 20) * 14), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
+	//assign_sdlrect(&editor->opt_menu.text_rect[9], create_vec((editor->opt_surf->h / 20) * 7, ((editor->opt_surf->h) / 20) * 10), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
+	//assign_sdlrect(&editor->opt_menu.text_rect[10], create_vec((editor->opt_surf->h / 20) * 7, ((editor->opt_surf->h) / 20) * 12), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
+	//assign_sdlrect(&editor->opt_menu.text_rect[11], create_vec((editor->opt_surf->h / 20) * 7, ((editor->opt_surf->h) / 20) * 14), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
 	return (0);
 }
 
@@ -138,9 +152,9 @@ int	init_options_menu(t_editor *editor)
 		return (1);
 	if (create_opt_str(editor, create_vec((editor->opt_surf->h) / 20, ((editor->opt_surf->h) / 20) * 8.5), 1, "CHOOSE TEXTURE") != 0)
 		return (1);
-	if (create_opt_str(editor, create_vec((editor->opt_surf->h) / 20, ((editor->opt_surf->h) / 20) * 16), 2, "ENTER MAP NAME") != 0)
+	if (create_opt_str(editor, create_vec((editor->opt_surf->h) / 20, ((editor->opt_surf->h) / 20) * 16), 2, "    ") != 0)
 		return (1);
-	if (create_opt_str(editor, create_vec((editor->opt_surf->w) / 2, ((editor->opt_surf->h) / 20) * 3), 3, "SET PLAYER POSITION") != 0)
+	if (create_opt_str(editor, create_vec((editor->opt_surf->w) / 2, ((editor->opt_surf->h) / 20) * 3), 3, "LOAD/SAVE MAP") != 0)
 		return (1);
 	if (create_opt_str(editor, create_vec((editor->opt_surf->w) / 2, ((editor->opt_surf->h) / 20) * 8.5), 4, "CHOOSE OBJECT") != 0)
 		return (1);
@@ -148,11 +162,13 @@ int	init_options_menu(t_editor *editor)
 		return (1);
 	if (create_opt_str(editor, create_vec((editor->opt_surf->h / 20), ((editor->opt_surf->h) / 20) * 6), 6, "height floor:") != 0)
 		return (1);
-	if (create_opt_str(editor, create_vec((editor->opt_surf->h / 20), ((editor->opt_surf->h) / 20) * 17), 7, editor->opt_menu.file_name) != 0)
+	if (create_opt_str(editor, create_vec((editor->opt_surf->w / 2), ((editor->opt_surf->h) / 20) * 5), 7, "name:") != 0)
 		return (1);
-	if (create_opt_str(editor, create_vec((editor->opt_surf->h / 20), ((editor->opt_surf->h) / 20) * 18.5), 8, "SAVE MAP") != 0)
+	if (create_hover_opt(editor, create_vec(((editor->opt_surf->w / 2) * 1.2), ((editor->opt_surf->h) / 20) * 5), 0, editor->opt_menu.file_name) != 0)
 		return (1);
-	if (create_opt_str(editor, create_vec((editor->opt_surf->h / 20) * 7, ((editor->opt_surf->h) / 20) * 18.5), 9, "LOAD MAP") != 0)
+	if (create_hover_opt(editor, create_vec(((editor->opt_surf->w / 2)), ((editor->opt_surf->h) / 20) * 6.5), 1, "SAVE MAP") != 0)
+		return (1);
+	if (create_hover_opt(editor, create_vec(((editor->opt_surf->w / 2) * 1.45), ((editor->opt_surf->h) / 20) * 6.5), 2, "LOAD MAP") != 0)
 		return (1);
 	if (create_ceiling_height(editor) != 0)
 		return(1);

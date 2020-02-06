@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   null_pointers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/05 01:39:06 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/05 14:54:58 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,15 @@ void    null_option_pointers(t_editor *editor)
         editor->opt_menu.options[i] = NULL;
         i++;
     }
+    i = 0;
+    while (i < NBHOVEROPTIONS)
+    {
+        editor->opt_menu.hover_options[i] = NULL;
+        i++;
+    }
     editor->opt_menu.title = NULL;
-    editor->opt_menu.ceiling_h_surf = NULL;
-    editor->opt_menu.floor_h_surf = NULL;
+    editor->opt_menu.height_surf[0] = NULL;
+    editor->opt_menu.height_surf[1] = NULL;
     editor->opt_menu.font = NULL;
     editor->opt_menu.font_title = NULL;
 }
