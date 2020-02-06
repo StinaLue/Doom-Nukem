@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/06 19:27:13 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/06 19:39:25 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,7 +267,11 @@ int	play_sound(t_game *game, t_sdlmain *sdlmain, t_map *map)
 		alSourcePause(sound->source[2]);
 	if (player->health <= 0 && is_buffer_playing(sdlmain->sound.source[0], sdlmain->sound.buffer[0]))
 	{
+		alSourcei(sdlmain->sound.source[0], AL_LOOPING, AL_FALSE);
 		alSourceStop(sdlmain->sound.source[0]);
+		init_source(sdlmain->sound.source[0], 1, 1, 1);
+		alSourcei(sdlmain->sound.source[0], AL_BUFFER, sdlmain->sound.buffer[1]);
+		alSourcePlay(sdlmain->sound.source[0]);
 	}
 	return (0);
 }
