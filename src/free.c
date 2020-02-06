@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 14:54:54 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 12:16:30 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,12 @@ int		free_fonts_surf(t_editor *editor)
 	{
 		SDL_FreeSurface(editor->instr_menu.instructs[i]);
 		editor->instr_menu.instructs[i] = NULL;
+		i++;
+	}
+	while (i < 2)
+	{
+		SDL_FreeSurface(editor->opt_menu.weapon_surf[i]);
+		editor->opt_menu.weapon_surf[i] = NULL;
 		i++;
 	}
 	return (EXIT_FAILURE);

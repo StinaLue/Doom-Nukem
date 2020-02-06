@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 19:04:38 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 12:15:42 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,23 @@ int	blit_textures(t_editor *editor)
 				editor->opt_menu.bord_color_text[i], editor->opt_surf);
 		if ((SDL_BlitScaled(editor->wall_textures[i], NULL, \
 			editor->opt_surf, &editor->opt_menu.text_rect[i])) < 0)
+			return (error_return("BlitScaled error = %s\n", SDL_GetError()));
+		i++;
+	}
+	return (0);
+}
+
+int	blit_music_weapon(t_editor *editor)
+{
+	int i;
+
+	i = 0;
+	while (i < 2)
+	{
+		draw_border_options(&editor->opt_menu.weapon_rect[i], \
+				editor->opt_menu.bord_color_weapon[i], editor->opt_surf);
+		if ((SDL_BlitScaled(editor->wall_textures[i], NULL, \
+			editor->opt_surf, &editor->opt_menu.weapon_rect[i])) < 0)
 			return (error_return("BlitScaled error = %s\n", SDL_GetError()));
 		i++;
 	}
@@ -188,6 +205,8 @@ int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 	if (blit_height(editor) != 0)
 		return (1);
 	if (blit_alert(editor) != 0)
+		return (1);
+	if (blit_music_weapon(editor) != 0)
 		return (1);
 	if (blit_editor_surf(editor, sdlmain) != 0)
 		return (1);

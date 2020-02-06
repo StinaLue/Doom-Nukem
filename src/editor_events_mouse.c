@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_mouse.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 19:57:15 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/06 12:21:37 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,6 +287,8 @@ void event_mouse(t_editor *editor, t_sdlmain *sdlmain)
 	editor->opt_menu.bord_hover_color_opt[0] = COLOR_CHOOSE;
 	editor->opt_menu.bord_hover_color_opt[1] = COLOR_CHOOSE;
 	editor->opt_menu.bord_hover_color_opt[2] = COLOR_CHOOSE;
+	//editor->opt_menu.bord_hover_color_opt[3] = COLOR_CHOOSE;
+	//editor->opt_menu.bord_hover_color_opt[4] = COLOR_CHOOSE;
 	SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
 	mouse_in_options(editor, sdlmain);
 	if (sdlmain->event.type == SDL_MOUSEWHEEL)

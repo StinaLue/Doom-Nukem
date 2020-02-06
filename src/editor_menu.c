@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 19:35:29 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 12:23:36 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,13 @@ int set_textures(t_editor *editor)
 	return (0);
 }
 
+int set_weapon_textures(t_editor *editor)
+{
+	assign_sdlrect(&editor->opt_menu.weapon_rect[0], create_vec((editor->opt_surf->h / 20) * 12, ((editor->opt_surf->h) / 20) * 14), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
+	assign_sdlrect(&editor->opt_menu.weapon_rect[1], create_vec((editor->opt_surf->h / 20) * 15, ((editor->opt_surf->h) / 20) * 14), create_vec((editor->opt_surf->w) / 16, (editor->opt_surf->w) / 16));
+	return (0);
+}
+
 int	init_options_menu(t_editor *editor)
 {
 	if ((editor->opt_menu.title = TTF_RenderText_Solid(editor->opt_menu.font_title, "Options", editor->opt_menu.text_color)) == NULL)
@@ -152,17 +159,17 @@ int	init_options_menu(t_editor *editor)
 		return (1);
 	if (create_opt_str(editor, create_vec((editor->opt_surf->h) / 20, ((editor->opt_surf->h) / 20) * 8.5), 1, "CHOOSE TEXTURE") != 0)
 		return (1);
-	if (create_opt_str(editor, create_vec((editor->opt_surf->h) / 20, ((editor->opt_surf->h) / 20) * 16), 2, "    ") != 0)
+	if (create_opt_str(editor, create_vec((editor->opt_surf->w) / 2, ((editor->opt_surf->h) / 20) * 3), 2, "LOAD/SAVE MAP") != 0)
 		return (1);
-	if (create_opt_str(editor, create_vec((editor->opt_surf->w) / 2, ((editor->opt_surf->h) / 20) * 3), 3, "LOAD/SAVE MAP") != 0)
+	if (create_opt_str(editor, create_vec((editor->opt_surf->w) / 2, ((editor->opt_surf->h) / 20) * 8.5), 3, "CHOOSE MUSIC") != 0)
 		return (1);
-	if (create_opt_str(editor, create_vec((editor->opt_surf->w) / 2, ((editor->opt_surf->h) / 20) * 8.5), 4, "CHOOSE OBJECT") != 0)
+	if (create_opt_str(editor, create_vec((editor->opt_surf->h) / 20, ((editor->opt_surf->h) / 20) * 5), 4, "height ceiling:") != 0)
 		return (1);
-	if (create_opt_str(editor, create_vec((editor->opt_surf->h) / 20, ((editor->opt_surf->h) / 20) * 5), 5, "height ceiling:") != 0)
+	if (create_opt_str(editor, create_vec((editor->opt_surf->h / 20), ((editor->opt_surf->h) / 20) * 6), 5, "height floor:") != 0)
 		return (1);
-	if (create_opt_str(editor, create_vec((editor->opt_surf->h / 20), ((editor->opt_surf->h) / 20) * 6), 6, "height floor:") != 0)
+	if (create_opt_str(editor, create_vec((editor->opt_surf->w / 2), ((editor->opt_surf->h) / 20) * 5), 6, "name:") != 0)
 		return (1);
-	if (create_opt_str(editor, create_vec((editor->opt_surf->w / 2), ((editor->opt_surf->h) / 20) * 5), 7, "name:") != 0)
+	if (create_opt_str(editor, create_vec((editor->opt_surf->w) / 2, ((editor->opt_surf->h) / 20) * 13), 7, "CHOOSE WEAPONS") != 0)
 		return (1);
 	if (create_hover_opt(editor, create_vec(((editor->opt_surf->w / 2) * 1.2), ((editor->opt_surf->h) / 20) * 5), 0, editor->opt_menu.file_name) != 0)
 		return (1);
@@ -170,11 +177,17 @@ int	init_options_menu(t_editor *editor)
 		return (1);
 	if (create_hover_opt(editor, create_vec(((editor->opt_surf->w / 2) * 1.45), ((editor->opt_surf->h) / 20) * 6.5), 2, "LOAD MAP") != 0)
 		return (1);
+		if (create_hover_opt(editor, create_vec(((editor->opt_surf->w / 2)), ((editor->opt_surf->h) / 20) * 10), 3, "RETRO MUSIC") != 0)
+		return (1);
+		if (create_hover_opt(editor, create_vec(((editor->opt_surf->w / 2)), ((editor->opt_surf->h) / 20) * 11.5), 4, "DOOM MUSIC") != 0)
+		return (1);
 	if (create_ceiling_height(editor) != 0)
 		return(1);
 	if (create_floor_height(editor) != 0)
 		return(1);
 	if (set_textures(editor) != 0)
+		return (1);
+	if (set_weapon_textures(editor) != 0)
 		return (1);
 	if (set_height(editor) != 0)
 		return (1);
