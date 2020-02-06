@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/04 18:24:46 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/06 11:49:59 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,19 @@ t_wall_node	*get_collision_wall(t_player *player, t_sector_node *sector, double 
 			dist = wall_distance(vecdb_add(player->pos, player->move), wall);
 			if (dist < *min_dist)
 			{
+				if (wall->neighbor_sector != NULL && wall->wall_type == 1)
+				{
+					tmp_deepest_wall = get_collision_wall(player, wall->neighbor_sector, min_dist);
+					if (tmp_deepest_wall != NULL)
+						deepest_wall = tmp_deepest_wall;
+				}
+				else
+				{
+					deepest_wall = wall;
+					*min_dist = dist;
+				}
+				
+				/*
 				if (wall->neighbor_sector == NULL)
 				{
 					deepest_wall = wall;
@@ -78,7 +91,7 @@ t_wall_node	*get_collision_wall(t_player *player, t_sector_node *sector, double 
 					tmp_deepest_wall = get_collision_wall(player, wall->neighbor_sector, min_dist);
 					if (tmp_deepest_wall != NULL)
 						deepest_wall = tmp_deepest_wall;
-				}
+				}*/
 			}
 		}
 		wall = wall->next;
