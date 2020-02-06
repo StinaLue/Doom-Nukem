@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 12:23:36 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 15:43:58 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	create_hover_opt(t_editor *editor, t_vec origin, int i, const char *str)
 		str, editor->opt_menu.text_color)) == NULL)
 		return (error_return("TTF_RenderText_Solid error = %s\n", \
 				TTF_GetError()));
-	assign_sdlrect(&editor->opt_menu.hover_options_rect[i], origin, \
+	assign_sdlrect(&editor->opt_menu.hover_opt_rect[i], origin, \
 					create_vec(0, 0));
 	return (0);
 }

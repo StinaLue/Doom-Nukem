@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 13:17:58 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 15:43:58 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,27 @@ int	blit_instructs(t_editor *editor)
 	return (0);
 }
 
+int	blit_hover_options(t_editor *editor)
+{
+	int i;
+
+	i = 0;
+	while (i < NBHOVEROPTIONS)
+	{
+		if ((SDL_BlitSurface(editor->opt_menu.hover_options[i], NULL,
+			editor->opt_surf, &editor->opt_menu.hover_opt_rect[i])) < 0)
+			return (error_return("BlitSurface error = %s\n", SDL_GetError()));
+		draw_border_options(&editor->opt_menu.hover_opt_rect[i], \
+					editor->opt_menu.bord_hover_color_opt[i], editor->opt_surf);
+		i++;
+	}
+	SDL_FreeSurface(editor->opt_menu.hover_options[0]);
+	editor->opt_menu.hover_options[0] = \
+		TTF_RenderText_Solid(editor->opt_menu.font, \
+		editor->opt_menu.file_name, editor->opt_menu.text_color);
+	return (0);
+}
+
 int	blit_options(t_editor *editor)
 {
 	int i;
@@ -46,20 +67,8 @@ int	blit_options(t_editor *editor)
 			return (error_return("BlitSurface error = %s\n", SDL_GetError()));
 		i++;
 	}
-	i = 0;
-	while (i < NBHOVEROPTIONS)
-	{
-		if ((SDL_BlitSurface(editor->opt_menu.hover_options[i], NULL,
-			editor->opt_surf, &editor->opt_menu.hover_options_rect[i])) < 0)
-			return (error_return("BlitSurface error = %s\n", SDL_GetError()));
-		draw_border_options(&editor->opt_menu.hover_options_rect[i], \
-					editor->opt_menu.bord_hover_color_opt[i], editor->opt_surf);
-		i++;
-	}
-	SDL_FreeSurface(editor->opt_menu.hover_options[0]);
-	editor->opt_menu.hover_options[0] = \
-		TTF_RenderText_Solid(editor->opt_menu.font, \
-		editor->opt_menu.file_name, editor->opt_menu.text_color);
+	if (blit_hover_options(editor) != 0)
+		return (1);
 	return (0);
 }
 
@@ -200,13 +209,10 @@ int	blit_editor_surf(t_editor *editor, t_sdlmain *sdlmain)
 	return (0);
 }
 
-int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
+int	blit_player_face(t_editor *editor)
 {
-	int			i;
 	SDL_Rect	face_rect;
-	SDL_Rect	enemy_rect;
 
-	i = 0;
 	if (editor->edit_map.player_spawn.x != -1 \
 			&& editor->edit_map.player_spawn.y != -1)
 	{
@@ -218,6 +224,15 @@ int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 							editor->editor_surf, &face_rect) < 0)
 			return (1);
 	}
+	return (0);
+}
+
+int	blit_enemy(t_editor *editor)
+{
+	int			i;
+	SDL_Rect	enemy_rect;
+
+	i = 0;
 	while (i < editor->edit_map.num_enemies \
 			&& editor->edit_map.enemy_info != NULL)
 	{
@@ -233,6 +248,15 @@ int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 			return (1);
 		i++;
 	}
+	return (0);
+}
+
+int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
+{
+	if (blit_player_face(editor) != 0)
+		return (1);
+	if (blit_enemy(editor) != 0)
+		return (1);
 	if (blit_instructs(editor) != 0)
 		return (1);
 	if (blit_options(editor) != 0)

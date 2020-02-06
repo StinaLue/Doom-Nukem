@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 12:27:24 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 15:43:58 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,7 +259,7 @@ typedef struct				s_options_menu
 
 	SDL_Rect				title_rect;
 	SDL_Rect				options_rect[NBOPTIONS];
-	SDL_Rect				hover_options_rect[NBHOVEROPTIONS];
+	SDL_Rect				hover_opt_rect[NBHOVEROPTIONS];
 	SDL_Rect				text_rect[NBTEXTURES];
 	SDL_Rect				height_rect[2];
 	SDL_Rect				player_rect;
@@ -512,7 +512,7 @@ void						draw_line(const t_vec a, const t_vec b, SDL_Surface *surf, int color);
 
 void						draw_border(SDL_Surface *surf, int color);
 
-void						draw_border_options(SDL_Rect *rect, int color, SDL_Surface *surf);
+void						draw_border_options(SDL_Rect *rec, int color, SDL_Surface *surf);
 
 /*
 **	BLIT FUNCTIONS
