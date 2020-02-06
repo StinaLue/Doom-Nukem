@@ -6,27 +6,26 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 16:22:14 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/05 11:44:29 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/06 15:18:58 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 #include "libft.h"
 
-void	init_rotate_wall(t_wall *new_wall, const t_wall_node *current_wall, const t_player *player)
+t_segment	rotate_wall_relative(const t_wall_node *current_wall, const t_player *player)
 {
-	new_wall->start.x = current_wall->start.x - player->pos.x;
-	new_wall->start.y = current_wall->start.y - player->pos.y;
-	new_wall->end.x = current_wall->end.x - player->pos.x;
-	new_wall->end.y = current_wall->end.y - player->pos.y;
-	new_wall->start = rotate2d(new_wall->start, -player->angle);
-	new_wall->end = rotate2d(new_wall->end, -player->angle);
+	t_segment	new_wall;
+	new_wall.a = vecdb_diff(current_wall->start, player->pos);
+	new_wall.b = vecdb_diff(current_wall->end, player->pos);
+	new_wall.a = rotate2d(new_wall.a, -player->angle);
+	new_wall.b = rotate2d(new_wall.b, -player->angle);
+	return (new_wall);
 }
 
 void	draw_rot_minimap(SDL_Surface *surf, t_player *player, const t_map *map)
 {
-	t_wall transfo_wall;
-	t_wall wall_tmp;
+	t_segment wall;
 	t_vecdb map_center;
 	t_vecdb transfo_direc;
 	t_wall_node *current_wall;
@@ -34,11 +33,9 @@ void	draw_rot_minimap(SDL_Surface *surf, t_player *player, const t_map *map)
 	
 	map_center.x = surf->w / 2 + 0.5;
 	map_center.y = surf->h / 2 + 0.5;
-	transfo_direc.x = player->inertia.x * 100;
-	transfo_direc.y = player->inertia.y * 100;
+	transfo_direc = multvecdb(player->inertia, 100);
 	transfo_direc = rotate2d(transfo_direc, -player->angle);
-	transfo_direc.x = map_center.x + transfo_direc.x;
-	transfo_direc.y = map_center.y + transfo_direc.y;
+	transfo_direc = vecdb_add(map_center, transfo_direc);
 
 	current_sector = map->sector_head;
 	while (current_sector != NULL)
@@ -46,14 +43,10 @@ void	draw_rot_minimap(SDL_Surface *surf, t_player *player, const t_map *map)
 		current_wall = current_sector->wall_head;
 		while (current_wall != NULL)
 		{
-			init_rotate_wall(&wall_tmp, current_wall, player);
-			wall_tmp.start = multvecdb(wall_tmp.start, 0.25);
-			wall_tmp.end = multvecdb(wall_tmp.end, 0.25);
-			transfo_wall.start.x = map_center.x + wall_tmp.start.x;
-			transfo_wall.start.y = map_center.y + wall_tmp.start.y;
-			transfo_wall.end.x = map_center.x + wall_tmp.end.x;
-			transfo_wall.end.y = map_center.y + wall_tmp.end.y;
-			draw_line(vecdb_to_vec(transfo_wall.start), vecdb_to_vec(transfo_wall.end), surf, current_wall->neighbor_sector == NULL ? 0xEEEEEE : 0x333333);
+			wall = rotate_wall_relative(current_wall, player);
+			wall.a = vecdb_add(map_center, multvecdb(wall.a, 0.25));
+			wall.b = vecdb_add(map_center, multvecdb(wall.b, 0.25));
+			draw_line(vecdb_to_vec(wall.a), vecdb_to_vec(wall.b), surf, current_wall->neighbor_sector == NULL ? 0xEEEEEE : 0x333333);
 			current_wall = current_wall->next;
 		}
 		current_sector = current_sector->next;

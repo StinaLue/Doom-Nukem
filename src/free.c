@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 16:47:00 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/06 19:42:25 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 
 void	quit_sdl_and_ttf(void)
 {
-	//Mix_CloseAudio();
-	//Mix_Quit();
 	TTF_Quit();
 	SDL_Quit();
 }
@@ -40,8 +38,6 @@ int		free_sdlmain(t_sdlmain *sdlmain)
 	TTF_CloseFont(sdlmain->font);
 	sdlmain->font = NULL;
 	free_sound(&sdlmain->sound);
-	//Mix_FreeMusic(sdlmain->music);
-	//sdlmain->music = NULL;
 	return (EXIT_FAILURE);
 }
 
@@ -141,6 +137,12 @@ int		free_fonts_surf(t_editor *editor)
 	{
 		SDL_FreeSurface(editor->instr_menu.instructs[i]);
 		editor->instr_menu.instructs[i] = NULL;
+		i++;
+	}
+	while (i < 2)
+	{
+		SDL_FreeSurface(editor->opt_menu.weapon_surf[i]);
+		editor->opt_menu.weapon_surf[i] = NULL;
 		i++;
 	}
 	return (EXIT_FAILURE);

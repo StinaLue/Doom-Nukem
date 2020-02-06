@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/06 18:20:15 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/06 19:41:15 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,12 @@ void    null_option_pointers(t_editor *editor)
     while (i < NBHOVEROPTIONS)
     {
         editor->opt_menu.hover_options[i] = NULL;
+        i++;
+    }
+    i = 0;
+    while (i < 2)
+    {
+        editor->opt_menu.weapon_surf[i] = NULL;
         i++;
     }
     editor->opt_menu.title = NULL;

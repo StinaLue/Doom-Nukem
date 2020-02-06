@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_keys.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/04 16:34:55 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/06 18:24:00 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	basic_move(t_player *player, const Uint8 *keyboard_state)//, t_sound *sound
 	move.x = 0;
 	move.y = 0;
 	if (keyboard_state[SDL_SCANCODE_W])
-		move.y +=1;
+		move.y += 1;
 	if (keyboard_state[SDL_SCANCODE_S])
 		move.y -= 1;
 	if (keyboard_state[SDL_SCANCODE_A])
@@ -53,12 +53,10 @@ void	basic_look(t_player *player, const Uint8 *keyboard_state)
 		player->true_fov -= 0.01;
 	if (keyboard_state[SDL_SCANCODE_PAGEDOWN] && player->true_fov < 2.27)//hardcoded 130deg
 		player->true_fov += 0.01;
-	player->fov.x = 100 * sin(player->true_fov / 2);
-	player->fov.y = 100 * cos(player->true_fov / 2);
-	/*if (keyboard_state[SDL_SCANCODE_H])
-		player->helper = 1;
-	else
-		player->helper = 0;*/
+	player->view.b.x = 100 * sin(player->true_fov / 2);
+	player->view.b.y = 100 * cos(player->true_fov / 2);
+	player->view.a.x = -player->view.b.x;
+	player->view.a.y = player->view.b.y;
 }
 
 void	handle_keys(t_doom *doom, const Uint8 *keyboard_state)//, t_sound *sound)

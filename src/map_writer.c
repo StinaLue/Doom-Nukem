@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_writer.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/03 17:54:01 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/05 12:15:39 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/06 17:24:11 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,8 @@ void	prepend_str(const char *to_prepend, const char *str, char *new_str, int ful
 
 int		write_map(t_map *map)
 {
-	int fd;
-	char full_path[22];
+	int		fd;
+	char	full_path[22];
 
 	prepend_str(".maps/", map->name, full_path, 22);
 	if (map == NULL)
@@ -159,7 +159,7 @@ int		write_map(t_map *map)
 
 	if (write(fd, "END", 3) != 3)
 		return (error_return("Error writing END mark\n", NULL));
-    if (close(fd) != 0)
-        return (error_return("Error closing fd\n", NULL));
+	if (close(fd) != 0)
+		return (error_return("Error closing fd\n", NULL));
 	return (0);
 }

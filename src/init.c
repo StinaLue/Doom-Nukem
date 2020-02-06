@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 18:00:10 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/06 19:42:01 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,6 @@ int		init_sdl_and_ttf(void)
 		ft_dprintf(STDERR_FILENO, "TTF_Init Error: %{r}s\n", TTF_GetError());
 		error = 1;
 	}
-	/*if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024) != 0)
-	{
-		ft_dprintf(STDERR_FILENO, "Mix_OpenAudio Error: %{r}s\n", \
-					Mix_GetError());
-		error = 1;
-	}*/
 	return (error);
 }
 
@@ -312,7 +306,8 @@ int	init_game(t_game *game, t_sdlmain *sdlmain, t_map *map)
 	//game->data.num_enemies = map->num_enemies;
 	//game->data.enemy_info = map->enemy_info;
 	init_data_struct(&(game->data));
-	if (init_gamesurfs_struct(&(game->surfs), sdlmain) == 1 || init_enemy_struct(game, map) == 1)
+	if (init_gamesurfs_struct(&(game->surfs), sdlmain) == 1 \
+							|| init_enemy_struct(game, map) == 1)
 		return (1);
 	//init_data_struct(&(game->data, map));
 	init_player_struct(&(game->player), map);

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/06 19:39:25 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/06 19:42:14 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "doom.h"
 #include "libbmp.h"
 
-int blit_uzi(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)//, t_sound *sound)
+int	blit_uzi(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)//, t_sound *sound)
 {
 	gamesurfs->weapons_rect.x = gamesurfs->current_frame * gamesurfs->weapons_rect.w;
 	gamesurfs->weapons_rect.y = gamesurfs->weapons_rect.h * 2;
@@ -52,7 +52,7 @@ int blit_uzi(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)//, t_sound *s
 	return (0);
 }
 
-int blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)//, t_sound *sound)
+int	blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)//, t_sound *sound)
 {
 	gamesurfs->weapons_rect.x = gamesurfs->current_frame * gamesurfs->weapons_rect.w;
 	gamesurfs->weapons_rect.y = 0;
@@ -96,6 +96,7 @@ void	draw_crosshair(SDL_Surface *dest)
 	t_vec bottom_cross;
 	t_vec left_cross;
 	t_vec right_cross;
+	
 	top_cross.x = dest->w / 2;
 	top_cross.y = (dest->h / 2) + 10;
 	bottom_cross.x = dest->w / 2;
@@ -171,9 +172,10 @@ int	blit_enemies(t_game *game, SDL_Surface *dest)
 	return (0);
 }
 
-int is_source_playing(ALuint source)
+int	is_source_playing(ALuint source)
 {
 	ALenum state;
+
 	alGetSourcei(source, AL_SOURCE_STATE, &state);
 	return (state == AL_PLAYING);
 }
@@ -189,24 +191,32 @@ void	play_weapon_sound(t_game *game, t_sdlmain *sdlmain)
 	player = &game->player;
 	if (player->current_weapon == 0)
 	{
-		if (player->anim == 1 && gamesurfs->current_frame == 0 && gamesurfs->anim_timer == 0 && !is_source_playing(sound->source[1]))
+		if (player->anim == 1 && gamesurfs->current_frame == 0 \
+			&& gamesurfs->anim_timer == 0 \
+			&& !is_source_playing(sound->source[1]))
 		{
 			alSourcef(sound->source[1], AL_PITCH, 1.6);
 			alSourcei(sound->source[1], AL_BUFFER, sound->buffer[1]);
 			alSourcePlay(sound->source[1]);
 		}
-		else if (player->anim == 0 && gamesurfs->current_frame == 0 && gamesurfs->anim_timer == 0 && is_source_playing(sound->source[1]))
+		else if (player->anim == 0 && gamesurfs->current_frame == 0 \
+			&& gamesurfs->anim_timer == 0 \
+			&& is_source_playing(sound->source[1]))
 			alSourceStop(sound->source[1]);
 	}
 	if (player->current_weapon == 1)
 	{
-		if (player->anim == 1 && gamesurfs->current_frame == 0 && gamesurfs->anim_timer == 0 && !is_source_playing(sound->source[1]))
+		if (player->anim == 1 && gamesurfs->current_frame == 0 \
+			&& gamesurfs->anim_timer == 0 \
+			&& !is_source_playing(sound->source[1]))
 		{
 			alSourcef(sound->source[1], AL_PITCH, 1);
 			alSourcei(sound->source[1], AL_BUFFER, sound->buffer[3]);
 			alSourcePlay(sound->source[1]);
 		}
-		else if (player->anim == 0 && gamesurfs->current_frame == 0 && gamesurfs->anim_timer == 0 && is_source_playing(sound->source[1]))
+		else if (player->anim == 0 && gamesurfs->current_frame == 0 \
+				&& gamesurfs->anim_timer == 0 \
+				&& is_source_playing(sound->source[1]))
 			alSourceStop(sound->source[1]);
 	}
 }
@@ -301,12 +311,14 @@ int game_loop(t_doom *doom)
 {
 	t_game		*game;
 	t_sdlmain	*sdlmain;
-	Uint32		startclock = 0;
-	int			itt = 0;
-	t_view		view;
+	Uint32		startclock;
+	int			itt;
+//	t_view		view;
 
 	game = &(doom->game);
 	sdlmain = &(doom->sdlmain);
+	itt = 0;
+	startclock = 0;
 
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	SDL_WarpMouseInWindow(sdlmain->win, sdlmain->win_surf->w / 2, sdlmain->win_surf->h / 2);
@@ -331,7 +343,6 @@ int game_loop(t_doom *doom)
 		//draw_perspective_view(game->surfs.perspective_view, &game->player, doom->wall_textures);
 		//if ((SDL_BlitScaled(game->surfs.weapons, &game->surfs.katana[(int)((float)SDL_GetTicks() / 400) % 4], game->surfs.perspective_view, NULL)) != 0)
 		//	printf("%s\n", SDL_GetError());
-
 		//print sector index
 		/*int i = 0;
 		t_sector_node *node = doom->map.sector_head;
@@ -342,12 +353,8 @@ int game_loop(t_doom *doom)
 			i++;
 			node = node->next;
 		}*/
-
 		//draw_perspective_view(game->surfs.perspective_view, &game->player, doom->wall_textures);
-		view.left = doom->game.player.fov;
-		view.right = doom->game.player.fov;
-		view.left.x *= -1;
-		draw_view_recursive(game->surfs.perspective_view, doom->wall_textures, view, doom->game.player.sector, &doom->game.player);
+		draw_view_recursive(game->surfs.perspective_view, doom->wall_textures, doom->game.player.view, doom->game.player.sector, &doom->game.player);
 		//if (blit_enemies(game, game->surfs.perspective_view) != 0)
 		//	return (error_return("Blit enemies error\n", NULL));
 		if (blit_weapon(game, game->surfs.perspective_view, game->player.current_weapon) != 0)//, &sdlmain->sound) != 0)
@@ -355,14 +362,15 @@ int game_loop(t_doom *doom)
 
 		if ((blit_hud_faces(game)) == 1)
 			return (error_return("error during blit_hud_faces\n", NULL));
-		if ((SDL_BlitScaled(game->surfs.perspective_view, NULL, sdlmain->win_surf, NULL)) < 0)
+		if ((SDL_BlitScaled(game->surfs.perspective_view, \
+							NULL, sdlmain->win_surf, NULL)) < 0)
 			return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
 		if ((draw_map(sdlmain, game, &doom->map, &game->data.hud_flags)) == 1)
 			return (error_return("error during map drawing\n", NULL));
 		if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)
-			return (error_return("SDL_UpdateWindowSurface error = %{r}s\n", SDL_GetError()));
-
-		itt++;
+			return (error_return("SDL_UpdateWindowSurface error = %{r}s\n", \
+						SDL_GetError()));
+			itt++;
 		if (SDL_GetTicks() - startclock >= 1000)
 		{
 			printf("fps:%d\n", itt);

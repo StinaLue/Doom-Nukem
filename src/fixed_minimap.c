@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   fixed_minimap.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 16:23:32 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/04 16:33:55 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/06 17:25:14 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 #include "libft.h"
 
-void	draw_fixed_minimap(SDL_Surface *surf, t_player *player, const t_map *map)
+void	draw_fixed_minimap(SDL_Surface *surf, \
+							t_player *player, const t_map *map)
 {
-	t_sector_node *current_sector;
-	t_wall_node	*current_wall;
+	t_sector_node	*current_sector;
+	t_wall_node		*current_wall;
 
 	current_sector = map->sector_head;
 	while (current_sector != NULL)
@@ -25,7 +26,8 @@ void	draw_fixed_minimap(SDL_Surface *surf, t_player *player, const t_map *map)
 		while (current_wall != NULL)
 		{
 			if (current_wall->neighbor_sector == NULL)
-			draw_line(vecdb_to_vec(current_wall->start), vecdb_to_vec(current_wall->end), surf, current_wall->color);
+				draw_line(vecdb_to_vec(current_wall->start), \
+					vecdb_to_vec(current_wall->end), surf, current_wall->color);
 			current_wall = current_wall->next;
 		}
 		current_sector = current_sector->next;
@@ -33,7 +35,8 @@ void	draw_fixed_minimap(SDL_Surface *surf, t_player *player, const t_map *map)
 	fill_pix(surf, (int)player->pos.x, (int)player->pos.y, 0xFFFF00);
 }
 
-int		draw_full_fixedmap(SDL_Surface *surf, t_player *player, const t_map *map, SDL_Surface *winsurf)
+int		draw_full_fixedmap(SDL_Surface *surf, t_player *player, \
+							const t_map *map, SDL_Surface *winsurf)
 {
 	int ret;
 
