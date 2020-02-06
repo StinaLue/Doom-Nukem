@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 20:04:58 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 18:00:10 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,74 +91,42 @@ int		init_sound(t_sound *sound)
 	alcMakeContextCurrent(sound->context);
 	alListener3f(AL_POSITION, 0, 0, 0);
 	alListener3f(AL_VELOCITY, 0, 0, 0);
-	//alListener3f(AL_ORIENTATION, 0, 1, 0);
 	alGenSources(NB_SOUND_SOURCES, sound->source);
-	alSourcef(sound->source[0], AL_PITCH, 1);
-	alSourcef(sound->source[0], AL_GAIN, 0.3);
-	alSource3f(sound->source[0], AL_POSITION, 0, 0, 0);
-	alSource3f(sound->source[0], AL_VELOCITY, 0, 0, 0);
-	alSourcei(sound->source[0], AL_LOOPING, AL_TRUE);
-	alSourcef(sound->source[1], AL_PITCH, 1);
-	alSourcef(sound->source[1], AL_GAIN, 1);
-	alSource3f(sound->source[1], AL_POSITION, 0, 0, 0);
-	alSource3f(sound->source[1], AL_VELOCITY, 0, 0, 0);
-	alSourcei(sound->source[1], AL_LOOPING, AL_FALSE);
-	alSourcef(sound->source[2], AL_PITCH, 1.5);
-	alSourcef(sound->source[2], AL_GAIN, 1);
-	alSource3f(sound->source[2], AL_POSITION, 0, 0, 0);
-	alSource3f(sound->source[2], AL_VELOCITY, 0, 0, 0);
-	alSourcei(sound->source[2], AL_LOOPING, AL_TRUE);
+	init_source(sound->source[0], 1, 0.3, 1); // background music
+	init_source(sound->source[1], 1, 1, 0); // player weapon
+	init_source(sound->source[2], 1.5, 1, 1); // player's feet
 	alGetError();
 	alGenBuffers(NB_SOUND_BUFFERS, sound->buffer);
+
+	//MUSIC
 	if ((load_wav("assets/sounds/beet.wav", sound->buffer[0])) != 0)
 		return (error_return("error loading %{r}s\n", "beet.wav"));
+	//if ((load_wav("assets/sounds/beet_mono.wav", sound->buffer[0])) != 0)
+	//	return (error_return("error loading %{r}s\n", "beet.wav"));
+
+	//player sounds
 	if ((load_wav("assets/sounds/niceswordsound.wav", sound->buffer[1])) != 0)
 		return (error_return("error loading %{r}s\n", "niceswordsound.wav"));
 	if ((load_wav("assets/sounds/footsteps-1.wav", sound->buffer[2])) != 0)
 		return (error_return("error loading %{r}s\n", "footsteps-1.wav"));
 	if ((load_wav("assets/sounds/uzi.wav", sound->buffer[3])) != 0)
 		return (error_return("error loading %{r}s\n", "uzi.wav"));
+	
+	//enemies sounds
+	if ((load_wav("assets/sounds/zombie_mono.wav", sound->buffer[4])) != 0)
+		return (error_return("error loading %{r}s\n", "zombie.wav"));
+	if ((load_wav("assets/sounds/boss.wav", sound->buffer[5])) != 0)
+		return (error_return("error loading %{r}s\n", "boss.wav"));
+	if ((load_wav("assets/sounds/boss_hit.wav", sound->buffer[6])) != 0)
+		return (error_return("error loading %{r}s\n", "boss_hit.wav"));
+
+	//environment sounds
+	if ((load_wav("assets/sounds/you_lose.wav", sound->buffer[7])) != 0)
+		return (error_return("error loading %{r}s\n", "you_lose.wav"));
+
 	alSourcei(sound->source[0], AL_BUFFER, sound->buffer[0]);
 	alSourcei(sound->source[2], AL_BUFFER, sound->buffer[2]);
 	alSourcePlay(sound->source[0]);
-	//alSourcePlay(sound->source[1]);
-	/*
-	if ((sound->error = alGetError()) != AL_NO_ERROR)
-	{
-		DisplayALError("alGenBuffers :", sound->error);
-		return (1);
-	}
-	// Load test.wav
-	load_wavFile("test.wav",&format,&data,&size,&freq,&loop);
-	if ((error = alGetError()) != AL_NO_ERROR)
-	{
-	 DisplayALError("alutload_wavFile test.wav : ", error);
-	 alDeleteBuffers(NUM_BUFFERS, g_Buffers);
-	 return;
-	}
-	// Copy test.wav data into AL Buffer 0
-	alBufferData(g_Buffers[0],format,data,size,freq);
-	if ((error = alGetError()) != AL_NO_ERROR)
-	{
-	 DisplayALError("alBufferData buffer 0 : ", error);
-	 alDeleteBuffers(NUM_BUFFERS, g_Buffers);
-	 return;
-	}
-	// Unload test.wav
-	unload_wav(format,data,size,freq);
-	if ((error = alGetError()) != AL_NO_ERROR)
-	{
-	 DisplayALError("alutUnload_wav : ", error);
-	 alDeleteBuffers(NUM_BUFFERS, g_Buffers);
-	 return;
-	}
-	// Generate Sources
-	alGenSources(1,source);
-	if ((error = alGetError()) != AL_NO_ERROR)
-	{
-	 DisplayALError("alGenSources 1 : ", error);
-	 return;
-	} */
 	return (0);
 }
 

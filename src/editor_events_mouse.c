@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 19:57:15 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/06 16:57:30 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
 			editor->opt_menu.typing_filename = 1;
 			//editor->opt_menu.bord_color_opt[1] = COLOR_HOVER;
 		}
-		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.hover_options_rect[1]) && sdlmain->event.button.button == SDL_BUTTON_LEFT)
+		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.hover_options_rect[1]) && sdlmain->event.button.button == SDL_BUTTON_LEFT && editor->start_sector_reached == 1)
 		{
 			if (editor->selected_sector != NULL)
 				remove_highlight_sector(editor->selected_sector);
@@ -132,7 +132,7 @@ void mouse_in_options(t_editor *editor, t_sdlmain *sdlmain)
 			//editor->opt_menu.typing_filename = 1;
 			//editor->opt_menu.bord_color_text[i] = COLOR_HOVER;
 		}
-		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.hover_options_rect[2]) && sdlmain->event.button.button == SDL_BUTTON_LEFT)
+		if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.hover_options_rect[2]) && sdlmain->event.button.button == SDL_BUTTON_LEFT && editor->start_sector_reached == 1)
 		{
 			if (editor->selected_sector != NULL)
 				remove_highlight_sector(editor->selected_sector);

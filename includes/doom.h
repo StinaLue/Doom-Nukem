@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 00:53:18 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/06 17:53:23 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # define PLAYER_RADIUS 0.3
 # define NB_WALL_TEXTURES 9
 # define NB_SOUND_SOURCES 3
-# define NB_SOUND_BUFFERS 4
+# define NB_SOUND_BUFFERS 8
 
 /*
 ** MAIN LOOP STATES
@@ -207,6 +207,7 @@ typedef struct				s_enemy
 	double					angle;
 	int						health;
 	int						state;
+	ALuint					sound_src;
 }							t_enemy;
 
 typedef struct				s_player
@@ -448,6 +449,8 @@ int							init_editor_menu(t_editor *editor);
 int							init_map(t_map *map);
 
 int							init_wall_textures(SDL_Surface **wall_textures, SDL_Surface *winsurf);
+
+void						init_source(ALuint src, ALfloat pitch, ALfloat gain, int loop);
 
 /*
 ** INIT STRUCT FUNCTIONS

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/05 21:22:24 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/06 18:03:55 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ int is_source_playing(ALuint source)
 	return (state == AL_PLAYING);
 }
 
-int	play_sound(t_game *game, t_sdlmain *sdlmain)
+void	play_weapon_sound(t_game *game, t_sdlmain *sdlmain)
 {
 	t_gamesurfs *gamesurfs;
 	t_sound		*sound;
@@ -209,11 +209,76 @@ int	play_sound(t_game *game, t_sdlmain *sdlmain)
 		else if (player->anim == 0 && gamesurfs->current_frame == 0 && gamesurfs->anim_timer == 0 && is_source_playing(sound->source[1]))
 			alSourceStop(sound->source[1]);
 	}
+}
+
+void	init_source(ALuint src, ALfloat pitch, ALfloat gain, int loop)
+{
+	alSourcef(src, AL_PITCH, pitch);
+	alSourcef(src, AL_GAIN, gain);
+	alSource3f(src, AL_POSITION, 0, 0, 0);
+	alSource3f(src, AL_VELOCITY, 0, 0, 0);
+	alSourcei(src, AL_LOOPING, loop);
+}
+
+void	play_enemies_sound(t_enemy *enemies, ALuint *buffers, t_map *map)
+{
+	int i;
+
+	i = 0;
+	if (enemies == NULL || map->num_enemies <= 0)
+		return ;
+	while (i < map->num_enemies)
+	{
+		if (!is_source_playing(enemies[i].sound_src))
+		{
+			if (map->enemy_info[i].which_enemy == 0)
+				alSourcei(enemies[i].sound_src, AL_BUFFER, buffers[4]);
+			else if (map->enemy_info[i].which_enemy == 1)
+				alSourcei(enemies[i].sound_src, AL_BUFFER, buffers[5]);
+			alSourcePlay(enemies[i].sound_src);
+		}
+		alSource3f(enemies[i].sound_src, AL_POSITION, enemies[i].pos.x, enemies[i].pos.y, 0);
+		i++;
+	}
+}
+
+int	play_sound(t_game *game, t_sdlmain *sdlmain, t_map *map)
+{
+	t_gamesurfs *gamesurfs;
+	t_sound		*sound;
+	t_player	*player;
+
+	gamesurfs = &game->surfs;
+	sound = &sdlmain->sound;
+	player = &game->player;
+	play_weapon_sound(game, sdlmain);
+	play_enemies_sound(game->enemy, sound->buffer, map);
 	if (player->is_moving == 1 && !is_source_playing(sound->source[2]))
 		alSourcePlay(sound->source[2]);
 	else if (player->is_moving == 0)
 		alSourcePause(sound->source[2]);
 	return (0);
+}
+
+void	set_listener_ori(double angle, t_vecdb player_pos)
+{
+	ALfloat	orix;
+	ALfloat oriy;
+	t_vecdb test;
+	ALfloat listener_ori[6];
+
+	orix = sin(angle) * -5 + player_pos.x;
+	oriy = cos(angle) * 5 + player_pos.y;
+	test.x = orix;
+	test.y = oriy; 
+	listener_ori[0] = orix;
+	listener_ori[1] = oriy;
+	listener_ori[2] = cross_product(test, player_pos);
+	listener_ori[3] = 0;
+	listener_ori[4] = 1;
+	listener_ori[5] = 0;
+	alListenerfv(AL_ORIENTATION, listener_ori);
+	//printf("vec direc x %f y %f\n", orix, oriy);
 }
 
 int game_loop(t_doom *doom)
@@ -236,11 +301,13 @@ int game_loop(t_doom *doom)
 		while (SDL_PollEvent(&(sdlmain->event)) != 0)
 			if (handle_events(doom) != 0)
 				break ;
-		play_sound(game, sdlmain);
+		play_sound(game, sdlmain, &doom->map);
 		handle_keys(doom, SDL_GetKeyboardState(NULL));//, &sdlmain->sound);
 		alListener3f(AL_POSITION, game->player.pos.x, game->player.pos.y, 0);
-		alSource3f(sdlmain->sound.source[0], AL_POSITION, doom->map.sector_head->wall_head->start.x, doom->map.sector_head->wall_head->start.y, 0);
-		alSource3f(sdlmain->sound.source[1], AL_POSITION, doom->map.sector_head->wall_head->end.x, doom->map.sector_head->wall_head->end.y, 0);
+		//printf("vec player x %f y %f\n", game->player.pos.x, game->player.pos.y);
+		set_listener_ori(game->player.angle, game->player.pos);
+		//alSource3f(sdlmain->sound.source[0], AL_POSITION, doom->map.sector_head->wall_head->start.x, doom->map.sector_head->wall_head->start.y, 0);
+		//alSource3f(sdlmain->sound.source[1], AL_POSITION, doom->map.sector_head->wall_head->end.x, doom->map.sector_head->wall_head->end.y, 0);
 		if (game->data.hud_flags & COLORFLAG)
 			game->surfs.perspective_view->userdata = "yescolor";
 		else

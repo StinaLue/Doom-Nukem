@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 11:28:43 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/06 16:18:36 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,8 @@ void	key_event_l(t_editor *editor, t_doom *doom)
 			free_map(&doom->map);
 		//set_sectors_clockwise(editor->edit_map.sector_head);
 		if (copy_map(&editor->edit_map, &doom->map) != 0)
+			doom->state = QUIT_STATE;
+		if (init_enemy_struct(&doom->game, &doom->map) != 0)
 			doom->state = QUIT_STATE;
 		doom->game.player.pos = vec_to_vecdb(doom->map.player_spawn);
 		doom->game.player.sector = get_sector_by_pos(doom->map.sector_head, \

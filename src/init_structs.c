@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 00:51:01 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/06 18:06:03 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,8 @@ int	init_enemy_struct(t_game *game, t_map *map)
 		get_enemysprite_rect(&game->enemy[current_enemy].clip_tex, enemy_info->which_enemy, game->enemy[current_enemy].texture);
 		game->enemy[current_enemy].state = 0;
 		game->enemy[current_enemy].health = 100;
+		alGenSources(1, &game->enemy[current_enemy].sound_src);
+		init_source(game->enemy[current_enemy].sound_src, 1, 5, 1);
 		current_enemy++;
 	}
 	return (0);
