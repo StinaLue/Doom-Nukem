@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 18:24:37 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 18:48:33 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,7 +276,7 @@ typedef struct				s_options_menu
 	int						bord_hover_color_opt[NBHOVEROPTIONS];
 	int 					bord_color_weapon[2];
 	int						activ_tex;
-	int 					activ_music;
+	int 					activ_music[2];
 	int 					activ_weapon[2];
 	int						typing_filename;
 	double					height_ceiling;
