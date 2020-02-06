@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 16:31:33 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 18:24:37 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define TITLE "DOOM"
 
 # define SQRT2 1.4142135623730950488
-# define PLAYER_RADIUS 0.3
+# define PLAYER_RADIUS 0.5
 # define NB_WALL_TEXTURES 9
 # define NB_SOUND_SOURCES 3
 # define NB_SOUND_BUFFERS 4
@@ -186,18 +186,17 @@ typedef struct				s_data
 	char					hud_flags;
 }							t_data;
 
-typedef	struct				s_wall
+typedef	struct				s_segment
 {
-	t_vecdb					start;
-	t_vecdb					end;
-}							t_wall;
+	t_vecdb					a;
+	t_vecdb					b;
+}							t_segment;
 
-typedef struct				s_view
+/*typedef struct				s_view
 {
 	t_vecdb					left;
 	t_vecdb					right;
-	t_vecdb					origin;
-}							t_view;
+}							t_view;*/
 
 typedef struct				s_enemy
 {
@@ -216,8 +215,11 @@ typedef struct				s_player
 	t_vecdb					move;
 	t_vecdb					inertia;
 	double					angle;
+	double					posz;
+	double					height;
 	double					view_z;
-	t_vecdb					fov;
+	//t_vecdb				fov;
+	t_segment				view;
 	double					true_fov;
 	int						health;
 	int						is_moving;
@@ -373,13 +375,13 @@ int							is_mouse_collide(t_vec mouse_pos, \
 												SDL_Rect collide_rect);
 
 int							check_collision(double pos_x, double pos_y, \
-											t_wall *walls);
+											t_segment *walls);
 
 int							blit(SDL_Surface *src, SDL_Rect *src_rect, \
 									SDL_Surface *dst, SDL_Rect *dst_rect);
 
-void						init_rotate_wall(t_wall *new_wall, \
-							const t_wall_node *current_wall, const t_player *player);
+t_segment					rotate_wall_relative(const t_wall_node *current_wall, \
+													const t_player *player);
 
 int							is_in_map(t_vecdb *player);
 
@@ -501,8 +503,7 @@ int							draw_full_rotmap(SDL_Surface *surf, t_player *player, const t_map *map
 
 void						draw_perspective_view(SDL_Surface *surf, t_player *player, SDL_Surface **wall_textures);
 
-void						draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view view, t_sector_node *sector, t_player *player);
-
+void		draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_segment view, t_sector_node *sector, t_player *player);
 /*
 ** DRAWING FUNCTIONS
 */

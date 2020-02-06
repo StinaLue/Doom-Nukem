@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 16:04:49 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 18:37:27 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ int				editor_events(t_doom *doom)
 		if (ft_strlen(editor->opt_menu.file_name) > 5)
 			ft_strncpy(editor->edit_map.name, editor->opt_menu.file_name, 15);
 		editor->opt_menu.typing_filename = 0;
+		editor->opt_menu.bord_hover_color_opt[0] = COLOR_CHOOSE;
 	}
 	else if (sdlmain->event.type == SDL_KEYDOWN \
 			&& (key == SDLK_DELETE || key == SDLK_BACKSPACE))

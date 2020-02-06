@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:02:35 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/05 13:01:03 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/05 16:13:15 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ t_sector_node	*add_sector_node(t_sector_node **sector_head)
 	new_node->wall_num = 0;
 	new_node->sector_center.x = -1;
 	new_node->sector_center.y = -1;
+	new_node->ceiling_height = 20;
+	new_node->floor_height = 2;
 	return (new_node);
 }
 
@@ -164,9 +166,11 @@ int			copy_sector_list(t_sector_node *sector_list, t_sector_node **new_list)
 	*new_list = malloc(sizeof(t_sector_node));
 	if (*new_list == NULL)
 		return (-1);
-	(*new_list)->wall_num = sector_list->wall_num;
-	(*new_list)->sector_center = sector_list->sector_center;
 	(*new_list)->next = NULL;
+	(*new_list)->sector_center = sector_list->sector_center;
+	(*new_list)->floor_height = sector_list->floor_height;
+	(*new_list)->ceiling_height = sector_list->ceiling_height;
+	(*new_list)->wall_num = sector_list->wall_num;
 	if (copy_wall_list(sector_list->wall_head, &(*new_list)->wall_head) == -1)
 		return (-1);
 	ret = copy_sector_list(sector_list->next, &(*new_list)->next);
@@ -209,8 +213,8 @@ int			count_sectors(t_sector_node *sector_list)
 	return (i);
 }
 
-
-//applies a given function to every sector in the list
+//applies a boolean function on every sector of the sector list
+//returns 0 if any of the sector return 0 to the function else return 1
 int		itt_sectors_true(t_sector_node *sector_node, int (*f)(t_sector_node *))
 {
 	while (sector_node)
@@ -222,6 +226,7 @@ int		itt_sectors_true(t_sector_node *sector_node, int (*f)(t_sector_node *))
 	return (1);
 }
 
+//runs void function on every wall_head of a sector list
 void		itt_sector_wall_heads(t_sector_node *sector_node, void (*f)(t_wall_node *wall_node))
 {
 	while (sector_node)

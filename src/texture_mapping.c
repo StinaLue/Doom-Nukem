@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 18:01:04 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/05 12:08:08 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/05 16:43:00 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	draw_texture(SDL_Surface *surf, SDL_Surface *tex, t_wall3d *wall)
 	while (win.x < wall->top_right.x)
 	{
 		pos.x = get_texture_x((double)(win.x - wall->top_left.x) / width, wall);
-		pos.x *= (int)(wall->length / 4 + 0.5);
+		//pos.x *= (int)(wall->length / 20 + 1);
 		if (top_limit < surf->h)
 			win.y = top_limit;
 		else

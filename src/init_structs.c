@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 17:33:56 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 18:23:49 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,13 @@ void	init_player_struct(t_player *player, t_map *map)
 	player->pos.y = map->player_spawn.y;
 	player->sector = get_sector_by_pos(map->sector_head, player->pos);
 	player->angle = 0;
+	player->posz = 0;
+	player->height = 10;
 	player->view_z = 0;
 	player->inertia.x = 0;
 	player->inertia.y = 0;
-	player->fov.x = 100;
-	player->fov.y = 100;
+	/*player->view.x = 100;
+	player->fov.y = 100;*/
 	player->true_fov = 1.5708; //hardcoded 90deg
 	player->health = 100;
 	player->is_moving = 0;

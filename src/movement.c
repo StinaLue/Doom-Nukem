@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/06 11:49:59 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/06 12:33:04 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,7 @@ void	update_sector(t_player *player, t_wall_node *wall)
 		if (wall->neighbor_sector != NULL && is_in_direction(player->move, wall) && is_in_range(vecdb_add(player->pos, player->move), wall) && wall_distance(player->pos, wall) <= 0)
 		{
 			player->sector = wall->neighbor_sector;
+			player->posz = player->sector->floor_height;
 			return ;
 		}
 		wall = wall->next;
@@ -226,4 +227,5 @@ void	movement(t_player *player, t_vecdb move)
 	player->pos = vecdb_add(player->pos, player->move);
 	player->inertia = multvecdb(player->move, 0.96);
 	update_sector(player, player->sector->wall_head);
+	player->posz = player->sector->floor_height;
 }
