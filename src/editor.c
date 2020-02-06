@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 18:56:21 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 19:10:18 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ void	init_colors(t_editor *editor)
 		editor->opt_menu.bord_hover_color_opt[4] = COLOR_CHOOSE;
 	editor->opt_menu.bord_color_opt[0] = COLOR_CHOOSE;
 	editor->opt_menu.bord_color_opt[1] = COLOR_CHOOSE;
-	editor->opt_menu.bord_color_weapon[0] = COLOR_NORMAL;
-	editor->opt_menu.bord_color_weapon[1] = COLOR_NORMAL;
+	editor->opt_menu.bord_color_weapon[0] = COLOR_CHOOSE;
+	editor->opt_menu.bord_color_weapon[1] = COLOR_CHOOSE;
 }
 
 int	init_editor(t_editor *editor, t_sdlmain *sdlmain)

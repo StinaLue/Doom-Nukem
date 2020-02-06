@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 19:00:06 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 19:09:31 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,22 @@ void	mouse_in_options(t_editor *editor, t_sdlmain *sdlmain, \
 			menu->bord_hover_color_opt[3] = COLOR_CHOOSE;
 			menu->activ_music[0] = 0;
 			menu->activ_music[1] = 1;
+		}
+		if (is_mouse_collide(sdlmain->mouse_pos, menu->weapon_rect[0]) \
+				&& sdlmain->event.button.button == SDL_BUTTON_LEFT)
+		{
+			if (menu->bord_color_weapon[0] == COLOR_PRESSED)
+				menu->bord_color_weapon[0] = COLOR_CHOOSE;
+			else
+				menu->bord_color_weapon[0] = COLOR_PRESSED;
+		}
+		if (is_mouse_collide(sdlmain->mouse_pos, menu->weapon_rect[1]) \
+				&& sdlmain->event.button.button == SDL_BUTTON_LEFT)
+		{
+			if (menu->bord_color_weapon[1] == COLOR_PRESSED)
+				menu->bord_color_weapon[1] = COLOR_CHOOSE;
+			else
+				menu->bord_color_weapon[1] = COLOR_PRESSED;
 		}
 		if (is_mouse_collide(sdlmain->mouse_pos, menu->hover_opt_rect[2]) \
 						&& sdlmain->event.button.button == SDL_BUTTON_LEFT)
