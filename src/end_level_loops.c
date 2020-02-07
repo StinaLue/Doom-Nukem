@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 15:36:13 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 16:14:11 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 18:44:57 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void game_over_loop(t_doom *doom)
 		while (SDL_PollEvent(&(sdlmain->event)) != 0)
 		{
 			check_quit(&sdlmain->event, &doom->state);
-			if (sdlmain->event.key.keysym.sym == SDLK_TAB)
+			if (sdlmain->event.key.keysym.sym == SDLK_TAB && sdlmain->event.type == SDL_KEYDOWN)
 				doom->state = EDITOR_STATE;
 		}
 	}
@@ -64,7 +64,7 @@ void win_loop(t_doom *doom)
 		while (SDL_PollEvent(&(sdlmain->event)) != 0)
 		{
 			check_quit(&sdlmain->event, &doom->state);
-			if (sdlmain->event.key.keysym.sym == SDLK_TAB)
+			if (sdlmain->event.key.keysym.sym == SDLK_TAB && sdlmain->event.type == SDL_KEYDOWN)
 				doom->state = EDITOR_STATE;
 		}
 	}
