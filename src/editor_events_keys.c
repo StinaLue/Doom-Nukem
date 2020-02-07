@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_keys.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 16:50:50 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 17:12:05 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,6 +260,22 @@ void	key_event_r(t_editor *editor, t_doom *doom)
 	}
 }
 
+void	key_event_n(t_editor *editor)
+{
+	free_map(&editor->edit_map);
+	editor->start_sector_reached = 1;
+	editor->edit_map.player_spawn.x = -1;
+	editor->edit_map.player_spawn.y = -1;
+	editor->edit_map.sector_head = NULL;
+	editor->current_sector = NULL;
+	editor->current_wall = NULL;
+	editor->selected_sector = NULL;
+	editor->wall_tmp.start.x = -1;
+	editor->wall_tmp.start.y = -1;
+	editor->wall_tmp.end.x = -1;
+	editor->wall_tmp.end.y = -1;
+}
+
 void	key_event_p(t_editor *editor)
 {
 	if (is_sector_occupied(editor->selected_sector, &editor->edit_map) == 0)
@@ -292,4 +308,6 @@ void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 		key_event_b(editor, doom, &editor->edit_map);
 	if (key == SDLK_r && editor->selected_sector != NULL)
 		key_event_r(editor, doom);
+	if (key == SDLK_n)
+		key_event_n(editor);
 }

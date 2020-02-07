@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 16:21:49 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 16:52:27 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -637,7 +637,7 @@ int							error_return(const char *error_msg, const char *sdl_error);
 */
 int							reset_init_editor(t_editor *editor, t_sdlmain *sdlmain);
 
-void						event_mouse(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain);
+void						event_mouse(t_editor *editor, t_sdlmain *sdlmain);
 
 void						event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain);
 

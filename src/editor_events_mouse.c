@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_mouse.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 16:10:28 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 17:10:18 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	set_border_color(t_editor *editor, t_vec mouse_pos)
 }
 
 void	mouse_in_options(t_editor *editor, t_sdlmain *sdlmain, \
-							t_options_menu *menu, t_doom *doom)
+							t_options_menu *menu)
 {
 	int i;
 
@@ -97,10 +97,11 @@ void	mouse_in_options(t_editor *editor, t_sdlmain *sdlmain, \
 				vecdb_to_vec(editor->edit_map.sector_head->sector_center);
 			if (write_map(&editor->edit_map) != 0)
 			{
-				ft_dprintf(STDERR_FILENO, "error in write map\n"); //THIS IS NOT SECURE YET
-				doom->state = QUIT_STATE;
+				ft_dprintf(STDERR_FILENO, "error in write map\n");
+				//unlink(editor->edit_map.name);
 			}
-			ft_printf("%{g}s was properly written 😉\n", editor->edit_map.name);
+			else
+				ft_printf("%{g}s was properly written 😉\n", editor->edit_map.name);
 		}
 		if (is_mouse_collide(sdlmain->mouse_pos, menu->hover_opt_rect[3]) \
 				&& sdlmain->event.button.button == SDL_BUTTON_LEFT)
@@ -148,12 +149,13 @@ void	mouse_in_options(t_editor *editor, t_sdlmain *sdlmain, \
 				remove_highlight_sector(editor->selected_sector);
 			editor->selected_sector = NULL;
 			free_map(&editor->edit_map);
-			if (read_map(menu->file_name, &editor->edit_map))
+			if (read_map(menu->file_name, &editor->edit_map) != 0)
 			{
 				ft_dprintf(STDERR_FILENO, "error in read map\n");
-				doom->state = QUIT_STATE;
+				free_map(&editor->edit_map);
 			}
-			ft_printf("%{g}s was properly loaded 😉\n", editor->edit_map.name);
+			else
+				ft_printf("%{g}s was properly loaded 😉\n", editor->edit_map.name);
 		}
 		i = 0;
 		while (i < 2)
@@ -298,7 +300,7 @@ void	mouse_click_right(t_editor *editor, t_sdlmain *sdlmain)
 	set_height(&editor->opt_menu, editor->opt_surf);
 }
 
-void	event_mouse(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
+void	event_mouse(t_editor *editor, t_sdlmain *sdlmain)
 {
 	if (sdlmain->event.button.button == SDL_BUTTON_LEFT \
 		&& sdlmain->mouse_pos.x <= NBPOINTSROW \
@@ -326,5 +328,5 @@ void	event_mouse(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 	if (editor->opt_menu.activ_weapon[1] != 1)
 		editor->opt_menu.bord_color_weapon[1] = COLOR_CHOOSE;
 	SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
-	mouse_in_options(editor, sdlmain, &editor->opt_menu, doom);
+	mouse_in_options(editor, sdlmain, &editor->opt_menu);
 }

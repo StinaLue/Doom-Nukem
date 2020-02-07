@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 17:01:32 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 17:16:03 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ int				editor_events(t_doom *doom)
 		if (sdlmain->event.type == SDL_KEYDOWN)
 			event_keydown(editor, doom, sdlmain);
 		if (/* sdlmain->event.type == SDL_MOUSEBUTTONDOWN ||  */sdlmain->event.type == SDL_MOUSEMOTION/*  || sdlmain->event.type == SDL_MOUSEWHEEL */)
-			event_mouse(editor, doom, sdlmain);
+			event_mouse(editor, sdlmain);
 	}
 	find_neighbors(&editor->edit_map);
 	itt_sector_wall_heads(editor->edit_map.sector_head, &set_wall_length);
