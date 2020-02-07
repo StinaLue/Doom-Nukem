@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_writer.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/03 17:54:01 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/06 17:24:11 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 16:47:42 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ int		write_map(t_map *map)
 	//if ((fd = open(map->name, O_CREAT | O_WRONLY | O_RDONLY)) == -1)
 	//if ((fd = open(map->name, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR)) == -1)
 	//if ((fd = open(map->name, O_CREAT | O_WRONLY | O_TRUNC | O_NOFOLLOW, S_IRUSR)) == -1)
-	if ((fd = open(full_path, O_CREAT | O_WRONLY | O_TRUNC | O_NOFOLLOW, S_IRUSR)) == -1)
+	if ((fd = open(full_path, O_CREAT | O_WRONLY | O_TRUNC | O_NOFOLLOW, S_IRUSR | S_IWUSR)) == -1)
 		return (error_return("error opening: %s\n", strerror(errno)));
 		//return (error_return("error opening %s\n", map->name));
 

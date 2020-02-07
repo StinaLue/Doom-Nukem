@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 00:10:56 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 16:53:17 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int				editor_events(t_doom *doom)
 			|| sdlmain->event.type == SDL_MOUSEMOTION \
 			|| sdlmain->event.type == SDL_MOUSEWHEEL)
 		{
-			event_mouse(editor, doom, sdlmain);
+			event_mouse(editor, sdlmain);
 		}
 	}
 	find_neighbors(&editor->edit_map);

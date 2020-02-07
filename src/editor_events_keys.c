@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 16:21:08 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 16:37:52 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,6 +260,22 @@ void	key_event_r(t_editor *editor, t_doom *doom)
 	}
 }
 
+void	key_event_n(t_editor *editor)
+{
+	free_map(&editor->edit_map);
+	editor->start_sector_reached = 1;
+	editor->edit_map.player_spawn.x = -1;
+	editor->edit_map.player_spawn.y = -1;
+	editor->edit_map.sector_head = NULL;
+	editor->current_sector = NULL;
+	editor->current_wall = NULL;
+	editor->selected_sector = NULL;
+	editor->wall_tmp.start.x = -1;
+	editor->wall_tmp.start.y = -1;
+	editor->wall_tmp.end.x = -1;
+	editor->wall_tmp.end.y = -1;
+}
+
 void 	key_event_up_down(t_editor *editor, t_sdlmain *sdlmain, t_options_menu *menu)
 {
 	if (editor->selected_sector != NULL)
@@ -327,4 +343,6 @@ void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 		key_event_b(editor, doom, &editor->edit_map);
 	if (key == SDLK_r && editor->selected_sector != NULL)
 		key_event_r(editor, doom);
+	if (key == SDLK_n)
+		key_event_n(editor);
 }
