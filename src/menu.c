@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:27:36 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/06 20:35:58 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 14:18:17 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,6 +269,8 @@ int	menu_loop(t_doom *doom)
 
 	menu = &(doom->menu);
 	sdlmain = &(doom->sdlmain);
+	stop_enem_soundsources(doom->game.enemy, doom->map.num_enemies);
+	alSourceStopv(NB_SOUND_SOURCES - 1, &(sdlmain->sound.source[1]));
 	while (doom->state == MENU_STATE)
 	{
 		ft_bzero(menu->background->pixels, \

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/06 19:41:15 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 13:30:30 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,11 @@ void null_game_pointers(t_game *game)
 	game->surfs.hud_faces_surf = NULL;
 	game->surfs.enemy_texture[0] = NULL;
 	game->surfs.enemy_texture[1] = NULL;
+	game->surfs.game_over = NULL;
+	game->surfs.victory = NULL;
 	game->enemy = NULL;
 	game->player.sector = NULL;
-    while (i < 4)
+    while (i < 2)
     {
         game->weapon_anim[i] = NULL;
         i++;

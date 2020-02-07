@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 00:19:07 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 14:12:15 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,6 +231,8 @@ int	editor_loop(t_doom *doom)
 	//if (NBPOINTSROW * editor->offset < editor->editor_surf->h)
 	offset_border = editor->editor_surf->h \
 			- NBPOINTSROW * editor->offset;
+	stop_enem_soundsources(doom->game.enemy, doom->map.num_enemies);
+	alSourceStopv(NB_SOUND_SOURCES, sdlmain->sound.source);
 	while (doom->state == EDITOR_STATE)
 	{
 		while (SDL_PollEvent(&sdlmain->event) != 0)

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 19:41:49 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 13:36:03 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,10 @@ int	init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain)
 		return (error_return("load UndeadWarrior surf error\n", NULL));
 	if ((gamesurfs->enemy_texture[1] = load_opti_bmp("assets/enemy_sprites/Ogre.bmp", gamesurfs->perspective_view, 0x00FFFF)) == NULL)
 		return (error_return("load Ogre surf error\n", NULL));
+	if ((gamesurfs->game_over = load_opti_bmp("assets/game_over.bmp", gamesurfs->perspective_view, 0)) == NULL)
+		return (error_return("load game over surf error\n", NULL));
+	if ((gamesurfs->victory = load_opti_bmp("assets/victory.bmp", gamesurfs->perspective_view, 0)) == NULL)
+		return (error_return("load victory surf error\n", NULL));
 	gamesurfs->weapons_rect = create_sdlrect(0, 0, 232, 200);
 	gamesurfs->hud_faces_rect = create_sdlrect(0, 0, gamesurfs->hud_faces_surf->w / 3, gamesurfs->hud_faces_surf->h / 5);
 	gamesurfs->anim_timer = 0;

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 00:37:00 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 14:13:43 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,14 +296,6 @@ int	play_sound(t_game *game, t_sdlmain *sdlmain, t_map *map)
 		alSourcePlay(sound->source[2]);
 	else if (player->is_moving == 0)
 		alSourcePause(sound->source[2]);
-	if (player->health <= 0 && is_buffer_playing(sdlmain->sound.source[0], sdlmain->sound.buffer[0]))
-	{
-		alSourcei(sdlmain->sound.source[0], AL_LOOPING, AL_FALSE);
-		alSourceStop(sdlmain->sound.source[0]);
-		init_source(sdlmain->sound.source[0], 1, 1, 1);
-		alSourcei(sdlmain->sound.source[0], AL_BUFFER, sdlmain->sound.buffer[1]);
-		alSourcePlay(sdlmain->sound.source[0]);
-	}
 	return (0);
 }
 
@@ -328,6 +320,95 @@ void	set_listener_ori(double angle, t_vecdb player_pos)
 	//printf("vec direc x %f y %f\n", orix, oriy);
 }
 
+void	stop_enem_soundsources(t_enemy *enemies, int nb_enemies)
+{
+	int i;
+
+	i = 0;
+	while (i < nb_enemies)
+	{
+		alSourceStop(enemies[i].sound_src);
+		i++;
+	}
+}
+
+void win_loop(t_doom *doom)
+{
+	t_game		*game;
+	t_sdlmain	*sdlmain;
+
+	sdlmain = &(doom->sdlmain);
+	game = &(doom->game);
+	//SDL_BlitScaled(game->surfs.game_over, NULL, game->surfs.perspective_view, NULL);
+	SDL_BlitScaled(game->surfs.victory, NULL, sdlmain->win_surf, NULL);
+	SDL_UpdateWindowSurface(sdlmain->win);
+	stop_enem_soundsources(game->enemy, doom->map.num_enemies);
+	alSourceStopv(NB_SOUND_SOURCES, sdlmain->sound.source);
+	init_source(sdlmain->sound.source[0], 1, 1, 1);
+	alSourcei(sdlmain->sound.source[0], AL_BUFFER, sdlmain->sound.buffer[8]);
+	alSourcePlay(sdlmain->sound.source[0]);
+	while (doom->state == GAME_STATE)
+	{
+		while (SDL_PollEvent(&(sdlmain->event)) != 0)
+		{
+			check_quit(&sdlmain->event, &doom->state);
+			if (sdlmain->event.key.keysym.sym == SDLK_TAB)
+				doom->state = EDITOR_STATE;
+		}
+	}
+	game->player.health = 100;
+	doom->game.player.pos = vec_to_vecdb(doom->map.player_spawn);
+	doom->game.player.sector = get_sector_by_pos(doom->map.sector_head, \
+												doom->game.player.pos);
+	if (doom->game.player.pos.x == -1 && doom->game.player.pos.y == -1)
+	{
+		doom->game.player.sector = doom->map.sector_head;
+		doom->game.player.pos = doom->map.sector_head->sector_center;
+	}
+	game->win = 0;
+	alSourceStop(sdlmain->sound.source[0]);
+	init_source(sdlmain->sound.source[0], 1, 0.3, 1);
+	alSourcei(sdlmain->sound.source[0], AL_BUFFER, sdlmain->sound.buffer[0]);
+}
+
+void game_over_loop(t_doom *doom)
+{
+	t_game		*game;
+	t_sdlmain	*sdlmain;
+
+	sdlmain = &(doom->sdlmain);
+	game = &(doom->game);
+	//SDL_BlitScaled(game->surfs.game_over, NULL, game->surfs.perspective_view, NULL);
+	SDL_BlitScaled(game->surfs.game_over, NULL, sdlmain->win_surf, NULL);
+	SDL_UpdateWindowSurface(sdlmain->win);
+	stop_enem_soundsources(game->enemy, doom->map.num_enemies);
+	alSourceStopv(NB_SOUND_SOURCES, sdlmain->sound.source);
+	init_source(sdlmain->sound.source[0], 0.8, 1, 1);
+	alSourcei(sdlmain->sound.source[0], AL_BUFFER, sdlmain->sound.buffer[7]);
+	alSourcePlay(sdlmain->sound.source[0]);
+	while (doom->state == GAME_STATE)
+	{
+		while (SDL_PollEvent(&(sdlmain->event)) != 0)
+		{
+			check_quit(&sdlmain->event, &doom->state);
+			if (sdlmain->event.key.keysym.sym == SDLK_TAB)
+				doom->state = EDITOR_STATE;
+		}
+	}
+	game->player.health = 100;
+	game->player.pos = vec_to_vecdb(doom->map.player_spawn);
+	doom->game.player.sector = get_sector_by_pos(doom->map.sector_head, \
+										doom->game.player.pos);
+	if (doom->game.player.pos.x == -1 && doom->game.player.pos.y == -1)
+	{
+		doom->game.player.sector = doom->map.sector_head;
+		doom->game.player.pos = doom->map.sector_head->sector_center;
+	}
+	alSourceStop(sdlmain->sound.source[0]);
+	init_source(sdlmain->sound.source[0], 1, 0.3, 1);
+	alSourcei(sdlmain->sound.source[0], AL_BUFFER, sdlmain->sound.buffer[0]);
+}
+
 int game_loop(t_doom *doom)
 {
 	t_game		*game;
@@ -344,6 +425,8 @@ int game_loop(t_doom *doom)
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	SDL_WarpMouseInWindow(sdlmain->win, sdlmain->win_surf->w / 2, sdlmain->win_surf->h / 2);
 	startclock = SDL_GetTicks();
+	if (!is_source_playing(sdlmain->sound.source[0]))
+		alSourcePlay(sdlmain->sound.source[0]);
 	while (doom->state == GAME_STATE)
 	{
 		ft_bzero(game->surfs.perspective_view->pixels, game->surfs.perspective_view->h * game->surfs.perspective_view->pitch);
@@ -351,6 +434,10 @@ int game_loop(t_doom *doom)
 			if (handle_events(doom) != 0)
 				break ;
 		play_sound(game, sdlmain, &doom->map);
+		if (game->player.health <= 0)
+			game_over_loop(doom);
+		else if (game->win == 1)
+			win_loop(doom);
 		handle_keys(doom, SDL_GetKeyboardState(NULL));//, &sdlmain->sound);
 		alListener3f(AL_POSITION, game->player.pos.x, game->player.pos.y, 0);
 		//printf("vec player x %f y %f\n", game->player.pos.x, game->player.pos.y);
