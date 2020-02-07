@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 16:52:27 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 19:15:45 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,7 +264,6 @@ typedef struct				s_options_menu
 	SDL_Surface				*options[NBOPTIONS];
 	SDL_Surface				*hover_options[NBHOVEROPTIONS];
 	SDL_Surface				*height_surf[2];
-	SDL_Surface 			*weapon_surf[2];
 
 	SDL_Rect				title_rect;
 	SDL_Rect				options_rect[NBOPTIONS];

@@ -3,23 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   end_level_loops.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 15:36:13 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 16:14:11 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 18:05:42 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-void game_over_loop(t_doom *doom)
+void	game_over_loop(t_doom *doom)
 {
 	t_game		*game;
 	t_sdlmain	*sdlmain;
 
 	sdlmain = &(doom->sdlmain);
 	game = &(doom->game);
-	//SDL_BlitScaled(game->surfs.game_over, NULL, game->surfs.perspective_view, NULL);
 	SDL_BlitScaled(game->surfs.game_over, NULL, sdlmain->win_surf, NULL);
 	SDL_UpdateWindowSurface(sdlmain->win);
 	play_gameover_music(game, sdlmain, doom);
@@ -48,7 +47,7 @@ void game_over_loop(t_doom *doom)
 	alSourcei(sdlmain->sound.source[0], AL_BUFFER, sdlmain->sound.buffer[0]);
 }
 
-void win_loop(t_doom *doom)
+void	win_loop(t_doom *doom)
 {
 	t_game		*game;
 	t_sdlmain	*sdlmain;

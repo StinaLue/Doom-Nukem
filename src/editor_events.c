@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 17:16:03 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 17:22:05 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,8 @@ void			height_up(t_editor *editor, t_options_menu *menu)
 	}
 }
 
-void			key_event_height(t_editor *editor, SDL_Event ev, t_options_menu *menu)
+void			key_event_height(t_editor *editor, SDL_Event ev, \
+										t_options_menu *menu)
 {
 	if (editor->selected_sector != NULL)
 	{
@@ -148,19 +149,21 @@ int				editor_events(t_doom *doom)
 	t_editor	*editor;
 	t_sdlmain	*sdlmain;
 	SDL_Keycode key;
+	Uint32		type;
 
 	editor = &(doom->editor);
 	sdlmain = &(doom->sdlmain);
 	key = sdlmain->event.key.keysym.sym;
+	type = sdlmain->event.type;
 	check_quit(&doom->sdlmain.event, &doom->state);
-	event_handle_input(editor, sdlmain->event.type, key, sdlmain->event.text.text);
+	event_handle_input(editor, type, key, sdlmain->event.text.text);
 	if (editor->opt_menu.typing_filename == 0)
 	{
-		if (key == SDLK_DOWN || key == SDLK_UP || sdlmain->event.type == SDL_MOUSEWHEEL)
+		if (key == SDLK_DOWN || key == SDLK_UP || type == SDL_MOUSEWHEEL)
 			key_event_height(editor, sdlmain->event, &editor->opt_menu);
-		if (sdlmain->event.type == SDL_KEYDOWN)
+		if (type == SDL_KEYDOWN)
 			event_keydown(editor, doom, sdlmain);
-		if (/* sdlmain->event.type == SDL_MOUSEBUTTONDOWN ||  */sdlmain->event.type == SDL_MOUSEMOTION/*  || sdlmain->event.type == SDL_MOUSEWHEEL */)
+		if (type == SDL_MOUSEBUTTONDOWN || type == SDL_MOUSEMOTION)
 			event_mouse(editor, sdlmain);
 	}
 	find_neighbors(&editor->edit_map);

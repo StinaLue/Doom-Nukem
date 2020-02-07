@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   sound.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 15:30:36 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 15:57:40 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 17:45:18 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-int	is_buffer_playing(ALuint src, ALuint buffer)
+int		is_buffer_playing(ALuint src, ALuint buffer)
 {
 	ALint playing_buffer;
 
@@ -29,14 +29,13 @@ void	init_source(ALuint src, ALfloat pitch, ALfloat gain, int loop)
 	alSourcei(src, AL_LOOPING, loop);
 }
 
-int	is_source_playing(ALuint source)
+int		is_source_playing(ALuint source)
 {
 	ALenum state;
 
 	alGetSourcei(source, AL_SOURCE_STATE, &state);
 	return (state == AL_PLAYING);
 }
-
 
 void	play_weapon_sound(t_game *game, t_sdlmain *sdlmain)
 {
@@ -96,12 +95,13 @@ void	play_enemies_sound(t_enemy *enemies, ALuint *buffers, t_map *map)
 				alSourcei(enemies[i].sound_src, AL_BUFFER, buffers[5]);
 			alSourcePlay(enemies[i].sound_src);
 		}
-		alSource3f(enemies[i].sound_src, AL_POSITION, enemies[i].pos.x, enemies[i].pos.y, 0);
+		alSource3f(enemies[i].sound_src, AL_POSITION, \
+						enemies[i].pos.x, enemies[i].pos.y, 0);
 		i++;
 	}
 }
 
-int	play_sound(t_game *game, t_sdlmain *sdlmain, t_map *map)
+int		play_sound(t_game *game, t_sdlmain *sdlmain, t_map *map)
 {
 	t_gamesurfs *gamesurfs;
 	t_sound		*sound;
