@@ -6,45 +6,12 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 15:36:15 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 16:10:28 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 #include "libft.h"
-
-void	change_size(t_editor *editor, t_sdlmain *sdlmain, t_options_menu *menu)
-{
-	if (editor->selected_sector != NULL)
-	{
-		menu->height_floor = editor->selected_sector->floor_height;
-		menu->height_ceiling = editor->selected_sector->ceiling_height;
-		if (menu->activ_height[1] == 1 && sdlmain->event.wheel.y > 0 && menu->height_floor > 0)
-		{
-			menu->height_floor--;
-			editor->selected_sector->floor_height--;
-		}
-		else if (menu->activ_height[1] == 1 && sdlmain->event.wheel.y < 0 && menu->height_floor < 49 \
-				&& menu->height_floor < menu->height_ceiling - 1)
-		{
-			menu->height_floor++;
-			editor->selected_sector->floor_height++;
-		}
-		if (menu->activ_height[0] == 1 && sdlmain->event.wheel.y < 0 && menu->height_ceiling < 50)
-		{
-			menu->height_ceiling++;
-			editor->selected_sector->ceiling_height++;
-		}
-		else if (menu->activ_height[0] == 1 && sdlmain->event.wheel.y > 0 && menu->height_ceiling > 1 \
-				&& menu->height_floor < 49 \
-				&& menu->height_ceiling > menu->height_floor + 1)
-		{
-			menu->height_ceiling--;
-			editor->selected_sector->ceiling_height--;
-		}
-		set_height(&editor->opt_menu, editor->opt_surf);
-	}
-}
 
 void	set_border_color(t_editor *editor, t_vec mouse_pos)
 {
@@ -360,6 +327,4 @@ void	event_mouse(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 		editor->opt_menu.bord_color_weapon[1] = COLOR_CHOOSE;
 	SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
 	mouse_in_options(editor, sdlmain, &editor->opt_menu, doom);
-	if (sdlmain->event.type == SDL_MOUSEWHEEL || sdlmain->event.key.keysym.sym == SDLK_DOWN ||sdlmain->event.key.keysym.sym == SDLK_UP)
-		change_size(editor, sdlmain, &editor->opt_menu);
 }
