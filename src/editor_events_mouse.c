@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 14:40:41 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 15:36:15 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,27 +19,23 @@ void	change_size(t_editor *editor, t_sdlmain *sdlmain, t_options_menu *menu)
 	{
 		menu->height_floor = editor->selected_sector->floor_height;
 		menu->height_ceiling = editor->selected_sector->ceiling_height;
-		if (is_mouse_collide(sdlmain->mouse_pos, menu->height_rect[1]) \
-			&& sdlmain->event.wheel.y > 0 && menu->height_floor > 0)
+		if (menu->activ_height[1] == 1 && sdlmain->event.wheel.y > 0 && menu->height_floor > 0)
 		{
 			menu->height_floor--;
 			editor->selected_sector->floor_height--;
 		}
-		else if (is_mouse_collide(sdlmain->mouse_pos, menu->height_rect[1]) \
-				&& sdlmain->event.wheel.y < 0 && menu->height_floor < 49 \
+		else if (menu->activ_height[1] == 1 && sdlmain->event.wheel.y < 0 && menu->height_floor < 49 \
 				&& menu->height_floor < menu->height_ceiling - 1)
 		{
 			menu->height_floor++;
 			editor->selected_sector->floor_height++;
 		}
-		if (is_mouse_collide(sdlmain->mouse_pos, menu->height_rect[0]) \
-				&& sdlmain->event.wheel.y < 0 && menu->height_ceiling < 50)
+		if (menu->activ_height[0] == 1 && sdlmain->event.wheel.y < 0 && menu->height_ceiling < 50)
 		{
 			menu->height_ceiling++;
 			editor->selected_sector->ceiling_height++;
 		}
-		else if (is_mouse_collide(sdlmain->mouse_pos, menu->height_rect[0]) \
-				&& sdlmain->event.wheel.y > 0 && menu->height_ceiling > 1 \
+		else if (menu->activ_height[0] == 1 && sdlmain->event.wheel.y > 0 && menu->height_ceiling > 1 \
 				&& menu->height_floor < 49 \
 				&& menu->height_ceiling > menu->height_floor + 1)
 		{
@@ -90,13 +86,6 @@ void	mouse_in_options(t_editor *editor, t_sdlmain *sdlmain, \
 			else if (!is_mouse_collide(sdlmain->mouse_pos, menu->text_rect[i]) \
 								&& i != menu->activ_tex)
 				menu->bord_color_text[i] = COLOR_NORMAL;
-			i++;
-		}
-		i = 0;
-		while (i < 2)
-		{
-			if (is_mouse_collide(sdlmain->mouse_pos, menu->height_rect[i]))
-				menu->bord_color_opt[i] = COLOR_PRESSED;
 			i++;
 		}
 		i = 0;
@@ -198,6 +187,25 @@ void	mouse_in_options(t_editor *editor, t_sdlmain *sdlmain, \
 				doom->state = QUIT_STATE;
 			}
 			ft_printf("%{g}s was properly loaded 😉\n", editor->edit_map.name);
+		}
+		i = 0;
+		while (i < 2)
+		{
+			if (is_mouse_collide(sdlmain->mouse_pos, menu->height_rect[i]) && editor->opt_menu.activ_height[i] != 1)
+				menu->bord_color_height[i] = COLOR_HOVER;
+			i++;
+		} 
+		if (is_mouse_collide(sdlmain->mouse_pos, menu->height_rect[0]) && sdlmain->event.button.button == SDL_BUTTON_LEFT)
+		{
+			menu->activ_height[0] = 1;
+			menu->activ_height[1] = 0;
+			menu->bord_color_height[0] = COLOR_PRESSED;
+		}
+		if (is_mouse_collide(sdlmain->mouse_pos, menu->height_rect[1]) && sdlmain->event.button.button == SDL_BUTTON_LEFT)
+		{
+			menu->activ_height[1] = 1;
+			menu->activ_height[0] = 0;
+			menu->bord_color_height[1] = COLOR_PRESSED;
 		}
 	}
 }
@@ -335,8 +343,10 @@ void	event_mouse(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 	{
 		mouse_click_right(editor, sdlmain);
 	}
-	editor->opt_menu.bord_color_opt[0] = COLOR_CHOOSE; // move somewhere else
-	editor->opt_menu.bord_color_opt[1] = COLOR_CHOOSE;
+	if (editor->opt_menu.activ_height[0] != 1)
+		editor->opt_menu.bord_color_height[0] = COLOR_CHOOSE; // move somewhere else
+	if (editor->opt_menu.activ_height[1] != 1)
+		editor->opt_menu.bord_color_height[1] = COLOR_CHOOSE;
 	editor->opt_menu.bord_hover_color_opt[0] = COLOR_CHOOSE;
 	editor->opt_menu.bord_hover_color_opt[1] = COLOR_CHOOSE;
 	editor->opt_menu.bord_hover_color_opt[2] = COLOR_CHOOSE;
@@ -350,6 +360,6 @@ void	event_mouse(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 		editor->opt_menu.bord_color_weapon[1] = COLOR_CHOOSE;
 	SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
 	mouse_in_options(editor, sdlmain, &editor->opt_menu, doom);
-	if (sdlmain->event.type == SDL_MOUSEWHEEL)
+	if (sdlmain->event.type == SDL_MOUSEWHEEL || sdlmain->event.key.keysym.sym == SDLK_DOWN ||sdlmain->event.key.keysym.sym == SDLK_UP)
 		change_size(editor, sdlmain, &editor->opt_menu);
 }

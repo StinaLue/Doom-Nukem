@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_keys.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 00:35:43 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 15:41:22 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,6 +267,39 @@ void	key_event_r(t_editor *editor, t_doom *doom)
 	}
 }
 
+void 	key_event_up_down(t_editor *editor, t_sdlmain *sdlmain, t_options_menu *menu)
+{
+	if (editor->selected_sector != NULL)
+	{
+		menu->height_floor = editor->selected_sector->floor_height;
+		menu->height_ceiling = editor->selected_sector->ceiling_height;
+		if (menu->activ_height[1] == 1 && menu->height_floor > 0 && sdlmain->event.key.keysym.sym == SDLK_DOWN)
+		{
+			menu->height_floor--;
+			editor->selected_sector->floor_height--;
+		}
+		else if (menu->activ_height[1] == 1 && menu->height_floor < 49 \
+				&& menu->height_floor < menu->height_ceiling - 1 && sdlmain->event.key.keysym.sym == SDLK_UP)
+		{
+			menu->height_floor++;
+			editor->selected_sector->floor_height++;
+		}
+		if (menu->activ_height[0] == 1 && menu->height_ceiling < 50 && sdlmain->event.key.keysym.sym == SDLK_UP)
+		{
+			menu->height_ceiling++;
+			editor->selected_sector->ceiling_height++;
+		}
+		else if (menu->activ_height[0] == 1 && menu->height_ceiling > 1 \
+				&& menu->height_floor < 49 \
+				&& menu->height_ceiling > menu->height_floor + 1 && sdlmain->event.key.keysym.sym == SDLK_DOWN)
+		{
+			menu->height_ceiling--;
+			editor->selected_sector->ceiling_height--;
+		}
+		set_height(&editor->opt_menu, editor->opt_surf);
+	}
+}
+
 void	key_event_p(t_editor *editor)
 {
 	if (is_sector_occupied(editor->selected_sector, &editor->edit_map) == 0)
@@ -285,6 +318,8 @@ void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 		key_event_u(editor);
 	if (key == SDLK_s)
 		key_event_s(editor);
+	if (key == SDLK_DOWN || key == SDLK_UP)
+		key_event_up_down(editor, sdlmain, &editor->opt_menu);
 	if (key == SDLK_t && sdlmain->event.key.repeat == 0)
 		key_event_t(editor);
 	if (key == SDLK_m && doom->map.sector_head != NULL)

@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 11:24:16 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 15:31:31 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,10 @@ void	init_colors(t_editor *editor)
 		editor->opt_menu.bord_hover_color_opt[3] = COLOR_CHOOSE;
 	if (editor->opt_menu.activ_music[1] != 1)
 		editor->opt_menu.bord_hover_color_opt[4] = COLOR_CHOOSE;
-	editor->opt_menu.bord_color_opt[0] = COLOR_CHOOSE;
-	editor->opt_menu.bord_color_opt[1] = COLOR_CHOOSE;
+	if (editor->opt_menu.activ_height[0] != 1)
+		editor->opt_menu.bord_color_height[0] = COLOR_CHOOSE;
+	if (editor->opt_menu.activ_height[1] != 1)
+		editor->opt_menu.bord_color_height[1] = COLOR_CHOOSE;
 	//if (editor->opt_menu.activ_weapon[0] != 1)
 		editor->opt_menu.bord_color_weapon[0] = COLOR_CHOOSE;
 	//if (editor->opt_menu.activ_weapon[1] != 1)
