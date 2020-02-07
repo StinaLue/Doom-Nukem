@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 17:12:05 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 21:47:27 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,6 +283,14 @@ void	key_event_p(t_editor *editor)
 			vecdb_to_vec(editor->selected_sector->sector_center);
 }
 
+void	key_event_g(t_editor *editor)
+{
+	if (editor->selected_sector->is_goal == 1)
+		editor->selected_sector->is_goal = 0;
+	else if (editor->selected_sector->is_goal == 0)
+		editor->selected_sector->is_goal = 1;
+}
+
 void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 {
 	SDL_Keycode key;
@@ -310,4 +318,6 @@ void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 		key_event_r(editor, doom);
 	if (key == SDLK_n)
 		key_event_n(editor);
+	if (key == SDLK_g && editor->selected_sector != NULL)
+		key_event_g(editor);
 }

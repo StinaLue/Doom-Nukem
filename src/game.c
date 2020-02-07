@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 18:47:30 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 22:20:56 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,7 +267,7 @@ int game_loop(t_doom *doom)
 		play_sound(game, sdlmain, &doom->map);
 		if (game->player.health <= 0)
 			game_over_loop(doom);
-		else if (game->win == 1)
+		else if (game->player.sector->is_goal == 1)
 			win_loop(doom);
 		handle_keys(doom, SDL_GetKeyboardState(NULL));//, &sdlmain->sound);
 		alListener3f(AL_POSITION, game->player.pos.x, game->player.pos.y, 0);
@@ -276,9 +276,9 @@ int game_loop(t_doom *doom)
 		//alSource3f(sdlmain->sound.source[0], AL_POSITION, doom->map.sector_head->wall_head->start.x, doom->map.sector_head->wall_head->start.y, 0);
 		//alSource3f(sdlmain->sound.source[1], AL_POSITION, doom->map.sector_head->wall_head->end.x, doom->map.sector_head->wall_head->end.y, 0);
 		if (game->data.hud_flags & COLORFLAG)
-			game->surfs.perspective_view->userdata = "yescolor";
+			game->surfs.perspective_view->userdata = "textured";
 		else
-			game->surfs.perspective_view->userdata = "nocolor";
+			game->surfs.perspective_view->userdata = "untextured";
 		//draw_perspective_view(game->surfs.perspective_view, &game->player, doom->wall_textures);
 		//if ((SDL_BlitScaled(game->surfs.weapons, &game->surfs.katana[(int)((float)SDL_GetTicks() / 400) % 4], game->surfs.perspective_view, NULL)) != 0)
 		//	printf("%s\n", SDL_GetError());

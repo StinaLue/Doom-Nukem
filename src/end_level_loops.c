@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 15:36:13 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 18:44:57 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 22:11:37 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,17 +69,6 @@ void win_loop(t_doom *doom)
 		}
 	}
 	soft_reset_player(&game->player, &doom->map);
-	/*
-	game->player.health = 100;
-	doom->game.player.pos = vec_to_vecdb(doom->map.player_spawn);
-	doom->game.player.sector = get_sector_by_pos(doom->map.sector_head, \
-												doom->game.player.pos);
-	if (doom->game.player.pos.x == -1 && doom->game.player.pos.y == -1)
-	{
-		doom->game.player.sector = doom->map.sector_head;
-		doom->game.player.pos = doom->map.sector_head->sector_center;
-	}*/
-	game->win = 0;
 	alSourceStop(sdlmain->sound.source[0]);
 	init_source(sdlmain->sound.source[0], 1, 0.3, 1);
 	alSourcei(sdlmain->sound.source[0], AL_BUFFER, sdlmain->sound.buffer[0]);

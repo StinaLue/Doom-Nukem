@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_sector.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:02:35 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/05 16:13:15 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/07 22:31:06 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ t_sector_node	*add_sector_node(t_sector_node **sector_head)
 	new_node->sector_center.y = -1;
 	new_node->ceiling_height = 20;
 	new_node->floor_height = 2;
+	new_node->is_goal = 0;
 	return (new_node);
 }
 
@@ -171,6 +172,7 @@ int			copy_sector_list(t_sector_node *sector_list, t_sector_node **new_list)
 	(*new_list)->floor_height = sector_list->floor_height;
 	(*new_list)->ceiling_height = sector_list->ceiling_height;
 	(*new_list)->wall_num = sector_list->wall_num;
+	(*new_list)->is_goal = sector_list->is_goal;
 	if (copy_wall_list(sector_list->wall_head, &(*new_list)->wall_head) == -1)
 		return (-1);
 	ret = copy_sector_list(sector_list->next, &(*new_list)->next);

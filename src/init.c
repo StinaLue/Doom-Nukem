@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 16:20:19 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 22:02:25 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -329,6 +329,5 @@ int	init_game(t_game *game, t_sdlmain *sdlmain, t_map *map)
 	init_player_struct(&(game->player), map);
 	game->weapon_anim[0] = blit_katana;
 	game->weapon_anim[1] = blit_uzi;
-	game->win = 0;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/03 17:39:25 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 18:15:52 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 22:32:36 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ int		read_sector(int fd, t_sector_node *sector)
 		return (error_return_map("error reading wall num\n", NULL, fd));
 	if (read_walls(fd, &sector->wall_head, sector->wall_num) != 0)
 		return (error_return_map("error reading walls\n", NULL, fd));
+	if (read(fd, &sector->is_goal, sizeof(int)) != sizeof(int))
+		return (error_return_map("error reading is_goal\n", NULL, fd));
 	return (0);
 }
 

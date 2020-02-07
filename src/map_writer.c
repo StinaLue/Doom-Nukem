@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/03 17:54:01 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 18:14:02 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 22:32:04 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ int		write_sector(int fd, t_sector_node *sector)
 		return (error_return_map("error writing wall num\n", NULL, fd));
 	if (write_walls(fd, sector->wall_head, sector->wall_num) != 0)
 		return (error_return_map("error writing walls\n", NULL, fd));
+	if (write(fd, &sector->is_goal, sizeof(int)) != sizeof(int))
+		return (error_return_map("error writing is_goal\n", NULL, fd));
 	return (0);
 }
 

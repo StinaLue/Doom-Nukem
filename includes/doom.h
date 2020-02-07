@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 17:59:41 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 22:01:55 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ typedef struct				s_sector_node
 	double					floor_height;
 	double					ceiling_height;
 	int						wall_num;
+	int						is_goal;
 }							t_sector_node;
 
 typedef struct				s_display_wall
@@ -241,7 +242,6 @@ typedef struct				s_game
 	t_enemy					*enemy;
 	int						(*weapon_anim[2])(t_gamesurfs *gamesurfs, \
 								SDL_Surface *dest, int *anim);
-	int						win;
 }							t_game;
 
 typedef struct				s_instr_menu
