@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 12:25:12 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 14:01:24 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,7 @@ int	init_options_menu(t_editor *editor)
 	if (create_floor_height(editor) != 0)
 		return (1);
 	set_textures(editor->opt_menu.text_rect, editor->opt_surf);
-	set_weapon_textures(&editor->opt_menu, editor->opt_surf);
+	//set_weapon_textures(&editor->opt_menu, editor->opt_surf);
 	set_height(&editor->opt_menu, editor->opt_surf);
 	return (0);
 }

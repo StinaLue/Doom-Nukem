@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 12:31:57 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 14:38:59 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,7 @@ typedef struct				s_options_menu
 	SDL_Rect				height_rect[2];
 	SDL_Rect				player_rect;
 	SDL_Rect 				weapon_rect[2];
+	SDL_Rect 				scaled_weapon_rect[2];
 
 	TTF_Font				*font_title;
 	TTF_Font				*font;

@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 13:34:12 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 14:41:20 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,15 +253,14 @@ int	blit_enemy(t_editor *editor)
 
 int	editor_blit_weapons(t_editor *editor)
 {
-	SDL_Rect 	katana_rect;
-	SDL_Rect 	gun_rect;
-
-	katana_rect = create_sdlrect(10, 10, 200, 200/* (editor->editor_surf->h / 20) * 12, (editor->editor_surf->h / 20) * 14, 20, 20 */);
-	if (SDL_BlitSurface(editor->weapon_texture, &editor->opt_menu.weapon_rect[0], editor->opt_surf, &katana_rect) < 0)
-		return (error_return("print this %s\n", SDL_GetError()));
-	gun_rect = create_sdlrect(20, 20, 200, 20/* (editor->editor_surf->h / 20) * 12, (editor->editor_surf->h / 20) * 14, 20, 20 */);
-	if (SDL_BlitSurface(editor->weapon_texture, &editor->opt_menu.weapon_rect[1], editor->opt_surf, &gun_rect) < 0)
-		return (error_return("print this %s\n", SDL_GetError()));
+	assign_sdlrect(&editor->opt_menu.scaled_weapon_rect[0], create_vec((editor->editor_surf->h / 20) * 11, (editor->editor_surf->h / 20) * 9.5), create_vec(80 ,80));
+	if (SDL_BlitScaled(editor->weapon_texture, &editor->opt_menu.weapon_rect[0], editor->opt_surf, &editor->opt_menu.scaled_weapon_rect[0]) < 0)
+		return (1);
+	assign_sdlrect(&editor->opt_menu.scaled_weapon_rect[1], create_vec((editor->editor_surf->h / 20) * 8, (editor->editor_surf->h / 20) * 9.5), create_vec(80, 80));
+	if (SDL_BlitScaled(editor->weapon_texture, &editor->opt_menu.weapon_rect[1], editor->opt_surf, &editor->opt_menu.scaled_weapon_rect[1]) < 0)
+		return (1);
+	draw_border_options(&editor->opt_menu.scaled_weapon_rect[0], editor->opt_menu.bord_color_weapon[0], editor->opt_surf);
+	draw_border_options(&editor->opt_menu.scaled_weapon_rect[1], editor->opt_menu.bord_color_weapon[1], editor->opt_surf);
 	return (0);
 }
 

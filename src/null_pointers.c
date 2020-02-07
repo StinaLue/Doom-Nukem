@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 11:46:47 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 13:39:46 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void null_game_pointers(t_game *game)
 	game->surfs.enemy_texture[1] = NULL;
 	game->enemy = NULL;
 	game->player.sector = NULL;
-    while (i < 4)
+    while (i < 2)
     {
         game->weapon_anim[i] = NULL;
         i++;

@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 11:27:50 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 14:40:41 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,7 @@ void	mouse_in_options(t_editor *editor, t_sdlmain *sdlmain, \
 		i = 0;
 		while (i < 2)
 		{
-			if (is_mouse_collide(sdlmain->mouse_pos, menu->weapon_rect[i]))
+			if (is_mouse_collide(sdlmain->mouse_pos, menu->scaled_weapon_rect[i]))
 			{
 				if (sdlmain->event.button.button == SDL_BUTTON_LEFT)
 				{
