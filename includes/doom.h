@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 16:52:27 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 17:59:41 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -372,6 +372,8 @@ typedef struct				s_doom
 	SDL_Surface				*wall_textures[10];
 	int						state;
 }							t_doom;
+
+int							error_return_map(const char *error_msg, const char *errstr, int fd);
 
 void						soft_reset_player(t_player *player, t_map *map);
 
