@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   editor_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:40:34 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/03 16:37:53 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/06 14:52:12 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-int			get_sign(double num)
+int		get_sign(double num)
 {
 	if (num > 0)
-		return 1;
+		return (1);
 	if (num < 0)
-		return -1;
+		return (-1);
 	return (0);
 }
 
@@ -32,7 +32,7 @@ int			is_same_sign(double a, double b)
 
 //checks if the list of walls is closed (loop)
 //returns 1 if it is 0 if not
-int			wall_loop(t_wall_node *node)
+int		wall_loop(t_wall_node *node)
 {
 	int		loop;
 	t_vecdb	*start;
@@ -43,13 +43,14 @@ int			wall_loop(t_wall_node *node)
 	start = &node->start;
 	while (node->next != NULL)
 		node = node->next;
-	if (node->end.x == start->x && node->end.y == start->y && &node->start != start)
+	if (node->end.x == start->x \
+		&& node->end.y == start->y && &node->start != start)
 		loop = 1;
 	return (loop);
 }
 
 //expects a sector with at least 3 walls
-int			check_convex_sector(t_sector_node *sector)
+int		check_convex_sector(t_sector_node *sector)
 {
 	t_wall_node	*wall;
 	t_vecdb		a;
@@ -65,7 +66,7 @@ int			check_convex_sector(t_sector_node *sector)
 	{
 		a = vecdb_diff(wall->end, wall->start);
 		b = vecdb_diff(wall->next->end, wall->next->start);
-		angle = atan2(cross_product(a,b), dot_product(a,b));
+		angle = atan2(cross_product(a, b), dot_product(a, b));
 		if (!is_same_sign(angle, total_angle) || fabs(angle) > 3.1415926)
 			return (0);
 		total_angle += angle;
@@ -76,7 +77,7 @@ int			check_convex_sector(t_sector_node *sector)
 	return (1);
 }
 
-void		set_wall_length(t_wall_node *head)
+void	set_wall_length(t_wall_node *head)
 {
 	if (head == NULL)
 		return ;
@@ -84,7 +85,7 @@ void		set_wall_length(t_wall_node *head)
 	set_wall_length(head->next);
 }
 
-int			check_clockwise_sector(t_sector_node *sector)
+int		check_clockwise_sector(t_sector_node *sector)
 {
 	t_wall_node	*wall;
 	t_vecdb		a;
@@ -98,7 +99,7 @@ int			check_clockwise_sector(t_sector_node *sector)
 	{
 		a = vecdb_diff(wall->end, wall->start);
 		b = vecdb_diff(wall->next->end, wall->next->start);
-		angle = atan2(cross_product(a,b), dot_product(a,b));
+		angle = atan2(cross_product(a, b), dot_product(a, b));
 		if (angle > 0)
 			return (0);
 		wall = wall->next;
@@ -106,7 +107,7 @@ int			check_clockwise_sector(t_sector_node *sector)
 	return (1);
 }
 
-void		flip_walls(t_sector_node *sector)
+void	flip_walls(t_sector_node *sector)
 {
 	t_wall_node	*wall;
 	t_vecdb		tmp;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 16:02:00 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 00:19:07 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	round_num(double num, int offset)
 {
 	double result;
 
-	result = num / offset;
+	result = num / (double)offset;
 	return (num < 0 ? result - 0.5 : result + 0.5);
 }
 
@@ -38,8 +38,14 @@ void	init_colors(t_editor *editor)
 	editor->opt_menu.bord_hover_color_opt[0] = COLOR_CHOOSE;
 	editor->opt_menu.bord_hover_color_opt[1] = COLOR_CHOOSE;
 	editor->opt_menu.bord_hover_color_opt[2] = COLOR_CHOOSE;
+	if (editor->opt_menu.activ_music[0] != 1)
+		editor->opt_menu.bord_hover_color_opt[3] = COLOR_CHOOSE;
+	if (editor->opt_menu.activ_music[1] != 1)
+		editor->opt_menu.bord_hover_color_opt[4] = COLOR_CHOOSE;
 	editor->opt_menu.bord_color_opt[0] = COLOR_CHOOSE;
 	editor->opt_menu.bord_color_opt[1] = COLOR_CHOOSE;
+	editor->opt_menu.bord_color_weapon[0] = COLOR_CHOOSE;
+	editor->opt_menu.bord_color_weapon[1] = COLOR_CHOOSE;
 }
 
 int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
@@ -59,7 +65,6 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	editor->opt_menu.typing_filename = 0;
 	ft_bzero(editor->opt_menu.file_name, 16);
 	ft_strncpy(editor->opt_menu.file_name, ".doom_", 6);
-	//editor->opt_menu.file_name[0] = ' ';
 
 	editor->current_sector = NULL;
 	editor->current_wall = NULL;
@@ -158,12 +163,12 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 		while (tmp_wall != NULL)
 		{
 			fill_area(editor_surf, tmp_wall, editor);
-            tmptest = tmp_wall->end;
-            tempstart = tmp_wall->start;
-            tmptest.x /= MAPMULTIPLIER;
-            tmptest.y /= MAPMULTIPLIER;
-            tempstart.x /= MAPMULTIPLIER;
-            tempstart.y /= MAPMULTIPLIER;
+				tmptest = tmp_wall->end;
+				tempstart = tmp_wall->start;
+				tmptest.x /= MAPMULTIPLIER;
+				tmptest.y /= MAPMULTIPLIER;
+				tempstart.x /= MAPMULTIPLIER;
+				tempstart.y /= MAPMULTIPLIER;
 			draw_line(multvec(vecdb_to_vec(tmptest), editor->offset),
 				multvec(vecdb_to_vec(tempstart), editor->offset), editor_surf, tmp_wall->type_color);
 			i++;
@@ -223,21 +228,20 @@ int	editor_loop(t_doom *doom)
 		editor->offset = editor->editor_surf->w / NBPOINTSROW;
 	else
 		editor->offset = editor->editor_surf->h / NBPOINTSROW;
-	printf("offset: %d\n", editor->offset);
+	//if (NBPOINTSROW * editor->offset < editor->editor_surf->h)
+	offset_border = editor->editor_surf->h \
+			- NBPOINTSROW * editor->offset;
 	while (doom->state == EDITOR_STATE)
 	{
 		while (SDL_PollEvent(&sdlmain->event) != 0)
 			if (editor_events(doom) != 0)
 				break ;
 		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
-		assign_sdlrect(&editor->mouse_rect, create_vec(sdlmain->mouse_pos.x - 15, sdlmain->mouse_pos.y - 15), create_vec(15, 15));
-		if (NBPOINTSROW * editor->offset < editor->editor_surf->h)
-			offset_border = editor->editor_surf->h \
-						- NBPOINTSROW * editor->offset;
+		assign_sdlrect(&editor->mouse_rect, create_vec(sdlmain->mouse_pos.x \
+						- 15, sdlmain->mouse_pos.y - 15), create_vec(15, 15));
+		
 		sdlmain->mouse_pos.x = round_num(sdlmain->mouse_pos.x, editor->offset);
-		sdlmain->mouse_pos.y = round_num(sdlmain->mouse_pos.y, editor->offset);
-		//sdlmain->mouse_pos.y = round_num(sdlmain->mouse_pos.y - offset_border \
-											//+ editor->offset, editor->offset);
+		sdlmain->mouse_pos.y = round_num(sdlmain->mouse_pos.y - offset_border + editor->offset, editor->offset);
 		ft_bzero(editor->editor_surf->pixels, \
 					editor->editor_surf->h * editor->editor_surf->pitch);
 		ft_bzero(editor->opt_surf->pixels, \
@@ -249,7 +253,7 @@ int	editor_loop(t_doom *doom)
 		draw_border(editor->opt_surf, 0xB12211);
 		draw_border(editor->instr_surf, 0xB12211);
 		draw_lines(editor, editor->editor_surf, sdlmain);
-		editor->player_face_surf = doom->game.surfs.hud_faces_surf; // create function insead
+		editor->player_face_surf = doom->game.surfs.hud_faces_surf;
 		editor->player_face_rec.x = doom->game.surfs.hud_faces_rect.x;
 		editor->player_face_rec.y = doom->game.surfs.hud_faces_rect.y;
 		editor->player_face_rec.h = doom->game.surfs.hud_faces_rect.h;

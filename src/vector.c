@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:06:54 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/05 12:56:35 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/06 14:53:13 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ double	cross_product_len(t_vec a, t_vec b, t_vec c)
 	bay = a.y - b.y;
 	bcx = c.x - b.x;
 	bcy = c.y - b.y;
-	// Got the vectors' coordinates.
-	// calculate the Z coordinate of the cross product.
 	return (bax * bcy - bay * bcx);
 }
 
@@ -136,7 +134,7 @@ t_vecdb	vec_to_vecdb(t_vec vector)
 
 double	get_point_distance(t_vecdb a, t_vecdb b)
 {
-	return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+	return (sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y)));
 }
 
 t_vecdb	vecdb_diff(t_vecdb a, t_vecdb b)
@@ -175,7 +173,6 @@ t_vec	vec_add(t_vec a, t_vec b)
 	return (vector);
 }
 
-
 t_vecdb	vecdb_mult(t_vecdb a, t_vecdb b)
 {
 	t_vecdb vector;
@@ -184,7 +181,6 @@ t_vecdb	vecdb_mult(t_vecdb a, t_vecdb b)
 	vector.y = a.y * b.y;
 	return (vector);
 }
-
 
 t_vec	vec_mult(t_vec a, t_vec b)
 {

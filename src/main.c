@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 17:00:15 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/07 00:29:42 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "doom.h"
 #include "libbmp.h"
 
-void null_doom_pointers(t_doom *doom)
+void	null_doom_pointers(t_doom *doom)
 {
 	null_game_pointers(&doom->game);
 	null_menu_pointers(&doom->menu);
@@ -22,20 +22,36 @@ void null_doom_pointers(t_doom *doom)
 	null_sdlmain_pointers(&doom->sdlmain);
 	null_map_pointers(&doom->map);
 	null_walltextures_pointers(doom->wall_textures);
-	/* doom->game.surfs.fixed_mmap = NULL;
-	doom->game.surfs.rot_mmap = NULL;
-	doom->game.surfs.perspective_view = NULL;
-	doom->game.surfs.weapons = NULL;
-	doom->menu.background = NULL;
-	doom->menu.menu_title = NULL;
-	doom->menu.options[0] = NULL;
-	doom->menu.options[1] = NULL;
-	doom->menu.options[2] = NULL;
-	doom->menu.options[3] = NULL;
-	doom->menu.font = NULL;*/
 }
 
-int	main_loop()
+int		check_doom_state(t_doom *doom)
+{
+	int	ret;
+
+	ret = 0;
+	if (init_doom(doom) == 1)
+	{
+		ret = 1;
+		doom->state = QUIT_STATE;
+	}
+	while (doom->state != QUIT_STATE)
+	{
+		if (doom->state == GAME_STATE && (doom->map.sector_head == NULL \
+			|| doom->game.player.sector == NULL))
+			doom->state = EDITOR_STATE;
+		if (doom->state == GAME_STATE)
+			ret = game_loop(doom);
+		else if (doom->state == MENU_STATE)
+			ret = menu_loop(doom);
+		else if (doom->state == EDITOR_STATE)
+			ret = editor_loop(doom);
+		if (ret == 1)
+			doom->state = QUIT_STATE;
+	}
+	return (ret);
+}
+
+int		main_loop(void)
 {
 	t_doom	doom;
 	int		ret;
@@ -45,24 +61,7 @@ int	main_loop()
 	doom.sdlmain.win_w = HD_W;
 	doom.sdlmain.win_h = HD_H;
 	null_doom_pointers(&doom);
-	if (init_doom(&doom) == 1)
-	{
-		ret = 1;
-		doom.state = QUIT_STATE;
-	}
-	while (doom.state != QUIT_STATE)
-	{
-		if (doom.state == GAME_STATE && (doom.map.sector_head == NULL || doom.game.player.sector == NULL))
-			doom.state = EDITOR_STATE;
-		if (doom.state == GAME_STATE)
-			ret = game_loop(&doom);
-		else if (doom.state == MENU_STATE)
-			ret = menu_loop(&doom);
-		else if (doom.state == EDITOR_STATE)
-			ret = editor_loop(&doom);
-		if (ret == 1)
-			doom.state = QUIT_STATE;
-	}
+	ret = check_doom_state(&doom);
 	free_game(&doom.game, &doom.map);
 	free_menu(&doom.menu);
 	free_editor(&doom.editor);
@@ -77,13 +76,12 @@ int	main_loop()
 	return (0);
 }
 
-int	verify_defines()
+int		verify_defines(void)
 {
-	return (0);
 	if (SQRT2 != 1.4142135623730950488 || PLAYER_RADIUS != 0.3 || NB_WALL_TEXTURES != 9 \
 	|| NB_SOUND_SOURCES != 3 || NB_SOUND_BUFFERS != 4 || QUIT_STATE != 0 || GAME_STATE != 1 \
-	|| MENU_STATE != 2 || EDITOR_STATE != 3 || HD_W != 1280 || HD_H != 720 || WSXGA_W != 1680 \
-	|| WSXGA_H != 1050 || FHD_W != 1920 || FHD_H != 1080 || QHD_W != 2560 || QHD_H != 1440 \
+	|| MENU_STATE != 2 || EDITOR_STATE != 3 || HD_W != 1280 || HD_H != 720 \
+	|| FHD_W != 1920 || FHD_H != 1080 || QHD_W != 2560 || QHD_H != 1440 \
 	|| OFFSET != 20 || NBPOINTS != 2501 || NBPOINTSROW != 50 || NBTEXTURES != 9 || NBOPTIONS != 8 \
 	|| NBHOVEROPTIONS != 3 || NBINSTRUCTS != 10 || MAPMULTIPLIER != 4 || COLOR_HOVER != 0x6C1413 \
 	|| COLOR_PRESSED != 0x00FF00 || COLOR_NORMAL != 0xff0000 || COLOR_CHOOSE != 0xffff00 \
@@ -94,12 +92,13 @@ int	verify_defines()
 		return (0);
 }
 
-int main(/*int argc, char *argv[]*/)
+int		main(void/*int argc, char *argv[]*/)
 {
 	//if (WIN_W > 1920 || WIN_H > 1080 || WIN_W < 100 || WIN_H < 100)
 	//	return (1);
-	if (verify_defines() != 0)
-		return (error_return("Some defines should %{r}s be changed, please\n", "NOT"));
+	//if (verify_defines() != 0)
+	//	return (error_return("Some defines should %{r}s be changed, \
+	//							please\n", "NOT"));
 	if (main_loop() == 1)
 		return (error_return("The program %{r}s 😢\n", "FAILED"));
 	return (EXIT_SUCCESS);

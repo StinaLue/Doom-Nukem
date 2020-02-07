@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   null_pointers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/05 14:54:58 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 19:41:15 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void null_game_pointers(t_game *game)
 	game->surfs.enemy_texture[0] = NULL;
 	game->surfs.enemy_texture[1] = NULL;
 	game->enemy = NULL;
+	game->player.sector = NULL;
     while (i < 4)
     {
         game->weapon_anim[i] = NULL;
@@ -61,6 +62,12 @@ void    null_option_pointers(t_editor *editor)
     while (i < NBHOVEROPTIONS)
     {
         editor->opt_menu.hover_options[i] = NULL;
+        i++;
+    }
+    i = 0;
+    while (i < 2)
+    {
+        editor->opt_menu.weapon_surf[i] = NULL;
         i++;
     }
     editor->opt_menu.title = NULL;
@@ -100,6 +107,7 @@ void    null_editor_pointers(t_editor *editor)
 	editor->wall_tmp.type_color = 0xFF0000;
     editor->wall_textures = NULL;
     editor->selected_sector = NULL;
+	editor->enemy_textures = NULL;
     null_option_pointers(editor);
     null_instr_pointers(editor);
     null_map_pointers(&editor->edit_map);

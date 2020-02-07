@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/05 14:54:54 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/06 19:42:25 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 
 void	quit_sdl_and_ttf(void)
 {
-	//Mix_CloseAudio();
-	//Mix_Quit();
 	TTF_Quit();
 	SDL_Quit();
 }
@@ -40,9 +38,22 @@ int		free_sdlmain(t_sdlmain *sdlmain)
 	TTF_CloseFont(sdlmain->font);
 	sdlmain->font = NULL;
 	free_sound(&sdlmain->sound);
-	//Mix_FreeMusic(sdlmain->music);
-	//sdlmain->music = NULL;
 	return (EXIT_FAILURE);
+}
+
+void	free_enemies(t_game *game, int num_enemies)
+{
+	int i;
+
+	i = 0;
+	if (num_enemies <= 0)
+		return ;
+	while (i < num_enemies)
+	{
+		alDeleteSources(1, &game->enemy[i].sound_src);
+		i++;
+	}
+	ft_memdel((void **)&game->enemy);
 }
 
 int		free_game(t_game *game, t_map *map)
@@ -64,8 +75,7 @@ int		free_game(t_game *game, t_map *map)
 	game->surfs.enemy_texture[0] = NULL;
 	SDL_FreeSurface(game->surfs.enemy_texture[1]);
 	game->surfs.enemy_texture[1] = NULL;
-	if (nb_enemy >= 0)
-		ft_memdel((void **)&game->enemy);
+	free_enemies(game, nb_enemy);
 	return (EXIT_FAILURE);
 }
 
@@ -127,6 +137,12 @@ int		free_fonts_surf(t_editor *editor)
 	{
 		SDL_FreeSurface(editor->instr_menu.instructs[i]);
 		editor->instr_menu.instructs[i] = NULL;
+		i++;
+	}
+	while (i < 2)
+	{
+		SDL_FreeSurface(editor->opt_menu.weapon_surf[i]);
+		editor->opt_menu.weapon_surf[i] = NULL;
 		i++;
 	}
 	return (EXIT_FAILURE);
