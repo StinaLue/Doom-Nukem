@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 00:19:07 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 11:24:16 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ void	init_colors(t_editor *editor)
 		editor->opt_menu.bord_hover_color_opt[4] = COLOR_CHOOSE;
 	editor->opt_menu.bord_color_opt[0] = COLOR_CHOOSE;
 	editor->opt_menu.bord_color_opt[1] = COLOR_CHOOSE;
-	editor->opt_menu.bord_color_weapon[0] = COLOR_CHOOSE;
-	editor->opt_menu.bord_color_weapon[1] = COLOR_CHOOSE;
+	//if (editor->opt_menu.activ_weapon[0] != 1)
+		editor->opt_menu.bord_color_weapon[0] = COLOR_CHOOSE;
+	//if (editor->opt_menu.activ_weapon[1] != 1)
+		editor->opt_menu.bord_color_weapon[1] = COLOR_CHOOSE;
 }
 
 int	init_editor(t_editor *editor, t_sdlmain *sdlmain)

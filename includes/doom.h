@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 00:08:48 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 12:31:57 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@
 # define NBINSTRUCTS 10
 # define MAPMULTIPLIER 4
 # define COLOR_HOVER 0x6C1413
-# define COLOR_PRESSED 0x00FF00
+# define COLOR_PRESSED 0x00cc00
 # define COLOR_NORMAL 0xff0000
 # define COLOR_CHOOSE 0xffff00
 
@@ -304,6 +304,7 @@ typedef struct				s_editor
 	SDL_Surface				*alert_loading_surf;
 	SDL_Surface				*loading_success_surf;
 	SDL_Surface				*player_face_surf;
+	SDL_Surface 			*weapon_texture;
 
 	SDL_Rect				editor_rect;
 	SDL_Rect				options_rect;
@@ -313,7 +314,7 @@ typedef struct				s_editor
 	SDL_Rect				alert_convex_rect;
 	SDL_Rect				alert_loading_rect;
 	SDL_Rect				loading_success_rect;
-	SDL_Rect				enemy_rect[2];
+	SDL_Rect				enemy_rect[2]; // do i use this?
 
 	t_sector_node			*current_sector;
 	t_sector_node			*selected_sector;
