@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 16:06:54 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 16:21:49 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@
 # define NBINSTRUCTS 10
 # define MAPMULTIPLIER 4
 # define COLOR_HOVER 0x6C1413
-# define COLOR_PRESSED 0x00FF00
+# define COLOR_PRESSED 0x00cc00
 # define COLOR_NORMAL 0xff0000
 # define COLOR_CHOOSE 0xffff00
 
@@ -97,6 +97,12 @@ typedef struct				s_vecdb
 	double					y;
 }							t_vecdb;
 
+typedef	struct				s_segment
+{
+	t_vecdb					a;
+	t_vecdb					b;
+}							t_segment;
+
 typedef struct				s_enemy_info
 {
 	t_vec					enemy_spawn;
@@ -128,8 +134,10 @@ typedef struct				s_sector_node
 	int						wall_num;
 }							t_sector_node;
 
-typedef struct				s_wall3d
+typedef struct				s_display_wall
 {
+	t_segment				relative;
+	t_segment				intersect;
 	t_vec					top_left;
 	t_vec					top_right;
 	t_vec					bottom_left;
@@ -139,7 +147,10 @@ typedef struct				s_wall3d
 	double					dist_left;
 	double					dist_right;
 	double					length;
-}							t_wall3d;
+	int						top_limit;
+	int						bot_limit;
+	SDL_Surface				*texture;
+}							t_display_wall;
 
 typedef struct				s_sound
 {
@@ -185,17 +196,12 @@ typedef struct				s_data
 	char					hud_flags;
 }							t_data;
 
-typedef	struct				s_segment
+typedef struct				s_view
 {
-	t_vecdb					a;
-	t_vecdb					b;
-}							t_segment;
-
-/*typedef struct				s_view
-{
-	t_vecdb					left;
-	t_vecdb					right;
-}							t_view;*/
+	t_segment				fov;
+	int						top_limit;
+	int						bot_limit;
+}							t_view;
 
 typedef struct				s_enemy
 {
@@ -267,19 +273,21 @@ typedef struct				s_options_menu
 	SDL_Rect				height_rect[2];
 	SDL_Rect				player_rect;
 	SDL_Rect 				weapon_rect[2];
+	SDL_Rect 				scaled_weapon_rect[2];
 
 	TTF_Font				*font_title;
 	TTF_Font				*font;
 
 	SDL_Color				text_color;
 	int						bord_color_text[NBTEXTURES];
-	int						bord_color_opt[5];
+	int 					bord_color_height[2];
 	int						bord_hover_color_opt[NBHOVEROPTIONS];
 	int 					bord_color_weapon[2];
 	int						activ_tex;
 	int 					activ_music[2];
 	int 					activ_weapon[2];
 	int						typing_filename;
+	int 					activ_height[2];
 	double					height_ceiling;
 	double					height_floor;
 	char					file_name[16];
@@ -308,6 +316,7 @@ typedef struct				s_editor
 	SDL_Surface				*alert_loading_surf;
 	SDL_Surface				*loading_success_surf;
 	SDL_Surface				*player_face_surf;
+	SDL_Surface 			*weapon_texture;
 
 	SDL_Rect				editor_rect;
 	SDL_Rect				options_rect;
@@ -317,7 +326,7 @@ typedef struct				s_editor
 	SDL_Rect				alert_convex_rect;
 	SDL_Rect				alert_loading_rect;
 	SDL_Rect				loading_success_rect;
-	SDL_Rect				enemy_rect[2];
+	SDL_Rect				enemy_rect[2]; // do i use this?
 
 	t_sector_node			*current_sector;
 	t_sector_node			*selected_sector;
@@ -466,6 +475,8 @@ int							init_wall_textures(SDL_Surface **wall_textures, \
 
 void						init_source(ALuint src, ALfloat pitch, ALfloat gain, int loop);
 
+t_view						init_view(t_player *player, SDL_Surface *surf);
+
 /*
 ** INIT STRUCT FUNCTIONS
 */
@@ -509,7 +520,7 @@ int							draw_full_rotmap(SDL_Surface *surf, t_player *player, const t_map *map
 
 void						draw_perspective_view(SDL_Surface *surf, t_player *player, SDL_Surface **wall_textures);
 
-void		draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_segment view, t_sector_node *sector, t_player *player);
+void		draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view view, t_sector_node *sector, t_player *player);
 /*
 ** DRAWING FUNCTIONS
 */
@@ -720,9 +731,8 @@ void						flip_walls(t_sector_node *sector);
 /*
 ** TEXTURE MAPPING
 */
-void						fill_wall_texture(SDL_Surface *surf, const t_wall3d *display_wall, SDL_Surface *tex);
 
-void						draw_texture(SDL_Surface *surf, SDL_Surface *wall_texture, t_wall3d *display_wall);
+void						draw_texture(SDL_Surface *surf, SDL_Surface *wall_texture, t_display_wall *display_wall);
 
 /*
 ** SOUND FUNCTIONS

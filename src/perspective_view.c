@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 17:15:38 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/07 15:35:27 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_vecdb		simple_intersect(t_vecdb start, t_vecdb end, t_vecdb cross)
 	return (intersection);
 }
 
-int			intersect_view(t_segment *wall, t_segment view)
+int			intersect_view(t_segment *wall, t_segment *intersect, t_segment view)
 {
 	if (cross_product(wall->a, wall->b) > 0 || (wall->a.y <= 0 && wall->b.y <= 0))
 		return (0);
@@ -50,110 +50,138 @@ int			intersect_view(t_segment *wall, t_segment view)
 	{
 		if (cross_product(wall->b, view.a) < 0)
 			return (0);
-		wall->a = simple_intersect(wall->a, wall->b, view.a);
+		intersect->a = simple_intersect(wall->a, wall->b, view.a);
 	}
 	else if (wall->a.y <= 0)
 		return (0);
+	else
+		intersect->a = wall->a;
 
 	if (cross_product(wall->b, view.b) > 0)
 	{
 		if (cross_product(wall->a, view.b) > 0)
 			return (0);
-		wall->b = simple_intersect(wall->a, wall->b, view.b);
+		intersect->b = simple_intersect(wall->a, wall->b, view.b);
 	}
 	else if (wall->b.y <= 0)
 		return (0);
+	else
+		intersect->b = wall->b;
 	return (1);
 }
 
-t_wall3d	create_perspective_wall(t_segment wall, SDL_Surface *surf, t_player *player, t_sector_node *sector)
+void		create_perspective_wall(t_display_wall *dsp_wall, SDL_Surface *surf, t_player *player, t_sector_node *sector)
 {
 	double		fov_ratio;
 	double		x;
 	double		top;
 	double		bot;
-	t_wall3d	display_wall;
 
-	fov_ratio = player->view.b.y / player->view.b.x / wall.a.y * surf->w;
-	x = wall.a.x * fov_ratio;
+	fov_ratio = player->view.b.y / player->view.b.x / dsp_wall->intersect.a.y * surf->w;
+	x = dsp_wall->intersect.a.x * fov_ratio;
 	top = (sector->ceiling_height - (player->posz + player->height)) * fov_ratio;
 	bot = (sector->floor_height - (player->posz + player->height)) * fov_ratio;
 
-	display_wall.top_left.x = (surf->w + x) / 2;
-	display_wall.top_left.y = (surf->h + top) / 2 - player->view_z;
-	display_wall.bottom_left.x = display_wall.top_left.x;
-	display_wall.bottom_left.y = (surf->h + bot) / 2 - player->view_z;
+	dsp_wall->top_left.x = (surf->w + x) / 2;
+	dsp_wall->top_left.y = (surf->h + top) / 2 - player->view_z;
+	dsp_wall->bottom_left.x = dsp_wall->top_left.x;
+	dsp_wall->bottom_left.y = (surf->h + bot) / 2 - player->view_z;
 
-	fov_ratio = player->view.b.y / player->view.b.x / wall.b.y * surf->w;
-	x = wall.b.x * fov_ratio;
+	fov_ratio = player->view.b.y / player->view.b.x / dsp_wall->intersect.b.y * surf->w;
+	x = dsp_wall->intersect.b.x * fov_ratio;
 	top = (sector->ceiling_height - (player->posz + player->height)) * fov_ratio;
 	bot = (sector->floor_height - (player->posz + player->height)) * fov_ratio;
 
-	display_wall.top_right.x = (surf->w + x) / 2;
-	display_wall.top_right.y = (surf->h + top) / 2 - player->view_z;
-	display_wall.bottom_right.x = display_wall.top_right.x;
-	display_wall.bottom_right.y = (surf->h + bot) / 2 - player->view_z;
-
-	display_wall.dist_left = wall.a.y;
-	display_wall.dist_right = wall.b.y;
-	display_wall.start_pos = 0;
-	display_wall.end_pos = 1;
-
-	return (display_wall);
+	dsp_wall->top_right.x = (surf->w + x) / 2;
+	dsp_wall->top_right.y = (surf->h + top) / 2 - player->view_z;
+	dsp_wall->bottom_right.x = dsp_wall->top_right.x;
+	dsp_wall->bottom_right.y = (surf->h + bot) / 2 - player->view_z;
 }
 
-void	draw_3dwall(t_wall3d display_wall, SDL_Surface *surf, const t_wall_node *wall, SDL_Surface **wall_textures)
+//remove wall and send texture directly
+void	draw_3dwall(t_display_wall *dsp_wall, SDL_Surface *surf)
 {
 	if (ft_strncmp(surf->userdata, "yescolor", 8) != 0)
 	{
-		draw_line(display_wall.top_left, display_wall.top_right, surf, wall->color);
-		draw_line(display_wall.top_right, display_wall.bottom_right, surf, wall->color);
-		draw_line(display_wall.bottom_right, display_wall.bottom_left, surf, wall->color);
-		draw_line(display_wall.bottom_left, display_wall.top_left, surf, wall->color);
+		draw_line(dsp_wall->top_left, dsp_wall->top_right, surf, 0xffffff);
+		draw_line(dsp_wall->top_right, dsp_wall->bottom_right, surf, 0xffdddd);
+		draw_line(dsp_wall->bottom_right, dsp_wall->bottom_left, surf, 0xdddddd);
+		draw_line(dsp_wall->bottom_left, dsp_wall->top_left, surf, 0xddddff);
 	}
 	else
-		draw_texture(surf, wall_textures[wall->tex_index], &display_wall);
+		draw_texture(surf, dsp_wall->texture, dsp_wall);
 }
 
-void		set_wall_cuts(t_segment wall, t_segment tmp_wall, t_wall3d *display_wall)
+void		init_display_wall(t_display_wall *display, t_wall_node *current_wall, t_view old_view, SDL_Surface **wall_textures)
 {
-	if (fabs(tmp_wall.a.x - tmp_wall.b.x) > 0.001)
+	double	length;
+
+	display->dist_left = display->intersect.a.y;
+	display->dist_right = display->intersect.b.y;
+	display->length = current_wall->length;
+	display->texture = wall_textures[current_wall->tex_index];
+	display->top_limit = old_view.top_limit;
+	display->bot_limit = old_view.bot_limit;
+	if (fabs(display->relative.a.x - display->relative.b.x) > 0.001)
 	{
-		display_wall->start_pos = (wall.a.x - tmp_wall.a.x) / (tmp_wall.b.x - tmp_wall.a.x);
-		display_wall->end_pos = (wall.b.x - tmp_wall.a.x) / (tmp_wall.b.x - tmp_wall.a.x);
+		length = display->relative.b.x - display->relative.a.x;
+		display->start_pos = (display->intersect.a.x - display->relative.a.x) / length;
+		display->end_pos = (display->intersect.b.x - display->relative.a.x) / length;
 	}
-	else if (fabs(tmp_wall.a.y - tmp_wall.b.y) > 0.001)
+	else if (fabs(display->relative.a.y - display->relative.b.y) > 0.001)
 	{
-		display_wall->start_pos = (wall.a.y - tmp_wall.a.y) / (tmp_wall.b.y - tmp_wall.a.y);
-		display_wall->end_pos = (wall.b.y - tmp_wall.a.y) / (tmp_wall.b.y - tmp_wall.a.y);
+		length = display->relative.b.y - display->relative.a.y;
+		display->start_pos = (display->intersect.a.y - display->relative.a.y) / length;
+		display->end_pos = (display->intersect.b.y - display->relative.a.y) / length;
+	}
+	else
+	{
+		display->start_pos = 0;
+		display->end_pos = 1;
 	}
 }
 
-void		draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_segment view, t_sector_node *sector, t_player *player)
+t_view		create_view(t_display_wall *display, t_view old_view)
 {
-	t_segment		wall;
-	t_wall3d		display_wall;
+	t_view	view;
+
+	view.fov.a = display->intersect.a;
+	view.fov.b = display->intersect.b;
+	view.top_limit = old_view.top_limit;
+	view.bot_limit = old_view.bot_limit;
+	if (display->top_left.y < view.top_limit && display->top_left.y >= display->top_right.y)
+		view.top_limit = display->top_left.y;
+	else if (display->top_right.y < view.top_limit && display->top_left.y <= display->top_right.y)
+		view.top_limit = display->top_right.y;
+	if (display->bottom_left.y > view.bot_limit && display->bottom_left.y <= display->bottom_right.y)
+		view.bot_limit = display->bottom_left.y;
+	else if (display->bottom_right.y > view.bot_limit && display->bottom_left.y >= display->bottom_right.y)
+		view.bot_limit = display->bottom_right.y;
+	return (view);
+}
+
+void		draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view view, t_sector_node *sector, t_player *player)
+{
+	t_display_wall	display_wall;
 	t_wall_node		*current_wall;
-	t_segment		tmp_wall;
+	t_view			new_view;
 
 	current_wall = sector->wall_head;
 	while (current_wall != NULL)
 	{
-		wall = rotate_wall_relative(current_wall, player);
-		tmp_wall.a = wall.a;
-		tmp_wall.b = wall.b;
-		if (intersect_view(&wall, view))//wall is in field of view
+		display_wall.relative = rotate_wall_relative(current_wall, player);
+		if (intersect_view(&display_wall.relative, &display_wall.intersect, view.fov))
 		{
-			display_wall = create_perspective_wall(wall, surf, player, sector);//ajouter sector pour les infos de hauteur
-			display_wall.length = current_wall->length;
-			set_wall_cuts(wall, tmp_wall, &display_wall);
+			create_perspective_wall(&display_wall, surf, player, sector);
+			init_display_wall(&display_wall, current_wall, view, wall_textures);//set cuts, set distance, set length;
 			if (current_wall->neighbor_sector != NULL && current_wall->neighbor_sector != sector)
 			{
-				draw_view_recursive(surf, wall_textures, wall, current_wall->neighbor_sector, player);
-				//draw top and bottom of wall
+				new_view = create_view(&display_wall, view);
+				draw_view_recursive(surf, wall_textures, new_view, current_wall->neighbor_sector, player);
+				//draw portal top and bot
 			}
 			else
-				draw_3dwall(display_wall, surf, current_wall, wall_textures);
+				draw_3dwall(&display_wall, surf);
 		}
 		current_wall = current_wall->next;
 	}

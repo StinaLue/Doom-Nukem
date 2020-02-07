@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 15:22:17 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 16:20:19 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,11 @@ int		init_doom(t_doom *doom)
 
 	doom->editor.wall_textures = doom->wall_textures;
 	doom->editor.enemy_textures = doom->game.surfs.enemy_texture;
+	doom->editor.weapon_texture = doom->game.surfs.weapons;
 	get_enemysprite_rect(&doom->editor.enemy_rect[0], 0, doom->editor.enemy_textures[0]);
 	get_enemysprite_rect(&doom->editor.enemy_rect[1], 1, doom->editor.enemy_textures[1]);
+	doom->editor.opt_menu.weapon_rect[0] = create_sdlrect(0, 0, 232, 200);
+	doom->editor.opt_menu.weapon_rect[1] = create_sdlrect(100, 500, 116, 100);
 	if (init_editor(&doom->editor, &doom->sdlmain) == 1)
 		return (1);
 	return (0);
@@ -153,6 +156,16 @@ int		init_sdlmain(t_sdlmain *sdlmain)
 	sdlmain->mouse_pos.x = 0;
 	sdlmain->mouse_pos.y = 0;
 	return (EXIT_SUCCESS);
+}
+
+t_view	init_view(t_player *player, SDL_Surface *surf)
+{
+	t_view	view;
+
+	view.fov = player->view;
+	view.top_limit = surf->h - 1;
+	view.bot_limit = 0;
+	return (view);
 }
 
 int		init_map(t_map *map)

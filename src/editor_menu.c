@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 17:53:34 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 14:01:24 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ int	init_instr_menu(t_editor *editor, SDL_Surface *surf)
 		return (1);
 	if (create_instruct_str(editor, create_vec(surf->w / 18, surf_h * 17), 8, "set enemy: b/e") != 0)
 		return (1);
-	if (create_instruct_str(editor, create_vec(surf->w / 2, surf_h * 17), 9, "remove enemy: r") != 0)
+	if (create_instruct_str(editor, create_vec(surf->w / 2, surf_h * 17), 9, "remove enemy/player: r") != 0)
 		return (1);
 	return (0);
 }
@@ -210,7 +210,7 @@ int	init_options_menu(t_editor *editor)
 	if (create_floor_height(editor) != 0)
 		return (1);
 	set_textures(editor->opt_menu.text_rect, editor->opt_surf);
-	set_weapon_textures(&editor->opt_menu, editor->opt_surf);
+	//set_weapon_textures(&editor->opt_menu, editor->opt_surf);
 	set_height(&editor->opt_menu, editor->opt_surf);
 	return (0);
 }
