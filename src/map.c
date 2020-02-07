@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 16:38:33 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/31 15:54:41 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 15:21:23 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,6 @@ int		copy_map(const t_map *srcmap, t_map *dstmap)
 		if (copy_sector_list(srcmap->sector_head, &dstmap->sector_head) == -1)
 			return (1);
 	}
+	dstmap->which_music = srcmap->which_music;
 	return (0);
 }

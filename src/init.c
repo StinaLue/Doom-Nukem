@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 15:46:36 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 16:20:19 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,10 +120,13 @@ int		init_sound(t_sound *sound)
 	//environment sounds
 	if ((load_wav("assets/sounds/you_lose.wav", sound->buffer[7])) != 0)
 		return (error_return("error loading %{r}s\n", "you_lose.wav"));
+	if ((load_wav("assets/sounds/win.wav", sound->buffer[8])) != 0)
+		return (error_return("error loading %{r}s\n", "win.wav"));
+	if ((load_wav("assets/sounds/chill_music.wav", sound->buffer[9])) != 0)
+		return (error_return("error loading %{r}s\n", "chill_music.wav"));
 
-	alSourcei(sound->source[0], AL_BUFFER, sound->buffer[0]);
+	//alSourcei(sound->source[0], AL_BUFFER, sound->buffer[0]);
 	alSourcei(sound->source[2], AL_BUFFER, sound->buffer[2]);
-	alSourcePlay(sound->source[0]);
 	return (0);
 }
 
@@ -326,5 +329,6 @@ int	init_game(t_game *game, t_sdlmain *sdlmain, t_map *map)
 	init_player_struct(&(game->player), map);
 	game->weapon_anim[0] = blit_katana;
 	game->weapon_anim[1] = blit_uzi;
+	game->win = 0;
 	return (0);
 }

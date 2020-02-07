@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/05 19:48:07 by afonck           ###   ########.fr        #
+#    Updated: 2020/02/07 15:40:09 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -94,7 +94,10 @@ SOURCES_LIST = main.c \
 			texture_mapping.c \
 			editor_events_mouse.c \
 			editor_events_keys.c \
-			mouse_movement.c #\
+			mouse_movement.c \
+			sound.c \
+			music.c \
+			end_level_loops.c #\
 			map_parser.c \
 	       multithreading.c \
 		   texture.c \

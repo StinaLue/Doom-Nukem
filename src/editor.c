@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 15:31:31 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 16:21:23 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 
 	editor->edit_map.player_spawn.x = -1;
 	editor->edit_map.player_spawn.y = -1;
+	editor->edit_map.which_music = 0;
 
 	editor->edit_map.sector_head = NULL;
 	editor->edit_map.num_enemies = 0;
@@ -235,6 +236,10 @@ int	editor_loop(t_doom *doom)
 	//if (NBPOINTSROW * editor->offset < editor->editor_surf->h)
 	offset_border = editor->editor_surf->h \
 			- NBPOINTSROW * editor->offset;
+	if (!is_buffer_playing(sdlmain->sound.source[0], sdlmain->sound.buffer[9]))
+		play_editor_music(sdlmain, doom);
+	//stop_enem_soundsources(doom->game.enemy, doom->map.num_enemies);
+	//alSourceStopv(NB_SOUND_SOURCES, sdlmain->sound.source);
 	while (doom->state == EDITOR_STATE)
 	{
 		while (SDL_PollEvent(&sdlmain->event) != 0)

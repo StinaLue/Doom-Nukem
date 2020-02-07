@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:22:12 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/06 18:44:20 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 13:56:28 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ int		handle_events(t_doom *doom)
 		// ONLY TO TEST HEALTH
 		if (doom->sdlmain.event.key.keysym.sym == SDLK_z)
 			doom->game.player.health -= 10;
+		if (doom->sdlmain.event.key.keysym.sym == SDLK_v)
+			doom->game.win = 1;
 	}
 	if (doom->sdlmain.event.type == SDL_MOUSEMOTION)
 	{
