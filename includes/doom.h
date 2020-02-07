@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 14:12:56 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 16:06:54 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # define PLAYER_RADIUS 0.5
 # define NB_WALL_TEXTURES 9
 # define NB_SOUND_SOURCES 3
-# define NB_SOUND_BUFFERS 9
+# define NB_SOUND_BUFFERS 10
 
 /*
 ** MAIN LOOP STATES
@@ -293,6 +293,7 @@ typedef struct				s_map
 	t_vec					player_spawn;
 	int						num_sectors;
 	int						num_enemies;
+	int						which_music;
 }							t_map;
 
 typedef struct				s_editor
@@ -362,6 +363,8 @@ typedef struct				s_doom
 	SDL_Surface				*wall_textures[10];
 	int						state;
 }							t_doom;
+
+void						soft_reset_player(t_player *player, t_map *map);
 
 void						prepend_str(const char *to_prepend, \
 							const char *str, char *new_str, int full_size);
@@ -725,5 +728,32 @@ void						draw_texture(SDL_Surface *surf, SDL_Surface *wall_texture, t_wall3d *d
 ** SOUND FUNCTIONS
 */
 void						stop_enem_soundsources(t_enemy *enemies, int nb_enemies);
+
+int							is_buffer_playing(ALuint src, ALuint buffer);
+
+void						init_source(ALuint src, ALfloat pitch, ALfloat gain, int loop);
+
+int							is_source_playing(ALuint source);
+
+int							play_sound(t_game *game, t_sdlmain *sdlmain, t_map *map);
+
+/*
+** MUSIC FUNCTIONS
+*/
+void						play_win_music(t_game *game, t_sdlmain *sdlmain, t_doom *doom);
+
+void						play_gameover_music(t_game *game, t_sdlmain *sdlmain, t_doom *doom);
+
+void						play_game_music(t_game *game, t_sdlmain *sdlmain, t_doom *doom);
+
+void						play_editor_music(t_sdlmain *sdlmain, t_doom *doom);
+
+/*
+** END LEVEL LOOPS FUNCTIONS
+*/
+
+void						game_over_loop(t_doom *doom);
+
+void						win_loop(t_doom *doom);
 
 #endif

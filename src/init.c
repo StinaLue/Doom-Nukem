@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 13:53:24 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 15:22:17 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,10 @@ int		init_sound(t_sound *sound)
 		return (error_return("error loading %{r}s\n", "you_lose.wav"));
 	if ((load_wav("assets/sounds/win.wav", sound->buffer[8])) != 0)
 		return (error_return("error loading %{r}s\n", "win.wav"));
+	if ((load_wav("assets/sounds/chill_music.wav", sound->buffer[9])) != 0)
+		return (error_return("error loading %{r}s\n", "chill_music.wav"));
 
-	alSourcei(sound->source[0], AL_BUFFER, sound->buffer[0]);
+	//alSourcei(sound->source[0], AL_BUFFER, sound->buffer[0]);
 	alSourcei(sound->source[2], AL_BUFFER, sound->buffer[2]);
 	return (0);
 }

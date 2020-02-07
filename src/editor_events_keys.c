@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 00:35:43 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 16:12:57 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,14 +183,7 @@ void	key_event_l(t_editor *editor, t_doom *doom)
 			doom->state = QUIT_STATE;
 		if (init_enemy_struct(&doom->game, &doom->map) != 0)
 			doom->state = QUIT_STATE;
-		doom->game.player.pos = vec_to_vecdb(doom->map.player_spawn);
-		doom->game.player.sector = get_sector_by_pos(doom->map.sector_head, \
-													doom->game.player.pos);
-		if (doom->game.player.pos.x == -1 && doom->game.player.pos.y == -1)
-		{
-			doom->game.player.sector = doom->map.sector_head;
-			doom->game.player.pos = doom->map.sector_head->sector_center;
-		}
+		soft_reset_player(&doom->game.player, &doom->map);
 		editor->loading_success = 1;
 		editor->show_loading_alert = 0;
 	}
