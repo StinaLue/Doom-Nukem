@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 00:37:00 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 15:42:59 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,9 +332,9 @@ int game_loop(t_doom *doom)
 {
 	t_game		*game;
 	t_sdlmain	*sdlmain;
-	Uint32		startclock;
-	int			itt;
-//	t_view		view;
+	Uint32		startclock = 0;
+	int			itt = 0;
+	t_view		view;
 
 	game = &(doom->game);
 	sdlmain = &(doom->sdlmain);
@@ -375,7 +375,8 @@ int game_loop(t_doom *doom)
 			node = node->next;
 		}*/
 		//draw_perspective_view(game->surfs.perspective_view, &game->player, doom->wall_textures);
-		draw_view_recursive(game->surfs.perspective_view, doom->wall_textures, doom->game.player.view, doom->game.player.sector, &doom->game.player);
+		view = init_view(&game->player, game->surfs.perspective_view);
+		draw_view_recursive(game->surfs.perspective_view, doom->wall_textures, view, game->player.sector, &game->player);
 		if (blit_enemies(game, game->surfs.perspective_view, &doom->map) != 0)
 			return (error_return("Blit enemies error\n", NULL));
 		if (blit_weapon(game, game->surfs.perspective_view, game->player.current_weapon) != 0)//, &sdlmain->sound) != 0)

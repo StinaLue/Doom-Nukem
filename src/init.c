@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 14:20:22 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 15:46:36 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,16 @@ int		init_sdlmain(t_sdlmain *sdlmain)
 	sdlmain->mouse_pos.x = 0;
 	sdlmain->mouse_pos.y = 0;
 	return (EXIT_SUCCESS);
+}
+
+t_view	init_view(t_player *player, SDL_Surface *surf)
+{
+	t_view	view;
+
+	view.fov = player->view;
+	view.top_limit = surf->h - 1;
+	view.bot_limit = 0;
+	return (view);
 }
 
 int		init_map(t_map *map)
