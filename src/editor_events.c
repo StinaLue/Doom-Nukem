@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 17:11:22 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 17:22:05 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void			del_last_char(char *str, int min_len)
 		str[len - 1] = '\0';
 }
 
-void	height_down(t_editor *editor, t_options_menu *menu)
+void			height_down(t_editor *editor, t_options_menu *menu)
 {
 	if (menu->activ_height[1] == 1 && menu->height_floor > 0)
 	{
@@ -95,7 +95,7 @@ void	height_down(t_editor *editor, t_options_menu *menu)
 	}
 }
 
-void	height_up(t_editor *editor, t_options_menu *menu)
+void			height_up(t_editor *editor, t_options_menu *menu)
 {
 	if (menu->activ_height[1] == 1 && menu->height_floor < 99 \
 			&& menu->height_floor < menu->height_ceiling - 1)
@@ -110,7 +110,8 @@ void	height_up(t_editor *editor, t_options_menu *menu)
 	}
 }
 
-void	key_event_height(t_editor *editor, SDL_Event ev, t_options_menu *menu)
+void			key_event_height(t_editor *editor, SDL_Event ev, \
+										t_options_menu *menu)
 {
 	if (editor->selected_sector != NULL)
 	{
@@ -126,7 +127,8 @@ void	key_event_height(t_editor *editor, SDL_Event ev, t_options_menu *menu)
 	}
 }
 
-void	event_handle_input(t_editor *editor, Uint32 type, SDL_Keycode key, char *text)
+void			event_handle_input(t_editor *editor, Uint32 type, \
+							SDL_Keycode key, char *text)
 {
 	if (type == SDL_KEYDOWN && key == SDLK_RETURN)
 	{
@@ -147,21 +149,22 @@ int				editor_events(t_doom *doom)
 	t_editor	*editor;
 	t_sdlmain	*sdlmain;
 	SDL_Keycode key;
+	Uint32		type;
 
 	editor = &(doom->editor);
 	sdlmain = &(doom->sdlmain);
 	key = sdlmain->event.key.keysym.sym;
+	type = sdlmain->event.type;
 	check_quit(&doom->sdlmain.event, &doom->state);
-	event_handle_input(editor, sdlmain->event.type, key, sdlmain->event.text.text);
+	event_handle_input(editor, type, key, sdlmain->event.text.text);
 	if (editor->opt_menu.typing_filename == 0)
 	{
-		if (sdlmain->event.type == SDL_KEYDOWN)
-			event_keydown(editor, doom, sdlmain);
-		if (sdlmain->event.type == SDL_MOUSEBUTTONDOWN || sdlmain->event.type == SDL_MOUSEMOTION \
-				|| sdlmain->event.type == SDL_MOUSEWHEEL)
-			event_mouse(editor, sdlmain);
-		if (key == SDLK_DOWN || key == SDLK_UP || sdlmain->event.type == SDL_MOUSEWHEEL)
+		if (key == SDLK_DOWN || key == SDLK_UP || type == SDL_MOUSEWHEEL)
 			key_event_height(editor, sdlmain->event, &editor->opt_menu);
+		if (type == SDL_KEYDOWN)
+			event_keydown(editor, doom, sdlmain);
+		if (type == SDL_MOUSEBUTTONDOWN || type == SDL_MOUSEMOTION)
+			event_mouse(editor, sdlmain);
 	}
 	find_neighbors(&editor->edit_map);
 	itt_sector_wall_heads(editor->edit_map.sector_head, &set_wall_length);

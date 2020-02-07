@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   menu.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:27:36 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 14:18:17 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 19:27:50 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,16 +218,21 @@ int	reset_doom(t_doom *doom)
 	free_menu(&doom->menu);
 	free_editor(&doom->editor);
 	free_sdlmain(&doom->sdlmain);
-	//free_wall_textures(doom->wall_textures);
 	quit_sdl_and_ttf();
 	if (init_sdl_and_ttf() == 1 \
 		|| init_sdlmain(&doom->sdlmain) == 1 \
 		|| init_gamesurfs_struct(&doom->game.surfs, &doom->sdlmain) == 1 \
 		|| init_enemy_struct(&doom->game, &doom->map) == 1 \
 		|| init_menu(&doom->menu, &doom->sdlmain) == 1 \
-		|| reset_init_editor(&doom->editor, &doom->sdlmain) == 1) \
-		//|| init_wall_textures(doom->wall_textures, doom->sdlmain.win_surf) == 1)
+		|| reset_init_editor(&doom->editor, &doom->sdlmain) == 1)
 		return (1);
+
+	doom->editor.player_face_surf = doom->game.surfs.hud_faces_surf;
+	doom->editor.player_face_rec.x = doom->game.surfs.hud_faces_rect.x;
+	doom->editor.player_face_rec.y = doom->game.surfs.hud_faces_rect.y;
+	doom->editor.player_face_rec.h = doom->game.surfs.hud_faces_rect.h;
+	doom->editor.player_face_rec.w = doom->game.surfs.hud_faces_rect.w;
+	doom->editor.weapon_texture = doom->game.surfs.weapons;
 	doom->state = GAME_STATE;
 	return (0);
 }
@@ -259,7 +264,7 @@ int	blit_menu_surfs(t_menu *menu, t_sdlmain *sdlmain)
 	if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)
 		return (error_return("SDL_UpdateWindowSurface error = %{r}s\n", \
 				SDL_GetError()));
-	return (0);
+		return (0);
 }
 
 int	menu_loop(t_doom *doom)

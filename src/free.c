@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 16:20:50 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 19:22:41 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,12 +141,6 @@ int		free_fonts_surf(t_editor *editor)
 	{
 		SDL_FreeSurface(editor->instr_menu.instructs[i]);
 		editor->instr_menu.instructs[i] = NULL;
-		i++;
-	}
-	while (i < 2)
-	{
-		SDL_FreeSurface(editor->opt_menu.weapon_surf[i]);
-		editor->opt_menu.weapon_surf[i] = NULL;
 		i++;
 	}
 	return (EXIT_FAILURE);

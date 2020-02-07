@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:02:39 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/22 16:49:41 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 17:46:00 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	assign_sdlrect_invert(SDL_Rect *rect, t_vec origin, t_vec size)
 	rect->h = size.y;
 }
 
-void assign_sdlrect(SDL_Rect *rect, t_vec origin, t_vec size)
+void	assign_sdlrect(SDL_Rect *rect, t_vec origin, t_vec size)
 {
 	rect->x = origin.x;
 	rect->y = origin.y;
@@ -47,7 +47,7 @@ void assign_sdlrect(SDL_Rect *rect, t_vec origin, t_vec size)
 	rect->h = size.y;
 }
 
-int	error_return(const char *error_msg, const char *sdl_error)
+int		error_return(const char *error_msg, const char *sdl_error)
 {
 	if (sdl_error != NULL)
 		ft_dprintf(STDERR_FILENO, error_msg, sdl_error);
