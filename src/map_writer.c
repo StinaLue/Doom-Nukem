@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/03 17:54:01 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 22:32:04 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/08 01:49:28 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,16 @@ int		write_map(t_map *map)
 		return (error_return_map("Error writing num enemies\n", NULL, fd));
 	if (write_enemies_info(fd, map->enemy_info, map->num_enemies) != 0)
 		return (error_return("Error writing enemies info\n", NULL));
+
+	if (write(fd, "music", 5) != 5)
+		return (error_return_map("Error writing music mark\n", NULL, fd));
+	if (write(fd, &map->which_music, sizeof(int)) != sizeof(int))
+		return (error_return_map("Error writing music choice\n", NULL, fd));
+
+	if (write(fd, "weapons", 7) != 7)
+		return (error_return_map("Error writing weapons mark\n", NULL, fd));
+	if (write(fd, &map->weapon_choice, sizeof(int)) != sizeof(int))
+		return (error_return_map("Error writing weapon choice\n", NULL, fd));
 
 	if (write(fd, "END", 3) != 3)
 		return (error_return_map("Error writing END mark\n", NULL, fd));

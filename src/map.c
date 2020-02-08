@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 16:38:33 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 15:21:23 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/08 01:46:47 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,6 @@ int		copy_map(const t_map *srcmap, t_map *dstmap)
 			return (1);
 	}
 	dstmap->which_music = srcmap->which_music;
+	dstmap->weapon_choice = srcmap->weapon_choice;
 	return (0);
 }

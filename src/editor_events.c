@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 17:11:22 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/08 01:56:50 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ int				editor_events(t_doom *doom)
 		if (key == SDLK_DOWN || key == SDLK_UP || sdlmain->event.type == SDL_MOUSEWHEEL)
 			key_event_height(editor, sdlmain->event, &editor->opt_menu);
 	}
+	doom->editor.edit_map.weapon_choice = doom->editor.opt_menu.activ_weapon;
 	find_neighbors(&editor->edit_map);
 	itt_sector_wall_heads(editor->edit_map.sector_head, &set_wall_length);
 	if (doom->state != EDITOR_STATE)

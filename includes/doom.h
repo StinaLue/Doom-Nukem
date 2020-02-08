@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 22:48:21 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/08 01:46:01 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,6 +302,7 @@ typedef struct				s_map
 	int						num_sectors;
 	int						num_enemies;
 	int						which_music;
+	int						weapon_choice;
 }							t_map;
 
 typedef struct				s_editor

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:22:12 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 22:02:46 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/08 02:03:08 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,16 +80,20 @@ void	handle_hud(SDL_Event *event, char *hud_flags)
 	}
 }
 
-void	check_weapon(SDL_Event *event, t_game *game)
+void	check_weapon(SDL_Event *event, t_game *game, int available_weapons)
 {
-	if (event->key.keysym.sym == SDLK_1 && game->player.current_weapon != 0 && game->player.anim == 0)
+	if (available_weapons == 0)
+		return ;
+	if (event->key.keysym.sym == SDLK_1 && game->player.current_weapon != 0 \
+	&& game->player.anim == 0 && available_weapons == 3)
 	{
 		game->player.current_weapon = 0;
 		game->surfs.anim_timer = 0;
 		game->surfs.current_frame = 0;
 		game->player.anim = 0;
 	}
-	else if (event->key.keysym.sym == SDLK_2 && game->player.current_weapon != 1 && game->player.anim == 0)
+	else if (event->key.keysym.sym == SDLK_2 && game->player.current_weapon != 1 \
+	&& game->player.anim == 0 && available_weapons == 3)
 	{
 		game->player.current_weapon = 1;
 		game->surfs.anim_timer = 0;
@@ -106,7 +110,7 @@ int		handle_events(t_doom *doom)
 	{
 		check_menu(&doom->sdlmain.event, &doom->state, &doom->menu.previous_state, GAME_STATE);
 		check_anim(&doom->sdlmain.event, &doom->game);
-		check_weapon(&doom->sdlmain.event, &doom->game);
+		check_weapon(&doom->sdlmain.event, &doom->game, doom->map.weapon_choice);
 		handle_hud(&doom->sdlmain.event, &doom->game.data.hud_flags);
 		// ONLY TO TEST HEALTH
 		if (doom->sdlmain.event.key.keysym.sym == SDLK_z)

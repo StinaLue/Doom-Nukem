@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/03 17:39:25 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 22:32:36 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/08 02:18:04 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,17 @@ int		read_map(const char *path, t_map *map)
 		return (error_return_map("Error reading num enemies\n", NULL, fd));
 	if (read_enemies_info(fd, &map->enemy_info, map->num_enemies) != 0)
 		return (error_return("Error reading enemies info\n", NULL));
+
+	if (read(fd, buf, 5) != 5 || ft_strncmp(buf, "music", 5) != 0)
+		return (error_return_map("Error reading music mark\n", NULL, fd));
+	if (read(fd, &map->which_music, sizeof(int)) != sizeof(int))
+		return (error_return_map("Error reading music choice\n", NULL, fd));
+
+	if (read(fd, buf, 7) != 7 || ft_strncmp(buf, "weapons", 7) != 0)
+		return (error_return_map("Error reading weapons mark\n", NULL, fd));
+	if (read(fd, &map->weapon_choice, sizeof(int)) != sizeof(int))
+		return (error_return_map("Error reading weapon choice\n", NULL, fd));
+
 	if (read(fd, buf, 3) != 3 || ft_strncmp(buf, "END", 3) != 0)
 		return (error_return_map("Error reading END mark\n", NULL, fd));
 	if (close(fd) != 0)

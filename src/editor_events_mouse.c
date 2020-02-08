@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/08 01:41:05 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/08 02:24:17 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,10 +126,7 @@ void	mouse_in_options(t_editor *editor, t_sdlmain *sdlmain, \
 				editor->edit_map.player_spawn = \
 				vecdb_to_vec(editor->edit_map.sector_head->sector_center);
 			if (write_map(&editor->edit_map) != 0)
-			{
 				ft_dprintf(STDERR_FILENO, "error in write map\n");
-				//unlink(editor->edit_map.name);
-			}
 			else
 				ft_printf("%{g}s was properly written 😉\n", editor->edit_map.name);
 		}
@@ -148,30 +145,6 @@ void	mouse_in_options(t_editor *editor, t_sdlmain *sdlmain, \
 			menu->activ_music = 1;
 		}
 		update_weapon_choice(sdlmain, menu);
-		/*
-		i = 0;
-		while (i < 2)
-		{
-			if (is_mouse_collide(sdlmain->mouse_pos, menu->scaled_weapon_rect[i]))
-			{
-				if (sdlmain->event.button.button == SDL_BUTTON_LEFT)
-				{
-					if (menu->activ_weapon[i] == 1)
-					{
-						menu->activ_weapon[i] = 0;
-						menu->bord_color_weapon[i] = COLOR_CHOOSE;
-					}
-					else
-					{
-						menu->activ_weapon[i] = 1;
-						menu->bord_color_weapon[i] = COLOR_PRESSED;
-					}
-				}
-				else if (menu->activ_weapon[i] == 0)
-					menu->bord_color_weapon[i] = COLOR_HOVER;
-			}
-		i++;
-		}*/
 		if (is_mouse_collide(sdlmain->mouse_pos, menu->hover_opt_rect[2]) \
 				&& sdlmain->event.button.button == SDL_BUTTON_LEFT && editor->start_sector_reached == 1)
 		{
@@ -185,7 +158,11 @@ void	mouse_in_options(t_editor *editor, t_sdlmain *sdlmain, \
 				free_map(&editor->edit_map);
 			}
 			else
+			{
 				ft_printf("%{g}s was properly loaded 😉\n", editor->edit_map.name);
+				editor->opt_menu.activ_music = editor->edit_map.which_music;
+				editor->opt_menu.activ_weapon = editor->edit_map.weapon_choice;
+			}
 		}
 		i = 0;
 		while (i < 2)

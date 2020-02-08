@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 21:47:27 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/08 02:09:49 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,10 @@ void	key_event_l(t_editor *editor, t_doom *doom)
 		if (init_enemy_struct(&doom->game, &doom->map) != 0)
 			doom->state = QUIT_STATE;
 		soft_reset_player(&doom->game.player, &doom->map);
+		if (doom->map.weapon_choice == 1 || doom->map.weapon_choice == 3)
+			doom->game.player.current_weapon = 0;
+		else if (doom->map.weapon_choice == 2)
+			doom->game.player.current_weapon = 1;
 		editor->loading_success = 1;
 		editor->show_loading_alert = 0;
 	}

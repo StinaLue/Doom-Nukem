@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 22:20:56 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/08 02:06:54 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,10 +110,12 @@ void	draw_crosshair(SDL_Surface *dest)
 	draw_line(left_cross, right_cross, dest, 0xff0000);
 }
 
-int	blit_weapon(t_game *game, SDL_Surface *dest, int weapon)//, t_sound *sound)
+int	blit_weapon(t_game *game, SDL_Surface *dest, int weapon, int available_weapons)//, t_sound *sound)
 {
 	int return_val;
 
+	if (available_weapons == 0)
+		return (0);
 	return_val = (*game->weapon_anim[weapon])(&game->surfs, dest, &game->player.anim);//, sound);
 	draw_crosshair(dest);
 	return (return_val);
@@ -297,7 +299,7 @@ int game_loop(t_doom *doom)
 		draw_view_recursive(game->surfs.perspective_view, doom->wall_textures, view, game->player.sector, &game->player);
 		if (blit_enemies(game, game->surfs.perspective_view, &doom->map) != 0)
 			return (error_return("Blit enemies error\n", NULL));
-		if (blit_weapon(game, game->surfs.perspective_view, game->player.current_weapon) != 0)//, &sdlmain->sound) != 0)
+		if (blit_weapon(game, game->surfs.perspective_view, game->player.current_weapon, doom->map.weapon_choice) != 0)//, &sdlmain->sound) != 0)
 			return (error_return("Blit weapon error\n", NULL));
 
 		if ((blit_hud_faces(game)) == 1)
