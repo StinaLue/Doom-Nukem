@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/08 02:09:49 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/08 02:46:48 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,9 @@ void	key_event_l(t_editor *editor, t_doom *doom)
 			doom->game.player.current_weapon = 0;
 		else if (doom->map.weapon_choice == 2)
 			doom->game.player.current_weapon = 1;
+		else
+			doom->game.player.current_weapon = -1;
+		
 		editor->loading_success = 1;
 		editor->show_loading_alert = 0;
 	}

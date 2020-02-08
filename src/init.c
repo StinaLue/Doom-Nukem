@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 22:02:25 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/08 02:40:55 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,8 @@ int		init_sound(t_sound *sound)
 		return (error_return("error loading %{r}s\n", "win.wav"));
 	if ((load_wav("assets/sounds/chill_music.wav", sound->buffer[9])) != 0)
 		return (error_return("error loading %{r}s\n", "chill_music.wav"));
+	if ((load_wav("assets/sounds/doom_theme.wav", sound->buffer[10])) != 0)
+		return (error_return("error loading %{r}s\n", "doom_theme.wav"));
 
 	//alSourcei(sound->source[0], AL_BUFFER, sound->buffer[0]);
 	alSourcei(sound->source[2], AL_BUFFER, sound->buffer[2]);

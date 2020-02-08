@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/08 01:46:01 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/08 02:40:06 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # define PLAYER_RADIUS 0.5
 # define NB_WALL_TEXTURES 9
 # define NB_SOUND_SOURCES 3
-# define NB_SOUND_BUFFERS 10
+# define NB_SOUND_BUFFERS 11
 
 /*
 ** MAIN LOOP STATES

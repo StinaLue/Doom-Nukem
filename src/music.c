@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 15:39:00 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 15:42:56 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/08 02:51:40 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ void	play_game_music(t_game *game, t_sdlmain *sdlmain, t_doom *doom)
 	}
 	else if (doom->map.which_music == 1)
 	{
-		;
+		init_source(sdlmain->sound.source[0], 1, 0.3, 1);
+		alSourcei(sdlmain->sound.source[0], AL_BUFFER, sdlmain->sound.buffer[10]);
 	}
 	alSourcePlay(sdlmain->sound.source[0]);
 }
