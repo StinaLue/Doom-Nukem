@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/08 00:52:39 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/08 02:58:50 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,11 +262,6 @@ int	editor_loop(t_doom *doom)
 		draw_border(editor->opt_surf, 0xB12211);
 		draw_border(editor->instr_surf, 0xB12211);
 		draw_lines(editor, editor->editor_surf, sdlmain);
-		editor->player_face_surf = doom->game.surfs.hud_faces_surf;
-		editor->player_face_rec.x = doom->game.surfs.hud_faces_rect.x;
-		editor->player_face_rec.y = doom->game.surfs.hud_faces_rect.y;
-		editor->player_face_rec.h = doom->game.surfs.hud_faces_rect.h;
-		editor->player_face_rec.w = doom->game.surfs.hud_faces_rect.w;
 		if (blit_editor(editor, sdlmain) != 0)
 			return (1);
 	}

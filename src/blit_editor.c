@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/08 01:30:46 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/08 03:02:20 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,7 +251,7 @@ int	blit_enemy(t_editor *editor)
 	return (0);
 }
 
-int	editor_blit_weapons(t_editor *editor)
+int	editor_blit_weapons(t_editor *editor)//, SDL_Surface *surf, t_options_menu *menu)
 {
 	assign_sdlrect(&editor->opt_menu.scaled_weapon_rect[0], create_vec((editor->editor_surf->h / 20) * 8, (editor->editor_surf->h / 20) * 9.5), create_vec(80 ,80));
 	if (SDL_BlitScaled(editor->weapon_texture, &editor->opt_menu.weapon_rect[0], editor->opt_surf, &editor->opt_menu.scaled_weapon_rect[0]) < 0)
@@ -261,6 +261,20 @@ int	editor_blit_weapons(t_editor *editor)
 		return (1);
 	draw_border_options(&editor->opt_menu.scaled_weapon_rect[0], editor->opt_menu.bord_color_weapon[0], editor->opt_surf);
 	draw_border_options(&editor->opt_menu.scaled_weapon_rect[1], editor->opt_menu.bord_color_weapon[1], editor->opt_surf);
+/* 	assign_sdlrect(&menu->scaled_weapon_rect[0], create_vec((surf->w / 2), \
+						(surf->h / 20) * 14), create_vec(80, 80));
+	if (SDL_BlitScaled(editor->weapon_texture, &menu->weapon_rect[0], \
+							surf, &menu->scaled_weapon_rect[0]) < 0)
+		return (error_return("%s\n", SDL_GetError()));
+	assign_sdlrect(&menu->scaled_weapon_rect[1], create_vec((surf->w / 2) \
+					* 1.4, (surf->h / 20) * 14), create_vec(80, 80));
+	if (SDL_BlitScaled(editor->weapon_texture, &menu->weapon_rect[1], \
+						surf, &menu->scaled_weapon_rect[1]) < 0)
+		return (1);
+	draw_border_options(&menu->scaled_weapon_rect[0], \
+							menu->bord_color_weapon[0], surf);
+	draw_border_options(&menu->scaled_weapon_rect[1], \
+							menu->bord_color_weapon[1], surf);*/
 	return (0);
 }
 
@@ -280,9 +294,7 @@ int	blit_editor(t_editor *editor, t_sdlmain *sdlmain)
 		return (1);
 	if (blit_alert(editor) != 0)
 		return (1);
-	//if (blit_music_and_weapon(editor) != 0)
-	//	return (1);
-	if (editor_blit_weapons(editor) != 0)
+	if (editor_blit_weapons(editor) != 0)//, editor->opt_surf, &editor->opt_menu) != 0)
 		return (1);
 	if (blit_editor_surf(editor, sdlmain) != 0)
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:22:12 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/08 02:03:08 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/08 02:57:44 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	check_quit(SDL_Event *event, int *state)
 		*state = QUIT_STATE;
 }
 
-void	check_menu(SDL_Event *event, int *state, int *prev_state_ptr, int prev_state)
+void	check_menu(SDL_Event *event, int *state, \
+					int *prev_state_ptr, int prev_state)
 {
 	if (event->key.keysym.sym == SDLK_TAB)
 	{
@@ -104,11 +105,12 @@ void	check_weapon(SDL_Event *event, t_game *game, int available_weapons)
 
 int		handle_events(t_doom *doom)
 {
-	//SDL_WarpMouseInWindow(doom->sdlmain.win, doom->sdlmain.win_surf->w / 2, doom->sdlmain.win_surf->h / 2);
 	check_quit(&doom->sdlmain.event, &doom->state);
-	if (doom->sdlmain.event.type == SDL_KEYDOWN && doom->sdlmain.event.key.repeat == 0)
+	if (doom->sdlmain.event.type == SDL_KEYDOWN \
+			&& doom->sdlmain.event.key.repeat == 0)
 	{
-		check_menu(&doom->sdlmain.event, &doom->state, &doom->menu.previous_state, GAME_STATE);
+		check_menu(&doom->sdlmain.event, &doom->state, \
+						&doom->menu.previous_state, GAME_STATE);
 		check_anim(&doom->sdlmain.event, &doom->game);
 		check_weapon(&doom->sdlmain.event, &doom->game, doom->map.weapon_choice);
 		handle_hud(&doom->sdlmain.event, &doom->game.data.hud_flags);
