@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/08 03:00:12 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/08 19:17:50 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -585,6 +585,8 @@ int							free_sdlmain(t_sdlmain *sdlmain);
 int							free_wall_textures(SDL_Surface **wall_textures);
 
 int							free_map(t_map *map);
+
+void						free_enemies(t_game *game, int num_enemies);
 
 /*
 ** PARSE FUNCTIONS

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/08 02:46:48 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/08 19:32:23 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,7 @@ void	key_event_l(t_editor *editor, t_doom *doom)
 		&& get_sector_by_pos(editor->edit_map.sector_head, \
 				vec_to_vecdb(editor->edit_map.player_spawn)) != NULL)
 	{
+		free_enemies(&doom->game, doom->map.num_enemies);
 		if (doom->map.sector_head != NULL)
 			free_map(&doom->map);
 		if (copy_map(&editor->edit_map, &doom->map) != 0)
