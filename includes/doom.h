@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 22:01:55 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/07 22:48:21 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,8 +284,8 @@ typedef struct				s_options_menu
 	int						bord_hover_color_opt[NBHOVEROPTIONS];
 	int 					bord_color_weapon[2];
 	int						activ_tex;
-	int 					activ_music[2];
-	int 					activ_weapon[2];
+	int 					activ_music;
+	int 					activ_weapon;
 	int						typing_filename;
 	int 					activ_height[2];
 	double					height_ceiling;

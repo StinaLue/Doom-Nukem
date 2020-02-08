@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 17:10:18 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/08 01:41:05 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,36 @@ void	set_border_color(t_editor *editor, t_vec mouse_pos)
 			editor->opt_menu.activ_tex = i;
 		}
 		i++;
+	}
+}
+
+void	update_weapon_choice(t_sdlmain *sdlmain, t_options_menu *menu)
+{
+	if (is_mouse_collide(sdlmain->mouse_pos, menu->scaled_weapon_rect[0]))
+	{
+		if (sdlmain->event.button.button == SDL_BUTTON_LEFT)
+		{
+			if (menu->activ_weapon == 1 || menu->activ_weapon == 3)
+				menu->bord_color_weapon[0] = COLOR_CHOOSE;
+			else if (menu->activ_weapon == 0 || menu->activ_weapon == 2)
+				menu->bord_color_weapon[0] = COLOR_PRESSED;
+			menu->activ_weapon += (menu->activ_weapon == 0 || menu->activ_weapon == 2) ? 1 : -1;
+		}
+		else if (menu->activ_weapon == 0 || menu->activ_weapon == 2)
+			menu->bord_color_weapon[0] = COLOR_HOVER;
+	}
+	else if (is_mouse_collide(sdlmain->mouse_pos, menu->scaled_weapon_rect[1]))
+	{
+		if (sdlmain->event.button.button == SDL_BUTTON_LEFT)
+		{
+			if (menu->activ_weapon == 2 || menu->activ_weapon == 3)
+				menu->bord_color_weapon[1] = COLOR_CHOOSE;
+			else if (menu->activ_weapon == 0 || menu->activ_weapon == 1)
+				menu->bord_color_weapon[1] = COLOR_PRESSED;
+			menu->activ_weapon += (menu->activ_weapon == 0 || menu->activ_weapon == 1) ? 2 : -2;
+		}
+		else if (menu->activ_weapon == 0 || menu->activ_weapon == 1)
+			menu->bord_color_weapon[1] = COLOR_HOVER;
 	}
 }
 
@@ -62,9 +92,9 @@ void	mouse_in_options(t_editor *editor, t_sdlmain *sdlmain, \
 			{
 				if (i != 3 && i != 4)
 					menu->bord_hover_color_opt[i] = COLOR_HOVER;
-				else if (i == 3 && menu->activ_music[0] == 0)
+				else if (i == 3 && menu->activ_music != 0)
 					menu->bord_hover_color_opt[i] = COLOR_HOVER;
-				else if (i == 4 && menu->activ_music[1] == 0)
+				else if (i == 4 && menu->activ_music != 1)
 					menu->bord_hover_color_opt[i] = COLOR_HOVER;
 			}
 			i++;
@@ -108,17 +138,17 @@ void	mouse_in_options(t_editor *editor, t_sdlmain *sdlmain, \
 		{
 			menu->bord_hover_color_opt[3] = COLOR_PRESSED;
 			menu->bord_hover_color_opt[4] = COLOR_CHOOSE;
-			menu->activ_music[0] = 1;
-			menu->activ_music[1] = 0;
+			menu->activ_music = 0;
 		}
 		if (is_mouse_collide(sdlmain->mouse_pos, menu->hover_opt_rect[4]) \
 				&& sdlmain->event.button.button == SDL_BUTTON_LEFT)
 		{
 			menu->bord_hover_color_opt[4] = COLOR_PRESSED;
 			menu->bord_hover_color_opt[3] = COLOR_CHOOSE;
-			menu->activ_music[0] = 0;
-			menu->activ_music[1] = 1;
+			menu->activ_music = 1;
 		}
+		update_weapon_choice(sdlmain, menu);
+		/*
 		i = 0;
 		while (i < 2)
 		{
@@ -141,7 +171,7 @@ void	mouse_in_options(t_editor *editor, t_sdlmain *sdlmain, \
 					menu->bord_color_weapon[i] = COLOR_HOVER;
 			}
 		i++;
-		}
+		}*/
 		if (is_mouse_collide(sdlmain->mouse_pos, menu->hover_opt_rect[2]) \
 				&& sdlmain->event.button.button == SDL_BUTTON_LEFT && editor->start_sector_reached == 1)
 		{
@@ -319,13 +349,13 @@ void	event_mouse(t_editor *editor, t_sdlmain *sdlmain)
 	editor->opt_menu.bord_hover_color_opt[0] = COLOR_CHOOSE;
 	editor->opt_menu.bord_hover_color_opt[1] = COLOR_CHOOSE;
 	editor->opt_menu.bord_hover_color_opt[2] = COLOR_CHOOSE;
-	if (editor->opt_menu.activ_music[0] != 1)
+	if (editor->opt_menu.activ_music != 0)
 		editor->opt_menu.bord_hover_color_opt[3] = COLOR_CHOOSE;
-	if (editor->opt_menu.activ_music[1] != 1)
+	if (editor->opt_menu.activ_music != 1)
 		editor->opt_menu.bord_hover_color_opt[4] = COLOR_CHOOSE;
-	if (editor->opt_menu.activ_weapon[0] != 1)
+	if (editor->opt_menu.activ_weapon == 0 || editor->opt_menu.activ_weapon == 2)
 		editor->opt_menu.bord_color_weapon[0] = COLOR_CHOOSE;
-	if (editor->opt_menu.activ_weapon[1] != 1)
+	if (editor->opt_menu.activ_weapon == 0 || editor->opt_menu.activ_weapon == 1)
 		editor->opt_menu.bord_color_weapon[1] = COLOR_CHOOSE;
 	SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
 	mouse_in_options(editor, sdlmain, &editor->opt_menu);
