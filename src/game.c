@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/08 02:06:54 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/09 14:39:25 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void	soft_reset_player(t_player *player, t_map *map)
 	player->pos = vec_to_vecdb(map->player_spawn);
 	player->sector = get_sector_by_pos(map->sector_head, \
 										player->pos);
-	if (player->pos.x == -1 && player->pos.y == -1)
+	if (player->pos.x == -1 && player->pos.y == -1 && map->sector_head)
 	{
 		player->sector = map->sector_head;
 		player->pos = map->sector_head->sector_center;

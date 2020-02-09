@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fixed_minimap.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 16:23:32 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/06 17:25:14 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/09 17:47:44 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ void	draw_fixed_minimap(SDL_Surface *surf, \
 		while (current_wall != NULL)
 		{
 			if (current_wall->neighbor_sector == NULL)
-				draw_line(vecdb_to_vec(current_wall->start), \
-					vecdb_to_vec(current_wall->end), surf, current_wall->color);
+				draw_line(vecdb_to_vec(multvecdb(divvecdb(current_wall->start, MAPMULTIPLIER), 2)), \
+					vecdb_to_vec(multvecdb(divvecdb(current_wall->end, MAPMULTIPLIER), 2)), surf, current_wall->color);
 			current_wall = current_wall->next;
 		}
 		current_sector = current_sector->next;
 	}
-	fill_pix(surf, (int)player->pos.x, (int)player->pos.y, 0xFFFF00);
+	fill_pix(surf, (int)((player->pos.x / MAPMULTIPLIER) * 2), (int)((player->pos.y / MAPMULTIPLIER) * 2), 0xFFFF00);
 }
 
 int		draw_full_fixedmap(SDL_Surface *surf, t_player *player, \

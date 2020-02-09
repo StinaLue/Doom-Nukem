@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/09 03:01:49 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/09 17:56:15 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@
 # define NBOPTIONS 8
 # define NBHOVEROPTIONS 5
 # define NBINSTRUCTS 10
-# define MAPMULTIPLIER 4
+# define MAPMULTIPLIER 50
 # define COLOR_HOVER 0x6C1413
 # define COLOR_PRESSED 0x00cc00
 # define COLOR_NORMAL 0xff0000
@@ -416,9 +416,13 @@ int							read_sectors(int fd, t_sector_node **sector_head, int num_sectors_file
 */
 double						get_magnitude(t_vecdb a, t_vecdb b);
 
-t_vecdb						multvecdb(t_vecdb vecdb, double n);
+t_vecdb						multvecdb(t_vecdb vecdb, double mult);
 
 t_vec						multvec(t_vec vec, int mult);
+
+t_vecdb						divvecdb(t_vecdb vecdb, double div);
+
+t_vec						divvec(t_vec vec, int div);
 
 t_vec						create_vec(int x, int y);
 

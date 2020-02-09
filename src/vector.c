@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:06:54 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/06 14:53:13 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/09 14:09:04 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,10 @@ void	vectorcpy(t_vec *one, const t_vec *two)
 	one->y = two->y;
 }
 
-t_vecdb	multvecdb(t_vecdb vecdb, double n)
+t_vecdb	multvecdb(t_vecdb vecdb, double mult)
 {
-	vecdb.x *= n;
-	vecdb.y *= n;
+	vecdb.x *= mult;
+	vecdb.y *= mult;
 	return (vecdb);
 }
 
@@ -93,6 +93,20 @@ t_vec	multvec(t_vec vec, int mult)
 {
 	vec.x *= mult;
 	vec.y *= mult;
+	return (vec);
+}
+
+t_vecdb divvecdb(t_vecdb vecdb, double div)
+{
+    vecdb.x /= div;
+	vecdb.y /= div;
+	return (vecdb);
+}
+
+t_vec	divvec(t_vec vec, int div)
+{
+	vec.x /= div;
+	vec.y /= div;
 	return (vec);
 }
 
