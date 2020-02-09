@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_mouse.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/08 02:24:17 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/08 20:49:49 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -309,6 +309,7 @@ void	mouse_click_right(t_editor *editor, t_sdlmain *sdlmain)
 
 void	event_mouse(t_editor *editor, t_sdlmain *sdlmain)
 {
+    editor->loading_success = 0;
 	if (sdlmain->event.button.button == SDL_BUTTON_LEFT \
 		&& sdlmain->mouse_pos.x <= NBPOINTSROW \
 		&& sdlmain->event.type == SDL_MOUSEBUTTONDOWN)

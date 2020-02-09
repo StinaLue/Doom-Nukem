@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/08 02:58:50 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/08 20:48:45 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,13 @@ void	init_colors(t_editor *editor)
 	editor->opt_menu.bord_hover_color_opt[0] = COLOR_CHOOSE;
 	editor->opt_menu.bord_hover_color_opt[1] = COLOR_CHOOSE;
 	editor->opt_menu.bord_hover_color_opt[2] = COLOR_CHOOSE;
-	//if (editor->opt_menu.activ_music != 0)
 	editor->opt_menu.bord_hover_color_opt[3] = COLOR_PRESSED;
-	//if (editor->opt_menu.activ_music != 1)
 	editor->opt_menu.bord_hover_color_opt[4] = COLOR_CHOOSE;
 	if (editor->opt_menu.activ_height[0] != 1)
 		editor->opt_menu.bord_color_height[0] = COLOR_CHOOSE;
 	if (editor->opt_menu.activ_height[1] != 1)
 		editor->opt_menu.bord_color_height[1] = COLOR_CHOOSE;
-	//if (editor->opt_menu.activ_weapon[0] != 1)
 	editor->opt_menu.bord_color_weapon[0] = COLOR_CHOOSE;
-	//if (editor->opt_menu.activ_weapon[1] != 1)
 	editor->opt_menu.bord_color_weapon[1] = COLOR_CHOOSE;
 }
 
@@ -265,5 +261,6 @@ int	editor_loop(t_doom *doom)
 		if (blit_editor(editor, sdlmain) != 0)
 			return (1);
 	}
+   // editor->loading_success = 0;
 	return (0);
 }
