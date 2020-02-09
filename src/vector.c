@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:06:54 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/09 14:09:04 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/09 18:27:16 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,24 @@ void	vectorcpy(t_vec *one, const t_vec *two)
 {
 	one->x = two->x;
 	one->y = two->y;
+}
+
+t_vecdb	vecdb_mult(t_vecdb a, t_vecdb b)
+{
+	t_vecdb vector;
+
+	vector.x = a.x * b.x;
+	vector.y = a.y * b.y;
+	return (vector);
+}
+
+t_vec	vec_mult(t_vec a, t_vec b)
+{
+	t_vec vector;
+
+	vector.x = a.x * b.x;
+	vector.y = a.y * b.y;
+	return (vector);
 }
 
 t_vecdb	multvecdb(t_vecdb vecdb, double mult)
@@ -187,20 +205,3 @@ t_vec	vec_add(t_vec a, t_vec b)
 	return (vector);
 }
 
-t_vecdb	vecdb_mult(t_vecdb a, t_vecdb b)
-{
-	t_vecdb vector;
-
-	vector.x = a.x * b.x;
-	vector.y = a.y * b.y;
-	return (vector);
-}
-
-t_vec	vec_mult(t_vec a, t_vec b)
-{
-	t_vec vector;
-
-	vector.x = a.x * b.x;
-	vector.y = a.y * b.y;
-	return (vector);
-}

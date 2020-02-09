@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/09 15:26:07 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/09 18:36:23 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,13 +225,12 @@ void	event_editor_surf(t_vec mouse, t_editor *editor, t_wall_node *wall)
 	if (start_wall_exists(wall) && !(mouse.x == wall->end.x \
 				&& mouse.y == wall->end.y))
 	{
-		wall->end.x = mouse.x * MAPMULTIPLIER; // assign vector multiplied
-		wall->end.y = mouse.y * MAPMULTIPLIER;
+        wall->end = vec_to_vecdb(multvec(mouse, MAPMULTIPLIER));
 		wall->tex_index = editor->opt_menu.activ_tex;
-		//editor->current_sector = get_last_sector(editor->edit_map.sector_head);
 		copy_wall_node(&editor->current_sector->wall_head, wall);
 		editor->current_sector->wall_num++;
-		wall->start.x = wall->end.x;
+        //set_vecdb_values(wall->start, wall->end);
+		wall->start.x = wall->end.x; // new function
 		wall->start.y = wall->end.y;
 		check_finished_sect(editor, editor->current_sector);
 	}
@@ -240,12 +239,9 @@ void	event_editor_surf(t_vec mouse, t_editor *editor, t_wall_node *wall)
 		if (editor->start_sector_reached == 1)
 		{
 			add_sector_node(&editor->edit_map.sector_head);
-			editor->start_sector.x = mouse.x * MAPMULTIPLIER;
-			editor->start_sector.y = mouse.y * MAPMULTIPLIER;
-			wall->start.x = mouse.x * MAPMULTIPLIER;
-			wall->start.y = mouse.y * MAPMULTIPLIER;
-			wall->end.x = mouse.x * MAPMULTIPLIER;
-			wall->end.y = mouse.y * MAPMULTIPLIER;
+            editor->start_sector = multvec(mouse, MAPMULTIPLIER);
+            wall->start = vec_to_vecdb(multvec(mouse, MAPMULTIPLIER));
+            wall->end = vec_to_vecdb(multvec(mouse, MAPMULTIPLIER));
 			editor->start_sector_reached = 0;
 		}
 	}
@@ -289,8 +285,7 @@ void	mouse_click_right(t_editor *editor, t_sdlmain *sdlmain)
 
 	tmp_mouse = sdlmain->mouse_pos;
 	tmp_sector = editor->selected_sector;
-	tmp_mouse.x = tmp_mouse.x * MAPMULTIPLIER;
-	tmp_mouse.y = tmp_mouse.y * MAPMULTIPLIER; //assign vector multiplied
+    tmp_mouse = multvec(tmp_mouse, MAPMULTIPLIER);
 	if (editor->start_sector_reached == 1)
 		editor->selected_sector = \
 		get_sector_by_pos(editor->edit_map.sector_head, \

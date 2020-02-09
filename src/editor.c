@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/08 20:48:45 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/09 18:39:28 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,8 +152,7 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 		return ;
 	tmp_sect = editor->edit_map.sector_head;
     tmptest = editor->wall_tmp.end;
-        tmptest.x /= MAPMULTIPLIER;
-        tmptest.y /= MAPMULTIPLIER;
+    tmptest = divvecdb(tmptest, MAPMULTIPLIER);
 	if (editor->start_sector_reached == 0)
 		draw_line(multvec(sdlmain->mouse_pos, editor->offset),
 			multvec(vecdb_to_vec(tmptest), editor->offset), editor_surf, editor->wall_tmp.type_color);
@@ -166,10 +165,8 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 			fill_area(editor_surf, tmp_wall, editor);
 				tmptest = tmp_wall->end;
 				tempstart = tmp_wall->start;
-				tmptest.x /= MAPMULTIPLIER;
-				tmptest.y /= MAPMULTIPLIER;
-				tempstart.x /= MAPMULTIPLIER;
-				tempstart.y /= MAPMULTIPLIER;
+                tmptest = divvecdb(tmptest, MAPMULTIPLIER);
+                tempstart = divvecdb(tempstart, MAPMULTIPLIER);
 			draw_line(multvec(vecdb_to_vec(tmptest), editor->offset),
 				multvec(vecdb_to_vec(tempstart), editor->offset), editor_surf, tmp_wall->type_color);
 			i++;
@@ -229,7 +226,6 @@ int	editor_loop(t_doom *doom)
 		editor->offset = editor->editor_surf->w / NBPOINTSROW;
 	else
 		editor->offset = editor->editor_surf->h / NBPOINTSROW;
-	//if (NBPOINTSROW * editor->offset < editor->editor_surf->h)
 	offset_border = editor->editor_surf->h \
 			- NBPOINTSROW * editor->offset;
 	if (!is_buffer_playing(sdlmain->sound.source[0], sdlmain->sound.buffer[9]))
@@ -261,6 +257,5 @@ int	editor_loop(t_doom *doom)
 		if (blit_editor(editor, sdlmain) != 0)
 			return (1);
 	}
-   // editor->loading_success = 0;
 	return (0);
 }
