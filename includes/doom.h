@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/08 19:17:50 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/09 03:01:49 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -373,16 +373,10 @@ typedef struct				s_doom
 	int						state;
 }							t_doom;
 
-int							error_return_map(const char *error_msg, const char *errstr, int fd);
-
 void						soft_reset_player(t_player *player, t_map *map);
 
 void						prepend_str(const char *to_prepend, \
 							const char *str, char *new_str, int full_size);
-
-int							write_map(t_map *map);
-
-int							read_map(const char *path, t_map *map);
 
 int							load_wav(char *file, ALuint buffer);
 
@@ -404,6 +398,18 @@ SDL_Surface					*load_opti_bmp(char *file, SDL_Surface *dst_surf, \
 											Uint32 colorkey);
 
 int							copy_map(const t_map *srcmap, t_map *dstmap);
+
+/*
+** MAP PARSING FUNCTIONS
+*/
+int							write_map(t_map *map);
+
+int							write_sectors(int fd, t_sector_node *sector_head, int num_sectors_file);
+
+int							read_map(const char *path, t_map *map);
+
+int							read_sectors(int fd, t_sector_node **sector_head, int num_sectors_file);
+
 
 /*
 ** VECTOR FUNCTIONS
@@ -635,6 +641,7 @@ int							editor_loop(t_doom *doom);
 */
 int							error_return(const char *error_msg, const char *sdl_error);
 
+int							error_return_map(const char *error_msg, const char *errstr, int fd);
 
 /*
 ** EDITOR FUNCTIONS

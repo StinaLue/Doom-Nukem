@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   text.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 15:58:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 17:43:51 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/09 03:03:18 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,13 @@ int	reset_text(TTF_Font **font, SDL_Surface **surf, \
 	if ((*surf = TTF_RenderText_Solid(*font, text, *color)) == NULL)
 		return (1);
 	return (0);
+}
+
+void	prepend_str(const char *to_prepend, const char *str, char *new_str, \
+		int full_size)
+{
+	ft_bzero(new_str, full_size);
+	ft_strncpy(new_str, to_prepend, ft_strlen(to_prepend));
+	ft_strncat(new_str, str, ft_strlen(str));
+	new_str[full_size - 1] = '\0';
 }

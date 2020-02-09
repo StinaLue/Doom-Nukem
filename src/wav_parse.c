@@ -3,30 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   wav_parse.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 00:15:56 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 17:50:08 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/08 20:11:37 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "al.h"
 #include "libft.h"
 #include "libwav.h"
-
-static int	error_return_wav(char *s1, char *s2, int fd)
-{
-	if (fd != -1)
-	{
-		if (close(fd) != 0)
-			ft_dprintf(STDERR_FILENO, "error while closing file\n");
-	}
-	if (s1 && s2)
-		ft_dprintf(STDERR_FILENO, s1, s2);
-	else
-		ft_dprintf(STDERR_FILENO, s1);
-	return (1);
-}
 
 ALenum	get_format_from_info(short channels, short bits_per_sample)
 {
@@ -35,7 +21,7 @@ ALenum	get_format_from_info(short channels, short bits_per_sample)
 		return (AL_FORMAT_MONO16);
 	return (AL_FORMAT_STEREO16);
 }
-
+/*
 void	endian_swap_short(short *x)
 {
 	*x = (*x >> 8) | (*x << 8);
@@ -59,7 +45,7 @@ void	file_ignore_bytes(int fd, short extra_params)
 		extra_params--;
 	}
 }
-
+*/
 static int	is_wav(char *file)
 {
 	int	len;

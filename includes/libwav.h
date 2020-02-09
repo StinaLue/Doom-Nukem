@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libwav.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 13:43:21 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/05 20:15:51 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/08 20:12:03 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,5 @@ typedef struct		s_wav
 	short			channels;
 }					t_wav;
 
+int					error_return_wav(char *s1, char *s2, int fd);
 #endif

@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/07 15:40:09 by afonck           ###   ########.fr        #
+#    Updated: 2020/02/09 03:02:10 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,8 +87,10 @@ SOURCES_LIST = main.c \
 			blit_editor.c \
 			new_blit.c \
 			map.c \
-			map_reader.c \
-			map_writer.c \
+			map_reader_main.c \
+			map_reader_sectors.c \
+			map_writer_main.c \
+			map_writer_sectors.c \
 			editor_events.c \
 			wav_parse.c \
 			texture_mapping.c \
@@ -97,7 +99,8 @@ SOURCES_LIST = main.c \
 			mouse_movement.c \
 			sound.c \
 			music.c \
-			end_level_loops.c #\
+			end_level_loops.c \
+			error.c #\
 			map_parser.c \
 	       multithreading.c \
 		   texture.c \
