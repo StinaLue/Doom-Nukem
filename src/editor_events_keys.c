@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_keys.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/08 19:32:23 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/09 15:39:19 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,7 @@ void	key_event_s(t_editor *editor)
 									editor->selected_sector);
 		editor->selected_sector = NULL;
 		editor->edit_map.num_sectors--;
+        editor->current_sector = get_last_sector(editor->edit_map.sector_head);
 	}
 }
 

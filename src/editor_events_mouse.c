@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/08 20:49:49 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/09 15:26:07 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,7 +228,7 @@ void	event_editor_surf(t_vec mouse, t_editor *editor, t_wall_node *wall)
 		wall->end.x = mouse.x * MAPMULTIPLIER; // assign vector multiplied
 		wall->end.y = mouse.y * MAPMULTIPLIER;
 		wall->tex_index = editor->opt_menu.activ_tex;
-		editor->current_sector = get_last_sector(editor->edit_map.sector_head);
+		//editor->current_sector = get_last_sector(editor->edit_map.sector_head);
 		copy_wall_node(&editor->current_sector->wall_head, wall);
 		editor->current_sector->wall_num++;
 		wall->start.x = wall->end.x;
@@ -249,6 +249,7 @@ void	event_editor_surf(t_vec mouse, t_editor *editor, t_wall_node *wall)
 			editor->start_sector_reached = 0;
 		}
 	}
+    editor->current_sector = get_last_sector(editor->edit_map.sector_head);
 }
 
 void	highlight_sector(t_sector_node *selected_sector)
