@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/10 18:00:46 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 19:55:54 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,10 @@ void	basic_move(t_player *player, const Uint8 *keyboard_state)
 		player->is_moving = 0;
 		//alSourcePause(sound->source[2]);
 	}
+	if (keyboard_state[SDL_SCANCODE_SPACE])
+		jump(player);
 	movement(player, move);
+	update_player(player);
 }
 
 void	basic_look(t_player *player, const Uint8 *keyboard_state)
