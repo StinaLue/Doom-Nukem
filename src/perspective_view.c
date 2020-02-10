@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 15:35:27 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/10 15:40:03 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,25 +72,27 @@ int			intersect_view(t_segment *wall, t_segment *intersect, t_segment view)
 
 void		create_perspective_wall(t_display_wall *dsp_wall, SDL_Surface *surf, t_player *player, t_sector_node *sector)
 {
-	double		fov_ratio;
+	double		distance_ratio;
 	double		x;
 	double		top;
 	double		bot;
 
-	fov_ratio = player->view.b.y / player->view.b.x / dsp_wall->intersect.a.y * surf->w;
-	x = dsp_wall->intersect.a.x * fov_ratio;
-	top = (sector->ceiling_height - (player->posz + player->height)) * fov_ratio;
-	bot = (sector->floor_height - (player->posz + player->height)) * fov_ratio;
+	dsp_wall->fov_ratio = player->view.b.y / player->view.b.x;
+
+	distance_ratio = dsp_wall->fov_ratio / dsp_wall->intersect.a.y * surf->w;
+	x = dsp_wall->intersect.a.x * distance_ratio;
+	top = (sector->ceiling_height - (player->posz + player->height)) * distance_ratio;
+	bot = (sector->floor_height - (player->posz + player->height)) * distance_ratio;
 
 	dsp_wall->top_left.x = (surf->w + x) / 2;
 	dsp_wall->top_left.y = (surf->h + top) / 2 - player->view_z;
 	dsp_wall->bottom_left.x = dsp_wall->top_left.x;
 	dsp_wall->bottom_left.y = (surf->h + bot) / 2 - player->view_z;
 
-	fov_ratio = player->view.b.y / player->view.b.x / dsp_wall->intersect.b.y * surf->w;
-	x = dsp_wall->intersect.b.x * fov_ratio;
-	top = (sector->ceiling_height - (player->posz + player->height)) * fov_ratio;
-	bot = (sector->floor_height - (player->posz + player->height)) * fov_ratio;
+	distance_ratio = dsp_wall->fov_ratio / dsp_wall->intersect.b.y * surf->w;
+	x = dsp_wall->intersect.b.x * distance_ratio;
+	top = (sector->ceiling_height - (player->posz + player->height)) * distance_ratio;
+	bot = (sector->floor_height - (player->posz + player->height)) * distance_ratio;
 
 	dsp_wall->top_right.x = (surf->w + x) / 2;
 	dsp_wall->top_right.y = (surf->h + top) / 2 - player->view_z;
@@ -141,23 +143,55 @@ void		init_display_wall(t_display_wall *display, t_wall_node *current_wall, t_vi
 	}
 }
 
-t_view		create_view(t_display_wall *display, t_view old_view)
+int			min(int a, int b)
+{
+	return (a < b ? a : b);
+}
+int			max(int a, int b)
+{
+	return (a > b ? a : b);
+}
+
+t_view		create_view(t_display_wall *display, t_display_wall *window, t_view old_view)
 {
 	t_view	view;
+	int		*tmp_window;
+	int		*tmp_display;
 
-	view.fov.a = display->intersect.a;
-	view.fov.b = display->intersect.b;
+	view.fov = display->intersect;
 	view.top_limit = old_view.top_limit;
 	view.bot_limit = old_view.bot_limit;
-	if (display->top_left.y < view.top_limit && display->top_left.y >= display->top_right.y)
-		view.top_limit = display->top_left.y;
-	else if (display->top_right.y < view.top_limit && display->top_left.y <= display->top_right.y)
-		view.top_limit = display->top_right.y;
-	if (display->bottom_left.y > view.bot_limit && display->bottom_left.y <= display->bottom_right.y)
-		view.bot_limit = display->bottom_left.y;
-	else if (display->bottom_right.y > view.bot_limit && display->bottom_left.y >= display->bottom_right.y)
-		view.bot_limit = display->bottom_right.y;
+
+	tmp_display = display->top_left.y < display->top_right.y ? &display->top_right.y : &display->top_left.y;
+	tmp_window = window->top_left.y < window->top_right.y ? &window->top_right.y : &window->top_left.y;
+	view.top_limit = min(min(*tmp_window, *tmp_display), old_view.top_limit);
+
+	tmp_display = display->bottom_left.y > display->bottom_right.y ? &display->bottom_right.y : &display->bottom_left.y;
+	tmp_window = window->bottom_left.y > window->bottom_right.y ? &window->bottom_right.y : &window->bottom_left.y;
+	view.bot_limit = max(max(*tmp_window, *tmp_display), old_view.bot_limit);
+
 	return (view);
+}
+
+t_display_wall	set_window_height(t_display_wall window, t_player *player, t_sector_node *sector, SDL_Surface *surf)
+{
+	double	distance_ratio;
+	double	top;
+	double	bot;
+
+	distance_ratio = window.fov_ratio / window.intersect.a.y * surf->w;
+	top = (sector->ceiling_height - (player->posz + player->height)) * distance_ratio;
+	bot = (sector->floor_height - (player->posz + player->height)) * distance_ratio;
+	window.top_left.y = (surf->h + top) / 2 - player->view_z;
+	window.bottom_left.y = (surf->h + bot) / 2 - player->view_z;
+
+	distance_ratio = window.fov_ratio / window.intersect.b.y * surf->w;
+	top = (sector->ceiling_height - (player->posz + player->height)) * distance_ratio;
+	bot = (sector->floor_height - (player->posz + player->height)) * distance_ratio;
+	window.top_right.y = (surf->h + top) / 2 - player->view_z;
+	window.bottom_right.y = (surf->h + bot) / 2 - player->view_z;
+
+	return (window);
 }
 
 void		draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view view, t_sector_node *sector, t_player *player)
@@ -165,6 +199,7 @@ void		draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view
 	t_display_wall	display_wall;
 	t_wall_node		*current_wall;
 	t_view			new_view;
+	t_display_wall	window;
 
 	current_wall = sector->wall_head;
 	while (current_wall != NULL)
@@ -176,7 +211,9 @@ void		draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view
 			init_display_wall(&display_wall, current_wall, view, wall_textures);//set cuts, set distance, set length;
 			if (current_wall->neighbor_sector != NULL && current_wall->neighbor_sector != sector)
 			{
-				new_view = create_view(&display_wall, view);
+				window = set_window_height(display_wall, player, sector, surf);
+				//draw_3dwall(&window, surf);
+				new_view = create_view(&display_wall, &window, view);
 				draw_view_recursive(surf, wall_textures, new_view, current_wall->neighbor_sector, player);
 				//draw portal top and bot
 			}
