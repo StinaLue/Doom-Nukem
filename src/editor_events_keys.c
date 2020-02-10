@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_keys.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/09 21:27:51 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 12:30:07 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 #include "libft.h"
 
-int	delete_enemy_info(t_map *map, t_vec delspawn)
+int		delete_enemy_info(t_map *map, t_vec delspawn)
 {
 	int				i;
 	int				j;
@@ -110,15 +110,13 @@ void	key_event_u(t_editor *editor)
 	previous = undo_wall(editor->edit_map.sector_head);
 	if (previous != NULL)
 	{
-        editor->wall_tmp.start = previous->end;
-        editor->wall_tmp.end = previous->end;
-        //set_vecdb_values(&previous->end, &editor->wall_tmp.start);
-        //set_vecdb_values(&previous->end, &editor->wall_tmp.end);
+		editor->wall_tmp.start = previous->end;
+		editor->wall_tmp.end = previous->end;
 	}
 	else
 	{
-        reset_vecdb(&editor->wall_tmp.start);
-        reset_vecdb(&editor->wall_tmp.end);
+		reset_vecdb(&editor->wall_tmp.start);
+		reset_vecdb(&editor->wall_tmp.end);
 		if (editor->current_sector && editor->current_sector->wall_head == NULL)
 		{
 			delete_sector_by_address(&editor->edit_map.sector_head, \
@@ -157,7 +155,7 @@ void	key_event_s(t_editor *editor)
 									editor->selected_sector);
 		editor->selected_sector = NULL;
 		editor->edit_map.num_sectors--;
-        editor->current_sector = get_last_sector(editor->edit_map.sector_head);
+		editor->current_sector = get_last_sector(editor->edit_map.sector_head);
 	}
 }
 
@@ -260,7 +258,8 @@ void	key_event_r(t_editor *editor, t_doom *doom)
 	{
 		if ((delete_enemy_info(&editor->edit_map, center)) != 0)
 		{
-			ft_dprintf(STDERR_FILENO, "malloc error while updating enemies info\n");
+			ft_dprintf(STDERR_FILENO, "malloc error \
+					while updating enemies info\n");
 			doom->state = QUIT_STATE;
 		}
 	}
@@ -270,13 +269,13 @@ void	key_event_n(t_editor *editor)
 {
 	free_map(&editor->edit_map);
 	editor->start_sector_reached = 1;
-    reset_vec(&editor->edit_map.player_spawn);
+	reset_vec(&editor->edit_map.player_spawn);
 	editor->edit_map.sector_head = NULL;
 	editor->current_sector = NULL;
 	editor->current_wall = NULL;
 	editor->selected_sector = NULL;
-    reset_vecdb(&editor->wall_tmp.start);
-    reset_vecdb(&editor->wall_tmp.end);
+	reset_vecdb(&editor->wall_tmp.start);
+	reset_vecdb(&editor->wall_tmp.end);
 }
 
 void	key_event_p(t_editor *editor)

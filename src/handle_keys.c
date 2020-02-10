@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/06 18:24:00 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 14:47:52 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	basic_move(t_player *player, const Uint8 *keyboard_state)//, t_sound *sound
 
 	move.x = 0;
 	move.y = 0;
-	if (keyboard_state[SDL_SCANCODE_W])
+	if (keyboard_state[SDL_SCANCODE_W])	
 		move.y += 1;
 	if (keyboard_state[SDL_SCANCODE_S])
 		move.y -= 1;
@@ -49,6 +49,10 @@ void	basic_look(t_player *player, const Uint8 *keyboard_state)
 		player->angle += 0.01;
 	if (keyboard_state[SDL_SCANCODE_RIGHT])
 		player->angle -= 0.01;
+	if (keyboard_state[SDL_SCANCODE_LSHIFT])
+		player->movespeed = 0.03;
+	else
+		player->movespeed = 0.01;
 	if (keyboard_state[SDL_SCANCODE_PAGEUP] && player->true_fov > 1.06)//hardcoded 60deg
 		player->true_fov -= 0.01;
 	if (keyboard_state[SDL_SCANCODE_PAGEDOWN] && player->true_fov < 2.27)//hardcoded 130deg

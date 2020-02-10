@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/09 21:14:01 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 14:38:17 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	init_colors(t_editor *editor)
 	i = 0;
 	while (i < NBTEXTURES)
 	{
-		editor->opt_menu.bord_color_text[i] = COLOR_NORMAL;
+		editor->opt_menu.bord_color_text[i] = COLOR_CHOOSE;
 		i++;
 	}
 	i = 0;
@@ -53,8 +53,7 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	int i;
 
 	i = 0;
-
-    reset_vec(&editor->edit_map.player_spawn);
+	reset_vec(&editor->edit_map.player_spawn);
 	editor->edit_map.which_music = 0;
 	editor->edit_map.sector_head = NULL;
 	editor->edit_map.num_enemies = 0;
@@ -77,8 +76,8 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 		editor->grid_values[i].y = 0;
 		i++;
 	}
-    reset_vecdb(&editor->wall_tmp.start);
-    reset_vecdb(&editor->wall_tmp.end);
+	reset_vecdb(&editor->wall_tmp.start);
+	reset_vecdb(&editor->wall_tmp.end);
 	editor->wall_tmp.wall_type = 0;
 	editor->start_sector_reached = 1;
 	editor->show_convex_alert = 0;
@@ -134,23 +133,25 @@ void	fill_area(SDL_Surface *surf, t_wall_node *wall, t_editor *editor)
 	}
 }
 
-void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
+void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, \
+					t_sdlmain *sdlmain)
 {
 	int				i;
 	t_sector_node	*tmp_sect;
 	t_wall_node		*tmp_wall;
+	t_vecdb			tmptest;
+	t_vecdb			tempstart;
 
 	i = 0;
-    t_vecdb tmptest;
-    t_vecdb tempstart;
 	if (editor->edit_map.sector_head == NULL)
 		return ;
 	tmp_sect = editor->edit_map.sector_head;
-    tmptest = editor->wall_tmp.end;
-    tmptest = divvecdb(tmptest, MAPMULTIPLIER);
+	tmptest = editor->wall_tmp.end;
+	tmptest = divvecdb(tmptest, MAPMULTIPLIER);
 	if (editor->start_sector_reached == 0)
 		draw_line(multvec(sdlmain->mouse_pos, editor->offset),
-			multvec(vecdb_to_vec(tmptest), editor->offset), editor_surf, editor->wall_tmp.type_color);
+				multvec(vecdb_to_vec(tmptest), editor->offset), \
+					editor_surf, editor->wall_tmp.type_color);
 	fill_area(editor_surf, &editor->wall_tmp, editor);
 	while (tmp_sect != NULL)
 	{
@@ -158,12 +159,13 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 		while (tmp_wall != NULL)
 		{
 			fill_area(editor_surf, tmp_wall, editor);
-				tmptest = tmp_wall->end;
-				tempstart = tmp_wall->start;
-                tmptest = divvecdb(tmptest, MAPMULTIPLIER);
-                tempstart = divvecdb(tempstart, MAPMULTIPLIER);
+			tmptest = tmp_wall->end;
+			tempstart = tmp_wall->start;
+			tmptest = divvecdb(tmptest, MAPMULTIPLIER);
+			tempstart = divvecdb(tempstart, MAPMULTIPLIER);
 			draw_line(multvec(vecdb_to_vec(tmptest), editor->offset),
-				multvec(vecdb_to_vec(tempstart), editor->offset), editor_surf, tmp_wall->type_color);
+					multvec(vecdb_to_vec(tempstart), editor->offset), \
+						editor_surf, tmp_wall->type_color);
 			i++;
 			tmp_wall = tmp_wall->next;
 		}
@@ -230,14 +232,14 @@ int	editor_loop(t_doom *doom)
 	while (doom->state == EDITOR_STATE)
 	{
 		while (SDL_PollEvent(&sdlmain->event) != 0)
-			if (editor_events(doom) != 0)
+			if (editor_events(doom, sdlmain) != 0)
 				break ;
 		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
 		assign_sdlrect(&editor->mouse_rect, create_vec(sdlmain->mouse_pos.x \
 						- 15, sdlmain->mouse_pos.y - 15), create_vec(15, 15));
-		
 		sdlmain->mouse_pos.x = round_num(sdlmain->mouse_pos.x, editor->offset);
-		sdlmain->mouse_pos.y = round_num(sdlmain->mouse_pos.y - offset_border + editor->offset, editor->offset);
+		sdlmain->mouse_pos.y = round_num(sdlmain->mouse_pos.y - offset_border \
+										+ editor->offset, editor->offset);
 		ft_bzero(editor->editor_surf->pixels, \
 					editor->editor_surf->h * editor->editor_surf->pitch);
 		ft_bzero(editor->opt_surf->pixels, \

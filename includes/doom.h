@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 02:07:42 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/10 14:41:09 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,6 +228,7 @@ typedef struct				s_player
 	//t_vecdb				fov;
 	t_segment				view;
 	double					true_fov;
+	double					movespeed;
 	int						health;
 	int						is_moving;
 	int						anim;
@@ -490,7 +491,8 @@ int							init_map(t_map *map);
 int							init_wall_textures(SDL_Surface **wall_textures, \
 												SDL_Surface *winsurf);
 
-void						init_source(ALuint src, ALfloat pitch, ALfloat gain, int loop);
+void						init_source(ALuint src, ALfloat pitch, \
+											ALfloat gain, int loop);
 
 t_view						init_view(t_player *player, SDL_Surface *surf);
 
@@ -522,7 +524,7 @@ void						check_menu(SDL_Event *event, \
 void						handle_keys(t_doom *doom, \
 										const Uint8 *keyboard_state);
 
-int							editor_events(t_doom *doom);
+int							editor_events(t_doom *doom, t_sdlmain *sdlmain);
 
 void						set_height(t_options_menu *menu, SDL_Surface *surf);
 

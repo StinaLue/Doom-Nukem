@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/08 02:58:38 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/10 14:33:20 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,15 +144,13 @@ void			event_handle_input(t_editor *editor, Uint32 type, \
 		ft_strncat(editor->opt_menu.file_name, text, 1);
 }
 
-int				editor_events(t_doom *doom)
+int				editor_events(t_doom *doom, t_sdlmain *sdlmain)
 {
 	t_editor	*editor;
-	t_sdlmain	*sdlmain;
 	SDL_Keycode key;
 	Uint32		type;
 
 	editor = &(doom->editor);
-	sdlmain = &(doom->sdlmain);
 	key = sdlmain->event.key.keysym.sym;
 	type = sdlmain->event.type;
 	check_quit(&doom->sdlmain.event, &doom->state);

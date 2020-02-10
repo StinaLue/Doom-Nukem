@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sound.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 15:30:36 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/10 01:59:26 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/10 14:59:21 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,10 @@ int		play_sound(t_game *game, t_sdlmain *sdlmain, t_map *map)
 	player = &game->player;
 	play_weapon_sound(game, sdlmain);
 	play_enemies_sound(game->enemy, sound->buffer, map);
+	if (player->movespeed == 0.01)
+		init_source(sound->source[2], 1.5, 1, 0);
+	else if (player->movespeed == 0.03)
+		init_source(sound->source[2], 2.5, 1, 0);
 	if (player->is_moving == 1 && !is_source_playing(sound->source[2]))
 		alSourcePlay(sound->source[2]);
 	else if (player->is_moving == 0)
