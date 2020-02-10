@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   poll_event.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:22:12 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/06 18:44:20 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/10 11:19:58 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	check_quit(SDL_Event *event, int *state)
 		*state = QUIT_STATE;
 }
 
-void	check_menu(SDL_Event *event, int *state, int *prev_state_ptr, int prev_state)
+void	check_menu(SDL_Event *event, int *state, \
+					int *prev_state_ptr, int prev_state)
 {
 	if (event->key.keysym.sym == SDLK_TAB)
 	{
@@ -80,16 +81,21 @@ void	handle_hud(SDL_Event *event, char *hud_flags)
 	}
 }
 
-void	check_weapon(SDL_Event *event, t_game *game)
+void	check_weapon(SDL_Event *event, t_game *game, int available_weapons)
 {
-	if (event->key.keysym.sym == SDLK_1 && game->player.current_weapon != 0 && game->player.anim == 0)
+	if (available_weapons == 0)
+		return ;
+	if (event->key.keysym.sym == SDLK_1 && game->player.current_weapon != 0 \
+	&& game->player.anim == 0 && available_weapons == 3)
 	{
 		game->player.current_weapon = 0;
 		game->surfs.anim_timer = 0;
 		game->surfs.current_frame = 0;
 		game->player.anim = 0;
 	}
-	else if (event->key.keysym.sym == SDLK_2 && game->player.current_weapon != 1 && game->player.anim == 0)
+	else if (event->key.keysym.sym == SDLK_2 \
+			&& game->player.current_weapon != 1 \
+	&& game->player.anim == 0 && available_weapons == 3)
 	{
 		game->player.current_weapon = 1;
 		game->surfs.anim_timer = 0;
@@ -100,13 +106,15 @@ void	check_weapon(SDL_Event *event, t_game *game)
 
 int		handle_events(t_doom *doom)
 {
-	//SDL_WarpMouseInWindow(doom->sdlmain.win, doom->sdlmain.win_surf->w / 2, doom->sdlmain.win_surf->h / 2);
 	check_quit(&doom->sdlmain.event, &doom->state);
-	if (doom->sdlmain.event.type == SDL_KEYDOWN && doom->sdlmain.event.key.repeat == 0)
+	if (doom->sdlmain.event.type == SDL_KEYDOWN \
+			&& doom->sdlmain.event.key.repeat == 0)
 	{
-		check_menu(&doom->sdlmain.event, &doom->state, &doom->menu.previous_state, GAME_STATE);
+		check_menu(&doom->sdlmain.event, &doom->state, \
+						&doom->menu.previous_state, GAME_STATE);
 		check_anim(&doom->sdlmain.event, &doom->game);
-		check_weapon(&doom->sdlmain.event, &doom->game);
+		check_weapon(&doom->sdlmain.event, \
+						&doom->game, doom->map.weapon_choice);
 		handle_hud(&doom->sdlmain.event, &doom->game.data.hud_flags);
 		// ONLY TO TEST HEALTH
 		if (doom->sdlmain.event.key.keysym.sym == SDLK_z)

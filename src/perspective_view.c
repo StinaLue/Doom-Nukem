@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 15:40:03 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/10 15:41:49 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void		create_perspective_wall(t_display_wall *dsp_wall, SDL_Surface *surf, t_pla
 //remove wall and send texture directly
 void	draw_3dwall(t_display_wall *dsp_wall, SDL_Surface *surf)
 {
-	if (ft_strncmp(surf->userdata, "yescolor", 8) != 0)
+	if (ft_strncmp(surf->userdata, "textured", 8) != 0)
 	{
 		draw_line(dsp_wall->top_left, dsp_wall->top_right, surf, 0xffffff);
 		draw_line(dsp_wall->top_right, dsp_wall->bottom_right, surf, 0xffdddd);

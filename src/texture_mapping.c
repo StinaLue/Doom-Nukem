@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_mapping.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 18:01:04 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/07 15:28:30 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/07 17:43:28 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@ double	get_texture_x(double x, t_display_wall *dsp)
 	double	top_div;
 	double	bot_div;
 
-	top_div = (1-x) * dsp->start_pos/dsp->dist_left + x * dsp->end_pos/dsp->dist_right;
-	bot_div = (1-x) * 1/dsp->dist_left + x * 1/dsp->dist_right;
+	top_div = (1 - x) * dsp->start_pos / dsp->dist_left \
+				+ x * dsp->end_pos / dsp->dist_right;
+	bot_div = (1 - x) * 1 / dsp->dist_left + x * 1 / dsp->dist_right;
 	x = top_div / bot_div;
 	return (x);
 }
@@ -39,8 +40,7 @@ int		get_tex_color(double x, double y, SDL_Surface *tex)
 	truex = fmod(fabs(x * (tex->w - 1)), tex->w);
 	truey = fmod((tex->h - 1) - fabs(y * (tex->h - 1)), tex->h);
 	color = ((int *)tex->pixels)[truex + truey * tex->w];
-
-	return color;
+	return (color);
 }
 
 void	draw_texture(SDL_Surface *surf, SDL_Surface *tex, t_display_wall *dsp)
@@ -58,7 +58,6 @@ void	draw_texture(SDL_Surface *surf, SDL_Surface *tex, t_display_wall *dsp)
 		return ;
 	delta_top = (double)(dsp->top_right.y - dsp->top_left.y) / width;
 	delta_bot = (double)(dsp->bottom_right.y - dsp->bottom_left.y) / width;
-
 	win.x = dsp->top_left.x;
 	top = dsp->top_left.y + 0.5;
 	bot = dsp->bottom_left.y + 0.5;

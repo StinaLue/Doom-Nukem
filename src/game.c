@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 15:42:59 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/09 14:39:25 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	blit_uzi(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)//, t_sound *s
 
 int	blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)//, t_sound *sound)
 {
+	// TODO --> blit blood katana when enemy is hit
 	gamesurfs->weapons_rect.x = gamesurfs->current_frame * gamesurfs->weapons_rect.w;
 	gamesurfs->weapons_rect.y = 0;
 	if (*anim == 1)
@@ -109,13 +110,28 @@ void	draw_crosshair(SDL_Surface *dest)
 	draw_line(left_cross, right_cross, dest, 0xff0000);
 }
 
-int	blit_weapon(t_game *game, SDL_Surface *dest, int weapon)//, t_sound *sound)
+int	blit_weapon(t_game *game, SDL_Surface *dest, int weapon, int available_weapons)//, t_sound *sound)
 {
 	int return_val;
 
+	if (available_weapons == 0)
+		return (0);
 	return_val = (*game->weapon_anim[weapon])(&game->surfs, dest, &game->player.anim);//, sound);
 	draw_crosshair(dest);
 	return (return_val);
+}
+
+void	soft_reset_player(t_player *player, t_map *map)
+{
+	player->health = 100;
+	player->pos = vec_to_vecdb(map->player_spawn);
+	player->sector = get_sector_by_pos(map->sector_head, \
+										player->pos);
+	if (player->pos.x == -1 && player->pos.y == -1 && map->sector_head)
+	{
+		player->sector = map->sector_head;
+		player->pos = map->sector_head->sector_center;
+	}
 }
 
 int	player_hurt_anim(int health, SDL_Rect *surf_rect)
@@ -193,120 +209,6 @@ int	blit_enemies(t_game *game, SDL_Surface *dest, t_map *map)
 	return (0);
 }
 
-int	is_source_playing(ALuint source)
-{
-	ALenum state;
-
-	alGetSourcei(source, AL_SOURCE_STATE, &state);
-	return (state == AL_PLAYING);
-}
-
-void	play_weapon_sound(t_game *game, t_sdlmain *sdlmain)
-{
-	t_gamesurfs *gamesurfs;
-	t_sound		*sound;
-	t_player	*player;
-
-	gamesurfs = &game->surfs;
-	sound = &sdlmain->sound;
-	player = &game->player;
-	if (player->current_weapon == 0)
-	{
-		if (player->anim == 1 && gamesurfs->current_frame == 0 \
-			&& gamesurfs->anim_timer == 0 \
-			&& !is_source_playing(sound->source[1]))
-		{
-			alSourcef(sound->source[1], AL_PITCH, 1.6);
-			alSourcei(sound->source[1], AL_BUFFER, sound->buffer[1]);
-			alSourcePlay(sound->source[1]);
-		}
-		else if (player->anim == 0 && gamesurfs->current_frame == 0 \
-			&& gamesurfs->anim_timer == 0 \
-			&& is_source_playing(sound->source[1]))
-			alSourceStop(sound->source[1]);
-	}
-	if (player->current_weapon == 1)
-	{
-		if (player->anim == 1 && gamesurfs->current_frame == 0 \
-			&& gamesurfs->anim_timer == 0 \
-			&& !is_source_playing(sound->source[1]))
-		{
-			alSourcef(sound->source[1], AL_PITCH, 1);
-			alSourcei(sound->source[1], AL_BUFFER, sound->buffer[3]);
-			alSourcePlay(sound->source[1]);
-		}
-		else if (player->anim == 0 && gamesurfs->current_frame == 0 \
-				&& gamesurfs->anim_timer == 0 \
-				&& is_source_playing(sound->source[1]))
-			alSourceStop(sound->source[1]);
-	}
-}
-
-void	init_source(ALuint src, ALfloat pitch, ALfloat gain, int loop)
-{
-	alSourcef(src, AL_PITCH, pitch);
-	alSourcef(src, AL_GAIN, gain);
-	alSource3f(src, AL_POSITION, 0, 0, 0);
-	alSource3f(src, AL_VELOCITY, 0, 0, 0);
-	alSourcei(src, AL_LOOPING, loop);
-}
-
-void	play_enemies_sound(t_enemy *enemies, ALuint *buffers, t_map *map)
-{
-	int i;
-
-	i = 0;
-	if (enemies == NULL || map->num_enemies <= 0)
-		return ;
-	while (i < map->num_enemies)
-	{
-		if (!is_source_playing(enemies[i].sound_src))
-		{
-			if (map->enemy_info[i].which_enemy == 0)
-				alSourcei(enemies[i].sound_src, AL_BUFFER, buffers[4]);
-			else if (map->enemy_info[i].which_enemy == 1)
-				alSourcei(enemies[i].sound_src, AL_BUFFER, buffers[5]);
-			alSourcePlay(enemies[i].sound_src);
-		}
-		alSource3f(enemies[i].sound_src, AL_POSITION, enemies[i].pos.x, enemies[i].pos.y, 0);
-		i++;
-	}
-}
-
-int	is_buffer_playing(ALuint src, ALuint buffer)
-{
-	ALint playing_buffer;
-
-	alGetSourcei(src, AL_BUFFER, &playing_buffer);
-	return ((ALuint)playing_buffer == buffer);
-}
-
-int	play_sound(t_game *game, t_sdlmain *sdlmain, t_map *map)
-{
-	t_gamesurfs *gamesurfs;
-	t_sound		*sound;
-	t_player	*player;
-
-	gamesurfs = &game->surfs;
-	sound = &sdlmain->sound;
-	player = &game->player;
-	play_weapon_sound(game, sdlmain);
-	play_enemies_sound(game->enemy, sound->buffer, map);
-	if (player->is_moving == 1 && !is_source_playing(sound->source[2]))
-		alSourcePlay(sound->source[2]);
-	else if (player->is_moving == 0)
-		alSourcePause(sound->source[2]);
-	if (player->health <= 0 && is_buffer_playing(sdlmain->sound.source[0], sdlmain->sound.buffer[0]))
-	{
-		alSourcei(sdlmain->sound.source[0], AL_LOOPING, AL_FALSE);
-		alSourceStop(sdlmain->sound.source[0]);
-		init_source(sdlmain->sound.source[0], 1, 1, 1);
-		alSourcei(sdlmain->sound.source[0], AL_BUFFER, sdlmain->sound.buffer[1]);
-		alSourcePlay(sdlmain->sound.source[0]);
-	}
-	return (0);
-}
-
 void	set_listener_ori(double angle, t_vecdb player_pos)
 {
 	ALfloat	orix;
@@ -328,6 +230,18 @@ void	set_listener_ori(double angle, t_vecdb player_pos)
 	//printf("vec direc x %f y %f\n", orix, oriy);
 }
 
+void	stop_enem_soundsources(t_enemy *enemies, int nb_enemies)
+{
+	int i;
+
+	i = 0;
+	while (i < nb_enemies)
+	{
+		alSourceStop(enemies[i].sound_src);
+		i++;
+	}
+}
+
 int game_loop(t_doom *doom)
 {
 	t_game		*game;
@@ -344,6 +258,8 @@ int game_loop(t_doom *doom)
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	SDL_WarpMouseInWindow(sdlmain->win, sdlmain->win_surf->w / 2, sdlmain->win_surf->h / 2);
 	startclock = SDL_GetTicks();
+	if (!is_buffer_playing(sdlmain->sound.source[0], sdlmain->sound.buffer[0]))
+		play_game_music(game, sdlmain, doom);
 	while (doom->state == GAME_STATE)
 	{
 		ft_bzero(game->surfs.perspective_view->pixels, game->surfs.perspective_view->h * game->surfs.perspective_view->pitch);
@@ -351,6 +267,10 @@ int game_loop(t_doom *doom)
 			if (handle_events(doom) != 0)
 				break ;
 		play_sound(game, sdlmain, &doom->map);
+		if (game->player.health <= 0)
+			game_over_loop(doom);
+		else if (game->player.sector->is_goal == 1)
+			win_loop(doom);
 		handle_keys(doom, SDL_GetKeyboardState(NULL));//, &sdlmain->sound);
 		alListener3f(AL_POSITION, game->player.pos.x, game->player.pos.y, 0);
 		//printf("vec player x %f y %f\n", game->player.pos.x, game->player.pos.y);
@@ -358,9 +278,9 @@ int game_loop(t_doom *doom)
 		//alSource3f(sdlmain->sound.source[0], AL_POSITION, doom->map.sector_head->wall_head->start.x, doom->map.sector_head->wall_head->start.y, 0);
 		//alSource3f(sdlmain->sound.source[1], AL_POSITION, doom->map.sector_head->wall_head->end.x, doom->map.sector_head->wall_head->end.y, 0);
 		if (game->data.hud_flags & COLORFLAG)
-			game->surfs.perspective_view->userdata = "yescolor";
+			game->surfs.perspective_view->userdata = "textured";
 		else
-			game->surfs.perspective_view->userdata = "nocolor";
+			game->surfs.perspective_view->userdata = "untextured";
 		//draw_perspective_view(game->surfs.perspective_view, &game->player, doom->wall_textures);
 		//if ((SDL_BlitScaled(game->surfs.weapons, &game->surfs.katana[(int)((float)SDL_GetTicks() / 400) % 4], game->surfs.perspective_view, NULL)) != 0)
 		//	printf("%s\n", SDL_GetError());
@@ -379,7 +299,7 @@ int game_loop(t_doom *doom)
 		draw_view_recursive(game->surfs.perspective_view, doom->wall_textures, view, game->player.sector, &game->player);
 		if (blit_enemies(game, game->surfs.perspective_view, &doom->map) != 0)
 			return (error_return("Blit enemies error\n", NULL));
-		if (blit_weapon(game, game->surfs.perspective_view, game->player.current_weapon) != 0)//, &sdlmain->sound) != 0)
+		if (blit_weapon(game, game->surfs.perspective_view, game->player.current_weapon, doom->map.weapon_choice) != 0)//, &sdlmain->sound) != 0)
 			return (error_return("Blit weapon error\n", NULL));
 
 		if ((blit_hud_faces(game)) == 1)

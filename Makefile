@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/05 19:48:07 by afonck           ###   ########.fr        #
+#    Updated: 2020/02/10 12:40:03 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,10 +21,12 @@ DEBUGFLAGS = -Wall -Werror -Wextra -D_THREAD_SAFE -g
 LDFLAGS = -L$(LIBFT_DIRECTORY) -L$(LIBBMP_DIRECTORY) -L$(SDL2_LIB_DIRECTORY)lib -L$(SDL2TTF_LIB_DIRECTORY)lib -L$(OPENAL_LIB_DIRECTORY)lib
 LDLIBS = -lft -lbmp -lSDL2 -lSDL2_ttf -lopenal
 
-INCLUDES =  -I$(HEADERS_DIRECTORY) -I$(LIBFT_HEADER) -I$(LIBBMP_HEADER) -I$(SDL2_HEADERS_DIRECTORY) -I$(SDL2TTF_HEADERS_DIRECTORY) -I$(OPENAL_HEADERS_DIRECTORY)
+INCLUDES = -I$(HEADERS_DIRECTORY) -I$(LIBFT_HEADER) -I$(LIBBMP_HEADER) -I$(SDL2_HEADERS_DIRECTORY) -I$(SDL2TTF_HEADERS_DIRECTORY) -I$(OPENAL_HEADERS_DIRECTORY)
 HARD_DBG ?= 1
 
 CURRENT_DIR = $(shell pwd)
+ASSETS_DIR = ./assets/
+ASSETS_ARCHIVE = assets.tar.gz
 
 LIBFT = $(LIBFT_DIRECTORY)libft.a
 LIBFT_DIRECTORY = ./libft/
@@ -81,30 +83,27 @@ SOURCES_LIST = main.c \
 			editor.c \
 			mouse.c \
 			editor_menu.c \
-			debug.c \
 			create_surfaces.c\
 			editor_check.c \
 			blit_editor.c \
 			new_blit.c \
 			map.c \
-			map_reader.c \
-			map_writer.c \
+			map_reader_main.c \
+			map_reader_sectors.c \
+			map_writer_main.c \
+			map_writer_sectors.c \
 			editor_events.c \
 			wav_parse.c \
 			texture_mapping.c \
 			editor_events_mouse.c \
 			editor_events_keys.c \
-			mouse_movement.c #\
-			map_parser.c \
-	       multithreading.c \
-		   texture.c \
-		   parsing.c \
-		   error_handling.c \
-		   drawing.c \
-		   checking.c \
-		   handle_fps.c \
-		   utils.c \
-		   floor_and_ceiling.c
+			mouse_movement.c \
+			sound.c \
+			music.c \
+			openal_sub_functions.c \
+			end_level_loops.c \
+			error.c #\
+			debug.c
 
 SOURCES = $(addprefix $(SOURCES_DIRECTORY), $(SOURCES_LIST))
 
@@ -162,7 +161,10 @@ $(OPENAL):
 	cd ../..
 	rm -rf openal-soft-$(OPENAL_VERSION)
 
-$(NAME): $(SDL2) $(SDL2TTF) $(OPENAL) $(LIBFT) $(LIBBMP) $(OBJECTS_DIRECTORY) $(OBJECTS)
+$(ASSETS_DIR): $(ASSETS_ARCHIVE)
+	tar -xzvf $(ASSETS_ARCHIVE)
+
+$(NAME): $(SDL2) $(SDL2TTF) $(OPENAL) $(LIBFT) $(LIBBMP) $(OBJECTS_DIRECTORY) $(OBJECTS) $(ASSETS_DIR)
 	@$(CC) $(INCLUDES) $(OBJECTS) $(LDFLAGS) $(LDLIBS) -o $(NAME)
 	@echo "\n$(NAME): $(GREEN)object files were created$(RESET)"
 	@echo "$(NAME): $(GREEN)$(NAME) was created$(RESET)"
@@ -216,8 +218,10 @@ fclean: clean
 	@rm -rf $(SDL2_LIB_DIRECTORY)
 	@rm -rf $(SDL2TTF_LIB_DIRECTORY)
 	@rm -rf $(OPENAL_LIB_DIRECTORY)
+	@rm -rf $(ASSETS_DIR)
 	@echo "$(NAME): $(RED)SDL2 and SDL2TTF was deleted$(RESET)"
 	@echo "$(NAME): $(RED)OPENAL was deleted$(RESET)"
+	@echo "$(NAME): $(RED)assets folder was deleted$(RESET)"
 	@$(MAKE) -sC $(LIBFT_DIRECTORY) fclean
 	@echo "$(NAME): $(RED)$(LIBFT) was deleted$(RESET)"
 	@$(MAKE) -sC $(LIBBMP_DIRECTORY) fclean
@@ -231,7 +235,7 @@ re:
 
 debug: $(DEBUG_NAME)
 
-$(DEBUG_NAME): $(SDL2) $(SDL2TTF) $(OPENAL) $(LIBFT) $(LIBBMP) $(OBJECTS_DIRECTORY_DEBUG) $(OBJECTS_DEBUG)
+$(DEBUG_NAME): $(SDL2) $(SDL2TTF) $(OPENAL) $(LIBFT) $(LIBBMP) $(OBJECTS_DIRECTORY_DEBUG) $(OBJECTS_DEBUG) $(ASSETS_DIR)
 	@$(CC) $(INCLUDES) $(OBJECTS_DEBUG) $(LDFLAGS) $(LDLIBS) -o $(DEBUG_NAME)
 	@echo "\n$(DEBUG_NAME): $(GREEN)object debug files were created$(RESET)"
 	@echo "$(DEBUG_NAME): $(GREEN)$(DEBUG_NAME) was created$(RESET)"

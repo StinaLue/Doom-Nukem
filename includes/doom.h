@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 14:45:16 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/10 15:41:48 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # define PLAYER_RADIUS 0.5
 # define NB_WALL_TEXTURES 9
 # define NB_SOUND_SOURCES 3
-# define NB_SOUND_BUFFERS 8
+# define NB_SOUND_BUFFERS 11
 
 /*
 ** MAIN LOOP STATES
@@ -56,7 +56,7 @@
 # define NBOPTIONS 8
 # define NBHOVEROPTIONS 5
 # define NBINSTRUCTS 10
-# define MAPMULTIPLIER 4
+# define MAPMULTIPLIER 50
 # define COLOR_HOVER 0x6C1413
 # define COLOR_PRESSED 0x00cc00
 # define COLOR_NORMAL 0xff0000
@@ -132,6 +132,7 @@ typedef struct				s_sector_node
 	double					floor_height;
 	double					ceiling_height;
 	int						wall_num;
+	int						is_goal;
 }							t_sector_node;
 
 typedef struct				s_display_wall
@@ -182,6 +183,9 @@ typedef struct				s_gamesurfs
 	SDL_Surface				*weapons;
 	SDL_Surface				*hud_faces_surf;
 	SDL_Surface				*enemy_texture[2];
+	SDL_Surface				*game_over;
+	SDL_Surface				*victory;
+
 	SDL_Rect				weapons_rect;
 	SDL_Rect				hud_faces_rect;
 	int						current_frame;
@@ -225,6 +229,7 @@ typedef struct				s_player
 	//t_vecdb				fov;
 	t_segment				view;
 	double					true_fov;
+	double					movespeed;
 	int						health;
 	int						is_moving;
 	int						anim;
@@ -261,7 +266,6 @@ typedef struct				s_options_menu
 	SDL_Surface				*options[NBOPTIONS];
 	SDL_Surface				*hover_options[NBHOVEROPTIONS];
 	SDL_Surface				*height_surf[2];
-	SDL_Surface 			*weapon_surf[2];
 
 	SDL_Rect				title_rect;
 	SDL_Rect				options_rect[NBOPTIONS];
@@ -281,8 +285,8 @@ typedef struct				s_options_menu
 	int						bord_hover_color_opt[NBHOVEROPTIONS];
 	int 					bord_color_weapon[2];
 	int						activ_tex;
-	int 					activ_music[2];
-	int 					activ_weapon[2];
+	int 					activ_music;
+	int 					activ_weapon;
 	int						typing_filename;
 	int 					activ_height[2];
 	double					height_ceiling;
@@ -298,6 +302,8 @@ typedef struct				s_map
 	t_vec					player_spawn;
 	int						num_sectors;
 	int						num_enemies;
+	int						which_music;
+	int						weapon_choice;
 }							t_map;
 
 typedef struct				s_editor
@@ -369,12 +375,7 @@ typedef struct				s_doom
 	int						state;
 }							t_doom;
 
-void						prepend_str(const char *to_prepend, \
-							const char *str, char *new_str, int full_size);
-
-int							write_map(t_map *map);
-
-int							read_map(const char *path, t_map *map);
+void						soft_reset_player(t_player *player, t_map *map);
 
 int							load_wav(char *file, ALuint buffer);
 
@@ -398,13 +399,29 @@ SDL_Surface					*load_opti_bmp(char *file, SDL_Surface *dst_surf, \
 int							copy_map(const t_map *srcmap, t_map *dstmap);
 
 /*
+** MAP PARSING FUNCTIONS
+*/
+int							write_map(t_map *map);
+
+int							write_sectors(int fd, t_sector_node *sector_head, int num_sectors_file);
+
+int							read_map(const char *path, t_map *map);
+
+int							read_sectors(int fd, t_sector_node **sector_head, int num_sectors_file);
+
+
+/*
 ** VECTOR FUNCTIONS
 */
 double						get_magnitude(t_vecdb a, t_vecdb b);
 
-t_vecdb						multvecdb(t_vecdb vecdb, double n);
+t_vecdb						multvecdb(t_vecdb vecdb, double mult);
 
 t_vec						multvec(t_vec vec, int mult);
+
+t_vecdb						divvecdb(t_vecdb vecdb, double div);
+
+t_vec						divvec(t_vec vec, int div);
 
 t_vec						create_vec(int x, int y);
 
@@ -432,6 +449,8 @@ double						get_point_distance(t_vecdb a, t_vecdb b);
 
 void						set_vec_values(t_vec *src, t_vec *dst);
 
+void                        set_vecdb_values(t_vecdb *src, t_vecdb *dst);
+
 t_vecdb						vecdb_diff(t_vecdb a, t_vecdb b);
 
 t_vec						vec_diff(t_vec a, t_vec b);
@@ -443,6 +462,12 @@ t_vec						vec_mult(t_vec a, t_vec b);
 t_vecdb						vecdb_add(t_vecdb a, t_vecdb b);
 
 t_vec						vec_add(t_vec a, t_vec b);
+
+t_vec                       reset_vec(t_vec *vector);
+
+t_vecdb                     reset_vecdb(t_vecdb *vector);
+
+int                         compare_vec(t_vec *vector1, t_vec *vector2);
 
 /*
 ** INIT FUNCTIONS
@@ -467,7 +492,8 @@ int							init_map(t_map *map);
 int							init_wall_textures(SDL_Surface **wall_textures, \
 												SDL_Surface *winsurf);
 
-void						init_source(ALuint src, ALfloat pitch, ALfloat gain, int loop);
+void						init_source(ALuint src, ALfloat pitch, \
+											ALfloat gain, int loop);
 
 t_view						init_view(t_player *player, SDL_Surface *surf);
 
@@ -499,7 +525,7 @@ void						check_menu(SDL_Event *event, \
 void						handle_keys(t_doom *doom, \
 										const Uint8 *keyboard_state);
 
-int							editor_events(t_doom *doom);
+int							editor_events(t_doom *doom, t_sdlmain *sdlmain);
 
 void						set_height(t_options_menu *menu, SDL_Surface *surf);
 
@@ -514,7 +540,7 @@ int							draw_full_rotmap(SDL_Surface *surf, t_player *player, const t_map *map
 
 void						draw_perspective_view(SDL_Surface *surf, t_player *player, SDL_Surface **wall_textures);
 
-void		draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view view, t_sector_node *sector, t_player *player);
+void						draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view view, t_sector_node *sector, t_player *player);
 /*
 ** DRAWING FUNCTIONS
 */
@@ -543,6 +569,10 @@ int							blit_uzi(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim);//, t_s
 int							highlight_text(TTF_Font **font, SDL_Surface **surf, SDL_Color *color, char *text);
 
 int							reset_text(TTF_Font **font, SDL_Surface **surf, SDL_Color *color, char *text);
+
+void						prepend_str(const char *to_prepend, \
+							const char *str, char *new_str, int full_size);
+
 
 /*
 ** NULL INIT FUNCTIONS
@@ -577,6 +607,8 @@ int							free_sdlmain(t_sdlmain *sdlmain);
 int							free_wall_textures(SDL_Surface **wall_textures);
 
 int							free_map(t_map *map);
+
+void						free_enemies(t_game *game, int num_enemies);
 
 /*
 ** PARSE FUNCTIONS
@@ -625,13 +657,14 @@ int							editor_loop(t_doom *doom);
 */
 int							error_return(const char *error_msg, const char *sdl_error);
 
+int							error_return_map(const char *error_msg, const char *errstr, int fd);
 
 /*
 ** EDITOR FUNCTIONS
 */
 int							reset_init_editor(t_editor *editor, t_sdlmain *sdlmain);
 
-void						event_mouse(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain);
+void						event_mouse(t_editor *editor, t_sdlmain *sdlmain);
 
 void						event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain);
 
@@ -675,6 +708,10 @@ int							itt_sectors_true(t_sector_node *sector_node, int (*f)(t_sector_node *)
 
 void						free_sector_list(t_sector_node **sector_list);
 
+void						set_sectors_clockwise(t_sector_node *sector_head);
+
+void						flip_walls(t_sector_node *sector);
+
 /*
 ** WALL NODE FUNCTIONS
 */
@@ -696,11 +733,6 @@ t_wall_node					*insert_wall_node(t_wall_node **wall_list);
 
 t_wall_node					*copy_wall_node(t_wall_node **wall_head, const t_wall_node *node);
 
-/*
-** DEBUG FUNCTIONS
-*/
-void						print_map_contents(const t_map *map);
-
 int							copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list);
 
 int							wall_loop(t_wall_node *node);
@@ -710,22 +742,56 @@ int							count_walls(t_wall_node *wall_list);
 void						set_wall_length(t_wall_node *head);
 
 /*
+** DEBUG FUNCTIONS
+*/
+void						print_map_contents(const t_map *map);
+
+void						print_vec(const t_vec *vec, const char *name);
+
+void						print_vecdb(const t_vecdb *vecdb, const char *name);
+/*
 ** EDITOR CHECK FUNCTIONS
 */
 int							check_convex_sector(t_sector_node *sector);
 
-void						set_wall_length(t_wall_node *head);
-
 int							check_clockwise_sector(t_sector_node *sector);
-
-void						set_sectors_clockwise(t_sector_node *sector_head);
-
-void						flip_walls(t_sector_node *sector);
 
 /*
 ** TEXTURE MAPPING
 */
 
 void						draw_texture(SDL_Surface *surf, SDL_Surface *wall_texture, t_display_wall *display_wall);
+
+/*
+** SOUND FUNCTIONS
+*/
+void						stop_enem_soundsources(t_enemy *enemies, int nb_enemies);
+
+int							is_buffer_playing(ALuint src, ALuint buffer);
+
+void						init_source(ALuint src, ALfloat pitch, ALfloat gain, int loop);
+
+int							is_source_playing(ALuint source);
+
+int							play_sound(t_game *game, t_sdlmain *sdlmain, t_map *map);
+
+/*
+** MUSIC FUNCTIONS
+*/
+void						play_win_music(t_game *game, t_sdlmain *sdlmain, t_doom *doom);
+
+void						play_gameover_music(t_game *game, t_sdlmain *sdlmain, t_doom *doom);
+
+void						play_game_music(t_game *game, t_sdlmain *sdlmain, t_doom *doom);
+
+void						play_editor_music(t_sdlmain *sdlmain, t_doom *doom);
+
+/*
+** END LEVEL LOOPS FUNCTIONS
+*/
+
+void						game_over_loop(t_doom *doom);
+
+void						win_loop(t_doom *doom);
 
 #endif

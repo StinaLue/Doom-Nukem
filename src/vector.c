@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:06:54 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/06 14:53:13 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/09 22:49:39 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,16 +76,40 @@ void	set_vec_values(t_vec *src, t_vec *dst)
 	dst->y = src->y;
 }
 
+void	set_vecdb_values(t_vecdb *src, t_vecdb *dst)
+{
+	dst->x = src->x;
+	dst->y = src->y;
+}
+
 void	vectorcpy(t_vec *one, const t_vec *two)
 {
 	one->x = two->x;
 	one->y = two->y;
 }
 
-t_vecdb	multvecdb(t_vecdb vecdb, double n)
+t_vecdb	vecdb_mult(t_vecdb a, t_vecdb b)
 {
-	vecdb.x *= n;
-	vecdb.y *= n;
+	t_vecdb vector;
+
+	vector.x = a.x * b.x;
+	vector.y = a.y * b.y;
+	return (vector);
+}
+
+t_vec	vec_mult(t_vec a, t_vec b)
+{
+	t_vec vector;
+
+	vector.x = a.x * b.x;
+	vector.y = a.y * b.y;
+	return (vector);
+}
+
+t_vecdb	multvecdb(t_vecdb vecdb, double mult)
+{
+	vecdb.x *= mult;
+	vecdb.y *= mult;
 	return (vecdb);
 }
 
@@ -93,6 +117,20 @@ t_vec	multvec(t_vec vec, int mult)
 {
 	vec.x *= mult;
 	vec.y *= mult;
+	return (vec);
+}
+
+t_vecdb divvecdb(t_vecdb vecdb, double div)
+{
+    vecdb.x /= div;
+	vecdb.y /= div;
+	return (vecdb);
+}
+
+t_vec	divvec(t_vec vec, int div)
+{
+	vec.x /= div;
+	vec.y /= div;
 	return (vec);
 }
 
@@ -173,20 +211,24 @@ t_vec	vec_add(t_vec a, t_vec b)
 	return (vector);
 }
 
-t_vecdb	vecdb_mult(t_vecdb a, t_vecdb b)
+t_vec   reset_vec(t_vec *vector)
 {
-	t_vecdb vector;
-
-	vector.x = a.x * b.x;
-	vector.y = a.y * b.y;
-	return (vector);
+    vector->x = -1;
+    vector->y = -1;
+    return (*vector);
 }
 
-t_vec	vec_mult(t_vec a, t_vec b)
+t_vecdb   reset_vecdb(t_vecdb *vector)
 {
-	t_vec vector;
+    vector->x = -1;
+    vector->y = -1;
+    return (*vector);
+}
 
-	vector.x = a.x * b.x;
-	vector.y = a.y * b.y;
-	return (vector);
+int     compare_vec(t_vec *vector1, t_vec *vector2)
+{
+    if (vector1->x == vector2->x && vector1->y == vector2->y)
+        return (1);
+    else
+        return (0);
 }

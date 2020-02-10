@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/12 11:47:21 by afonck            #+#    #+#             */
-/*   Updated: 2020/01/15 11:53:07 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/10 02:06:31 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ void    print_map_contents(const t_map *map)
     int             j;
 
     i = 0;
-    if (map == NULL)
-        return ;
     tmp_sec = map->sector_head;
     while (tmp_sec != NULL)
     {

@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:40:34 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/06 14:52:12 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 12:27:59 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int		get_sign(double num)
 	return (0);
 }
 
-int			is_same_sign(double a, double b)
+int		is_same_sign(double a, double b)
 {
 	if (a > 0 && b < 0)
 		return (0);
@@ -30,8 +30,6 @@ int			is_same_sign(double a, double b)
 	return (1);
 }
 
-//checks if the list of walls is closed (loop)
-//returns 1 if it is 0 if not
 int		wall_loop(t_wall_node *node)
 {
 	int		loop;
@@ -49,7 +47,6 @@ int		wall_loop(t_wall_node *node)
 	return (loop);
 }
 
-//expects a sector with at least 3 walls
 int		check_convex_sector(t_sector_node *sector)
 {
 	t_wall_node	*wall;

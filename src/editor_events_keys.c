@@ -6,14 +6,14 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 15:41:22 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 12:30:07 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 #include "libft.h"
 
-int	delete_enemy_info(t_map *map, t_vec delspawn)
+int		delete_enemy_info(t_map *map, t_vec delspawn)
 {
 	int				i;
 	int				j;
@@ -110,17 +110,13 @@ void	key_event_u(t_editor *editor)
 	previous = undo_wall(editor->edit_map.sector_head);
 	if (previous != NULL)
 	{
-		editor->wall_tmp.start.x = previous->end.x;
-		editor->wall_tmp.start.y = previous->end.y;
-		editor->wall_tmp.end.x = previous->end.x;
-		editor->wall_tmp.end.y = previous->end.y;
+		editor->wall_tmp.start = previous->end;
+		editor->wall_tmp.end = previous->end;
 	}
 	else
 	{
-		editor->wall_tmp.start.x = -1;
-		editor->wall_tmp.start.y = -1;
-		editor->wall_tmp.end.x = -1;
-		editor->wall_tmp.end.y = -1;
+		reset_vecdb(&editor->wall_tmp.start);
+		reset_vecdb(&editor->wall_tmp.end);
 		if (editor->current_sector && editor->current_sector->wall_head == NULL)
 		{
 			delete_sector_by_address(&editor->edit_map.sector_head, \
@@ -159,6 +155,7 @@ void	key_event_s(t_editor *editor)
 									editor->selected_sector);
 		editor->selected_sector = NULL;
 		editor->edit_map.num_sectors--;
+		editor->current_sector = get_last_sector(editor->edit_map.sector_head);
 	}
 }
 
@@ -177,20 +174,20 @@ void	key_event_l(t_editor *editor, t_doom *doom)
 		&& get_sector_by_pos(editor->edit_map.sector_head, \
 				vec_to_vecdb(editor->edit_map.player_spawn)) != NULL)
 	{
+		free_enemies(&doom->game, doom->map.num_enemies);
 		if (doom->map.sector_head != NULL)
 			free_map(&doom->map);
 		if (copy_map(&editor->edit_map, &doom->map) != 0)
 			doom->state = QUIT_STATE;
 		if (init_enemy_struct(&doom->game, &doom->map) != 0)
 			doom->state = QUIT_STATE;
-		doom->game.player.pos = vec_to_vecdb(doom->map.player_spawn);
-		doom->game.player.sector = get_sector_by_pos(doom->map.sector_head, \
-													doom->game.player.pos);
-		if (doom->game.player.pos.x == -1 && doom->game.player.pos.y == -1)
-		{
-			doom->game.player.sector = doom->map.sector_head;
-			doom->game.player.pos = doom->map.sector_head->sector_center;
-		}
+		soft_reset_player(&doom->game.player, &doom->map);
+		if (doom->map.weapon_choice == 1 || doom->map.weapon_choice == 3)
+			doom->game.player.current_weapon = 0;
+		else if (doom->map.weapon_choice == 2)
+			doom->game.player.current_weapon = 1;
+		else
+			doom->game.player.current_weapon = -1;
 		editor->loading_success = 1;
 		editor->show_loading_alert = 0;
 	}
@@ -261,43 +258,24 @@ void	key_event_r(t_editor *editor, t_doom *doom)
 	{
 		if ((delete_enemy_info(&editor->edit_map, center)) != 0)
 		{
-			ft_dprintf(STDERR_FILENO, "malloc error while updating enemies info\n");
+			ft_dprintf(STDERR_FILENO, "malloc error \
+					while updating enemies info\n");
 			doom->state = QUIT_STATE;
 		}
 	}
 }
 
-void 	key_event_up_down(t_editor *editor, t_sdlmain *sdlmain, t_options_menu *menu)
+void	key_event_n(t_editor *editor)
 {
-	if (editor->selected_sector != NULL)
-	{
-		menu->height_floor = editor->selected_sector->floor_height;
-		menu->height_ceiling = editor->selected_sector->ceiling_height;
-		if (menu->activ_height[1] == 1 && menu->height_floor > 0 && sdlmain->event.key.keysym.sym == SDLK_DOWN)
-		{
-			menu->height_floor--;
-			editor->selected_sector->floor_height--;
-		}
-		else if (menu->activ_height[1] == 1 && menu->height_floor < 49 \
-				&& menu->height_floor < menu->height_ceiling - 1 && sdlmain->event.key.keysym.sym == SDLK_UP)
-		{
-			menu->height_floor++;
-			editor->selected_sector->floor_height++;
-		}
-		if (menu->activ_height[0] == 1 && menu->height_ceiling < 50 && sdlmain->event.key.keysym.sym == SDLK_UP)
-		{
-			menu->height_ceiling++;
-			editor->selected_sector->ceiling_height++;
-		}
-		else if (menu->activ_height[0] == 1 && menu->height_ceiling > 1 \
-				&& menu->height_floor < 49 \
-				&& menu->height_ceiling > menu->height_floor + 1 && sdlmain->event.key.keysym.sym == SDLK_DOWN)
-		{
-			menu->height_ceiling--;
-			editor->selected_sector->ceiling_height--;
-		}
-		set_height(&editor->opt_menu, editor->opt_surf);
-	}
+	free_map(&editor->edit_map);
+	editor->start_sector_reached = 1;
+	reset_vec(&editor->edit_map.player_spawn);
+	editor->edit_map.sector_head = NULL;
+	editor->current_sector = NULL;
+	editor->current_wall = NULL;
+	editor->selected_sector = NULL;
+	reset_vecdb(&editor->wall_tmp.start);
+	reset_vecdb(&editor->wall_tmp.end);
 }
 
 void	key_event_p(t_editor *editor)
@@ -305,6 +283,14 @@ void	key_event_p(t_editor *editor)
 	if (is_sector_occupied(editor->selected_sector, &editor->edit_map) == 0)
 		editor->edit_map.player_spawn = \
 			vecdb_to_vec(editor->selected_sector->sector_center);
+}
+
+void	key_event_g(t_editor *editor)
+{
+	if (editor->selected_sector->is_goal == 1)
+		editor->selected_sector->is_goal = 0;
+	else if (editor->selected_sector->is_goal == 0)
+		editor->selected_sector->is_goal = 1;
 }
 
 void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
@@ -318,8 +304,6 @@ void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 		key_event_u(editor);
 	if (key == SDLK_s)
 		key_event_s(editor);
-	if (key == SDLK_DOWN || key == SDLK_UP)
-		key_event_up_down(editor, sdlmain, &editor->opt_menu);
 	if (key == SDLK_t && sdlmain->event.key.repeat == 0)
 		key_event_t(editor);
 	if (key == SDLK_m && doom->map.sector_head != NULL)
@@ -334,4 +318,8 @@ void	event_keydown(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
 		key_event_b(editor, doom, &editor->edit_map);
 	if (key == SDLK_r && editor->selected_sector != NULL)
 		key_event_r(editor, doom);
+	if (key == SDLK_n)
+		key_event_n(editor);
+	if (key == SDLK_g && editor->selected_sector != NULL)
+		key_event_g(editor);
 }

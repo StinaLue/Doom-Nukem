@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_menu.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 14:01:24 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/08 20:51:38 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,7 +245,7 @@ int	init_alerts(t_editor *editor, SDL_Surface *surf)
 					- editor->alert_convex_surf->w) / 2, 0), create_vec(0, 0));
 	if ((editor->alert_loading_surf = \
 		TTF_RenderText_Solid(editor->opt_menu.font, \
-		"Couldn't load because sector wasn't finished yet", \
+		"Couldn't load (sector not finished or player not set)", \
 			editor->opt_menu.text_color)) == NULL)
 		return (error_return("TTF_RenderText_Solid error = %s\n", \
 				TTF_GetError()));

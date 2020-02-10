@@ -6,67 +6,192 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 15:36:15 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 14:30:31 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 #include "libft.h"
 
-void	change_size(t_editor *editor, t_sdlmain *sdlmain, t_options_menu *menu)
-{
-	if (editor->selected_sector != NULL)
-	{
-		menu->height_floor = editor->selected_sector->floor_height;
-		menu->height_ceiling = editor->selected_sector->ceiling_height;
-		if (menu->activ_height[1] == 1 && sdlmain->event.wheel.y > 0 && menu->height_floor > 0)
-		{
-			menu->height_floor--;
-			editor->selected_sector->floor_height--;
-		}
-		else if (menu->activ_height[1] == 1 && sdlmain->event.wheel.y < 0 && menu->height_floor < 49 \
-				&& menu->height_floor < menu->height_ceiling - 1)
-		{
-			menu->height_floor++;
-			editor->selected_sector->floor_height++;
-		}
-		if (menu->activ_height[0] == 1 && sdlmain->event.wheel.y < 0 && menu->height_ceiling < 50)
-		{
-			menu->height_ceiling++;
-			editor->selected_sector->ceiling_height++;
-		}
-		else if (menu->activ_height[0] == 1 && sdlmain->event.wheel.y > 0 && menu->height_ceiling > 1 \
-				&& menu->height_floor < 49 \
-				&& menu->height_ceiling > menu->height_floor + 1)
-		{
-			menu->height_ceiling--;
-			editor->selected_sector->ceiling_height--;
-		}
-		set_height(&editor->opt_menu, editor->opt_surf);
-	}
-}
-
-void	set_border_color(t_editor *editor, t_vec mouse_pos)
+void	mouse_collide_textures(t_options_menu *menu, t_vec mouse_pos, \
+											Uint8 button)
 {
 	int i;
 
 	i = 0;
 	while (i < NBTEXTURES)
 	{
-		if (is_mouse_collide(mouse_pos, editor->opt_menu.text_rect[i]))
+		if (is_mouse_collide(mouse_pos, menu->text_rect[i]) \
+							&& button == SDL_BUTTON_LEFT)
 		{
-			if (editor->opt_menu.activ_tex != i)
-				editor->opt_menu.bord_color_text\
-				[editor->opt_menu.activ_tex] = COLOR_NORMAL;
-			editor->opt_menu.bord_color_text[i] = COLOR_PRESSED;
-			editor->opt_menu.activ_tex = i;
+			if (menu->activ_tex != i)
+				menu->bord_color_text[menu->activ_tex] = COLOR_CHOOSE;
+			menu->bord_color_text[i] = COLOR_PRESSED;
+			menu->activ_tex = i;
+		}
+		else
+		{
+			if (is_mouse_collide(mouse_pos, menu->text_rect[i]) \
+								&& i != menu->activ_tex)
+				menu->bord_color_text[i] = COLOR_HOVER;
+			else if (!is_mouse_collide(mouse_pos, menu->text_rect[i]) \
+								&& i != menu->activ_tex)
+				menu->bord_color_text[i] = COLOR_CHOOSE;
 		}
 		i++;
 	}
 }
 
+void	update_weapon_choice(t_sdlmain *sdlmain, \
+			t_options_menu *menu, int weapon, t_vec mouse)
+{
+	if (sdlmain->event.button.button == SDL_BUTTON_LEFT)
+	{
+		if (is_mouse_collide(mouse, menu->scaled_weapon_rect[0]))
+		{
+			if (weapon == 1 || weapon == 3)
+				menu->bord_color_weapon[0] = COLOR_CHOOSE;
+			else if (weapon == 0 || weapon == 2)
+				menu->bord_color_weapon[0] = COLOR_PRESSED;
+			menu->activ_weapon += (weapon == 0 || weapon == 2) ? 1 : -1;
+		}
+		else if (is_mouse_collide(mouse, menu->scaled_weapon_rect[1]))
+		{
+			if (weapon == 2 || weapon == 3)
+				menu->bord_color_weapon[1] = COLOR_CHOOSE;
+			else if (weapon == 0 || weapon == 1)
+				menu->bord_color_weapon[1] = COLOR_PRESSED;
+			menu->activ_weapon += (weapon == 0 || weapon == 1) ? 2 : -2;
+		}
+	}
+	else if ((weapon == 0 || weapon == 2) \
+			&& is_mouse_collide(mouse, menu->scaled_weapon_rect[0]))
+		menu->bord_color_weapon[0] = COLOR_HOVER;
+	else if ((weapon == 0 || weapon == 1) \
+			&& is_mouse_collide(mouse, menu->scaled_weapon_rect[1]))
+		menu->bord_color_weapon[1] = COLOR_HOVER;
+}
+
+void	mouse_collide_load(t_sdlmain *sdlmain, \
+			t_options_menu *menu, t_editor *editor)
+{
+	if (is_mouse_collide(sdlmain->mouse_pos, menu->hover_opt_rect[2]) \
+			&& sdlmain->event.button.button == SDL_BUTTON_LEFT \
+			&& editor->start_sector_reached == 1)
+	{
+		if (editor->selected_sector != NULL)
+			remove_highlight_sector(editor->selected_sector);
+		editor->selected_sector = NULL;
+		free_map(&editor->edit_map);
+		if (read_map(menu->file_name, &editor->edit_map) != 0)
+		{
+			ft_dprintf(STDERR_FILENO, "error in read map\n");
+			free_map(&editor->edit_map);
+		}
+		else
+		{
+			ft_printf("%{g}s was properly loaded 😉\n", editor->edit_map.name);
+			editor->opt_menu.activ_music = editor->edit_map.which_music;
+			editor->opt_menu.activ_weapon = editor->edit_map.weapon_choice;
+		}
+	}
+}
+
+void	mouse_collide_music(t_sdlmain *sdlmain, t_options_menu *menu)
+{
+	if (is_mouse_collide(sdlmain->mouse_pos, menu->hover_opt_rect[3]))
+	{
+		if (sdlmain->event.button.button == SDL_BUTTON_LEFT)
+		{
+			menu->bord_hover_color_opt[3] = COLOR_PRESSED;
+			menu->bord_hover_color_opt[4] = COLOR_CHOOSE;
+			menu->activ_music = 0;
+		}
+		else if (menu->activ_music != 0)
+			menu->bord_hover_color_opt[3] = COLOR_HOVER;
+	}
+	if (is_mouse_collide(sdlmain->mouse_pos, menu->hover_opt_rect[4]))
+	{
+		if (sdlmain->event.button.button == SDL_BUTTON_LEFT)
+		{
+			menu->bord_hover_color_opt[4] = COLOR_PRESSED;
+			menu->bord_hover_color_opt[3] = COLOR_CHOOSE;
+			menu->activ_music = 1;
+		}
+		else if (menu->activ_music != 1)
+			menu->bord_hover_color_opt[4] = COLOR_HOVER;
+	}
+}
+
+void	mouse_collide_height(t_sdlmain *sdlmain, t_editor *editor, \
+								t_options_menu *menu)
+{
+	int i;
+
+	i = 0;
+	while (i < 2)
+	{
+		if (is_mouse_collide(sdlmain->mouse_pos, \
+				editor->opt_menu.height_rect[i]) \
+				&& editor->opt_menu.activ_height[i] != 1)
+			editor->opt_menu.bord_color_height[i] = COLOR_HOVER;
+		i++;
+	}
+	if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.height_rect[0]) \
+			&& sdlmain->event.button.button == SDL_BUTTON_LEFT)
+	{
+		menu->activ_height[0] = 1;
+		menu->activ_height[1] = 0;
+		menu->bord_color_height[0] = COLOR_PRESSED;
+	}
+	if (is_mouse_collide(sdlmain->mouse_pos, editor->opt_menu.height_rect[1]) \
+			&& sdlmain->event.button.button == SDL_BUTTON_LEFT)
+	{
+		menu->activ_height[1] = 1;
+		menu->activ_height[0] = 0;
+		menu->bord_color_height[1] = COLOR_PRESSED;
+	}
+}
+
+void	mouse_collide_save(t_editor *editor)
+{
+	if (editor->selected_sector != NULL)
+		remove_highlight_sector(editor->selected_sector);
+	editor->selected_sector = NULL;
+	if (editor->edit_map.sector_head == NULL)
+	{
+		ft_dprintf(STDERR_FILENO, "no sector in map to save\n");
+		return ;
+	}
+	if (ft_strlen(editor->edit_map.name) <= 6)
+	{
+		ft_dprintf(STDERR_FILENO, "wrong map name to save\n");
+		return ;
+	}
+	if (editor->edit_map.player_spawn.x == -1 \
+		&& editor->edit_map.player_spawn.y == -1)
+		editor->edit_map.player_spawn = \
+		vecdb_to_vec(editor->edit_map.sector_head->sector_center);
+	if (write_map(&editor->edit_map) != 0)
+		ft_dprintf(STDERR_FILENO, "error in write map\n");
+	else
+		ft_printf("%{g}s was properly written 😉\n", \
+				editor->edit_map.name);
+}
+
+void	mouse_collide_input(t_sdlmain *sdlmain, \
+							t_options_menu *menu, Uint8 button)
+{
+	if (is_mouse_collide(sdlmain->mouse_pos, menu->hover_opt_rect[0]) \
+				&& button == SDL_BUTTON_LEFT)
+	{
+		menu->bord_hover_color_opt[0] = COLOR_PRESSED;
+		menu->typing_filename = 1;
+	}
+}
+
 void	mouse_in_options(t_editor *editor, t_sdlmain *sdlmain, \
-							t_options_menu *menu, t_doom *doom)
+							t_options_menu *menu, Uint8 button)
 {
 	int i;
 
@@ -74,139 +199,22 @@ void	mouse_in_options(t_editor *editor, t_sdlmain *sdlmain, \
 	if (is_mouse_collide(sdlmain->mouse_pos, editor->options_rect))
 	{
 		sdlmain->mouse_pos.x -= editor->editor_rect.w;
-		if (sdlmain->event.button.button == SDL_BUTTON_LEFT)
-		{
-			set_border_color(editor, sdlmain->mouse_pos);
-		}
-		while (i < NBTEXTURES)
-		{
-			if (is_mouse_collide(sdlmain->mouse_pos, menu->text_rect[i]) \
-								&& i != menu->activ_tex)
-				menu->bord_color_text[i] = COLOR_HOVER;
-			else if (!is_mouse_collide(sdlmain->mouse_pos, menu->text_rect[i]) \
-								&& i != menu->activ_tex)
-				menu->bord_color_text[i] = COLOR_NORMAL;
-			i++;
-		}
-		i = 0;
-		while (i < NBHOVEROPTIONS)
+		mouse_collide_textures(&editor->opt_menu, sdlmain->mouse_pos, button);
+		while (i < 3)
 		{
 			if (is_mouse_collide(sdlmain->mouse_pos, menu->hover_opt_rect[i]))
-			{
-				if (i != 3 && i != 4)
-					menu->bord_hover_color_opt[i] = COLOR_HOVER;
-				else if (i == 3 && menu->activ_music[0] == 0)
-					menu->bord_hover_color_opt[i] = COLOR_HOVER;
-				else if (i == 4 && menu->activ_music[1] == 0)
-					menu->bord_hover_color_opt[i] = COLOR_HOVER;
-			}
+				menu->bord_hover_color_opt[i] = COLOR_HOVER;
 			i++;
 		}
-		if (is_mouse_collide(sdlmain->mouse_pos, menu->hover_opt_rect[0]) \
-					&& sdlmain->event.button.button == SDL_BUTTON_LEFT)
-		{
-			menu->bord_hover_color_opt[0] = COLOR_PRESSED;
-			menu->typing_filename = 1;
-		}
+		mouse_collide_input(sdlmain, &editor->opt_menu, button);
 		if (is_mouse_collide(sdlmain->mouse_pos, menu->hover_opt_rect[1]) \
-				&& sdlmain->event.button.button == SDL_BUTTON_LEFT && editor->start_sector_reached == 1)
-		{
-			if (editor->selected_sector != NULL)
-				remove_highlight_sector(editor->selected_sector);
-			editor->selected_sector = NULL;
-			if (editor->edit_map.sector_head == NULL)
-			{
-				ft_dprintf(STDERR_FILENO, "no sector in map to save\n");
-				return ;
-			}
-			if (ft_strlen(editor->edit_map.name) <= 6)
-			{
-				ft_dprintf(STDERR_FILENO, "wrong map name to save\n");
-				return ;
-			}
-			if (editor->edit_map.player_spawn.x == -1 \
-				&& editor->edit_map.player_spawn.y == -1)
-				editor->edit_map.player_spawn = \
-				vecdb_to_vec(editor->edit_map.sector_head->sector_center);
-			if (write_map(&editor->edit_map) != 0)
-			{
-				ft_dprintf(STDERR_FILENO, "error in write map\n"); //THIS IS NOT SECURE YET
-				doom->state = QUIT_STATE;
-			}
-			ft_printf("%{g}s was properly written 😉\n", editor->edit_map.name);
-		}
-		if (is_mouse_collide(sdlmain->mouse_pos, menu->hover_opt_rect[3]) \
-				&& sdlmain->event.button.button == SDL_BUTTON_LEFT)
-		{
-			menu->bord_hover_color_opt[3] = COLOR_PRESSED;
-			menu->bord_hover_color_opt[4] = COLOR_CHOOSE;
-			menu->activ_music[0] = 1;
-			menu->activ_music[1] = 0;
-		}
-		if (is_mouse_collide(sdlmain->mouse_pos, menu->hover_opt_rect[4]) \
-				&& sdlmain->event.button.button == SDL_BUTTON_LEFT)
-		{
-			menu->bord_hover_color_opt[4] = COLOR_PRESSED;
-			menu->bord_hover_color_opt[3] = COLOR_CHOOSE;
-			menu->activ_music[0] = 0;
-			menu->activ_music[1] = 1;
-		}
-		i = 0;
-		while (i < 2)
-		{
-			if (is_mouse_collide(sdlmain->mouse_pos, menu->scaled_weapon_rect[i]))
-			{
-				if (sdlmain->event.button.button == SDL_BUTTON_LEFT)
-				{
-					if (menu->activ_weapon[i] == 1)
-					{
-						menu->activ_weapon[i] = 0;
-						menu->bord_color_weapon[i] = COLOR_CHOOSE;
-					}
-					else
-					{
-						menu->activ_weapon[i] = 1;
-						menu->bord_color_weapon[i] = COLOR_PRESSED;
-					}
-				}
-				else if (menu->activ_weapon[i] == 0)
-					menu->bord_color_weapon[i] = COLOR_HOVER;
-			}
-		i++;
-		}
-		if (is_mouse_collide(sdlmain->mouse_pos, menu->hover_opt_rect[2]) \
-				&& sdlmain->event.button.button == SDL_BUTTON_LEFT && editor->start_sector_reached == 1)
-		{
-			if (editor->selected_sector != NULL)
-				remove_highlight_sector(editor->selected_sector);
-			editor->selected_sector = NULL;
-			free_map(&editor->edit_map);
-			if (read_map(menu->file_name, &editor->edit_map))
-			{
-				ft_dprintf(STDERR_FILENO, "error in read map\n");
-				doom->state = QUIT_STATE;
-			}
-			ft_printf("%{g}s was properly loaded 😉\n", editor->edit_map.name);
-		}
-		i = 0;
-		while (i < 2)
-		{
-			if (is_mouse_collide(sdlmain->mouse_pos, menu->height_rect[i]) && editor->opt_menu.activ_height[i] != 1)
-				menu->bord_color_height[i] = COLOR_HOVER;
-			i++;
-		} 
-		if (is_mouse_collide(sdlmain->mouse_pos, menu->height_rect[0]) && sdlmain->event.button.button == SDL_BUTTON_LEFT)
-		{
-			menu->activ_height[0] = 1;
-			menu->activ_height[1] = 0;
-			menu->bord_color_height[0] = COLOR_PRESSED;
-		}
-		if (is_mouse_collide(sdlmain->mouse_pos, menu->height_rect[1]) && sdlmain->event.button.button == SDL_BUTTON_LEFT)
-		{
-			menu->activ_height[1] = 1;
-			menu->activ_height[0] = 0;
-			menu->bord_color_height[1] = COLOR_PRESSED;
-		}
+			&& button == SDL_BUTTON_LEFT && editor->start_sector_reached == 1)
+			mouse_collide_save(editor);
+		mouse_collide_music(sdlmain, &editor->opt_menu);
+		update_weapon_choice(sdlmain, menu, menu->activ_weapon, \
+							sdlmain->mouse_pos);
+		mouse_collide_load(sdlmain, menu, editor);
+		mouse_collide_height(sdlmain, editor, &editor->opt_menu);
 	}
 }
 
@@ -231,8 +239,7 @@ void	check_finished_sect(t_editor *editor, t_sector_node *sector)
 			sector->ceiling_height = editor->opt_menu.height_ceiling;
 			editor->edit_map.num_sectors++;
 		}
-		editor->wall_tmp.start.x = -1;
-		editor->wall_tmp.start.y = -1;
+		reset_vecdb(&editor->wall_tmp.start);
 		editor->start_sector_reached = 1;
 	}
 }
@@ -249,14 +256,11 @@ void	event_editor_surf(t_vec mouse, t_editor *editor, t_wall_node *wall)
 	if (start_wall_exists(wall) && !(mouse.x == wall->end.x \
 				&& mouse.y == wall->end.y))
 	{
-		wall->end.x = mouse.x * MAPMULTIPLIER; // assign vector multiplied
-		wall->end.y = mouse.y * MAPMULTIPLIER;
+		wall->end = vec_to_vecdb(multvec(mouse, MAPMULTIPLIER));
 		wall->tex_index = editor->opt_menu.activ_tex;
-		editor->current_sector = get_last_sector(editor->edit_map.sector_head);
 		copy_wall_node(&editor->current_sector->wall_head, wall);
 		editor->current_sector->wall_num++;
-		wall->start.x = wall->end.x;
-		wall->start.y = wall->end.y;
+		wall->start = wall->end;
 		check_finished_sect(editor, editor->current_sector);
 	}
 	else
@@ -264,15 +268,13 @@ void	event_editor_surf(t_vec mouse, t_editor *editor, t_wall_node *wall)
 		if (editor->start_sector_reached == 1)
 		{
 			add_sector_node(&editor->edit_map.sector_head);
-			editor->start_sector.x = mouse.x * MAPMULTIPLIER;
-			editor->start_sector.y = mouse.y * MAPMULTIPLIER;
-			wall->start.x = mouse.x * MAPMULTIPLIER;
-			wall->start.y = mouse.y * MAPMULTIPLIER;
-			wall->end.x = mouse.x * MAPMULTIPLIER;
-			wall->end.y = mouse.y * MAPMULTIPLIER;
+			editor->start_sector = multvec(mouse, MAPMULTIPLIER);
+			wall->start = vec_to_vecdb(multvec(mouse, MAPMULTIPLIER));
+			wall->end = vec_to_vecdb(multvec(mouse, MAPMULTIPLIER));
 			editor->start_sector_reached = 0;
 		}
 	}
+	editor->current_sector = get_last_sector(editor->edit_map.sector_head);
 }
 
 void	highlight_sector(t_sector_node *selected_sector)
@@ -312,8 +314,7 @@ void	mouse_click_right(t_editor *editor, t_sdlmain *sdlmain)
 
 	tmp_mouse = sdlmain->mouse_pos;
 	tmp_sector = editor->selected_sector;
-	tmp_mouse.x = tmp_mouse.x * MAPMULTIPLIER;
-	tmp_mouse.y = tmp_mouse.y * MAPMULTIPLIER; //assign vector multiplied
+	tmp_mouse = multvec(tmp_mouse, MAPMULTIPLIER);
 	if (editor->start_sector_reached == 1)
 		editor->selected_sector = \
 		get_sector_by_pos(editor->edit_map.sector_head, \
@@ -331,35 +332,41 @@ void	mouse_click_right(t_editor *editor, t_sdlmain *sdlmain)
 	set_height(&editor->opt_menu, editor->opt_surf);
 }
 
-void	event_mouse(t_editor *editor, t_doom *doom, t_sdlmain *sdlmain)
+void	base_color_rect_options(t_options_menu *menu)
 {
-	if (sdlmain->event.button.button == SDL_BUTTON_LEFT \
+	if (menu->activ_height[0] != 1)
+		menu->bord_color_height[0] = COLOR_CHOOSE;
+	if (menu->activ_height[1] != 1)
+		menu->bord_color_height[1] = COLOR_CHOOSE;
+	menu->bord_hover_color_opt[0] = COLOR_CHOOSE;
+	menu->bord_hover_color_opt[1] = COLOR_CHOOSE;
+	menu->bord_hover_color_opt[2] = COLOR_CHOOSE;
+	if (menu->activ_music != 0)
+		menu->bord_hover_color_opt[3] = COLOR_CHOOSE;
+	if (menu->activ_music != 1)
+		menu->bord_hover_color_opt[4] = COLOR_CHOOSE;
+	if (menu->activ_weapon == 0 || menu->activ_weapon == 2)
+		menu->bord_color_weapon[0] = COLOR_CHOOSE;
+	if (menu->activ_weapon == 0 || menu->activ_weapon == 1)
+		menu->bord_color_weapon[1] = COLOR_CHOOSE;
+}
+
+void	event_mouse(t_editor *editor, t_sdlmain *sdlmain)
+{
+	Uint8 button;
+
+	button = sdlmain->event.button.button;
+	editor->loading_success = 0;
+	if (button == SDL_BUTTON_LEFT \
 		&& sdlmain->mouse_pos.x <= NBPOINTSROW \
 		&& sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
 		event_editor_surf(sdlmain->mouse_pos, editor, &editor->wall_tmp);
-	if (sdlmain->event.button.button == SDL_BUTTON_RIGHT \
-		&& sdlmain->mouse_pos.x <= NBPOINTSROW \
+	if (button == SDL_BUTTON_RIGHT && sdlmain->mouse_pos.x <= NBPOINTSROW \
 		&& sdlmain->event.type == SDL_MOUSEBUTTONDOWN)
 	{
 		mouse_click_right(editor, sdlmain);
 	}
-	if (editor->opt_menu.activ_height[0] != 1)
-		editor->opt_menu.bord_color_height[0] = COLOR_CHOOSE; // move somewhere else
-	if (editor->opt_menu.activ_height[1] != 1)
-		editor->opt_menu.bord_color_height[1] = COLOR_CHOOSE;
-	editor->opt_menu.bord_hover_color_opt[0] = COLOR_CHOOSE;
-	editor->opt_menu.bord_hover_color_opt[1] = COLOR_CHOOSE;
-	editor->opt_menu.bord_hover_color_opt[2] = COLOR_CHOOSE;
-	if (editor->opt_menu.activ_music[0] != 1)
-		editor->opt_menu.bord_hover_color_opt[3] = COLOR_CHOOSE;
-	if (editor->opt_menu.activ_music[1] != 1)
-		editor->opt_menu.bord_hover_color_opt[4] = COLOR_CHOOSE;
-	if (editor->opt_menu.activ_weapon[0] != 1)
-		editor->opt_menu.bord_color_weapon[0] = COLOR_CHOOSE;
-	if (editor->opt_menu.activ_weapon[1] != 1)
-		editor->opt_menu.bord_color_weapon[1] = COLOR_CHOOSE;
+	base_color_rect_options(&editor->opt_menu);
 	SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
-	mouse_in_options(editor, sdlmain, &editor->opt_menu, doom);
-	if (sdlmain->event.type == SDL_MOUSEWHEEL || sdlmain->event.key.keysym.sym == SDLK_DOWN ||sdlmain->event.key.keysym.sym == SDLK_UP)
-		change_size(editor, sdlmain, &editor->opt_menu);
+	mouse_in_options(editor, sdlmain, &editor->opt_menu, button);
 }

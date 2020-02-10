@@ -6,68 +6,64 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 13:39:46 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/07 19:31:29 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 #include "libft.h"
 
-void null_game_pointers(t_game *game)
+void    null_game_pointers(t_game *game)
 {
     int i;
 
     i = 0;
-    game->surfs.fixed_mmap = NULL;
-    game->surfs.rot_mmap = NULL;
-    game->surfs.perspective_view = NULL;
-    game->surfs.weapons = NULL;
+	game->surfs.fixed_mmap = NULL;
+	game->surfs.rot_mmap = NULL;
+	game->surfs.perspective_view = NULL;
+	game->surfs.weapons = NULL;
 	game->surfs.hud_faces_surf = NULL;
 	game->surfs.enemy_texture[0] = NULL;
 	game->surfs.enemy_texture[1] = NULL;
+	game->surfs.game_over = NULL;
+	game->surfs.victory = NULL;
 	game->enemy = NULL;
 	game->player.sector = NULL;
-    while (i < 2)
-    {
-        game->weapon_anim[i] = NULL;
-        i++;
-    }
+	while (i < 2)
+	{
+		game->weapon_anim[i] = NULL;
+		i++;
+	}
 }
 
-void null_menu_pointers(t_menu *menu)
+void	null_menu_pointers(t_menu *menu)
 {
-    int i;
+	int i;
 
-    i = 0;
-    menu->background = NULL;
-    menu->menu_title = NULL;
-    while (i < 4)
-    {
-        menu->options[i] = NULL;
-        i++;
-    }
+	i = 0;
+	menu->background = NULL;
+	menu->menu_title = NULL;
+	while (i < 4)
+	{
+		menu->options[i] = NULL;
+		i++;
+	}
 }
 
 void    null_option_pointers(t_editor *editor)
 {
-    int i;
+	int i;
 
-    i = 0;
-    while (i < NBOPTIONS)
-    {
-        editor->opt_menu.options[i] = NULL;
-        i++;
-    }
-    i = 0;
-    while (i < NBHOVEROPTIONS)
-    {
+	i = 0;
+	while (i < NBOPTIONS)
+	{
+		editor->opt_menu.options[i] = NULL;
+		i++;
+	}
+	i = 0;
+	while (i < NBHOVEROPTIONS)
+	{
         editor->opt_menu.hover_options[i] = NULL;
-        i++;
-    }
-    i = 0;
-    while (i < 2)
-    {
-        editor->opt_menu.weapon_surf[i] = NULL;
         i++;
     }
     editor->opt_menu.title = NULL;
@@ -108,6 +104,7 @@ void    null_editor_pointers(t_editor *editor)
     editor->wall_textures = NULL; // do i need this?
     editor->selected_sector = NULL;
 	editor->enemy_textures = NULL; // do i need this?
+	//editor->weapon_texture = NULL;
     null_option_pointers(editor);
     null_instr_pointers(editor);
     null_map_pointers(&editor->edit_map);

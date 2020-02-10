@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 15:31:31 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 14:38:17 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	init_colors(t_editor *editor)
 	i = 0;
 	while (i < NBTEXTURES)
 	{
-		editor->opt_menu.bord_color_text[i] = COLOR_NORMAL;
+		editor->opt_menu.bord_color_text[i] = COLOR_CHOOSE;
 		i++;
 	}
 	i = 0;
@@ -38,18 +38,14 @@ void	init_colors(t_editor *editor)
 	editor->opt_menu.bord_hover_color_opt[0] = COLOR_CHOOSE;
 	editor->opt_menu.bord_hover_color_opt[1] = COLOR_CHOOSE;
 	editor->opt_menu.bord_hover_color_opt[2] = COLOR_CHOOSE;
-	if (editor->opt_menu.activ_music[0] != 1)
-		editor->opt_menu.bord_hover_color_opt[3] = COLOR_CHOOSE;
-	if (editor->opt_menu.activ_music[1] != 1)
-		editor->opt_menu.bord_hover_color_opt[4] = COLOR_CHOOSE;
+	editor->opt_menu.bord_hover_color_opt[3] = COLOR_PRESSED;
+	editor->opt_menu.bord_hover_color_opt[4] = COLOR_CHOOSE;
 	if (editor->opt_menu.activ_height[0] != 1)
 		editor->opt_menu.bord_color_height[0] = COLOR_CHOOSE;
 	if (editor->opt_menu.activ_height[1] != 1)
 		editor->opt_menu.bord_color_height[1] = COLOR_CHOOSE;
-	//if (editor->opt_menu.activ_weapon[0] != 1)
-		editor->opt_menu.bord_color_weapon[0] = COLOR_CHOOSE;
-	//if (editor->opt_menu.activ_weapon[1] != 1)
-		editor->opt_menu.bord_color_weapon[1] = COLOR_CHOOSE;
+	editor->opt_menu.bord_color_weapon[0] = COLOR_CHOOSE;
+	editor->opt_menu.bord_color_weapon[1] = COLOR_CHOOSE;
 }
 
 int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
@@ -57,10 +53,8 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	int i;
 
 	i = 0;
-
-	editor->edit_map.player_spawn.x = -1;
-	editor->edit_map.player_spawn.y = -1;
-
+	reset_vec(&editor->edit_map.player_spawn);
+	editor->edit_map.which_music = 0;
 	editor->edit_map.sector_head = NULL;
 	editor->edit_map.num_enemies = 0;
 	editor->opt_menu.height_ceiling = 40;
@@ -69,7 +63,6 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	editor->opt_menu.typing_filename = 0;
 	ft_bzero(editor->opt_menu.file_name, 16);
 	ft_strncpy(editor->opt_menu.file_name, ".doom_", 6);
-
 	editor->current_sector = NULL;
 	editor->current_wall = NULL;
 	editor->selected_sector = NULL;
@@ -83,10 +76,8 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 		editor->grid_values[i].y = 0;
 		i++;
 	}
-	editor->wall_tmp.start.x = -1;
-	editor->wall_tmp.start.y = -1;
-	editor->wall_tmp.end.x = -1;
-	editor->wall_tmp.end.y = -1;
+	reset_vecdb(&editor->wall_tmp.start);
+	reset_vecdb(&editor->wall_tmp.end);
 	editor->wall_tmp.wall_type = 0;
 	editor->start_sector_reached = 1;
 	editor->show_convex_alert = 0;
@@ -142,24 +133,25 @@ void	fill_area(SDL_Surface *surf, t_wall_node *wall, t_editor *editor)
 	}
 }
 
-void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
+void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, \
+					t_sdlmain *sdlmain)
 {
 	int				i;
 	t_sector_node	*tmp_sect;
 	t_wall_node		*tmp_wall;
+	t_vecdb			tmptest;
+	t_vecdb			tempstart;
 
 	i = 0;
-    t_vecdb tmptest;
-    t_vecdb tempstart;
 	if (editor->edit_map.sector_head == NULL)
 		return ;
 	tmp_sect = editor->edit_map.sector_head;
-    tmptest = editor->wall_tmp.end;
-        tmptest.x /= MAPMULTIPLIER;
-        tmptest.y /= MAPMULTIPLIER;
+	tmptest = editor->wall_tmp.end;
+	tmptest = divvecdb(tmptest, MAPMULTIPLIER);
 	if (editor->start_sector_reached == 0)
 		draw_line(multvec(sdlmain->mouse_pos, editor->offset),
-			multvec(vecdb_to_vec(tmptest), editor->offset), editor_surf, editor->wall_tmp.type_color);
+				multvec(vecdb_to_vec(tmptest), editor->offset), \
+					editor_surf, editor->wall_tmp.type_color);
 	fill_area(editor_surf, &editor->wall_tmp, editor);
 	while (tmp_sect != NULL)
 	{
@@ -167,14 +159,13 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, t_sdlmain *sdlmain)
 		while (tmp_wall != NULL)
 		{
 			fill_area(editor_surf, tmp_wall, editor);
-				tmptest = tmp_wall->end;
-				tempstart = tmp_wall->start;
-				tmptest.x /= MAPMULTIPLIER;
-				tmptest.y /= MAPMULTIPLIER;
-				tempstart.x /= MAPMULTIPLIER;
-				tempstart.y /= MAPMULTIPLIER;
+			tmptest = tmp_wall->end;
+			tempstart = tmp_wall->start;
+			tmptest = divvecdb(tmptest, MAPMULTIPLIER);
+			tempstart = divvecdb(tempstart, MAPMULTIPLIER);
 			draw_line(multvec(vecdb_to_vec(tmptest), editor->offset),
-				multvec(vecdb_to_vec(tempstart), editor->offset), editor_surf, tmp_wall->type_color);
+					multvec(vecdb_to_vec(tempstart), editor->offset), \
+						editor_surf, tmp_wall->type_color);
 			i++;
 			tmp_wall = tmp_wall->next;
 		}
@@ -232,20 +223,23 @@ int	editor_loop(t_doom *doom)
 		editor->offset = editor->editor_surf->w / NBPOINTSROW;
 	else
 		editor->offset = editor->editor_surf->h / NBPOINTSROW;
-	//if (NBPOINTSROW * editor->offset < editor->editor_surf->h)
 	offset_border = editor->editor_surf->h \
 			- NBPOINTSROW * editor->offset;
+	if (!is_buffer_playing(sdlmain->sound.source[0], sdlmain->sound.buffer[9]))
+		play_editor_music(sdlmain, doom);
+	//stop_enem_soundsources(doom->game.enemy, doom->map.num_enemies);
+	//alSourceStopv(NB_SOUND_SOURCES, sdlmain->sound.source);
 	while (doom->state == EDITOR_STATE)
 	{
 		while (SDL_PollEvent(&sdlmain->event) != 0)
-			if (editor_events(doom) != 0)
+			if (editor_events(doom, sdlmain) != 0)
 				break ;
 		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
 		assign_sdlrect(&editor->mouse_rect, create_vec(sdlmain->mouse_pos.x \
 						- 15, sdlmain->mouse_pos.y - 15), create_vec(15, 15));
-		
 		sdlmain->mouse_pos.x = round_num(sdlmain->mouse_pos.x, editor->offset);
-		sdlmain->mouse_pos.y = round_num(sdlmain->mouse_pos.y - offset_border + editor->offset, editor->offset);
+		sdlmain->mouse_pos.y = round_num(sdlmain->mouse_pos.y - offset_border \
+										+ editor->offset, editor->offset);
 		ft_bzero(editor->editor_surf->pixels, \
 					editor->editor_surf->h * editor->editor_surf->pitch);
 		ft_bzero(editor->opt_surf->pixels, \
@@ -257,11 +251,6 @@ int	editor_loop(t_doom *doom)
 		draw_border(editor->opt_surf, 0xB12211);
 		draw_border(editor->instr_surf, 0xB12211);
 		draw_lines(editor, editor->editor_surf, sdlmain);
-		editor->player_face_surf = doom->game.surfs.hud_faces_surf;
-		editor->player_face_rec.x = doom->game.surfs.hud_faces_rect.x;
-		editor->player_face_rec.y = doom->game.surfs.hud_faces_rect.y;
-		editor->player_face_rec.h = doom->game.surfs.hud_faces_rect.h;
-		editor->player_face_rec.w = doom->game.surfs.hud_faces_rect.w;
 		if (blit_editor(editor, sdlmain) != 0)
 			return (1);
 	}
