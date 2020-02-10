@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/09 18:39:28 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/09 21:14:01 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,8 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 
 	i = 0;
 
-	editor->edit_map.player_spawn.x = -1;
-	editor->edit_map.player_spawn.y = -1;
+    reset_vec(&editor->edit_map.player_spawn);
 	editor->edit_map.which_music = 0;
-
 	editor->edit_map.sector_head = NULL;
 	editor->edit_map.num_enemies = 0;
 	editor->opt_menu.height_ceiling = 40;
@@ -66,7 +64,6 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	editor->opt_menu.typing_filename = 0;
 	ft_bzero(editor->opt_menu.file_name, 16);
 	ft_strncpy(editor->opt_menu.file_name, ".doom_", 6);
-
 	editor->current_sector = NULL;
 	editor->current_wall = NULL;
 	editor->selected_sector = NULL;
@@ -80,10 +77,8 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 		editor->grid_values[i].y = 0;
 		i++;
 	}
-	editor->wall_tmp.start.x = -1;
-	editor->wall_tmp.start.y = -1;
-	editor->wall_tmp.end.x = -1;
-	editor->wall_tmp.end.y = -1;
+    reset_vecdb(&editor->wall_tmp.start);
+    reset_vecdb(&editor->wall_tmp.end);
 	editor->wall_tmp.wall_type = 0;
 	editor->start_sector_reached = 1;
 	editor->show_convex_alert = 0;

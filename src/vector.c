@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:06:54 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/09 18:27:16 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/09 22:49:39 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,12 @@ void	give_vec_values(t_vec *vec, int x, int y)
 }
 
 void	set_vec_values(t_vec *src, t_vec *dst)
+{
+	dst->x = src->x;
+	dst->y = src->y;
+}
+
+void	set_vecdb_values(t_vecdb *src, t_vecdb *dst)
 {
 	dst->x = src->x;
 	dst->y = src->y;
@@ -205,3 +211,24 @@ t_vec	vec_add(t_vec a, t_vec b)
 	return (vector);
 }
 
+t_vec   reset_vec(t_vec *vector)
+{
+    vector->x = -1;
+    vector->y = -1;
+    return (*vector);
+}
+
+t_vecdb   reset_vecdb(t_vecdb *vector)
+{
+    vector->x = -1;
+    vector->y = -1;
+    return (*vector);
+}
+
+int     compare_vec(t_vec *vector1, t_vec *vector2)
+{
+    if (vector1->x == vector2->x && vector1->y == vector2->y)
+        return (1);
+    else
+        return (0);
+}

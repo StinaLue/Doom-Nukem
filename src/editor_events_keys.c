@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/09 15:39:19 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/09 21:27:51 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,17 +110,15 @@ void	key_event_u(t_editor *editor)
 	previous = undo_wall(editor->edit_map.sector_head);
 	if (previous != NULL)
 	{
-		editor->wall_tmp.start.x = previous->end.x;
-		editor->wall_tmp.start.y = previous->end.y;
-		editor->wall_tmp.end.x = previous->end.x;
-		editor->wall_tmp.end.y = previous->end.y;
+        editor->wall_tmp.start = previous->end;
+        editor->wall_tmp.end = previous->end;
+        //set_vecdb_values(&previous->end, &editor->wall_tmp.start);
+        //set_vecdb_values(&previous->end, &editor->wall_tmp.end);
 	}
 	else
 	{
-		editor->wall_tmp.start.x = -1;
-		editor->wall_tmp.start.y = -1;
-		editor->wall_tmp.end.x = -1;
-		editor->wall_tmp.end.y = -1;
+        reset_vecdb(&editor->wall_tmp.start);
+        reset_vecdb(&editor->wall_tmp.end);
 		if (editor->current_sector && editor->current_sector->wall_head == NULL)
 		{
 			delete_sector_by_address(&editor->edit_map.sector_head, \
@@ -192,7 +190,6 @@ void	key_event_l(t_editor *editor, t_doom *doom)
 			doom->game.player.current_weapon = 1;
 		else
 			doom->game.player.current_weapon = -1;
-		
 		editor->loading_success = 1;
 		editor->show_loading_alert = 0;
 	}
@@ -273,16 +270,13 @@ void	key_event_n(t_editor *editor)
 {
 	free_map(&editor->edit_map);
 	editor->start_sector_reached = 1;
-	editor->edit_map.player_spawn.x = -1;
-	editor->edit_map.player_spawn.y = -1;
+    reset_vec(&editor->edit_map.player_spawn);
 	editor->edit_map.sector_head = NULL;
 	editor->current_sector = NULL;
 	editor->current_wall = NULL;
 	editor->selected_sector = NULL;
-	editor->wall_tmp.start.x = -1;
-	editor->wall_tmp.start.y = -1;
-	editor->wall_tmp.end.x = -1;
-	editor->wall_tmp.end.y = -1;
+    reset_vecdb(&editor->wall_tmp.start);
+    reset_vecdb(&editor->wall_tmp.end);
 }
 
 void	key_event_p(t_editor *editor)

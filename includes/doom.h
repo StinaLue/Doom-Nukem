@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/09 17:56:15 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/09 22:51:18 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -450,6 +450,8 @@ double						get_point_distance(t_vecdb a, t_vecdb b);
 
 void						set_vec_values(t_vec *src, t_vec *dst);
 
+void                        set_vecdb_values(t_vecdb *src, t_vecdb *dst);
+
 t_vecdb						vecdb_diff(t_vecdb a, t_vecdb b);
 
 t_vec						vec_diff(t_vec a, t_vec b);
@@ -461,6 +463,12 @@ t_vec						vec_mult(t_vec a, t_vec b);
 t_vecdb						vecdb_add(t_vecdb a, t_vecdb b);
 
 t_vec						vec_add(t_vec a, t_vec b);
+
+t_vec                       reset_vec(t_vec *vector);
+
+t_vecdb                     reset_vecdb(t_vecdb *vector);
+
+int                         compare_vec(t_vec *vector1, t_vec *vector2);
 
 /*
 ** INIT FUNCTIONS

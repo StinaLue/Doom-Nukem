@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_sector.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:02:35 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/07 22:31:06 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/09 21:15:25 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,9 @@ t_sector_node	*add_sector_node(t_sector_node **sector_head)
 	new_node->next = NULL;
 	new_node->wall_head = NULL;
 	new_node->wall_num = 0;
-	new_node->sector_center.x = -1;
-	new_node->sector_center.y = -1;
+    reset_vecdb(&new_node->sector_center);
+	//new_node->sector_center.x = -1;
+	//new_node->sector_center.y = -1;
 	new_node->ceiling_height = 20;
 	new_node->floor_height = 2;
 	new_node->is_goal = 0;
