@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/10 02:09:23 by afonck           ###   ########.fr        #
+#    Updated: 2020/02/10 11:25:50 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,10 +21,12 @@ DEBUGFLAGS = -Wall -Werror -Wextra -D_THREAD_SAFE -g
 LDFLAGS = -L$(LIBFT_DIRECTORY) -L$(LIBBMP_DIRECTORY) -L$(SDL2_LIB_DIRECTORY)lib -L$(SDL2TTF_LIB_DIRECTORY)lib -L$(OPENAL_LIB_DIRECTORY)lib
 LDLIBS = -lft -lbmp -lSDL2 -lSDL2_ttf -lopenal
 
-INCLUDES =  -I$(HEADERS_DIRECTORY) -I$(LIBFT_HEADER) -I$(LIBBMP_HEADER) -I$(SDL2_HEADERS_DIRECTORY) -I$(SDL2TTF_HEADERS_DIRECTORY) -I$(OPENAL_HEADERS_DIRECTORY)
+INCLUDES = -I$(HEADERS_DIRECTORY) -I$(LIBFT_HEADER) -I$(LIBBMP_HEADER) -I$(SDL2_HEADERS_DIRECTORY) -I$(SDL2TTF_HEADERS_DIRECTORY) -I$(OPENAL_HEADERS_DIRECTORY)
 HARD_DBG ?= 1
 
 CURRENT_DIR = $(shell pwd)
+ASSETS_DIR = ./assets/
+ASSETS_ARCHIVE = assets.tar.gz
 
 LIBFT = $(LIBFT_DIRECTORY)libft.a
 LIBFT_DIRECTORY = ./libft/
@@ -159,7 +161,10 @@ $(OPENAL):
 	cd ../..
 	rm -rf openal-soft-$(OPENAL_VERSION)
 
-$(NAME): $(SDL2) $(SDL2TTF) $(OPENAL) $(LIBFT) $(LIBBMP) $(OBJECTS_DIRECTORY) $(OBJECTS)
+$(ASSETS_DIR):
+	tar -xzvf $(ASSETS_ARCHIVE)
+
+$(NAME): $(SDL2) $(SDL2TTF) $(OPENAL) $(LIBFT) $(LIBBMP) $(OBJECTS_DIRECTORY) $(OBJECTS) $(ASSETS_DIR)
 	@$(CC) $(INCLUDES) $(OBJECTS) $(LDFLAGS) $(LDLIBS) -o $(NAME)
 	@echo "\n$(NAME): $(GREEN)object files were created$(RESET)"
 	@echo "$(NAME): $(GREEN)$(NAME) was created$(RESET)"
@@ -228,7 +233,7 @@ re:
 
 debug: $(DEBUG_NAME)
 
-$(DEBUG_NAME): $(SDL2) $(SDL2TTF) $(OPENAL) $(LIBFT) $(LIBBMP) $(OBJECTS_DIRECTORY_DEBUG) $(OBJECTS_DEBUG)
+$(DEBUG_NAME): $(SDL2) $(SDL2TTF) $(OPENAL) $(LIBFT) $(LIBBMP) $(OBJECTS_DIRECTORY_DEBUG) $(OBJECTS_DEBUG) $(ASSETS_DIR)
 	@$(CC) $(INCLUDES) $(OBJECTS_DEBUG) $(LDFLAGS) $(LDLIBS) -o $(DEBUG_NAME)
 	@echo "\n$(DEBUG_NAME): $(GREEN)object debug files were created$(RESET)"
 	@echo "$(DEBUG_NAME): $(GREEN)$(DEBUG_NAME) was created$(RESET)"

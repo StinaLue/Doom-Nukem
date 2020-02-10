@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 02:16:37 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/10 11:27:41 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,8 @@ int		init_sound(t_sound *sound)
 
 int		init_sdlmain(t_sdlmain *sdlmain)
 {
+	if ((init_sound(&sdlmain->sound)) != 0)
+		return (error_return("error during openal sound init\n", NULL));
 	if ((sdlmain->win = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, \
 		SDL_WINDOWPOS_UNDEFINED, sdlmain->win_w, sdlmain->win_h, \
 		SDL_WINDOW_SHOWN)) == NULL)
@@ -151,8 +153,6 @@ int		init_sdlmain(t_sdlmain *sdlmain)
 	}
 	if ((sdlmain->font = TTF_OpenFont("assets/fonts/dukes-3d.ttf", 28)) == NULL)
 		return (error_return("TTF_OpenFont error = %s\n", TTF_GetError()));
-	if ((init_sound(&sdlmain->sound)) != 0)
-		return (error_return("error during openal sound init\n", NULL));
 	sdlmain->mouse_pos.x = 0;
 	sdlmain->mouse_pos.y = 0;
 	return (EXIT_SUCCESS);
