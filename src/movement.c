@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/10 14:45:48 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 19:25:02 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,17 @@ int		is_in_direction(t_vecdb move, t_wall_node *wall)
 	return (0);
 }
 
+int			portal_collide(t_player *player, t_sector_node *sector)
+{
+	if (player->posz + KNEE_HEIGHT < sector->floor_height)
+		return (1);
+	if (player->posz + player->height > sector->ceiling_height)
+		return (1);
+	if (player->height > sector->ceiling_height - sector->floor_height)
+		return (1);
+	return (0);
+}
+
 t_wall_node	*get_collision_wall(t_player *player, \
 				t_sector_node *sector, double *min_dist)
 {
@@ -71,30 +82,17 @@ t_wall_node	*get_collision_wall(t_player *player, \
 			dist = wall_distance(vecdb_add(player->pos, player->move), wall);
 			if (dist < *min_dist)
 			{
-				if (wall->neighbor_sector != NULL && wall->wall_type == 1)
-				{
-					tmp_deepest_wall = \
-							get_collision_wall(player, wall->neighbor_sector, min_dist);
-					if (tmp_deepest_wall != NULL)
-						deepest_wall = tmp_deepest_wall;
-				}
-				else
-				{
-					deepest_wall = wall;
-					*min_dist = dist;
-				}
-				/*
-				if (wall->neighbor_sector == NULL)
-				{
-					deepest_wall = wall;
-					*min_dist = dist;
-				}
-				else
+				if (wall->neighbor_sector != NULL && !portal_collide(player, wall->neighbor_sector) && wall->wall_type == 1)
 				{
 					tmp_deepest_wall = get_collision_wall(player, wall->neighbor_sector, min_dist);
 					if (tmp_deepest_wall != NULL)
 						deepest_wall = tmp_deepest_wall;
-				}*/
+				}
+				else
+				{
+					deepest_wall = wall;
+					*min_dist = dist;
+				}
 			}
 		}
 		wall = wall->next;
@@ -176,7 +174,7 @@ void	update_sector(t_player *player, t_wall_node *wall)
 			&& wall_distance(player->pos, wall) <= 0)
 		{
 			player->sector = wall->neighbor_sector;
-			player->posz = player->sector->floor_height;
+			//player->posz = player->sector->floor_height;
 			return ;
 		}
 		wall = wall->next;
@@ -233,5 +231,27 @@ void	movement(t_player *player, t_vecdb move)
 	player->pos = vecdb_add(player->pos, player->move);
 	player->inertia = multvecdb(player->move, 0.96);
 	update_sector(player, player->sector->wall_head);
-	player->posz = player->sector->floor_height;
+}
+
+void	update_player(t_player *player)
+{
+	player->posz += player->zinertia;
+	if (player->posz + player->height >= player->sector->ceiling_height)
+	{
+		player->posz = player->sector->ceiling_height - player->height;
+		player->zinertia = 0;
+	}
+	if (player->posz <= player->sector->floor_height)
+	{
+		player->posz = player->sector->floor_height;
+		player->zinertia = 0;
+	}
+	if (player->posz > player->sector->floor_height)
+		player->zinertia -= 0.016;
+}
+
+void	jump(t_player *player)
+{
+	if (player->posz <= player->sector->floor_height)
+		player->zinertia = 0.7;
 }

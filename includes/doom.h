@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 16:43:52 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/10 18:24:56 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # define NB_WALL_TEXTURES 9
 # define NB_SOUND_SOURCES 3
 # define NB_SOUND_BUFFERS 11
+# define PLAYER_HEIGHT 18
+# define KNEE_HEIGHT 8
 
 /*
 ** MAIN LOOP STATES
@@ -222,6 +224,7 @@ typedef struct				s_player
 	t_vecdb					pos;
 	t_vecdb					move;
 	t_vecdb					inertia;
+	double					zinertia;
 	double					angle;
 	double					posz;
 	double					height;
@@ -634,6 +637,9 @@ void						movement(t_player *player, t_vecdb move);
 
 void						mouse_movement(SDL_MouseMotionEvent event,t_doom *doom);
 
+void						update_player(t_player *player);
+
+void						jump(t_player *player);
 /*
 ** MENU FUNCTIONS
 */

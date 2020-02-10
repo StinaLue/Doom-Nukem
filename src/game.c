@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/09 14:39:25 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 19:23:02 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,6 +272,7 @@ int game_loop(t_doom *doom)
 		else if (game->player.sector->is_goal == 1)
 			win_loop(doom);
 		handle_keys(doom, SDL_GetKeyboardState(NULL));//, &sdlmain->sound);
+		//printf("z:%f\nzinertia:%f\n", game->player.posz, game->player.zinertia);
 		alListener3f(AL_POSITION, game->player.pos.x, game->player.pos.y, 0);
 		//printf("vec player x %f y %f\n", game->player.pos.x, game->player.pos.y);
 		set_listener_ori(game->player.angle, game->player.pos);
