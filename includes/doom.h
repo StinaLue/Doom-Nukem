@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 18:12:19 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 19:08:28 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -628,6 +628,8 @@ int							free_map(t_map *map);
 void						free_enemies(t_game *game, int num_enemies);
 
 void						free_and_null_surf(SDL_Surface *surf);
+
+int							free_height(t_editor *editor);
 
 /*
 ** SDL_SUB_FUNCTIONS

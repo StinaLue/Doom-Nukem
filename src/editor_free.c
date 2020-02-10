@@ -6,11 +6,12 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/10 17:58:11 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 17:59:23 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 19:08:04 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
+#include "libft.h"
 
 int		free_fonts(t_editor *editor)
 {
@@ -65,4 +66,28 @@ int		free_editor(t_editor *editor)
 	free_fonts_surf(editor);
 	free_fonts(editor);
 	return (EXIT_FAILURE);
+}
+
+int	free_height(t_editor *editor)
+{
+	const char *num_ceil;
+	const char *num_floor;
+
+	SDL_FreeSurface(editor->opt_menu.height_surf[0]);
+	SDL_FreeSurface(editor->opt_menu.height_surf[1]);
+	if ((num_floor = ft_itoa((int)editor->opt_menu.height_floor)) == NULL)
+		return (1);
+	if ((num_ceil = ft_itoa((int)editor->opt_menu.height_ceiling)) == NULL)
+		return (1);
+	if ((editor->opt_menu.height_surf[0] = \
+		TTF_RenderText_Solid(editor->opt_menu.font, num_ceil, \
+							editor->opt_menu.text_color)) == NULL)
+		return (1);
+	if ((editor->opt_menu.height_surf[1] = \
+		TTF_RenderText_Solid(editor->opt_menu.font, num_floor, \
+							editor->opt_menu.text_color)) == NULL)
+		return (1);
+	ft_memdel((void **)&num_floor);
+	ft_memdel((void **)&num_ceil);
+	return (0);
 }
