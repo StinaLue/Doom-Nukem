@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 15:41:48 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/10 16:43:52 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@
 # define NBOPTIONS 8
 # define NBHOVEROPTIONS 5
 # define NBINSTRUCTS 10
-# define MAPMULTIPLIER 50
+# define MAPMULTIPLIER 5
 # define COLOR_HOVER 0x6C1413
 # define COLOR_PRESSED 0x00cc00
 # define COLOR_NORMAL 0xff0000
@@ -759,8 +759,7 @@ int							check_clockwise_sector(t_sector_node *sector);
 /*
 ** TEXTURE MAPPING
 */
-
-void						draw_texture(SDL_Surface *surf, SDL_Surface *wall_texture, t_display_wall *display_wall);
+void	draw_texture(SDL_Surface *surf, SDL_Surface *tex, t_display_wall *dsp, int type);
 
 /*
 ** SOUND FUNCTIONS

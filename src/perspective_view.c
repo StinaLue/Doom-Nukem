@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 15:41:49 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/10 17:41:12 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ void	draw_3dwall(t_display_wall *dsp_wall, SDL_Surface *surf)
 		draw_line(dsp_wall->bottom_left, dsp_wall->top_left, surf, 0xddddff);
 	}
 	else
-		draw_texture(surf, dsp_wall->texture, dsp_wall);
+		draw_texture(surf, dsp_wall->texture, dsp_wall, 0);
 }
 
 void		init_display_wall(t_display_wall *display, t_wall_node *current_wall, t_view old_view, SDL_Surface **wall_textures)
@@ -159,8 +159,6 @@ t_view		create_view(t_display_wall *display, t_display_wall *window, t_view old_
 	int		*tmp_display;
 
 	view.fov = display->intersect;
-	view.top_limit = old_view.top_limit;
-	view.bot_limit = old_view.bot_limit;
 
 	tmp_display = display->top_left.y < display->top_right.y ? &display->top_right.y : &display->top_left.y;
 	tmp_window = window->top_left.y < window->top_right.y ? &window->top_right.y : &window->top_left.y;
@@ -194,6 +192,42 @@ t_display_wall	set_window_height(t_display_wall window, t_player *player, t_sect
 	return (window);
 }
 
+void		draw_portal(t_display_wall *wall, t_display_wall *window, SDL_Surface *surf)
+{
+	t_vec	tmp_values;
+
+	tmp_values.x = window->bottom_left.y;
+	tmp_values.y = window->bottom_right.y;
+
+	window->bottom_left.y = window->top_left.y;
+	window->bottom_right.y = window->top_right.y;
+	window->top_left.y = wall->top_left.y;
+	window->top_right.y = wall->top_right.y;
+	if (ft_strncmp(surf->userdata, "textured", 8) != 0)
+	{
+		draw_line(window->top_left, window->top_right, surf, 0xff8800);
+		draw_line(window->top_right, window->bottom_right, surf, 0xffff00);
+		draw_line(window->bottom_right, window->bottom_left, surf, 0x88ff00);
+		draw_line(window->bottom_left, window->top_left, surf, 0xffff00);
+	}
+	else
+		draw_texture(surf, window->texture, window, 1);
+
+	window->top_left.y = tmp_values.x;
+	window->top_right.y = tmp_values.y;
+	window->bottom_left.y = wall->bottom_left.y;
+	window->bottom_right.y = wall->bottom_right.y;
+	if (ft_strncmp(surf->userdata, "textured", 8) != 0)
+	{
+		draw_line(window->top_left, window->top_right, surf, 0xff8800);
+		draw_line(window->top_right, window->bottom_right, surf, 0xffff00);
+		draw_line(window->bottom_right, window->bottom_left, surf, 0x88ff00);
+		draw_line(window->bottom_left, window->top_left, surf, 0xffff00);
+	}
+	else
+		draw_texture(surf, window->texture, window, 2);
+}
+
 void		draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view view, t_sector_node *sector, t_player *player)
 {
 	t_display_wall	display_wall;
@@ -211,11 +245,10 @@ void		draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view
 			init_display_wall(&display_wall, current_wall, view, wall_textures);//set cuts, set distance, set length;
 			if (current_wall->neighbor_sector != NULL && current_wall->neighbor_sector != sector)
 			{
-				window = set_window_height(display_wall, player, sector, surf);
-				//draw_3dwall(&window, surf);
+				window = set_window_height(display_wall, player, current_wall->neighbor_sector, surf);
 				new_view = create_view(&display_wall, &window, view);
 				draw_view_recursive(surf, wall_textures, new_view, current_wall->neighbor_sector, player);
-				//draw portal top and bot
+				draw_portal(&display_wall, &window, surf);
 			}
 			else
 				draw_3dwall(&display_wall, surf);

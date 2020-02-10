@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_mapping.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 18:01:04 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/07 17:43:28 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 17:55:11 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,27 @@ int		get_tex_color(double x, double y, SDL_Surface *tex)
 	return (color);
 }
 
-void	draw_texture(SDL_Surface *surf, SDL_Surface *tex, t_display_wall *dsp)
+void	fill_ceiling(SDL_Surface *surf, t_vec win, int color, int type)
+{
+	if (type == 2)
+		return ;
+	while (win.y < surf->h)
+	{
+		fill_pix(surf, win.x, win.y++, color);
+	}
+}
+
+void	fill_floor(SDL_Surface *surf, t_vec win, int color, int type)
+{
+	if (type == 1)
+		return ;
+	while (win.y >= 0)
+	{
+		fill_pix(surf, win.x, win.y--, color);
+	}
+}
+
+void	draw_texture(SDL_Surface *surf, SDL_Surface *tex, t_display_wall *dsp, int type)
 {
 	int		width;
 	double	delta_top;
@@ -64,18 +84,17 @@ void	draw_texture(SDL_Surface *surf, SDL_Surface *tex, t_display_wall *dsp)
 	while (win.x < dsp->top_right.x)
 	{
 		pos.x = get_texture_x((double)(win.x - dsp->top_left.x) / width, dsp);
-		if (top > dsp->top_limit)
-			win.y = dsp->top_limit;
-		else
-			win.y = top;
-		while (win.y >= bot && win.y >= dsp->bot_limit)
-		{
-			pos.y = get_texture_y(win.y, top, bot);
-			if (win.x < 0 || win.x >= surf->w || win.y < 0 || win.y >= surf->h)
-				printf("pixel outside of screen\n");
-			fill_pix(surf, win.x, win.y, get_tex_color(pos.x, pos.y, tex));
-			win.y--;
-		}
+		win.y = top > dsp->top_limit ? dsp->top_limit : top;
+		fill_ceiling(surf, win, 0x999999, type);
+		if (top > bot)
+			while (win.y >= bot && win.y >= dsp->bot_limit)
+			{
+				pos.y = get_texture_y(win.y, top, bot);
+				fill_pix(surf, win.x, win.y, get_tex_color(pos.x, pos.y, tex));
+				win.y--;
+			}
+		win.y = bot;
+		fill_floor(surf, win, 0x666666, type);
 		top += delta_top;
 		bot += delta_bot;
 		win.x++;
