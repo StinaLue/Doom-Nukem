@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:06:54 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/09 22:49:39 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 17:16:37 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,9 @@ t_vec	multvec(t_vec vec, int mult)
 	return (vec);
 }
 
-t_vecdb divvecdb(t_vecdb vecdb, double div)
+t_vecdb	divvecdb(t_vecdb vecdb, double div)
 {
-    vecdb.x /= div;
+	vecdb.x /= div;
 	vecdb.y /= div;
 	return (vecdb);
 }
@@ -211,24 +211,24 @@ t_vec	vec_add(t_vec a, t_vec b)
 	return (vector);
 }
 
-t_vec   reset_vec(t_vec *vector)
+t_vec	reset_vec(t_vec *vector)
 {
-    vector->x = -1;
-    vector->y = -1;
-    return (*vector);
+	vector->x = -1;
+	vector->y = -1;
+	return (*vector);
 }
 
-t_vecdb   reset_vecdb(t_vecdb *vector)
+t_vecdb	reset_vecdb(t_vecdb *vector)
 {
-    vector->x = -1;
-    vector->y = -1;
-    return (*vector);
+	vector->x = -1;
+	vector->y = -1;
+	return (*vector);
 }
 
-int     compare_vec(t_vec *vector1, t_vec *vector2)
+int		compare_vec(t_vec *vector1, t_vec *vector2)
 {
-    if (vector1->x == vector2->x && vector1->y == vector2->y)
-        return (1);
-    else
-        return (0);
+	if (vector1->x == vector2->x && vector1->y == vector2->y)
+		return (1);
+	else
+		return (0);
 }

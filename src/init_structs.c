@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 19:50:59 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/10 20:06:35 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ void	init_player_struct(t_player *player, t_map *map)
 	player->is_moving = 0;
 	player->anim = 0;
 	player->current_weapon = 0;
+	player->movespeed = 0.01;
 }
 
 void	get_enemysprite_rect(SDL_Rect *rect, int which_enemy, \

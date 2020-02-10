@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
+#    By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/10 12:40:03 by afonck           ###   ########.fr        #
+#    Updated: 2020/02/10 19:05:37 by sluetzen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -85,7 +85,7 @@ SOURCES_LIST = main.c \
 			editor_menu.c \
 			create_surfaces.c\
 			editor_check.c \
-			blit_editor.c \
+			editor_blit.c \
 			new_blit.c \
 			map.c \
 			map_reader_main.c \
@@ -102,8 +102,13 @@ SOURCES_LIST = main.c \
 			music.c \
 			openal_sub_functions.c \
 			end_level_loops.c \
-			error.c #\
-			debug.c
+			error.c \
+			editor_null_pointers.c \
+			editor_create_surfaces.c \
+			editor_init_options.c \
+			editor_init_instructs.c \
+			editor_events_height_input.c \
+			editor_free.c
 
 SOURCES = $(addprefix $(SOURCES_DIRECTORY), $(SOURCES_LIST))
 

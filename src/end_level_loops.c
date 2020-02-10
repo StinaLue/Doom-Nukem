@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   end_level_loops.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 15:36:13 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/08 02:58:27 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/10 18:01:13 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ void	game_over_loop(t_doom *doom)
 		while (SDL_PollEvent(&(sdlmain->event)) != 0)
 		{
 			check_quit(&sdlmain->event, &doom->state);
-			if (sdlmain->event.key.keysym.sym == SDLK_TAB && sdlmain->event.type == SDL_KEYDOWN)
+			if (sdlmain->event.key.keysym.sym == SDLK_TAB \
+					&& sdlmain->event.type == SDL_KEYDOWN)
 				doom->state = EDITOR_STATE;
 		}
 	}
@@ -53,7 +54,8 @@ void	win_loop(t_doom *doom)
 		while (SDL_PollEvent(&(sdlmain->event)) != 0)
 		{
 			check_quit(&sdlmain->event, &doom->state);
-			if (sdlmain->event.key.keysym.sym == SDLK_TAB && sdlmain->event.type == SDL_KEYDOWN)
+			if (sdlmain->event.key.keysym.sym == SDLK_TAB \
+				&& sdlmain->event.type == SDL_KEYDOWN)
 				doom->state = EDITOR_STATE;
 		}
 	}

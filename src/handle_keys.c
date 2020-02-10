@@ -6,13 +6,13 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/06 18:24:00 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 19:55:54 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-void	basic_move(t_player *player, const Uint8 *keyboard_state)//, t_sound *sound)
+void	basic_move(t_player *player, const Uint8 *keyboard_state)
 {
 	t_vecdb	move;
 
@@ -36,7 +36,10 @@ void	basic_move(t_player *player, const Uint8 *keyboard_state)//, t_sound *sound
 		player->is_moving = 0;
 		//alSourcePause(sound->source[2]);
 	}
+	if (keyboard_state[SDL_SCANCODE_SPACE])
+		jump(player);
 	movement(player, move);
+	update_player(player);
 }
 
 void	basic_look(t_player *player, const Uint8 *keyboard_state)
@@ -49,6 +52,10 @@ void	basic_look(t_player *player, const Uint8 *keyboard_state)
 		player->angle += 0.01;
 	if (keyboard_state[SDL_SCANCODE_RIGHT])
 		player->angle -= 0.01;
+	if (keyboard_state[SDL_SCANCODE_LSHIFT])
+		player->movespeed = 0.03;
+	else
+		player->movespeed = 0.01;
 	if (keyboard_state[SDL_SCANCODE_PAGEUP] && player->true_fov > 1.06)//hardcoded 60deg
 		player->true_fov -= 0.01;
 	if (keyboard_state[SDL_SCANCODE_PAGEDOWN] && player->true_fov < 2.27)//hardcoded 130deg
@@ -59,8 +66,8 @@ void	basic_look(t_player *player, const Uint8 *keyboard_state)
 	player->view.a.y = player->view.b.y;
 }
 
-void	handle_keys(t_doom *doom, const Uint8 *keyboard_state)//, t_sound *sound)
+void	handle_keys(t_doom *doom, const Uint8 *keyboard_state)
 {
 	basic_look(&doom->game.player, keyboard_state);
-	basic_move(&doom->game.player, keyboard_state);//, sound);
+	basic_move(&doom->game.player, keyboard_state);
 }

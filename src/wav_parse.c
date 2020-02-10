@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wav_parse.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 00:15:56 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/08 20:11:37 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/10 15:42:45 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,14 @@
 #include "libft.h"
 #include "libwav.h"
 
-ALenum	get_format_from_info(short channels, short bits_per_sample)
+ALenum		get_format_from_info(short channels, short bits_per_sample)
 {
 	bits_per_sample = 0;
 	if (channels == 1)
 		return (AL_FORMAT_MONO16);
 	return (AL_FORMAT_STEREO16);
 }
+
 /*
 void	endian_swap_short(short *x)
 {
@@ -46,6 +47,7 @@ void	file_ignore_bytes(int fd, short extra_params)
 	}
 }
 */
+
 static int	is_wav(char *file)
 {
 	int	len;
@@ -67,7 +69,7 @@ static int	is_wav(char *file)
 	return (1);
 }
 
-int	read_riff_chunk(int fd, char *xbuffer, char *file, int *offset)
+int			read_riff_chunk(int fd, char *xbuffer, char *file, int *offset)
 {
 	if (read(fd, xbuffer, 4) != 4 || ft_strncmp(xbuffer, "RIFF", 4) != 0)
 		return (error_return_wav("Not a WAV file\n", NULL, fd));
@@ -81,7 +83,7 @@ int	read_riff_chunk(int fd, char *xbuffer, char *file, int *offset)
 	return (0);
 }
 
-int	read_fmt_chunk(t_wav *wav, int fd, char *xbuffer, int *offset)
+int			read_fmt_chunk(t_wav *wav, int fd, char *xbuffer, int *offset)
 {
 	if (read(fd, xbuffer, 4) != 4 || ft_strncmp(xbuffer, "fmt ", 4) != 0)
 		return (error_return_wav("Invalid WAV file\n", NULL, fd));
@@ -105,7 +107,7 @@ int	read_fmt_chunk(t_wav *wav, int fd, char *xbuffer, int *offset)
 	return (0);
 }
 
-int	read_data_chunk(t_wav *wav, int fd, char *xbuffer, int *offset)
+int			read_data_chunk(t_wav *wav, int fd, char *xbuffer, int *offset)
 {
 	if (read(fd, xbuffer, 4) <= 0 || ft_strncmp(xbuffer, "data", 4) != 0)
 		return (error_return_wav("Invalid WAV file\n", NULL, fd));
@@ -124,7 +126,7 @@ int	read_data_chunk(t_wav *wav, int fd, char *xbuffer, int *offset)
 	return (0);
 }
 
-int	load_wav(char *file, ALuint buffer)
+int			load_wav(char *file, ALuint buffer)
 {
 	int		fd;
 	char	xbuffer[5];

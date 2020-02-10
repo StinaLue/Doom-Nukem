@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   text.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 15:58:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/09 03:03:18 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/10 15:39:40 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 #include "libft.h"
 
-int	highlight_text(TTF_Font **font, SDL_Surface **surf, \
+int		highlight_text(TTF_Font **font, SDL_Surface **surf, \
 					SDL_Color *color, char *text)
 {
 	SDL_FreeSurface(*surf);
@@ -24,7 +24,7 @@ int	highlight_text(TTF_Font **font, SDL_Surface **surf, \
 	return (0);
 }
 
-int	reset_text(TTF_Font **font, SDL_Surface **surf, \
+int		reset_text(TTF_Font **font, SDL_Surface **surf, \
 					SDL_Color *color, char *text)
 {
 	SDL_FreeSurface(*surf);
