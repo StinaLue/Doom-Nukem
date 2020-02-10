@@ -3,38 +3,59 @@
 /*                                                        :::      ::::::::   */
 /*   sound.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 15:30:36 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/07 17:45:18 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 01:59:26 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-int		is_buffer_playing(ALuint src, ALuint buffer)
+void	play_katana_sound(t_game *game, t_sdlmain *sdlmain)
 {
-	ALint playing_buffer;
+	t_gamesurfs *gamesurfs;
+	t_sound		*sound;
+	t_player	*player;
 
-	alGetSourcei(src, AL_BUFFER, &playing_buffer);
-	return ((ALuint)playing_buffer == buffer);
+	gamesurfs = &game->surfs;
+	sound = &sdlmain->sound;
+	player = &game->player;
+	if (player->anim == 1 && gamesurfs->current_frame == 0 \
+		&& gamesurfs->anim_timer == 0 \
+		&& !is_source_playing(sound->source[1]))
+	{
+		alSourcef(sound->source[1], AL_PITCH, 1.6);
+		alSourcei(sound->source[1], AL_BUFFER, sound->buffer[1]);
+		alSourcePlay(sound->source[1]);
+	}
+	else if (player->anim == 0 && gamesurfs->current_frame == 0 \
+		&& gamesurfs->anim_timer == 0 \
+		&& is_source_playing(sound->source[1]))
+		alSourceStop(sound->source[1]);
 }
 
-void	init_source(ALuint src, ALfloat pitch, ALfloat gain, int loop)
+void	play_uzi_sound(t_game *game, t_sdlmain *sdlmain)
 {
-	alSourcef(src, AL_PITCH, pitch);
-	alSourcef(src, AL_GAIN, gain);
-	alSource3f(src, AL_POSITION, 0, 0, 0);
-	alSource3f(src, AL_VELOCITY, 0, 0, 0);
-	alSourcei(src, AL_LOOPING, loop);
-}
+	t_gamesurfs *gamesurfs;
+	t_sound		*sound;
+	t_player	*player;
 
-int		is_source_playing(ALuint source)
-{
-	ALenum state;
-
-	alGetSourcei(source, AL_SOURCE_STATE, &state);
-	return (state == AL_PLAYING);
+	gamesurfs = &game->surfs;
+	sound = &sdlmain->sound;
+	player = &game->player;
+	if (player->anim == 1 && gamesurfs->current_frame == 0 \
+		&& gamesurfs->anim_timer == 0 \
+		&& !is_source_playing(sound->source[1]))
+	{
+		alSourcef(sound->source[1], AL_PITCH, 1);
+		alSourcei(sound->source[1], AL_BUFFER, sound->buffer[3]);
+		alSourcePlay(sound->source[1]);
+	}
+	else if (player->anim == 0 && gamesurfs->current_frame == 0 \
+			&& gamesurfs->anim_timer == 0 \
+			&& is_source_playing(sound->source[1]))
+		alSourceStop(sound->source[1]);
 }
 
 void	play_weapon_sound(t_game *game, t_sdlmain *sdlmain)
@@ -47,35 +68,9 @@ void	play_weapon_sound(t_game *game, t_sdlmain *sdlmain)
 	sound = &sdlmain->sound;
 	player = &game->player;
 	if (player->current_weapon == 0)
-	{
-		if (player->anim == 1 && gamesurfs->current_frame == 0 \
-			&& gamesurfs->anim_timer == 0 \
-			&& !is_source_playing(sound->source[1]))
-		{
-			alSourcef(sound->source[1], AL_PITCH, 1.6);
-			alSourcei(sound->source[1], AL_BUFFER, sound->buffer[1]);
-			alSourcePlay(sound->source[1]);
-		}
-		else if (player->anim == 0 && gamesurfs->current_frame == 0 \
-			&& gamesurfs->anim_timer == 0 \
-			&& is_source_playing(sound->source[1]))
-			alSourceStop(sound->source[1]);
-	}
-	if (player->current_weapon == 1)
-	{
-		if (player->anim == 1 && gamesurfs->current_frame == 0 \
-			&& gamesurfs->anim_timer == 0 \
-			&& !is_source_playing(sound->source[1]))
-		{
-			alSourcef(sound->source[1], AL_PITCH, 1);
-			alSourcei(sound->source[1], AL_BUFFER, sound->buffer[3]);
-			alSourcePlay(sound->source[1]);
-		}
-		else if (player->anim == 0 && gamesurfs->current_frame == 0 \
-				&& gamesurfs->anim_timer == 0 \
-				&& is_source_playing(sound->source[1]))
-			alSourceStop(sound->source[1]);
-	}
+		play_katana_sound(game, sdlmain);
+	else if (player->current_weapon == 1)
+		play_uzi_sound(game, sdlmain);
 }
 
 void	play_enemies_sound(t_enemy *enemies, ALuint *buffers, t_map *map)

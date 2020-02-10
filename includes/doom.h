@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/09 22:51:18 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 02:07:42 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -375,9 +375,6 @@ typedef struct				s_doom
 
 void						soft_reset_player(t_player *player, t_map *map);
 
-void						prepend_str(const char *to_prepend, \
-							const char *str, char *new_str, int full_size);
-
 int							load_wav(char *file, ALuint buffer);
 
 int							is_mouse_collide(t_vec mouse_pos, \
@@ -540,7 +537,7 @@ int							draw_full_rotmap(SDL_Surface *surf, t_player *player, const t_map *map
 
 void						draw_perspective_view(SDL_Surface *surf, t_player *player, SDL_Surface **wall_textures);
 
-void		draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view view, t_sector_node *sector, t_player *player);
+void						draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view view, t_sector_node *sector, t_player *player);
 /*
 ** DRAWING FUNCTIONS
 */
@@ -569,6 +566,10 @@ int							blit_uzi(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim);//, t_s
 int							highlight_text(TTF_Font **font, SDL_Surface **surf, SDL_Color *color, char *text);
 
 int							reset_text(TTF_Font **font, SDL_Surface **surf, SDL_Color *color, char *text);
+
+void						prepend_str(const char *to_prepend, \
+							const char *str, char *new_str, int full_size);
+
 
 /*
 ** NULL INIT FUNCTIONS
@@ -704,6 +705,10 @@ int							itt_sectors_true(t_sector_node *sector_node, int (*f)(t_sector_node *)
 
 void						free_sector_list(t_sector_node **sector_list);
 
+void						set_sectors_clockwise(t_sector_node *sector_head);
+
+void						flip_walls(t_sector_node *sector);
+
 /*
 ** WALL NODE FUNCTIONS
 */
@@ -725,11 +730,6 @@ t_wall_node					*insert_wall_node(t_wall_node **wall_list);
 
 t_wall_node					*copy_wall_node(t_wall_node **wall_head, const t_wall_node *node);
 
-/*
-** DEBUG FUNCTIONS
-*/
-void						print_map_contents(const t_map *map);
-
 int							copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list);
 
 int							wall_loop(t_wall_node *node);
@@ -739,17 +739,19 @@ int							count_walls(t_wall_node *wall_list);
 void						set_wall_length(t_wall_node *head);
 
 /*
+** DEBUG FUNCTIONS
+*/
+void						print_map_contents(const t_map *map);
+
+void						print_vec(const t_vec *vec, const char *name);
+
+void						print_vecdb(const t_vecdb *vecdb, const char *name);
+/*
 ** EDITOR CHECK FUNCTIONS
 */
 int							check_convex_sector(t_sector_node *sector);
 
-void						set_wall_length(t_wall_node *head);
-
 int							check_clockwise_sector(t_sector_node *sector);
-
-void						set_sectors_clockwise(t_sector_node *sector_head);
-
-void						flip_walls(t_sector_node *sector);
 
 /*
 ** TEXTURE MAPPING

@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/09 03:02:10 by afonck           ###   ########.fr        #
+#    Updated: 2020/02/10 02:09:23 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,7 +81,6 @@ SOURCES_LIST = main.c \
 			editor.c \
 			mouse.c \
 			editor_menu.c \
-			debug.c \
 			create_surfaces.c\
 			editor_check.c \
 			blit_editor.c \
@@ -99,18 +98,10 @@ SOURCES_LIST = main.c \
 			mouse_movement.c \
 			sound.c \
 			music.c \
+			openal_sub_functions.c \
 			end_level_loops.c \
 			error.c #\
-			map_parser.c \
-	       multithreading.c \
-		   texture.c \
-		   parsing.c \
-		   error_handling.c \
-		   drawing.c \
-		   checking.c \
-		   handle_fps.c \
-		   utils.c \
-		   floor_and_ceiling.c
+			debug.c
 
 SOURCES = $(addprefix $(SOURCES_DIRECTORY), $(SOURCES_LIST))
 
