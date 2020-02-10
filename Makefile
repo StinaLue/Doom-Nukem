@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/10 11:25:50 by afonck           ###   ########.fr        #
+#    Updated: 2020/02/10 12:08:16 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -161,7 +161,7 @@ $(OPENAL):
 	cd ../..
 	rm -rf openal-soft-$(OPENAL_VERSION)
 
-$(ASSETS_DIR):
+$(ASSETS_DIR): $(ASSETS_ARCHIVE)
 	tar -xzvf $(ASSETS_ARCHIVE)
 
 $(NAME): $(SDL2) $(SDL2TTF) $(OPENAL) $(LIBFT) $(LIBBMP) $(OBJECTS_DIRECTORY) $(OBJECTS) $(ASSETS_DIR)
