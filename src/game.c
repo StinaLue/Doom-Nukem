@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/09 14:39:25 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 19:05:55 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,12 @@ int	blit_uzi(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)//, t_sound *s
 {
 	gamesurfs->weapons_rect.x = gamesurfs->current_frame * gamesurfs->weapons_rect.w;
 	gamesurfs->weapons_rect.y = gamesurfs->weapons_rect.h * 2;
+	if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->weapons_rect, dest, NULL) != 0)
+		return (error_return("SDL_BlitScaled error: %s\n", SDL_GetError()));
 	if (*anim == 1)
 	{
 		if (gamesurfs->current_frame == 0 && gamesurfs->anim_timer == 0)
-		{
 			gamesurfs->anim_timer = SDL_GetTicks();
-			//alSourcef(sound->source[1], AL_PITCH, 1.3);
-			//alSourcei(sound->source[1], AL_BUFFER, sound->buffer[1]);
-			//alSourcePlay(sound->source[1]);
-		}
-		//if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->katana[gamesurfs->current_frame], dest, NULL) != 0)
-		if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->weapons_rect, dest, NULL) != 0)
-			return (error_return("SDL_BlitScaled error: %s\n", SDL_GetError()));
 		if ((SDL_GetTicks() - gamesurfs->anim_timer) >= 150)
 		{
 			gamesurfs->current_frame++;
@@ -43,12 +37,7 @@ int	blit_uzi(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)//, t_sound *s
 		}
 	}
 	else
-	{
-		if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->weapons_rect, dest, NULL) != 0)
-			return (error_return("SDL_BlitScaled error: %s\n", SDL_GetError()));
 		gamesurfs->anim_timer = 0;
-	}
-	
 	return (0);
 }
 
@@ -57,18 +46,12 @@ int	blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)//, t_sound
 	// TODO --> blit blood katana when enemy is hit
 	gamesurfs->weapons_rect.x = gamesurfs->current_frame * gamesurfs->weapons_rect.w;
 	gamesurfs->weapons_rect.y = 0;
+	if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->weapons_rect, dest, NULL) != 0)
+		return (error_return("SDL_BlitScaled error: %s\n", SDL_GetError()));
 	if (*anim == 1)
 	{
 		if (gamesurfs->current_frame == 0 && gamesurfs->anim_timer == 0)
-		{
 			gamesurfs->anim_timer = SDL_GetTicks();
-			//alSourcef(sound->source[1], AL_PITCH, 1.3);
-			//alSourcei(sound->source[1], AL_BUFFER, sound->buffer[1]);
-			//alSourcePlay(sound->source[1]);
-		}
-		//if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->katana[gamesurfs->current_frame], dest, NULL) != 0)
-		if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->weapons_rect, dest, NULL) != 0)
-			return (error_return("SDL_BlitScaled error: %s\n", SDL_GetError()));
 		if ((SDL_GetTicks() - gamesurfs->anim_timer) >= 150)
 		{
 			gamesurfs->current_frame++;
@@ -82,12 +65,7 @@ int	blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)//, t_sound
 		}
 	}
 	else
-	{
-		if (SDL_BlitScaled(gamesurfs->weapons, &gamesurfs->weapons_rect, dest, NULL) != 0)
-			return (error_return("SDL_BlitScaled error: %s\n", SDL_GetError()));
 		gamesurfs->anim_timer = 0;
-	}
-	
 	return (0);
 }
 
@@ -181,7 +159,7 @@ int	blit_hud_faces(t_game *game)
 	return (0);
 }
 
-SDL_Rect find_rect_enemy(t_enemy *enemy, t_player *player, SDL_Surface *dest)
+SDL_Rect find_dstrect_enemy(t_enemy *enemy, t_player *player, SDL_Surface *dest)
 {
 	SDL_Rect return_rect;
 
@@ -193,6 +171,55 @@ SDL_Rect find_rect_enemy(t_enemy *enemy, t_player *player, SDL_Surface *dest)
 	return (return_rect);
 }
 
+void		walking_enemy_anim(t_enemy *enemy)
+{
+	enemy->clip_tex.y = enemy->current_frame * enemy->clip_tex.h;
+	if (enemy->current_frame == 0 && enemy->anim_timer == 0)
+	enemy->anim_timer = SDL_GetTicks();
+	if (enemy->current_frame == 0 && enemy->anim_timer == 0)
+		enemy->anim_timer = SDL_GetTicks();
+	if ((SDL_GetTicks() - enemy->anim_timer) >= 150)
+	{
+		enemy->current_frame++;
+		enemy->anim_timer = SDL_GetTicks();
+	}
+	if (enemy->current_frame >= 4)
+	{
+		enemy->current_frame = 0;
+		enemy->clip_tex.y = 0;
+		enemy->state = 0;
+	}
+}
+
+void		attack_enemy_anim(t_enemy *enemy)
+{
+	enemy->clip_tex.y = enemy->clip_tex.h * (enemy->current_frame + 4);
+	if (enemy->current_frame == 0 && enemy->anim_timer == 0)
+		enemy->anim_timer = SDL_GetTicks();
+	if ((SDL_GetTicks() - enemy->anim_timer) >= 250)
+	{
+		enemy->current_frame++;
+		enemy->anim_timer = SDL_GetTicks();
+	}
+	if (enemy->current_frame >= 3)
+	{
+		enemy->current_frame = 0;
+		enemy->clip_tex.y = 0;
+		enemy->state = 0;
+	}
+}
+
+SDL_Rect find_srcrect_enemy(t_enemy *enemy)//, t_player *player)
+{
+	if (enemy->state == 1)
+		walking_enemy_anim(enemy);
+	else if (enemy->state == 2)
+		attack_enemy_anim(enemy);
+	else
+		enemy->anim_timer = 0;
+	return (enemy->clip_tex);
+}
+
 int	blit_enemies(t_game *game, SDL_Surface *dest, t_map *map)
 {
 	int i;
@@ -201,7 +228,12 @@ int	blit_enemies(t_game *game, SDL_Surface *dest, t_map *map)
 	i = 0;
 	while (i < map->num_enemies)
 	{
-		destrect = find_rect_enemy(&game->enemy[i], &game->player, dest);
+		if (game->player.anim == 1)
+			game->enemy[i].state = 2;
+		else if (game->player.is_moving == 1)
+			game->enemy[i].state = 1;
+		game->enemy[i].clip_tex = find_srcrect_enemy(&game->enemy[i]);//, &game->player);
+		destrect = find_dstrect_enemy(&game->enemy[i], &game->player, dest);
 		if ((SDL_BlitScaled(game->enemy[i].texture, &game->enemy[i].clip_tex, dest, &destrect)) != 0)
 			return (error_return("SDL_BlitScaled error: %{r}s\n", SDL_GetError()));
 		i++;

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 11:27:41 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/10 19:56:28 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int		init_wall_textures(SDL_Surface **wall_textures, SDL_Surface *winsurf)
 
 int		init_doom(t_doom *doom)
 {
-	if (init_map(&doom->map) == 1 || init_sdl_and_ttf() == 1 \
+	if (init_sdl_and_ttf() == 1 \
 		|| init_sdlmain(&doom->sdlmain) == 1 \
 		|| init_game(&doom->game, &doom->sdlmain, &doom->map) == 1 \
 		|| init_menu(&doom->menu, &doom->sdlmain) == 1 \
@@ -168,23 +168,11 @@ t_view	init_view(t_player *player, SDL_Surface *surf)
 	return (view);
 }
 
-int		init_map(t_map *map)
-{
-	//if (read_map(".doom_1", map))
-	//	return (1);
-	(void)map;
-	return (0);
-}
-
 int	init_game(t_game *game, t_sdlmain *sdlmain, t_map *map)
 {
-	//game->data.num_enemies = map->num_enemies;
-	//game->data.enemy_info = map->enemy_info;
 	init_data_struct(&(game->data));
-	if (init_gamesurfs_struct(&(game->surfs), sdlmain) == 1 \
-							|| init_enemy_struct(game, map) == 1)
+	if (init_gamesurfs_struct(&(game->surfs), sdlmain) == 1)
 		return (1);
-	//init_data_struct(&(game->data, map));
 	init_player_struct(&(game->player), map);
 	game->weapon_anim[0] = blit_katana;
 	game->weapon_anim[1] = blit_uzi;

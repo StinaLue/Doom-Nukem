@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_keys.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:33:21 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/09 21:27:51 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 15:23:04 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ void	key_event_l(t_editor *editor, t_doom *doom)
 			free_map(&doom->map);
 		if (copy_map(&editor->edit_map, &doom->map) != 0)
 			doom->state = QUIT_STATE;
-		if (init_enemy_struct(&doom->game, &doom->map) != 0)
+		if (init_enemies(&doom->game, &doom->map) != 0)
 			doom->state = QUIT_STATE;
 		soft_reset_player(&doom->game.player, &doom->map);
 		if (doom->map.weapon_choice == 1 || doom->map.weapon_choice == 3)

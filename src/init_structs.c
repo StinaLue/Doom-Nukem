@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/09 14:21:03 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 19:50:59 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,21 @@ void	get_enemysprite_rect(SDL_Rect *rect, int which_enemy, \
 		rect->h = sprite_sheet->h / 11;
 }
 
-int	init_enemy_struct(t_game *game, t_map *map)
+void	init_enemy(t_enemy *enemy, t_enemy_info *enemy_info, t_game *game)
+{
+	enemy->pos = create_vecdb(enemy_info->enemy_spawn.x, enemy_info->enemy_spawn.y);
+	enemy->texture = game->surfs.enemy_texture[enemy_info->which_enemy];
+	enemy->angle = 0;
+	get_enemysprite_rect(&enemy->clip_tex, enemy_info->which_enemy, enemy->texture);
+	enemy->state = 0;
+	enemy->health = 100;
+	enemy->anim_timer = 0;
+	enemy->current_frame = 0;
+	alGenSources(1, &enemy->sound_src);
+	init_source(enemy->sound_src, 1, 5, 1);
+}
+
+int	init_enemies(t_game *game, t_map *map)
 {
 	int				current_enemy;
 	t_enemy_info	*enemy_info;
@@ -123,14 +137,7 @@ int	init_enemy_struct(t_game *game, t_map *map)
 	while (current_enemy < map->num_enemies)
 	{
 		enemy_info = &map->enemy_info[current_enemy];
-		game->enemy[current_enemy].pos = create_vecdb(enemy_info->enemy_spawn.x, enemy_info->enemy_spawn.y);
-		game->enemy[current_enemy].texture = game->surfs.enemy_texture[enemy_info->which_enemy];
-		game->enemy[current_enemy].angle = 0;
-		get_enemysprite_rect(&game->enemy[current_enemy].clip_tex, enemy_info->which_enemy, game->enemy[current_enemy].texture);
-		game->enemy[current_enemy].state = 0;
-		game->enemy[current_enemy].health = 100;
-		alGenSources(1, &game->enemy[current_enemy].sound_src);
-		init_source(game->enemy[current_enemy].sound_src, 1, 5, 1);
+		init_enemy(&game->enemy[current_enemy], enemy_info, game);
 		current_enemy++;
 	}
 	return (0);
