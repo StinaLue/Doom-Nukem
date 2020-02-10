@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 14:00:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 14:30:31 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 17:27:21 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,7 +256,7 @@ void	event_editor_surf(t_vec mouse, t_editor *editor, t_wall_node *wall)
 	if (start_wall_exists(wall) && !(mouse.x == wall->end.x \
 				&& mouse.y == wall->end.y))
 	{
-		wall->end = vec_to_vecdb(multvec(mouse, MAPMULTIPLIER));
+		wall->end = vec_to_vecdb(multvec(mouse, SIZEMAP));
 		wall->tex_index = editor->opt_menu.activ_tex;
 		copy_wall_node(&editor->current_sector->wall_head, wall);
 		editor->current_sector->wall_num++;
@@ -268,9 +268,9 @@ void	event_editor_surf(t_vec mouse, t_editor *editor, t_wall_node *wall)
 		if (editor->start_sector_reached == 1)
 		{
 			add_sector_node(&editor->edit_map.sector_head);
-			editor->start_sector = multvec(mouse, MAPMULTIPLIER);
-			wall->start = vec_to_vecdb(multvec(mouse, MAPMULTIPLIER));
-			wall->end = vec_to_vecdb(multvec(mouse, MAPMULTIPLIER));
+			editor->start_sector = multvec(mouse, SIZEMAP);
+			wall->start = vec_to_vecdb(multvec(mouse, SIZEMAP));
+			wall->end = vec_to_vecdb(multvec(mouse, SIZEMAP));
 			editor->start_sector_reached = 0;
 		}
 	}
@@ -314,7 +314,7 @@ void	mouse_click_right(t_editor *editor, t_sdlmain *sdlmain)
 
 	tmp_mouse = sdlmain->mouse_pos;
 	tmp_sector = editor->selected_sector;
-	tmp_mouse = multvec(tmp_mouse, MAPMULTIPLIER);
+	tmp_mouse = multvec(tmp_mouse, SIZEMAP);
 	if (editor->start_sector_reached == 1)
 		editor->selected_sector = \
 		get_sector_by_pos(editor->edit_map.sector_head, \

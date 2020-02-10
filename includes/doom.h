@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 16:45:59 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 18:12:19 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@
 # define NBOPTIONS 8
 # define NBHOVEROPTIONS 5
 # define NBINSTRUCTS 10
-# define MAPMULTIPLIER 50
+# define SIZEMAP 50
 # define COLOR_HOVER 0x6C1413
 # define COLOR_PRESSED 0x00cc00
 # define COLOR_NORMAL 0xff0000
@@ -627,6 +627,8 @@ int							free_map(t_map *map);
 
 void						free_enemies(t_game *game, int num_enemies);
 
+void						free_and_null_surf(SDL_Surface *surf);
+
 /*
 ** SDL_SUB_FUNCTIONS
 */
@@ -712,6 +714,12 @@ int							create_instruct_str(t_editor *editor, \
 int							init_options_menu(t_editor *editor);
 
 int							init_instr_menu(t_editor *editor, SDL_Surface *surf);
+
+void						event_handle_input(t_editor *editor, Uint32 type, \
+								SDL_Keycode key, char *text);
+
+void						key_event_height(t_editor *editor, SDL_Event ev, \
+										t_options_menu *menu);
 /*
 ** LINKED LIST FUNCTIONS
 */

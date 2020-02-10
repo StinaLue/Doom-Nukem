@@ -6,19 +6,19 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/10 14:47:52 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 18:00:46 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-void	basic_move(t_player *player, const Uint8 *keyboard_state)//, t_sound *sound)
+void	basic_move(t_player *player, const Uint8 *keyboard_state)
 {
 	t_vecdb	move;
 
 	move.x = 0;
 	move.y = 0;
-	if (keyboard_state[SDL_SCANCODE_W])	
+	if (keyboard_state[SDL_SCANCODE_W])
 		move.y += 1;
 	if (keyboard_state[SDL_SCANCODE_S])
 		move.y -= 1;
@@ -63,8 +63,8 @@ void	basic_look(t_player *player, const Uint8 *keyboard_state)
 	player->view.a.y = player->view.b.y;
 }
 
-void	handle_keys(t_doom *doom, const Uint8 *keyboard_state)//, t_sound *sound)
+void	handle_keys(t_doom *doom, const Uint8 *keyboard_state)
 {
 	basic_look(&doom->game.player, keyboard_state);
-	basic_move(&doom->game.player, keyboard_state);//, sound);
+	basic_move(&doom->game.player, keyboard_state);
 }

@@ -6,14 +6,14 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 11:41:18 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 14:38:17 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 17:36:57 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "doom.h"
 
-int	round_num(double num, int offset)
+int		round_num(double num, int offset)
 {
 	double result;
 
@@ -48,24 +48,11 @@ void	init_colors(t_editor *editor)
 	editor->opt_menu.bord_color_weapon[1] = COLOR_CHOOSE;
 }
 
-int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
+int		init_editor2(t_editor *editor, t_sdlmain *sdlmain)
 {
 	int i;
 
 	i = 0;
-	reset_vec(&editor->edit_map.player_spawn);
-	editor->edit_map.which_music = 0;
-	editor->edit_map.sector_head = NULL;
-	editor->edit_map.num_enemies = 0;
-	editor->opt_menu.height_ceiling = 40;
-	editor->opt_menu.height_floor = 2;
-	editor->opt_menu.activ_tex = 0;
-	editor->opt_menu.typing_filename = 0;
-	ft_bzero(editor->opt_menu.file_name, 16);
-	ft_strncpy(editor->opt_menu.file_name, ".doom_", 6);
-	editor->current_sector = NULL;
-	editor->current_wall = NULL;
-	editor->selected_sector = NULL;
 	if (create_surfaces_editor(editor, sdlmain) != 0)
 		return (1);
 	if (init_editor_menu(editor) != 0)
@@ -87,7 +74,27 @@ int	init_editor(t_editor *editor, t_sdlmain *sdlmain)
 	return (0);
 }
 
-int	reset_init_editor(t_editor *editor, t_sdlmain *sdlmain)
+int		init_editor(t_editor *editor, t_sdlmain *sdlmain)
+{
+	reset_vec(&editor->edit_map.player_spawn);
+	editor->edit_map.which_music = 0;
+	editor->edit_map.sector_head = NULL;
+	editor->edit_map.num_enemies = 0;
+	editor->opt_menu.height_ceiling = 40;
+	editor->opt_menu.height_floor = 2;
+	editor->opt_menu.activ_tex = 0;
+	editor->opt_menu.typing_filename = 0;
+	ft_bzero(editor->opt_menu.file_name, 16);
+	ft_strncpy(editor->opt_menu.file_name, ".doom_", 6);
+	editor->current_sector = NULL;
+	editor->current_wall = NULL;
+	editor->selected_sector = NULL;
+	if (init_editor2(editor, sdlmain) != 0)
+		return (1);
+	return (0);
+}
+
+int		reset_init_editor(t_editor *editor, t_sdlmain *sdlmain)
 {
 	int i;
 
@@ -115,8 +122,8 @@ void	fill_area(SDL_Surface *surf, t_wall_node *wall, t_editor *editor)
 	color = (editor->start_sector.x == wall->start.x \
 			&& editor->start_sector.y == wall->start.y) ? 0X00FF00 : 0XB11226;
 	j = 0;
-	tmp_wall.x = wall->start.x / MAPMULTIPLIER * editor->offset;
-	tmp_wall.y = wall->start.y / MAPMULTIPLIER * editor->offset;
+	tmp_wall.x = wall->start.x / SIZEMAP * editor->offset;
+	tmp_wall.y = wall->start.y / SIZEMAP * editor->offset;
 	while (j < 4)
 	{
 		i = 0;
@@ -134,24 +141,18 @@ void	fill_area(SDL_Surface *surf, t_wall_node *wall, t_editor *editor)
 }
 
 void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, \
-					t_sdlmain *sdlmain)
+					t_vec mouse)
 {
-	int				i;
 	t_sector_node	*tmp_sect;
 	t_wall_node		*tmp_wall;
-	t_vecdb			tmptest;
-	t_vecdb			tempstart;
 
-	i = 0;
 	if (editor->edit_map.sector_head == NULL)
 		return ;
 	tmp_sect = editor->edit_map.sector_head;
-	tmptest = editor->wall_tmp.end;
-	tmptest = divvecdb(tmptest, MAPMULTIPLIER);
 	if (editor->start_sector_reached == 0)
-		draw_line(multvec(sdlmain->mouse_pos, editor->offset),
-				multvec(vecdb_to_vec(tmptest), editor->offset), \
-					editor_surf, editor->wall_tmp.type_color);
+		draw_line(multvec(mouse, editor->offset), \
+		multvec(vecdb_to_vec(divvecdb(editor->wall_tmp.end, SIZEMAP)), \
+			editor->offset), editor_surf, editor->wall_tmp.type_color);
 	fill_area(editor_surf, &editor->wall_tmp, editor);
 	while (tmp_sect != NULL)
 	{
@@ -159,14 +160,9 @@ void	draw_lines(t_editor *editor, SDL_Surface *editor_surf, \
 		while (tmp_wall != NULL)
 		{
 			fill_area(editor_surf, tmp_wall, editor);
-			tmptest = tmp_wall->end;
-			tempstart = tmp_wall->start;
-			tmptest = divvecdb(tmptest, MAPMULTIPLIER);
-			tempstart = divvecdb(tempstart, MAPMULTIPLIER);
-			draw_line(multvec(vecdb_to_vec(tmptest), editor->offset),
-					multvec(vecdb_to_vec(tempstart), editor->offset), \
-						editor_surf, tmp_wall->type_color);
-			i++;
+			draw_line(multvec(vecdb_to_vec(divvecdb(tmp_wall->end, SIZEMAP)), \
+			editor->offset), multvec(vecdb_to_vec(divvecdb(tmp_wall->start, \
+				SIZEMAP)), editor->offset), editor_surf, tmp_wall->type_color);
 			tmp_wall = tmp_wall->next;
 		}
 		tmp_sect = tmp_sect->next;
@@ -201,17 +197,27 @@ void	draw_editor(SDL_Surface *editor_surf,
 	sdlmain->mouse_pos.y = sdlmain->mouse_pos.y == 0 ? 1 : sdlmain->mouse_pos.y;
 }
 
-int	is_pos_wall(t_wall_node *wall)
+void	prepare_editor(t_sdlmain *sdlmain, t_editor *editor, int offset_border)
 {
-	if (wall->start.x > 0 && wall->start.y > 0)
-	{
-		if (wall->end.x > 0 && wall->end.y > 0)
-			return (1);
-	}
-	return (0);
+	assign_sdlrect(&editor->mouse_rect, create_vec(sdlmain->mouse_pos.x \
+					- 15, sdlmain->mouse_pos.y - 15), create_vec(15, 15));
+	sdlmain->mouse_pos.x = round_num(sdlmain->mouse_pos.x, editor->offset);
+	sdlmain->mouse_pos.y = round_num(sdlmain->mouse_pos.y - offset_border \
+									+ editor->offset, editor->offset);
+	ft_bzero(editor->editor_surf->pixels, \
+				editor->editor_surf->h * editor->editor_surf->pitch);
+	ft_bzero(editor->opt_surf->pixels, \
+				editor->opt_surf->h * editor->opt_surf->pitch);
+	ft_bzero(editor->instr_surf->pixels, \
+				editor->instr_surf->h * editor->instr_surf->pitch);
+	draw_editor(editor->editor_surf, editor, sdlmain);
+	draw_border(editor->editor_surf, 0xB12211);
+	draw_border(editor->opt_surf, 0xB12211);
+	draw_border(editor->instr_surf, 0xB12211);
+	draw_lines(editor, editor->editor_surf, sdlmain->mouse_pos);
 }
 
-int	editor_loop(t_doom *doom)
+int		editor_loop(t_doom *doom)
 {
 	t_editor	*editor;
 	t_sdlmain	*sdlmain;
@@ -227,30 +233,13 @@ int	editor_loop(t_doom *doom)
 			- NBPOINTSROW * editor->offset;
 	if (!is_buffer_playing(sdlmain->sound.source[0], sdlmain->sound.buffer[9]))
 		play_editor_music(sdlmain, doom);
-	//stop_enem_soundsources(doom->game.enemy, doom->map.num_enemies);
-	//alSourceStopv(NB_SOUND_SOURCES, sdlmain->sound.source);
 	while (doom->state == EDITOR_STATE)
 	{
 		while (SDL_PollEvent(&sdlmain->event) != 0)
 			if (editor_events(doom, sdlmain) != 0)
 				break ;
 		SDL_GetMouseState(&sdlmain->mouse_pos.x, &sdlmain->mouse_pos.y);
-		assign_sdlrect(&editor->mouse_rect, create_vec(sdlmain->mouse_pos.x \
-						- 15, sdlmain->mouse_pos.y - 15), create_vec(15, 15));
-		sdlmain->mouse_pos.x = round_num(sdlmain->mouse_pos.x, editor->offset);
-		sdlmain->mouse_pos.y = round_num(sdlmain->mouse_pos.y - offset_border \
-										+ editor->offset, editor->offset);
-		ft_bzero(editor->editor_surf->pixels, \
-					editor->editor_surf->h * editor->editor_surf->pitch);
-		ft_bzero(editor->opt_surf->pixels, \
-					editor->opt_surf->h * editor->opt_surf->pitch);
-		ft_bzero(editor->instr_surf->pixels, \
-					editor->instr_surf->h * editor->instr_surf->pitch);
-		draw_editor(editor->editor_surf, editor, sdlmain);
-		draw_border(editor->editor_surf, 0xB12211);
-		draw_border(editor->opt_surf, 0xB12211);
-		draw_border(editor->instr_surf, 0xB12211);
-		draw_lines(editor, editor->editor_surf, sdlmain);
+		prepare_editor(sdlmain, editor, offset_border);
 		if (blit_editor(editor, sdlmain) != 0)
 			return (1);
 	}

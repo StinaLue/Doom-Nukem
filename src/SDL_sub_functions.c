@@ -3,15 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   SDL_sub_functions.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:02:39 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/08 20:03:31 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/10 17:56:41 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 #include "libft.h"
+
+void	free_and_null_surf(SDL_Surface *surf)
+{
+	SDL_FreeSurface(surf);
+	surf = NULL;
+}
 
 void	assign_sdlcolor(SDL_Color *color, Uint8 red, Uint8 green, Uint8 blue)
 {

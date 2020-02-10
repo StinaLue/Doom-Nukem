@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/07 19:22:41 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 17:58:46 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	free_sound(t_sound *sound)
 	alSourcei(sound->source[0], AL_LOOPING, AL_FALSE);
 	alSourcei(sound->source[2], AL_LOOPING, AL_FALSE);
 	alDeleteSources(NB_SOUND_SOURCES, sound->source);
-	//alSourceUnqueueBuffers(sound->source, 1, &sound->buffer);
 	alDeleteBuffers(NB_SOUND_BUFFERS, sound->buffer);
 	alcDestroyContext(sound->context);
 	alcCloseDevice(sound->device);
@@ -61,24 +60,15 @@ int		free_game(t_game *game, t_map *map)
 	int nb_enemy;
 
 	nb_enemy = map->num_enemies;
-	SDL_FreeSurface(game->surfs.fixed_mmap);
-	game->surfs.fixed_mmap = NULL;
-	SDL_FreeSurface(game->surfs.rot_mmap);
-	game->surfs.rot_mmap = NULL;
-	SDL_FreeSurface(game->surfs.perspective_view);
-	game->surfs.perspective_view = NULL;
-	SDL_FreeSurface(game->surfs.weapons);
-	game->surfs.weapons = NULL;
-	SDL_FreeSurface(game->surfs.hud_faces_surf);
-	game->surfs.hud_faces_surf = NULL;
-	SDL_FreeSurface(game->surfs.enemy_texture[0]);
-	game->surfs.enemy_texture[0] = NULL;
-	SDL_FreeSurface(game->surfs.enemy_texture[1]);
-	game->surfs.enemy_texture[1] = NULL;
-	SDL_FreeSurface(game->surfs.game_over);
-	game->surfs.game_over = NULL;
-	SDL_FreeSurface(game->surfs.victory);
-	game->surfs.victory = NULL;
+	free_and_null_surf(game->surfs.fixed_mmap);
+	free_and_null_surf(game->surfs.rot_mmap);
+	free_and_null_surf(game->surfs.perspective_view);
+	free_and_null_surf(game->surfs.weapons);
+	free_and_null_surf(game->surfs.hud_faces_surf);
+	free_and_null_surf(game->surfs.enemy_texture[0]);
+	free_and_null_surf(game->surfs.enemy_texture[1]);
+	free_and_null_surf(game->surfs.game_over);
+	free_and_null_surf(game->surfs.victory);
 	free_enemies(game, nb_enemy);
 	return (EXIT_FAILURE);
 }
@@ -88,84 +78,13 @@ int		free_menu(t_menu *menu)
 	int i;
 
 	i = 0;
-	SDL_FreeSurface(menu->background);
-	menu->background = NULL;
-	SDL_FreeSurface(menu->menu_title);
-	menu->menu_title = NULL;
+	free_and_null_surf(menu->background);
+	free_and_null_surf(menu->menu_title);
 	while (i < 4)
 	{
-		SDL_FreeSurface(menu->options[i]);
-		menu->options[i] = NULL;
+		free_and_null_surf(menu->options[i]);
 		i++;
 	}
-	return (EXIT_FAILURE);
-}
-
-int		free_fonts(t_editor *editor)
-{
-	TTF_CloseFont(editor->opt_menu.font);
-	editor->opt_menu.font = NULL;
-	TTF_CloseFont(editor->opt_menu.font_title);
-	editor->opt_menu.font_title = NULL;
-	TTF_CloseFont(editor->instr_menu.font);
-	editor->instr_menu.font = NULL;
-	TTF_CloseFont(editor->instr_menu.font_title);
-	editor->instr_menu.font_title = NULL;
-	return (EXIT_FAILURE);
-}
-
-int		free_fonts_surf(t_editor *editor)
-{
-	int i;
-
-	i = 0;
-	SDL_FreeSurface(editor->instr_menu.title);
-	editor->instr_menu.title = NULL;
-	SDL_FreeSurface(editor->opt_menu.title);
-	editor->opt_menu.title = NULL;
-	while (i < NBOPTIONS)
-	{
-		SDL_FreeSurface(editor->opt_menu.options[i]);
-		editor->opt_menu.options[i] = NULL;
-		i++;
-	}
-	i = 0;
-	while (i < NBHOVEROPTIONS)
-	{
-		SDL_FreeSurface(editor->opt_menu.hover_options[i]);
-		editor->opt_menu.hover_options[i] = NULL;
-		i++;
-	}
-	i = 0;
-	while (i < NBINSTRUCTS)
-	{
-		SDL_FreeSurface(editor->instr_menu.instructs[i]);
-		editor->instr_menu.instructs[i] = NULL;
-		i++;
-	}
-	return (EXIT_FAILURE);
-}
-
-int		free_editor(t_editor *editor)
-{
-	SDL_FreeSurface(editor->editor_surf);
-	editor->editor_surf = NULL;
-	SDL_FreeSurface(editor->instr_surf);
-	editor->instr_surf = NULL;
-	SDL_FreeSurface(editor->opt_surf);
-	editor->opt_surf = NULL;
-	SDL_FreeSurface(editor->alert_convex_surf);
-	editor->alert_convex_surf = NULL;
-	SDL_FreeSurface(editor->alert_loading_surf);
-	editor->alert_loading_surf = NULL;
-	SDL_FreeSurface(editor->loading_success_surf);
-	editor->loading_success_surf = NULL;
-	SDL_FreeSurface(editor->opt_menu.height_surf[1]);
-	editor->opt_menu.height_surf[1] = NULL;
-	SDL_FreeSurface(editor->opt_menu.height_surf[0]);
-	editor->opt_menu.height_surf[0] = NULL;
-	free_fonts_surf(editor);
-	free_fonts(editor);
 	return (EXIT_FAILURE);
 }
 
@@ -176,8 +95,7 @@ int		free_wall_textures(SDL_Surface **wall_textures)
 	i = 0;
 	while (i < NB_WALL_TEXTURES)
 	{
-		SDL_FreeSurface(wall_textures[i]);
-		wall_textures[i] = NULL;
+		free_and_null_surf(wall_textures[i]);
 		i++;
 	}
 	return (EXIT_FAILURE);

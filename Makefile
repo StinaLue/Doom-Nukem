@@ -6,7 +6,7 @@
 #    By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/10 16:46:17 by sluetzen         ###   ########.fr        #
+#    Updated: 2020/02/10 17:59:05 by sluetzen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -106,7 +106,9 @@ SOURCES_LIST = main.c \
 			editor_null_pointers.c \
 			editor_create_surfaces.c \
 			editor_init_options.c \
-			editor_init_instructs.c
+			editor_init_instructs.c \
+			editor_events_height_input.c \
+			editor_free.c
 
 SOURCES = $(addprefix $(SOURCES_DIRECTORY), $(SOURCES_LIST))
 

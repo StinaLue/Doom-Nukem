@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:49:38 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 11:14:54 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 17:27:21 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,9 +217,9 @@ int	blit_player_face(t_editor *editor)
 			&& editor->edit_map.player_spawn.y != -1)
 	{
 		face_rect = create_sdlrect(editor->edit_map.player_spawn.x \
-					* editor->offset / MAPMULTIPLIER - 10, \
+					* editor->offset / SIZEMAP - 10, \
 					editor->editor_surf->h - editor->edit_map.player_spawn.y \
-					* editor->offset / MAPMULTIPLIER - 10, 20, 20);
+					* editor->offset / SIZEMAP - 10, 20, 20);
 		if (SDL_BlitScaled(editor->player_face_surf, &editor->player_face_rec, \
 							editor->editor_surf, &face_rect) < 0)
 			return (1);
@@ -239,8 +239,8 @@ int	blit_enemy(t_editor *editor, t_map *map, int offset)
 	{
 		enemy_rect = \
 			create_sdlrect(info[i].enemy_spawn.x \
-			* offset / MAPMULTIPLIER - 40, editor->editor_surf->h \
-			- info[i].enemy_spawn.y * offset / MAPMULTIPLIER - 40, 80, 80);
+			* offset / SIZEMAP - 40, editor->editor_surf->h \
+			- info[i].enemy_spawn.y * offset / SIZEMAP - 40, 80, 80);
 		if (SDL_BlitScaled(editor->enemy_textures[info[i].which_enemy], \
 			&editor->enemy_rect[info[i].which_enemy], \
 			editor->editor_surf, &enemy_rect) < 0)
