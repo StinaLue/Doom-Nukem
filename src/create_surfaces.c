@@ -6,7 +6,7 @@
 /*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 14:55:47 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 19:39:27 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/10 19:51:46 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ int	create_surfaces_editor(t_editor *editor, t_sdlmain *sdlmain)
 		return (error_return("create surface error = %s\n", \
 					SDL_GetError()));
 		if ((editor->opt_surf = SDL_CreateRGBSurface(0, win->w - \
-		(win->w / 1.79), (win->h / 3) * 2, 32, 0, 0, 0, 0)) == NULL)
+		(win->w / 1.79) + 1, (win->h / 3) * 2, 32, 0, 0, 0, 0)) == NULL)
 		return (error_return("create surface error = %s\n", \
 				SDL_GetError()));
 		if ((editor->instr_surf = SDL_CreateRGBSurface(0, win->w \
-			- (win->w / 1.79), win->h - (win->h / 3) * 2, \
+			- (win->w / 1.79) + 1, win->h - (win->h / 3) * 2, \
 			32, 0, 0, 0, 0)) == NULL)
 		return (error_return("create surface error = %s\n", \
 				SDL_GetError()));
@@ -35,7 +35,7 @@ int	create_surfaces_editor(t_editor *editor, t_sdlmain *sdlmain)
 	assign_sdlrect(&editor->options_rect, create_vec(win->w / 1.79, 0), \
 		create_vec(win->w - (win->w / 1.79 - 1), (win->h / 3) * 2));
 	assign_sdlrect(&editor->instr_rect, create_vec(win->w / 1.79, \
-				(win->h / 3.2) * 2), create_vec(win->w - (win->w / 1.79 - 1), \
-				win->h - ((win->h / 3.2) * 2)));
+				(win->h / 3) * 2), create_vec(win->w - (win->w / 1.79 - 1), \
+				win->h - ((win->h / 3) * 2)));
 	return (0);
 }
