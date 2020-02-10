@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/10 12:08:16 by afonck           ###   ########.fr        #
+#    Updated: 2020/02/10 12:40:03 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -218,8 +218,10 @@ fclean: clean
 	@rm -rf $(SDL2_LIB_DIRECTORY)
 	@rm -rf $(SDL2TTF_LIB_DIRECTORY)
 	@rm -rf $(OPENAL_LIB_DIRECTORY)
+	@rm -rf $(ASSETS_DIR)
 	@echo "$(NAME): $(RED)SDL2 and SDL2TTF was deleted$(RESET)"
 	@echo "$(NAME): $(RED)OPENAL was deleted$(RESET)"
+	@echo "$(NAME): $(RED)assets folder was deleted$(RESET)"
 	@$(MAKE) -sC $(LIBFT_DIRECTORY) fclean
 	@echo "$(NAME): $(RED)$(LIBFT) was deleted$(RESET)"
 	@$(MAKE) -sC $(LIBBMP_DIRECTORY) fclean
