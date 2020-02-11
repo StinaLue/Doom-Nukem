@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/11 17:38:51 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 17:45:24 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,6 +205,7 @@ void		move_player(t_player *player)
 			move = move_hyp_length(tmp_wall, tmp_dist, col_angle);
 			player->move.x += move.x;
 			player->move.y += move.y;
+			update_sector(player, player->sector->wall_head);
 		}
 		if (tmp_wall2 && wall_distance(player->pos, tmp_wall2) < 0)
 		{
@@ -223,10 +224,15 @@ void		movement(t_player *player, t_vecdb move)
 		move = multvecdb(move, 1 / SQRT2);//change later to actually calculate velocity
 	move = rotate2d(move, player->angle);
 	move = multvecdb(move, player->movespeed);
+	if (player->posz > player->sector->floor_height)
+		move = multvecdb(move, 0.5);
 	player->move = vecdb_add(move, player->inertia);
 	move_player(player);
 	player->pos = vecdb_add(player->pos, player->move);
-	player->inertia = multvecdb(player->move, 0.96);
+	if (player->posz <= player->sector->floor_height)
+		player->inertia = multvecdb(player->move, 0.96);
+	else
+		player->inertia = multvecdb(player->move, 0.99);
 	update_sector(player, player->sector->wall_head);
 }
 
@@ -249,6 +255,7 @@ void		update_player(t_player *player)
 
 void		jump(t_player *player)
 {
+	//remove if in fly mode
 	if (player->posz <= player->sector->floor_height)
 		player->zinertia = 0.7;
 }

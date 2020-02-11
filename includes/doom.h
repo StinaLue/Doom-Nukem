@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 16:47:10 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 17:50:05 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 # define NB_SOUND_BUFFERS 11
 # define PLAYER_HEIGHT 18
 # define KNEE_HEIGHT 8
-# define RUN 0.03
-# define WALK 0.01
+# define RUN 0.025
+# define WALK 0.015
 
 /*
 ** MAIN LOOP STATES
@@ -60,7 +60,7 @@
 # define NBOPTIONS 8
 # define NBHOVEROPTIONS 5
 # define NBINSTRUCTS 10
-# define SIZEMAP 50
+# define SIZEMAP 20
 # define COLOR_HOVER 0x6C1413
 # define COLOR_PRESSED 0x00cc00
 # define COLOR_NORMAL 0xffff00
@@ -556,7 +556,8 @@ void						set_height(t_options_menu *menu, SDL_Surface *surf);
 **	GAME FUNCTIONS
 */
 int							player_hurt_anim(int health, SDL_Rect *surf_rect);
-SDL_Rect					find_srcrect_enemy(t_enemy *enemy);
+
+SDL_Rect					find_srcrect_enemy(t_enemy *enemy, t_enemy_info *enemy_info);
 
 SDL_Rect					find_dstrect_enemy(t_enemy *enemy, \
 									t_player *player, SDL_Surface *dest);
