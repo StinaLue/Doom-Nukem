@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 16:34:48 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/11 16:43:55 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 # define NB_SOUND_BUFFERS 11
 # define PLAYER_HEIGHT 18
 # define KNEE_HEIGHT 8
-# define RUN 0.03
-# define WALK 0.01
+# define RUN 0.025
+# define WALK 0.015
 
 /*
 ** MAIN LOOP STATES

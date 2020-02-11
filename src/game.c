@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/11 16:35:08 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/11 16:43:50 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -527,5 +527,6 @@ int	game_loop(t_doom *doom)
 			itt++;
 	}
 	SDL_SetRelativeMouseMode(SDL_FALSE);
+	SDL_WarpMouseInWindow(sdlmain->win, sdlmain->win_surf->w / 2, sdlmain->win_surf->h / 2);
 	return (0);
 }
