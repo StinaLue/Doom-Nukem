@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 09:59:42 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 13:15:26 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,14 @@ int	init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain)
 		return (error_return("TTF_RenderText error = %{r)s\n", TTF_GetError()));
 	gamesurfs->weapons_rect = create_sdlrect(0, 0, 232, 200);
 	gamesurfs->hud_faces_rect = create_sdlrect(0, 0, gamesurfs->hud_faces_surf->w / 3, gamesurfs->hud_faces_surf->h / 5);
+	gamesurfs->hud_weapons_rect[0] = create_sdlrect(0, 0, 232, 200);
+	gamesurfs->hud_weapons_rect[1] = create_sdlrect(100, 500, 116, 100);
 	gamesurfs->dst_fps_rect = create_sdlrect((gamesurfs->perspective_view->w / 2) - 12, 0, 0, 0);
 	gamesurfs->anim_timer = 0;
 	gamesurfs->hud_timer = 0;
 	gamesurfs->current_frame = 0;
+	gamesurfs->hud_weapons_color[0] = COLOR_NORMAL;
+	gamesurfs->hud_weapons_color[1] = COLOR_NORMAL;
 	return (0);
 }
 

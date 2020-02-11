@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:53:33 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 20:07:05 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/11 12:45:22 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int		init_doom(t_doom *doom)
 	doom->editor.enemy_textures = doom->game.surfs.enemy_texture;
 	doom->editor.weapon_texture = doom->game.surfs.weapons;
 	doom->editor.player_face_surf = doom->game.surfs.hud_faces_surf;
+	//doom->editor.player_face_rec = doom->game.surfs.hud_weapons_rect;
 	doom->editor.player_face_rec.x = doom->game.surfs.hud_faces_rect.x;
 	doom->editor.player_face_rec.y = doom->game.surfs.hud_faces_rect.y;
 	doom->editor.player_face_rec.h = doom->game.surfs.hud_faces_rect.h;

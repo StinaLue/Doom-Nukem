@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 01:05:14 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/11 12:38:15 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ int		free_game(t_game *game, t_map *map)
 	free_and_null_surf(game->surfs.perspective_view);
 	free_and_null_surf(game->surfs.weapons);
 	free_and_null_surf(game->surfs.hud_faces_surf);
+	free_and_null_surf(game->surfs.hud_weapons_surf[0]);
+	free_and_null_surf(game->surfs.hud_weapons_surf[1]);
 	free_and_null_surf(game->surfs.enemy_texture[0]);
 	free_and_null_surf(game->surfs.enemy_texture[1]);
 	free_and_null_surf(game->surfs.game_over);

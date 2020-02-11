@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 11:56:48 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 13:01:37 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,6 +190,7 @@ typedef struct				s_gamesurfs
 	SDL_Surface				*game_over;
 	SDL_Surface				*victory;
 	SDL_Surface				*fps;
+	SDL_Surface				*hud_weapons_surf[2];
 	TTF_Font				*fps_font;
 	char					*fps_text;
 	SDL_Color				fps_color;
@@ -197,6 +198,8 @@ typedef struct				s_gamesurfs
 	SDL_Rect				weapons_rect;
 	SDL_Rect				hud_faces_rect;
 	SDL_Rect				dst_fps_rect;
+	SDL_Rect				hud_weapons_rect[2];
+	int						hud_weapons_color[2];
 	int						current_frame;
 	int						anim_timer;
 	int						hud_timer;
