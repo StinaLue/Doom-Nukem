@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/11 10:50:43 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 10:53:20 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 21:20:07 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,12 @@ int	editor_blit_weapons(t_editor *editor, t_options_menu *menu)
 
 	h = editor->editor_surf->h / 20;
 	assign_sdlrect(&menu->scaled_weapon_rect[0], \
-			create_vec(h * 8, h * 9.5), create_vec(80, 80));
+			create_vec(h * 8, h * 9.5), create_vec(h * 3, h * 3));
 	if (SDL_BlitScaled(editor->weapon_texture, &menu->weapon_rect[0], \
 					editor->opt_surf, &menu->scaled_weapon_rect[0]) < 0)
 		return (1);
 	assign_sdlrect(&menu->scaled_weapon_rect[1], \
-				create_vec(h * 11, h * 9.5), create_vec(80, 80));
+				create_vec(h * 11.5, h * 9.5), create_vec(h * 3, h * 3));
 	if (SDL_BlitScaled(editor->weapon_texture, &menu->weapon_rect[1], \
 					editor->opt_surf, &menu->scaled_weapon_rect[1]) < 0)
 		return (1);

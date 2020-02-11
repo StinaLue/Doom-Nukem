@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 21:04:47 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 21:24:52 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@
 # define NBPOINTS 2501
 # define NBPOINTSROW 50
 # define NBTEXTURES	9
-# define NBOPTIONS 8
+# define NBOPTIONS 9
 # define NBHOVEROPTIONS 5
 # define NBINSTRUCTS 10
 # define SIZEMAP 20

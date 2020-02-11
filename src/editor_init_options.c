@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/10 16:41:57 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 21:11:58 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 21:26:31 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,15 +66,18 @@ int		init_choose_opt_menu(t_editor *editor, int surf_h, int surf_w)
 int		init_click_opt_menu(t_editor *editor, int surf_h, int surf_w)
 {
 	if (create_opt_str(editor, create_vec(surf_h, surf_h * 5), \
-							4, "height ceiling:") != 0)
+							4, "Height ceiling:") != 0)
 		return (1);
 	if (create_opt_str(editor, create_vec(surf_h, surf_h * 6), \
-							5, "height floor:") != 0)
+							5, "Height floor:") != 0)
 		return (1);
 	if (create_opt_str(editor, create_vec(surf_w, surf_h * 5), \
-							6, "name:") != 0)
+							6, "Name:") != 0)
 		return (1);
-	if (create_hover_opt(editor, create_vec(surf_w * 1.2, surf_h * 5), \
+	if (create_opt_str(editor, create_vec(surf_w * 1.8, surf_h * 5), \
+							8, "enter") != 0)
+		return (1);
+	if (create_hover_opt(editor, create_vec(surf_w * 1.25, surf_h * 5), \
 							0, editor->opt_menu.file_name) != 0)
 		return (1);
 	if (create_hover_opt(editor, create_vec(surf_w, surf_h * 6.5), \

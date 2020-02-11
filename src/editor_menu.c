@@ -3,28 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   editor_menu.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 16:43:12 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 16:45:36 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 21:15:44 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 #include "libft.h"
-
-void	set_weapon_textures(t_options_menu *menu, SDL_Surface *surf)
-{
-	int height;
-	int width;
-
-	height = surf->h / 20;
-	width = surf->w / 16;
-	assign_sdlrect(&menu->weapon_rect[0], \
-				create_vec(height * 12, height * 14), create_vec(width, width));
-	assign_sdlrect(&menu->weapon_rect[1], \
-				create_vec(height * 15, height * 14), create_vec(width, width));
-}
 
 int		init_fonts(t_editor *editor)
 {
