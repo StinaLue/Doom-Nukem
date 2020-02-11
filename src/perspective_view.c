@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 19:15:11 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/11 19:25:03 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,6 @@
 double		vxs(double xstart, double ystart, double xtwo, double ytwo)
 {
 	return (xstart * ytwo - ystart * xtwo);
-}
-
-t_vecdb		intersect(t_vecdb start, t_vecdb end, t_vecdb origin, t_vecdb cross)
-{
-	t_vecdb intersection;
-	intersection.x = vxs(vxs(start.x, start.y, end.x, end.y), start.x - end.x, vxs(origin.x, origin.y, cross.x, cross.y), origin.x - cross.x) / vxs(start.x - end.x, start.y - end.y, origin.x - cross.x, origin.y - cross.y);
-	intersection.y = vxs(vxs(start.x, start.y, end.x, end.y), start.y - end.y, vxs(origin.x, origin.y, cross.x, cross.y), origin.y - cross.y) / vxs(start.x - end.x, start.y - end.y, origin.x - cross.x, origin.y - cross.y);
-	return (intersection);
 }
 
 t_vecdb		simple_intersect(t_vecdb start, t_vecdb end, t_vecdb cross)
@@ -45,7 +37,6 @@ int			intersect_view(t_segment *wall, t_segment *intersect, t_segment view)
 {
 	if (cross_product(wall->a, wall->b) > 0 || (wall->a.y <= 0 && wall->b.y <= 0))
 		return (0);
-
 	if (cross_product(wall->a, view.a) < 0)
 	{
 		if (cross_product(wall->b, view.a) < 0)
@@ -56,7 +47,6 @@ int			intersect_view(t_segment *wall, t_segment *intersect, t_segment view)
 		return (0);
 	else
 		intersect->a = wall->a;
-
 	if (cross_product(wall->b, view.b) > 0)
 	{
 		if (cross_product(wall->a, view.b) > 0)
@@ -78,22 +68,18 @@ void		create_perspective_wall(t_display_wall *dsp_wall, SDL_Surface *surf, t_pla
 	double		bot;
 
 	dsp_wall->fov_ratio = player->view.b.y / player->view.b.x;
-
 	distance_ratio = dsp_wall->fov_ratio / dsp_wall->intersect.a.y * surf->w;
 	x = dsp_wall->intersect.a.x * distance_ratio;
 	top = (sector->ceiling_height - (player->posz + player->height)) * distance_ratio;
 	bot = (sector->floor_height - (player->posz + player->height)) * distance_ratio;
-
 	dsp_wall->top_left.x = (surf->w + x) / 2;
 	dsp_wall->top_left.y = (surf->h + top) / 2 - player->view_z;
 	dsp_wall->bottom_left.x = dsp_wall->top_left.x;
 	dsp_wall->bottom_left.y = (surf->h + bot) / 2 - player->view_z;
-
 	distance_ratio = dsp_wall->fov_ratio / dsp_wall->intersect.b.y * surf->w;
 	x = dsp_wall->intersect.b.x * distance_ratio;
 	top = (sector->ceiling_height - (player->posz + player->height)) * distance_ratio;
 	bot = (sector->floor_height - (player->posz + player->height)) * distance_ratio;
-
 	dsp_wall->top_right.x = (surf->w + x) / 2;
 	dsp_wall->top_right.y = (surf->h + top) / 2 - player->view_z;
 	dsp_wall->bottom_right.x = dsp_wall->top_right.x;
