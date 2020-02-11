@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/10 16:41:57 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 21:26:31 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 21:28:56 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,9 @@ int		init_choose_opt_menu(t_editor *editor, int surf_h, int surf_w)
 	if (create_opt_str(editor, create_vec(surf_w, surf_h * 13), \
 										7, "CHOOSE WEAPONS") != 0)
 		return (1);
+	if (create_opt_str(editor, create_vec(surf_w * 1.8, surf_h * 5), \
+							8, "enter") != 0)
+		return (1);
 	return (0);
 }
 
@@ -73,9 +76,6 @@ int		init_click_opt_menu(t_editor *editor, int surf_h, int surf_w)
 		return (1);
 	if (create_opt_str(editor, create_vec(surf_w, surf_h * 5), \
 							6, "Name:") != 0)
-		return (1);
-	if (create_opt_str(editor, create_vec(surf_w * 1.8, surf_h * 5), \
-							8, "enter") != 0)
 		return (1);
 	if (create_hover_opt(editor, create_vec(surf_w * 1.25, surf_h * 5), \
 							0, editor->opt_menu.file_name) != 0)
