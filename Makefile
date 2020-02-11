@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+         #
+#    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/11 11:30:10 by sluetzen         ###   ########.fr        #
+#    Updated: 2020/02/11 21:29:41 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -115,7 +115,10 @@ SOURCES_LIST = main.c \
 			editor_free.c \
 			editor_blit_alerts.c \
 			editor_drawing.c \
-			editor_blit_options.c
+			editor_blit_options.c \
+			enemy.c \
+			enemy_actions.c \
+			enemy_anim.c
 
 SOURCES = $(addprefix $(SOURCES_DIRECTORY), $(SOURCES_LIST))
 

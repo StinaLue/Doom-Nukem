@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_keys_a_to_l.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/11 11:04:28 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 11:09:15 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 20:43:42 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void	key_event_l(t_editor *editor, t_doom *doom)
 		if (init_enemies(&doom->game, &doom->map) != 0)
 			doom->state = QUIT_STATE;
 		soft_reset_player(&doom->game.player, &doom->map);
+		find_neighbors(&doom->map);
 		if (doom->map.weapon_choice == 1 || doom->map.weapon_choice == 3)
 			doom->game.player.current_weapon = 0;
 		else if (doom->map.weapon_choice == 2)

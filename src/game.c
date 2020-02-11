@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/11 18:26:13 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/11 21:25:48 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,12 @@ int	blit_uzi(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)
 
 int	blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)
 {
-	// TODO --> blit blood katana when enemy is hit
 	gamesurfs->weapons_rect.x = gamesurfs->current_frame \
 					* gamesurfs->weapons_rect.w;
-	gamesurfs->weapons_rect.y = 0;
+	if (*anim == 0)
+		gamesurfs->weapons_rect.y = 0;
+	else if (*anim == 1 && gamesurfs->current_frame > 2)
+		gamesurfs->weapons_rect.y = gamesurfs->weapons_rect.h;
 	if (SDL_BlitScaled(gamesurfs->weapons, \
 				&gamesurfs->weapons_rect, dest, NULL) != 0)
 		return (error_return("SDL_BlitScaled error: %s\n", SDL_GetError()));
@@ -167,151 +169,6 @@ int	blit_hud_faces(t_game *game)
 	return (0);
 }
 
-SDL_Rect find_dstrect_enemy(t_enemy *enemy, t_player *player, SDL_Surface *dest)
-{
-	SDL_Rect	return_rect;
-	t_vecdb		transformed_enem_pos;
-	t_vecdb		screenpos;
-	double		fov_ratio;
-	double		top;
-	double		bot;
-	double		ybot;
-
-	top = (player->posz + player->height) - (30 + enemy->posz);//player->sector->floor_height);//(sector->ceiling_height - (player->posz + player->height)) * distance_ratio;
-	bot = (player->posz + player->height) - enemy->posz;//player->sector->floor_height;
-
-	fov_ratio = player->view.b.y / player->view.b.x;
-	transformed_enem_pos = vecdb_diff(enemy->pos, player->pos);
-	transformed_enem_pos = rotate2d(transformed_enem_pos, -player->angle);
-	screenpos.x = transformed_enem_pos.x / transformed_enem_pos.y;
-	screenpos.x *= fov_ratio;
-	screenpos.x *= dest->w / 2;
-	screenpos.x += dest->w / 2;
-
-	screenpos.y = top / transformed_enem_pos.y;
-	screenpos.y *= fov_ratio;
-	screenpos.y *= dest->w / 2;
-	screenpos.y = (dest->h / 2) + screenpos.y + player->view_z;
-
-	ybot = bot / transformed_enem_pos.y;
-	ybot *= fov_ratio;
-	ybot *= dest->w / 2;
-	ybot = (dest->h / 2) + ybot + player->view_z;
-	//printf("screenpos enem x %f\n", screenpos.x);// * (dest->w / 2));
-	//printf("enemy x %f y %f\n", enemy->pos.x, enemy->pos.y);
-	//printf("pos x %f y %f\n", player->pos.x, player->pos.y);
-	return_rect.h = ybot - screenpos.y;// / ((get_point_distance(player->pos, enemy->pos)) - 10);
-	return_rect.w = return_rect.h * enemy->clip_tex.w / enemy->clip_tex.h;// / ((get_point_distance(player->pos, enemy->pos)) - 10);
-	return_rect.x = screenpos.x - return_rect.w * 0.35;// - 40;//((return_rect.w - 40) / 2);//(dest->w / 2) - (return_rect.w / 2);//enemy->pos.x - player->pos.x;
-	return_rect.y = screenpos.y;//enemy->pos.y - player->pos.y;
-	//fill_pix(dest, return_rect.x, return_rect.y, 0xFFFFFF);
-	//fill_pix(dest, return_rect.x, return_rect.y + return_rect.h, 0xFF00FF);
-	player->anim = player->anim;
-	(void)dest;
-	return (return_rect);
-}
-
-void		enemy_walking_anim(t_enemy *enemy)
-{
-	enemy->clip_tex.y = enemy->current_frame * enemy->clip_tex.h;
-	if (enemy->current_frame == 0 && enemy->anim_timer == 0)
-		enemy->anim_timer = SDL_GetTicks();
-	if (enemy->current_frame == 0 && enemy->anim_timer == 0)
-		enemy->anim_timer = SDL_GetTicks();
-	if ((SDL_GetTicks() - enemy->anim_timer) >= 150)
-	{
-		enemy->current_frame++;
-		enemy->anim_timer = SDL_GetTicks();
-	}
-	if (enemy->current_frame >= 4)
-	{
-		enemy->current_frame = 0;
-		enemy->clip_tex.y = 0;
-		enemy->state = 0;
-	}
-}
-
-void		enemy_attack_anim(t_enemy *enemy)
-{
-	enemy->clip_tex.y = enemy->clip_tex.h * (enemy->current_frame + 4);
-	if (enemy->current_frame == 0 && enemy->anim_timer == 0)
-		enemy->anim_timer = SDL_GetTicks();
-	if ((SDL_GetTicks() - enemy->anim_timer) >= 250)
-	{
-		enemy->current_frame++;
-		enemy->anim_timer = SDL_GetTicks();
-	}
-	if (enemy->current_frame >= 3)
-	{
-		enemy->current_frame = 0;
-		enemy->clip_tex.y = 0;
-		enemy->state = 0;
-	}
-}
-
-void	enemy_die_anim(t_enemy *enemy, t_enemy_info *enemy_info)
-{
-	if (enemy_info->which_enemy == 0)
-		enemy->clip_tex.y = enemy->clip_tex.h * 8;
-	else if (enemy_info->which_enemy == 1)
-		enemy->clip_tex.y = enemy->clip_tex.h * 9;
-	enemy->clip_tex.x = enemy->clip_tex.w * enemy->current_frame;
-	if (enemy->current_frame == 0 && enemy->anim_timer == 0)
-		enemy->anim_timer = SDL_GetTicks();
-	if ((SDL_GetTicks() - enemy->anim_timer) >= 150)
-	{
-		enemy->current_frame++;
-		enemy->anim_timer = SDL_GetTicks();
-	}
-	if (enemy->current_frame >= 7)
-		enemy->state = 3;
-}
-
-void	enemy_dead_rect(t_enemy *enemy)
-{
-	enemy->clip_tex.y = enemy->clip_tex.h * 8;
-	enemy->clip_tex.x = enemy->clip_tex.w * 6;
-}
-
-SDL_Rect find_srcrect_enemy(t_enemy *enemy, t_enemy_info *enemy_info)//, t_player *player)
-{
-	if (enemy->state == 1 && enemy->health > 0)
-		enemy_walking_anim(enemy);
-	else if (enemy->state == 2 && enemy->health > 0)
-		enemy_attack_anim(enemy);
-	else if (enemy->state == 2 && enemy->health <= 0)
-		enemy_die_anim(enemy, enemy_info);
-	else if (enemy->state == 3)
-		enemy_dead_rect(enemy);
-	else
-		enemy->anim_timer = 0;
-	//printf("enemy health %d\n", enemy->health);
-	return (enemy->clip_tex);
-}
-
-int	blit_enemies(t_game *game, SDL_Surface *dest, t_map *map)
-{
-	int			i;
-	SDL_Rect	destrect;
-
-	i = 0;
-	while (i < map->num_enemies)
-	{
-		if (game->player.anim == 1 && game->enemy[i].state != 3)
-			game->enemy[i].state = 2;
-		else if (game->player.is_moving == 1 && game->enemy[i].state != 3)
-			game->enemy[i].state = 1;
-		game->enemy[i].clip_tex = find_srcrect_enemy(&game->enemy[i], &map->enemy_info[i]);//, &game->player);
-		destrect = find_dstrect_enemy(&game->enemy[i], &game->player, dest);
-		if ((SDL_BlitScaled(game->enemy[i].texture, \
-				&game->enemy[i].clip_tex, dest, &destrect)) != 0)
-			return (error_return("SDL_BlitScaled error: %{r}s\n", \
-						SDL_GetError()));
-			i++;
-	}
-	return (0);
-}
-
 void	set_listener_ori(double angle, t_vecdb player_pos)
 {
 	ALfloat	orix;
@@ -426,11 +283,9 @@ void	katana_hit(t_player *player, t_enemy *enemy, int num_enemies)
 
 int	player_attack(t_enemy *enemy, t_player *player, t_map *map, t_gamesurfs *surfs)
 {
-	//printf("current frame %d\n", surfs->current_frame);
 	if (player->current_weapon == 0 && player->anim == 1 && surfs->current_frame == 3)
 	{
 		katana_hit(player, enemy, map->num_enemies);
-		//if (player->pos)
 	}
 	else if (player->current_weapon == 1 && player->anim == 1 && surfs->current_frame == 2)
 	{
@@ -518,7 +373,7 @@ int	game_loop(t_doom *doom)
 					game->player.current_weapon, doom->map.weapon_choice) != 0)
 			return (error_return("Blit weapon error\n", NULL));
 		player_attack(game->enemy, &game->player, &doom->map, &game->surfs);
-
+		enemy_action(game->enemy, &game->player, doom->map.num_enemies);
 		if ((blit_hud_faces(game)) == 1)
 			return (error_return("error during blit_hud_faces\n", NULL));
 		if ((blit_fps(game, &itt, &startclock)) == 1)

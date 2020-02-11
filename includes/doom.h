@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 18:33:51 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/11 21:33:07 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -617,6 +617,9 @@ int							editor_blit_weapons(t_editor *editor, \
 int							blit_options(t_editor *editor);
 
 int							blit_height(t_editor *editor);
+
+int							blit_enemies(t_game *game, SDL_Surface *dest, \
+									t_map *map);
 /*
 ** TEXT FUNCTIONS
 */
@@ -857,6 +860,8 @@ int							count_walls(t_wall_node *wall_list);
 
 void						set_wall_length(t_wall_node *head);
 
+void						find_neighbors(t_map *map);
+
 /*
 ** DEBUG FUNCTIONS
 */
@@ -872,6 +877,15 @@ void						print_vecdb(const t_vecdb *vecdb, const char *name);
 int							check_convex_sector(t_sector_node *sector);
 
 int							check_clockwise_sector(t_sector_node *sector);
+
+/*
+** ENEMY FUNCTIONS
+*/
+void						enemy_action(t_enemy *enemy, t_player *player, \
+									int num_enemies);
+
+SDL_Rect					find_srcrect_enemy(t_enemy *enemy, \
+								t_enemy_info *enemy_info);
 
 /*
 ** TEXTURE MAPPING
