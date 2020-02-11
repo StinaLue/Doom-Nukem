@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 22:07:29 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 22:17:56 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -534,6 +534,10 @@ int							editor_events(t_doom *doom, t_sdlmain *sdlmain);
 
 void						set_height(t_options_menu *menu, SDL_Surface *surf);
 
+void						check_anim(t_game *game);
+
+void						check_weapon(SDL_Event *event, t_game *game, \
+											int available_weapons);
 /*
 **	GAME FUNCTIONS
 */

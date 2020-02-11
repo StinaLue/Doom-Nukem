@@ -6,7 +6,7 @@
 #    By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/11 22:08:12 by sluetzen         ###   ########.fr        #
+#    Updated: 2020/02/11 22:16:47 by sluetzen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,6 +81,7 @@ SOURCES_LIST = main.c \
 			vector_multiplications.c \
 			vector_create_reset.c \
 			poll_event.c \
+			poll_event_checks.c \
 			handle_keys.c \
 			movement.c \
 			movement_collisions.c \
