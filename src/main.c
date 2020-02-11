@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 11:54:23 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 17:36:21 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ int		main_loop(void)
 	free_sdlmain(&doom.sdlmain);
 	free_map(&doom.map);
 	free_map(&doom.editor.edit_map);
-	//free_sector_list(&doom.map.sector_head);
 	free_wall_textures(doom.wall_textures);
 	quit_sdl_and_ttf();
 	if (ret == 1)
@@ -78,15 +77,19 @@ int		main_loop(void)
 
 int		verify_defines(void)
 {
-	if (SQRT2 != 1.4142135623730950488 || PLAYER_RADIUS != 0.3 || NB_WALL_TEXTURES != 9 \
-	|| NB_SOUND_SOURCES != 3 || NB_SOUND_BUFFERS != 4 || QUIT_STATE != 0 || GAME_STATE != 1 \
+	if (SQRT2 != 1.4142135623730950488 || PLAYER_RADIUS != 0.3 \
+	|| NB_WALL_TEXTURES != 9 || NB_SOUND_SOURCES != 3 \
+	|| NB_SOUND_BUFFERS != 4 || QUIT_STATE != 0 || GAME_STATE != 1 \
 	|| MENU_STATE != 2 || EDITOR_STATE != 3 || HD_W != 1280 || HD_H != 720 \
 	|| FHD_W != 1920 || FHD_H != 1080 || QHD_W != 2560 || QHD_H != 1440 \
-	|| OFFSET != 20 || NBPOINTS != 2501 || NBPOINTSROW != 50 || NBTEXTURES != 9 || NBOPTIONS != 8 \
-	|| NBHOVEROPTIONS != 3 || NBINSTRUCTS != 10 || SIZEMAP != 4 || COLOR_HOVER != 0x6C1413 \
-	|| COLOR_PRESSED != 0x00FF00 || COLOR_NORMAL != 0xff0000 || COLOR_NORMAL != 0xffff00 \
-	|| ROT_MAP_SHOW != 1 || FIX_MAP_SHOW != 2 || TEXFLAG != 4 || HEALTH_STATUS != 8 \
-	|| FIRST_OPTION_SELECT != 1 || SECOND_OPTION_SELECT != 2 || THIRD_OPTION_SELECT != 3 || FOURTH_OPTION_SELECT != 4)
+	|| OFFSET != 20 || NBPOINTS != 2501 || NBPOINTSROW != 50 \
+	|| NBTEXTURES != 9 || NBOPTIONS != 8 || NBHOVEROPTIONS != 3 \
+	|| NBINSTRUCTS != 10 || SIZEMAP != 4 || COLOR_HOVER != 0x6C1413 \
+	|| COLOR_PRESSED != 0x00FF00 || COLOR_NORMAL != 0xff0000 \
+	|| COLOR_NORMAL != 0xffff00 || ROT_MAP_SHOW != 1 \
+	|| FIX_MAP_SHOW != 2 || TEXFLAG != 4 || HEALTH_STATUS != 8 \
+	|| FIRST_OPTION_SELECT != 1 || SECOND_OPTION_SELECT != 2 \
+	|| THIRD_OPTION_SELECT != 3 || FOURTH_OPTION_SELECT != 4)
 		return (1);
 	else
 		return (0);

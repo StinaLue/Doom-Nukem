@@ -6,14 +6,12 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:25:24 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/11 16:05:15 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 17:33:28 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-//recursively mallocs a node at the end of the wall list
-//returns malloced adress
 t_wall_node	*insert_wall_node(t_wall_node **wall_list)
 {
 	if (*wall_list == NULL)
@@ -30,8 +28,7 @@ t_wall_node	*insert_wall_node(t_wall_node **wall_list)
 		return (insert_wall_node(&((*wall_list)->next)));
 }
 
-//frees every node of the wall_list and sets them to NULL
-void	free_wall_list(t_wall_node **wall_list)
+void		free_wall_list(t_wall_node **wall_list)
 {
 	if (*wall_list)
 	{
@@ -41,8 +38,6 @@ void	free_wall_list(t_wall_node **wall_list)
 	}
 }
 
-//deletes the last wall node and sets it to NULL
-//return the new last node adress or NULL of none left
 t_wall_node	*delete_last_wall(t_wall_node **wall_list)
 {
 	t_wall_node	*tmp;
@@ -65,8 +60,6 @@ t_wall_node	*delete_last_wall(t_wall_node **wall_list)
 	}
 }
 
-//adds existing node add the end of the list and copies the variables from given node
-//returns created node adress
 t_wall_node	*copy_wall_node(t_wall_node **wall_head, const t_wall_node *node)
 {
 	t_wall_node *new_node;
@@ -88,9 +81,8 @@ t_wall_node	*copy_wall_node(t_wall_node **wall_head, const t_wall_node *node)
 	return (new_node);
 }
 
-//create new node with given params and adds it to the end of list
-//returns created node adress
-t_wall_node	*create_wall_node(t_wall_node **wall_head, t_vecdb a, t_vecdb b, int tex_index)
+t_wall_node	*create_wall_node(t_wall_node **wall_head, \
+					t_vecdb a, t_vecdb b, int tex_index)
 {
 	t_wall_node *new_node;
 
@@ -109,8 +101,7 @@ t_wall_node	*create_wall_node(t_wall_node **wall_head, t_vecdb a, t_vecdb b, int
 	return (new_node);
 }
 
-//return wall adress from an index
-t_wall_node	*get_wall_by_index(t_wall_node *wall_list,unsigned int index)
+t_wall_node	*get_wall_by_index(t_wall_node *wall_list, unsigned int index)
 {
 	if (wall_list == NULL)
 		return (NULL);
@@ -120,8 +111,8 @@ t_wall_node	*get_wall_by_index(t_wall_node *wall_list,unsigned int index)
 		return (get_wall_by_index(wall_list->next, index - 1));
 }
 
-//returns the first wall for which the distance from the wall center to the position given is under 'dist'
-t_wall_node	*get_wall_by_pos(t_wall_node *wall_list, t_vecdb position, double dist)
+t_wall_node	*get_wall_by_pos(t_wall_node *wall_list, \
+							t_vecdb position, double dist)
 {
 	t_vecdb wall_center;
 
@@ -135,9 +126,10 @@ t_wall_node	*get_wall_by_pos(t_wall_node *wall_list, t_vecdb position, double di
 		return (get_wall_by_pos(wall_list->next, position, dist));
 }
 
-t_wall_node	*get_closest_wall(t_wall_node *wall_list, t_vecdb position, double dist, double inc)
+t_wall_node	*get_closest_wall(t_wall_node *wall_list, \
+				t_vecdb position, double dist, double inc)
 {
-	int		i;
+	int			i;
 	t_wall_node *node;
 
 	node = NULL;
@@ -151,12 +143,10 @@ t_wall_node	*get_closest_wall(t_wall_node *wall_list, t_vecdb position, double d
 	return (NULL);
 }
 
-//returns a vector of the average position of all the wall_start coordinates of a list of walls
-//returns a 0,0 vector if there are no walls
-t_vecdb	point_average_position(t_wall_node *wall_head)
+t_vecdb		point_average_position(t_wall_node *wall_head)
 {
-	t_vecdb	average;
-	int		count;
+	t_vecdb		average;
+	int			count;
 	t_wall_node *current_wall;
 
 	average.x = 0;
@@ -178,7 +168,7 @@ t_vecdb	point_average_position(t_wall_node *wall_head)
 	return (average);
 }
 
-t_wall_node		*get_last_wall_node(t_wall_node *wall_list)
+t_wall_node	*get_last_wall_node(t_wall_node *wall_list)
 {
 	if (wall_list == NULL)
 		return (NULL);
@@ -187,12 +177,7 @@ t_wall_node		*get_last_wall_node(t_wall_node *wall_list)
 	return (wall_list);
 }
 
-//removewall(int index)
-//removewall(t_vecdb position)
-
-//mallocs and copies a list of walls on a new list adress
-//returns the number of walls mallocs or -1 if malloc error
-int	copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list)
+int			copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list)
 {
 	int	ret;
 
@@ -204,14 +189,8 @@ int	copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list)
 	*new_list = malloc(sizeof(t_wall_node));
 	if (*new_list == NULL)
 		return (-1);
-    (*new_list)->start = wall_list->start;
-    (*new_list)->end = wall_list->end;
-    //set_vecdb_values(&wall_list->start, &(*new_list)->start);
-    //set_vecdb_values(&(*new_list)->end, &wall_list->end);
-	//(*new_list)->start.x = wall_list->start.x;
-	//(*new_list)->start.y = wall_list->start.y;
-	//(*new_list)->end.x = wall_list->end.x;
-	//(*new_list)->end.y = wall_list->end.y;
+	(*new_list)->start = wall_list->start;
+	(*new_list)->end = wall_list->end;
 	(*new_list)->color = wall_list->color;
 	(*new_list)->length = wall_list->length;
 	(*new_list)->sector_index = wall_list->sector_index;
