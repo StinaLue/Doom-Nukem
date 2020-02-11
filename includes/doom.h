@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 21:54:01 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 22:07:29 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -713,6 +713,11 @@ double						wall_distance(t_vecdb point, t_wall_node *wall);
 int							is_in_range(t_vecdb pos, t_wall_node *wall);
 
 int							is_in_direction(t_vecdb move, t_wall_node *wall);
+
+t_vecdb						move_hyp_length(t_wall_node *wall, \
+										double distance, double angle);
+
+void						update_sector(t_player *player, t_wall_node *wall);
 /*
 ** MENU FUNCTIONS
 */

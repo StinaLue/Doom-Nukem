@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_line.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 16:06:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/06 14:33:17 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 22:14:00 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,8 @@ int		get_steps(double *x, double *y)
 	return (0);
 }
 
-void	draw_line(t_vec a, t_vec b, SDL_Surface *surf, int color)
+void	draw_line_sub(t_vec a, t_vec b, SDL_Surface *surf, int color)
 {
-	double	deltax;
-	double	deltay;
-	t_vecdb	pos;
-	int		steps;
-
 	if (b.y < a.y)
 	{
 		draw_line(b, a, surf, color);
@@ -54,6 +49,16 @@ void	draw_line(t_vec a, t_vec b, SDL_Surface *surf, int color)
 		a.x += ((double)b.x - a.x) / (((double)b.y - a.y) / -a.y);
 		a.y = 0;
 	}
+}
+
+void	draw_line(t_vec a, t_vec b, SDL_Surface *surf, int color)
+{
+	double	deltax;
+	double	deltay;
+	t_vecdb	pos;
+	int		steps;
+
+	draw_line_sub(a, b, surf, color);
 	deltax = b.x - a.x;
 	deltay = b.y - a.y;
 	steps = ft_absolute(get_steps(&deltax, &deltay));
