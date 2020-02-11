@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/10 20:06:16 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/11 01:25:14 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,6 +274,33 @@ void	stop_enem_soundsources(t_enemy *enemies, int nb_enemies)
 	}
 }
 
+int	update_fps(int *itt, t_gamesurfs *surfs, Uint32 *startclock)
+{
+	if ((surfs->fps_text = ft_itoa(*itt)) == NULL)
+		return (error_return("itoa malloc error\n", NULL));
+	if (reset_text(&surfs->fps_font, &surfs->fps, &surfs->fps_color, surfs->fps_text) != 0)
+		return (error_return("reset text error\n", NULL));
+	ft_memdel((void **)&surfs->fps_text);
+	*itt = 0;
+	*startclock = SDL_GetTicks();
+	return (0);
+}
+
+int	blit_fps(t_game *game, int *itt, Uint32 *startclock)
+{
+	if (game->data.hud_flags & FPS_SHOW)
+	{
+		if ((SDL_BlitSurface(game->surfs.fps, NULL, game->surfs.perspective_view, &game->surfs.dst_fps_rect)) < 0)
+			return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
+	}
+	if (SDL_GetTicks() - *startclock >= 1000 && game->data.hud_flags & FPS_SHOW)
+	{
+		if (update_fps(itt, &game->surfs, startclock) != 0)
+			return (1);
+	}
+	return (0);
+}
+
 int game_loop(t_doom *doom)
 {
 	t_game		*game;
@@ -308,26 +335,10 @@ int game_loop(t_doom *doom)
 		alListener3f(AL_POSITION, game->player.pos.x, game->player.pos.y, 0);
 		//printf("vec player x %f y %f\n", game->player.pos.x, game->player.pos.y);
 		set_listener_ori(game->player.angle, game->player.pos);
-		//alSource3f(sdlmain->sound.source[0], AL_POSITION, doom->map.sector_head->wall_head->start.x, doom->map.sector_head->wall_head->start.y, 0);
-		//alSource3f(sdlmain->sound.source[1], AL_POSITION, doom->map.sector_head->wall_head->end.x, doom->map.sector_head->wall_head->end.y, 0);
-		if (game->data.hud_flags & COLORFLAG)
-			game->surfs.perspective_view->userdata = "textured";
-		else
+		if (game->data.hud_flags & TEXFLAG)
 			game->surfs.perspective_view->userdata = "untextured";
-		//draw_perspective_view(game->surfs.perspective_view, &game->player, doom->wall_textures);
-		//if ((SDL_BlitScaled(game->surfs.weapons, &game->surfs.katana[(int)((float)SDL_GetTicks() / 400) % 4], game->surfs.perspective_view, NULL)) != 0)
-		//	printf("%s\n", SDL_GetError());
-		//print sector index
-		/*int i = 0;
-		t_sector_node *node = doom->map.sector_head;
-		while (node != NULL)
-		{
-			if (game->player.sector == node)
-				printf("sector: %d\n", i + 1);
-			i++;
-			node = node->next;
-		}*/
-		//draw_perspective_view(game->surfs.perspective_view, &game->player, doom->wall_textures);
+		else
+			game->surfs.perspective_view->userdata = "textured";
 		view = init_view(&game->player, game->surfs.perspective_view);
 		draw_view_recursive(game->surfs.perspective_view, doom->wall_textures, view, game->player.sector, &game->player);
 		if (blit_enemies(game, game->surfs.perspective_view, &doom->map) != 0)
@@ -337,6 +348,8 @@ int game_loop(t_doom *doom)
 
 		if ((blit_hud_faces(game)) == 1)
 			return (error_return("error during blit_hud_faces\n", NULL));
+		if ((blit_fps(game, &itt, &startclock)) == 1)
+			return (error_return("error during blit_fps\n", NULL));
 		if ((SDL_BlitScaled(game->surfs.perspective_view, \
 							NULL, sdlmain->win_surf, NULL)) < 0)
 			return (error_return("SDL_BlitScaled error = %{r}s\n", SDL_GetError()));
@@ -346,12 +359,6 @@ int game_loop(t_doom *doom)
 			return (error_return("SDL_UpdateWindowSurface error = %{r}s\n", \
 						SDL_GetError()));
 			itt++;
-		if (SDL_GetTicks() - startclock >= 1000)
-		{
-			printf("fps:%d\n", itt);
-			itt = 0;
-			startclock = SDL_GetTicks();
-		}
 	}
 	SDL_SetRelativeMouseMode(SDL_FALSE);
 	return (0);

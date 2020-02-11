@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   poll_event.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:22:12 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/10 11:19:58 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 00:47:11 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,10 @@ void	handle_hud(SDL_Event *event, char *hud_flags)
 		activate_map_flags(hud_flags);
 	if (event->key.keysym.sym == SDLK_c)
 	{
-		if ((*hud_flags & COLORFLAG) == 0)
-			*hud_flags |= COLORFLAG;
-		else if ((*hud_flags & COLORFLAG))
-			*hud_flags &= ~(COLORFLAG);
+		if ((*hud_flags & TEXFLAG) == 0)
+			*hud_flags |= TEXFLAG;
+		else if ((*hud_flags & TEXFLAG))
+			*hud_flags &= ~(TEXFLAG);
 	}
 	if (event->key.keysym.sym == SDLK_p)
 	{
@@ -78,6 +78,13 @@ void	handle_hud(SDL_Event *event, char *hud_flags)
 			*hud_flags |= HEALTH_STATUS;
 		else if ((*hud_flags & HEALTH_STATUS))
 			*hud_flags &= ~(HEALTH_STATUS);
+	}
+	if (event->key.keysym.sym == SDLK_t)
+	{
+		if ((*hud_flags & FPS_SHOW) == 0)
+			*hud_flags |= FPS_SHOW;
+		else if ((*hud_flags & FPS_SHOW))
+			*hud_flags &= ~(FPS_SHOW);
 	}
 }
 

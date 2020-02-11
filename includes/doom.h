@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 20:07:59 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/11 00:46:36 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,9 @@
 */
 # define ROT_MAP_SHOW 1
 # define FIX_MAP_SHOW 2
-# define COLORFLAG 4
+# define TEXFLAG 4
 # define HEALTH_STATUS 8
+# define FPS_SHOW 16
 
 /*
 ** MENU OPTIONS
@@ -187,9 +188,14 @@ typedef struct				s_gamesurfs
 	SDL_Surface				*enemy_texture[2];
 	SDL_Surface				*game_over;
 	SDL_Surface				*victory;
+	SDL_Surface				*fps;
+	TTF_Font				*fps_font;
+	char					*fps_text;
+	SDL_Color				fps_color;
 
 	SDL_Rect				weapons_rect;
 	SDL_Rect				hud_faces_rect;
+	SDL_Rect				dst_fps_rect;
 	int						current_frame;
 	int						anim_timer;
 	int						hud_timer;

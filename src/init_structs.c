@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 20:06:35 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/11 00:43:51 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,14 @@ int	init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain)
 		return (error_return("load game over surf error\n", NULL));
 	if ((gamesurfs->victory = load_opti_bmp("assets/victory.bmp", gamesurfs->perspective_view, 0)) == NULL)
 		return (error_return("load victory surf error\n", NULL));
+	assign_sdlcolor(&gamesurfs->fps_color, 255, 0, 0);
+	if ((gamesurfs->fps_font = TTF_OpenFont("assets/fonts/dooM.ttf", 14)) == NULL)
+		return (error_return("TTF_OpenFont error = %s\n", TTF_GetError()));
+	if ((gamesurfs->fps = TTF_RenderText_Solid(gamesurfs->fps_font, "fps = 00", gamesurfs->fps_color)) == NULL)
+		return (error_return("TTF_RenderText error = %{r)s\n", TTF_GetError()));
 	gamesurfs->weapons_rect = create_sdlrect(0, 0, 232, 200);
 	gamesurfs->hud_faces_rect = create_sdlrect(0, 0, gamesurfs->hud_faces_surf->w / 3, gamesurfs->hud_faces_surf->h / 5);
+	gamesurfs->dst_fps_rect = create_sdlrect((gamesurfs->perspective_view->w / 2) - 12, 0, 0, 0);
 	gamesurfs->anim_timer = 0;
 	gamesurfs->hud_timer = 0;
 	gamesurfs->current_frame = 0;

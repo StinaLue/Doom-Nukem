@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:43:56 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 17:58:46 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 01:05:14 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,10 @@ int		free_game(t_game *game, t_map *map)
 	free_and_null_surf(game->surfs.enemy_texture[1]);
 	free_and_null_surf(game->surfs.game_over);
 	free_and_null_surf(game->surfs.victory);
+	free_and_null_surf(game->surfs.fps);
+	TTF_CloseFont(game->surfs.fps_font);
+	game->surfs.fps_font = NULL;
+	ft_memdel((void **)&game->surfs.fps_text);
 	free_enemies(game, nb_enemy);
 	return (EXIT_FAILURE);
 }
