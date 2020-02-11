@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/11 15:34:19 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 16:01:29 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 20:28:30 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,12 @@ void	check_finished_sect(t_editor *editor, t_sector_node *sector)
 	if ((editor->start_sector.x == editor->wall_tmp.end.x) \
 		&& (editor->start_sector.y == editor->wall_tmp.end.y))
 	{
-		if (check_convex_sector(sector) != 1)
+		if (check_convex_sector(sector) != 1 || editor->num_points < 3)
 		{
 			delete_sector_by_address(&editor->edit_map.sector_head, sector);
 			sector = NULL;
 			editor->show_convex_alert = 1;
+			editor->num_points = 0;
 		}
 		else
 		{
@@ -51,6 +52,7 @@ void	check_finished_sect(t_editor *editor, t_sector_node *sector)
 			sector->floor_height = editor->opt_menu.height_floor;
 			sector->ceiling_height = editor->opt_menu.height_ceiling;
 			editor->edit_map.num_sectors++;
+			editor->num_points = 0;
 		}
 		reset_vecdb(&editor->wall_tmp.start);
 		editor->start_sector_reached = 1;
@@ -74,6 +76,7 @@ void	create_walls_on_map(t_vec mouse, t_editor *editor, t_wall_node *wall)
 		copy_wall_node(&editor->current_sector->wall_head, wall);
 		editor->current_sector->wall_num++;
 		wall->start = wall->end;
+		editor->num_points++;
 		check_finished_sect(editor, editor->current_sector);
 	}
 	else
@@ -85,6 +88,7 @@ void	create_walls_on_map(t_vec mouse, t_editor *editor, t_wall_node *wall)
 			wall->start = vec_to_vecdb(multvec(mouse, SIZEMAP));
 			wall->end = vec_to_vecdb(multvec(mouse, SIZEMAP));
 			editor->start_sector_reached = 0;
+			editor->num_points++;
 		}
 	}
 	editor->current_sector = get_last_sector(editor->edit_map.sector_head);
