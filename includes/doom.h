@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 21:24:52 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 21:54:01 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -698,6 +698,21 @@ void						mouse_movement(SDL_MouseMotionEvent event, \
 void						update_player(t_player *player);
 
 void						jump(t_player *player);
+
+t_wall_node					*get_collision_wall(t_player *player, \
+									t_sector_node *sector, double *min_dist);
+
+t_vecdb						collide(t_wall_node *wall, double distance, \
+										double *col_angle);
+
+t_vecdb						corner_collision(t_player *player, \
+											t_wall_node *wall);
+
+double						wall_distance(t_vecdb point, t_wall_node *wall);
+
+int							is_in_range(t_vecdb pos, t_wall_node *wall);
+
+int							is_in_direction(t_vecdb move, t_wall_node *wall);
 /*
 ** MENU FUNCTIONS
 */

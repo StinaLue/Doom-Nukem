@@ -6,12 +6,22 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 13:47:58 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/11 19:49:32 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 21:48:39 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 #include "libft.h"
+
+void	init_values_blit(SDL_Rect *dst_rect, \
+				t_vec *screen_start, t_vec *surf_start)
+{
+	if (dst_rect == NULL)
+		give_vec_values(screen_start, 0, 0);
+	else
+		give_vec_values(screen_start, dst_rect->x, dst_rect->y);
+	give_vec_values(surf_start, 0, 0);
+}
 
 void	simple_blit(SDL_Surface *src, SDL_Surface *dst, \
 				SDL_Rect *dst_rect, Uint32 colorkey)
@@ -20,11 +30,7 @@ void	simple_blit(SDL_Surface *src, SDL_Surface *dst, \
 	t_vec	surf_start;
 	Uint32	color;
 
-	if (dst_rect == NULL)
-		give_vec_values(&screen_start, 0, 0);
-	else
-		give_vec_values(&screen_start, dst_rect->x, dst_rect->y);
-	give_vec_values(&surf_start, 0, 0);
+	init_values_blit(dst_rect, &screen_start, &surf_start);
 	while (surf_start.x < src->w && screen_start.x < dst->w)
 	{
 		surf_start.y = 0;
