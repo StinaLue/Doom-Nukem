@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 17:50:05 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 18:14:19 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -557,7 +557,8 @@ void						set_height(t_options_menu *menu, SDL_Surface *surf);
 */
 int							player_hurt_anim(int health, SDL_Rect *surf_rect);
 
-SDL_Rect					find_srcrect_enemy(t_enemy *enemy, t_enemy_info *enemy_info);
+SDL_Rect					find_srcrect_enemy(t_enemy *enemy, \
+											t_enemy_info *enemy_info);
 
 SDL_Rect					find_dstrect_enemy(t_enemy *enemy, \
 									t_player *player, SDL_Surface *dest);
@@ -802,7 +803,7 @@ void						key_event_height(t_editor *editor, SDL_Event ev, \
 void						mouse_collide1(t_sdlmain *sdlmain, \
 										t_editor *editor, t_options_menu *menu);
 void						mouse_collide2(t_sdlmain *sdlmain, \
-							t_editor *editor,t_options_menu *menu, Uint8 button);
+						t_editor *editor, t_options_menu *menu, Uint8 button);
 
 void						create_walls_on_map(t_vec mouse, t_editor *editor, \
 													t_wall_node *wall);
