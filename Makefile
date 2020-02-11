@@ -6,7 +6,7 @@
 #    By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/11 22:16:47 by sluetzen         ###   ########.fr        #
+#    Updated: 2020/02/11 22:37:39 by sluetzen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -135,7 +135,10 @@ SOURCES_LIST = main.c \
 			editor_free.c \
 			editor_blit_alerts.c \
 			editor_drawing.c \
-			editor_blit_options.c
+			editor_blit_options.c \
+			enemy.c \
+			enemy_actions.c \
+			enemy_anim.c
 
 SOURCES = $(addprefix $(SOURCES_DIRECTORY), $(SOURCES_LIST))
 

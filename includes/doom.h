@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 22:17:56 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 22:37:52 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,8 +221,10 @@ typedef struct				s_enemy
 {
 	t_vecdb					pos;
 	SDL_Surface				*texture;
+	t_sector_node			*sector;
 	SDL_Rect				clip_tex;
 	double					angle;
+	double					posz;
 	int						health;
 	int						state;
 	ALuint					sound_src;
@@ -888,6 +890,10 @@ t_wall_node					*copy_wall_node(t_wall_node **wall_head, \
 int							copy_wall_list(t_wall_node *wall_list, \
 											t_wall_node **new_list);
 
+void						set_wall_length(t_wall_node *head);
+
+void						find_neighbors(t_map *map);
+
 /*
 ** DEBUG FUNCTIONS
 */
@@ -903,6 +909,15 @@ void						print_vecdb(const t_vecdb *vecdb, const char *name);
 int							check_convex_sector(t_sector_node *sector);
 
 int							check_clockwise_sector(t_sector_node *sector);
+
+/*
+** ENEMY FUNCTIONS
+*/
+void						enemy_action(t_enemy *enemy, t_player *player, \
+									int num_enemies);
+
+SDL_Rect					find_srcrect_enemy(t_enemy *enemy, \
+								t_enemy_info *enemy_info);
 
 /*
 ** TEXTURE MAPPING

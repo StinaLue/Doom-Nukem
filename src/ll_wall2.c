@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ll_wall2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/11 19:30:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 19:33:06 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 22:27:02 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int			copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list)
 	(*new_list)->tex_index = wall_list->tex_index;
 	(*new_list)->wall_type = wall_list->wall_type;
 	(*new_list)->type_color = wall_list->type_color;
-	(*new_list)->neighbor_sector = wall_list->neighbor_sector;
+	//(*new_list)->neighbor_sector = wall_list->neighbor_sector;
 	ret = copy_wall_list(wall_list->next, &(*new_list)->next);
 	if (ret == -1)
 		return (-1);

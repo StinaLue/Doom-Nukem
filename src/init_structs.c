@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 18:33:32 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 22:33:43 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,15 @@ void		init_player_struct(t_player *player, t_map *map)
 	player->movespeed = WALK;
 }
 
-void		init_enemy(t_enemy *enemy, t_enemy_info *enemy_info, t_game *game)
+void	init_enemy(t_enemy *enemy, t_enemy_info *enemy_info, t_game *game, t_map *map)
 {
 	enemy->pos = create_vecdb(enemy_info->enemy_spawn.x, \
-							enemy_info->enemy_spawn.y);
+	enemy_info->enemy_spawn.y);
+	enemy->sector = get_sector_by_pos(map->sector_head, enemy->pos);
+	if (enemy->sector)
+		enemy->posz = enemy->sector->floor_height;
+	else
+		enemy->posz = 0;
 	enemy->texture = game->surfs.enemy_texture[enemy_info->which_enemy];
 	enemy->angle = 0;
 	get_enemysprite_rect(&enemy->clip_tex, \
@@ -97,7 +102,7 @@ int			init_enemies(t_game *game, t_map *map)
 	while (current_enemy < map->num_enemies)
 	{
 		enemy_info = &map->enemy_info[current_enemy];
-		init_enemy(&game->enemy[current_enemy], enemy_info, game);
+		init_enemy(&game->enemy[current_enemy], enemy_info, game, map);
 		current_enemy++;
 	}
 	return (0);
