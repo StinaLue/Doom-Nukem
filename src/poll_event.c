@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   poll_event.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:22:12 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/11 10:24:11 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 18:35:55 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,9 +121,6 @@ int		handle_events(t_doom *doom)
 		check_weapon(&doom->sdlmain.event, \
 						&doom->game, doom->map.weapon_choice);
 		handle_hud(&doom->sdlmain.event, &doom->game.data.hud_flags);
-		// ONLY TO TEST HEALTH
-		if (doom->sdlmain.event.key.keysym.sym == SDLK_z)
-			doom->game.player.health -= 10;
 	}
 	if (doom->sdlmain.event.type == SDL_MOUSEMOTION)
 	{

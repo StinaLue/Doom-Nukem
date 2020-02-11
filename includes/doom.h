@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 16:34:48 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/11 18:33:51 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,8 +221,10 @@ typedef struct				s_enemy
 {
 	t_vecdb					pos;
 	SDL_Surface				*texture;
+	t_sector_node			*sector;
 	SDL_Rect				clip_tex;
 	double					angle;
+	double					posz;
 	int						health;
 	int						state;
 	ALuint					sound_src;
@@ -551,7 +553,6 @@ void						handle_keys(t_doom *doom, \
 int							editor_events(t_doom *doom, t_sdlmain *sdlmain);
 
 void						set_height(t_options_menu *menu, SDL_Surface *surf);
-
 
 /*
 ** PRINT MINIMAP FUNCTIONS

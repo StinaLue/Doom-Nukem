@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/11 16:35:08 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/11 18:26:13 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,8 +177,8 @@ SDL_Rect find_dstrect_enemy(t_enemy *enemy, t_player *player, SDL_Surface *dest)
 	double		bot;
 	double		ybot;
 
-	top = (player->posz + player->height) - (30 + player->sector->floor_height);//(sector->ceiling_height - (player->posz + player->height)) * distance_ratio;
-	bot = (player->posz + player->height) - player->sector->floor_height;
+	top = (player->posz + player->height) - (30 + enemy->posz);//player->sector->floor_height);//(sector->ceiling_height - (player->posz + player->height)) * distance_ratio;
+	bot = (player->posz + player->height) - enemy->posz;//player->sector->floor_height;
 
 	fov_ratio = player->view.b.y / player->view.b.x;
 	transformed_enem_pos = vecdb_diff(enemy->pos, player->pos);
@@ -375,40 +375,52 @@ int	blit_fps(t_game *game, int *itt, Uint32 *startclock)
 	return (0);
 }
 
+void	check_hit_uzi(int num_enemies, int *is_enemy_hit, t_vecdb dir_player, t_enemy *enemy)
+{
+	int i;
+
+	i = 0;
+	while (i < num_enemies && *is_enemy_hit == 0)
+	{
+		if (get_point_distance(dir_player, enemy[i].pos) < 22)
+		{
+			enemy[i].health -= 1;
+			*is_enemy_hit = 1;
+		}
+		i++;
+	}
+}
+
 void	raycast_uzi(t_player *player, t_enemy *enemy, int num_enemies)
 {
-	int		i;
 	int		is_enemy_hit;
 	t_vecdb	dir_player;
 	int		nb_steps;
 	t_vecdb	step;
 
-	i = 0;
 	nb_steps = 0;
 	is_enemy_hit = 0;
 	dir_player.x = -sin(player->angle) * 2 + player->pos.x;
 	dir_player.y = cos(player->angle) * 2 + player->pos.y;
-
 	step = vecdb_diff(dir_player, player->pos);
-	//printf("player x %f, y %f\n", player->pos.x, player->pos.y);
-	//printf("dir player x %f, y %f\n", dir_player.x, dir_player.y);
-	while (nb_steps < 50 && is_enemy_hit == 0)
+	while (nb_steps < 100 && is_enemy_hit == 0)
 	{
-		i = 0;
-		while (i < num_enemies && is_enemy_hit == 0)
-		{
-			//printf("diff x == %d y == %d, step nb %d\n", (int)(dir_player.x - enemy[i].pos.x), (int)(dir_player.y - enemy[i].pos.y), nb_steps);
-			if ((int)(dir_player.x - enemy[i].pos.x) == 0 && (int)(dir_player.y - enemy[i].pos.y) == 0)
-			{
-				//printf("enemy hit !!\n");
-				enemy[i].health -= 1;
-				//printf("new health == %d for enemy %i\n", enemy[i].health, i);
-				is_enemy_hit = 1;
-			}
-			i++;
-		}
+		check_hit_uzi(num_enemies, &is_enemy_hit, dir_player, enemy);
 		dir_player = vecdb_add(dir_player, step);
 		nb_steps++;
+	}
+}
+
+void	katana_hit(t_player *player, t_enemy *enemy, int num_enemies)
+{
+	int i;
+
+	i = 0;
+	while (i < num_enemies)
+	{
+		if (get_point_distance(player->pos, enemy[i].pos) < 22)
+			enemy[i].health -= 1;
+		i++;
 	}
 }
 
@@ -417,7 +429,7 @@ int	player_attack(t_enemy *enemy, t_player *player, t_map *map, t_gamesurfs *sur
 	//printf("current frame %d\n", surfs->current_frame);
 	if (player->current_weapon == 0 && player->anim == 1 && surfs->current_frame == 3)
 	{
-		;
+		katana_hit(player, enemy, map->num_enemies);
 		//if (player->pos)
 	}
 	else if (player->current_weapon == 1 && player->anim == 1 && surfs->current_frame == 2)
