@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 18:14:19 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 19:13:03 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -531,6 +531,8 @@ void						init_data_struct(t_data *data);
 void						init_player_struct(t_player *player, t_map *map);
 
 int							init_enemies(t_game *game, t_map *map);
+
+int							init_sound(t_sound *sound);
 
 /*
 ** POLL EVENT FUNCTIONS

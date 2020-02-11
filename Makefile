@@ -6,7 +6,7 @@
 #    By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/11 16:38:23 by sluetzen         ###   ########.fr        #
+#    Updated: 2020/02/11 19:16:02 by sluetzen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,6 +66,7 @@ SOURCES_LIST = main.c \
 			game_create_surfaces.c \
 			init.c \
 			init_structs.c \
+			init_wall_textures.c \
 			null_pointers.c \
 			free.c \
 			drawing.c \
@@ -107,6 +108,7 @@ SOURCES_LIST = main.c \
 			editor_mouse_collide2.c \
 			mouse_movement.c \
 			sound.c \
+			sound_init.c \
 			music.c \
 			openal_sub_functions.c \
 			end_level_loops.c \
