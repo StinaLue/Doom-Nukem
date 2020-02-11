@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/11 15:33:12 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/11 16:13:03 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,8 +169,8 @@ SDL_Rect find_dstrect_enemy(t_enemy *enemy, t_player *player, SDL_Surface *dest)
 	double		bot;
 	double		ybot;
 
-	top = (10 + player->sector->floor_height) - (player->posz + player->height);//(sector->ceiling_height - (player->posz + player->height)) * distance_ratio;
-	bot = top - 10;
+	top = (player->posz + player->height) - (30 + player->sector->floor_height);//(sector->ceiling_height - (player->posz + player->height)) * distance_ratio;
+	bot = (player->posz + player->height) - player->sector->floor_height;
 
 	fov_ratio = player->view.b.y / player->view.b.x;
 	transformed_enem_pos = vecdb_diff(enemy->pos, player->pos);
@@ -183,20 +183,21 @@ SDL_Rect find_dstrect_enemy(t_enemy *enemy, t_player *player, SDL_Surface *dest)
 	screenpos.y = top / transformed_enem_pos.y;
 	screenpos.y *= fov_ratio;
 	screenpos.y *= dest->w / 2;
-	screenpos.y = (dest->h / 2) + player->view_z + screenpos.y;
+	screenpos.y = (dest->h / 2) + screenpos.y + player->view_z;
+
 	ybot = bot / transformed_enem_pos.y;
 	ybot *= fov_ratio;
 	ybot *= dest->w / 2;
-	ybot += (dest->h / 2) + player->view_z  + ybot;
+	ybot = (dest->h / 2) + ybot + player->view_z;
 	//printf("screenpos enem x %f\n", screenpos.x);// * (dest->w / 2));
 	//printf("enemy x %f y %f\n", enemy->pos.x, enemy->pos.y);
 	//printf("pos x %f y %f\n", player->pos.x, player->pos.y);
-	return_rect.h = screenpos.y - ybot;// / ((get_point_distance(player->pos, enemy->pos)) - 10);
-	return_rect.w = (double)return_rect.h / enemy->clip_tex.h * (enemy->clip_tex.w);// / ((get_point_distance(player->pos, enemy->pos)) - 10);
-	return_rect.x = (screenpos.x);// - 40;//((return_rect.w - 40) / 2);//(dest->w / 2) - (return_rect.w / 2);//enemy->pos.x - player->pos.x;
-	return_rect.y = (screenpos.y);//enemy->pos.y - player->pos.y;
-	fill_pix(dest, return_rect.x, return_rect.y, 0xFFFFFF);
-	fill_pix(dest, return_rect.x + return_rect.w, return_rect.y + return_rect.h, 0xFF00FF);
+	return_rect.h = ybot - screenpos.y;// / ((get_point_distance(player->pos, enemy->pos)) - 10);
+	return_rect.w = return_rect.h * enemy->clip_tex.w / enemy->clip_tex.h;// / ((get_point_distance(player->pos, enemy->pos)) - 10);
+	return_rect.x = screenpos.x - return_rect.w * 0.35;// - 40;//((return_rect.w - 40) / 2);//(dest->w / 2) - (return_rect.w / 2);//enemy->pos.x - player->pos.x;
+	return_rect.y = screenpos.y;//enemy->pos.y - player->pos.y;
+	//fill_pix(dest, return_rect.x, return_rect.y, 0xFFFFFF);
+	//fill_pix(dest, return_rect.x, return_rect.y + return_rect.h, 0xFF00FF);
 	player->anim = player->anim;
 	(void)dest;
 	return (return_rect);
@@ -372,7 +373,7 @@ void	raycast_uzi(t_player *player, t_enemy *enemy, int num_enemies)
 	i = 0;
 	nb_steps = 0;
 	is_enemy_hit = 0;
-	dir_player.x = sin(player->angle) * -2 + player->pos.x;
+	dir_player.x = -sin(player->angle) * 2 + player->pos.x;
 	dir_player.y = cos(player->angle) * 2 + player->pos.y;
 
 	step = vecdb_diff(dir_player, player->pos);
