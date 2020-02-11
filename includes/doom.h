@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 20:25:02 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 21:04:47 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -702,6 +702,12 @@ void						jump(t_player *player);
 ** MENU FUNCTIONS
 */
 
+void						browse_options(t_sdlmain *sdlmain, t_menu *menu, \
+										SDL_Rect *rects, int key_or_mouse);
+
+void						launch_option(t_doom *doom);
+
+int							highlight_select(t_menu *menu, TTF_Font *font);
 /*
 ** CREATE SURFACES
 */

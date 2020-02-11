@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/10 16:41:57 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 11:52:49 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 21:11:58 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,16 @@ void	set_textures(SDL_Rect *text_rect, SDL_Surface *surf)
 	int w;
 
 	h = surf->h / 20;
-	w = surf->w / 16;
+	w = surf->w / 9;
 	assign_sdlrect(&text_rect[0], create_vec(h, h * 10), create_vec(w, w));
-	assign_sdlrect(&text_rect[1], create_vec(h, h * 12), create_vec(w, w));
-	assign_sdlrect(&text_rect[2], create_vec(h, h * 14), create_vec(w, w));
-	assign_sdlrect(&text_rect[3], create_vec(h * 3, h * 10), create_vec(w, w));
-	assign_sdlrect(&text_rect[4], create_vec(h * 3, h * 12), create_vec(w, w));
-	assign_sdlrect(&text_rect[5], create_vec(h * 3, h * 14), create_vec(w, w));
-	assign_sdlrect(&text_rect[6], create_vec(h * 5, h * 10), create_vec(w, w));
-	assign_sdlrect(&text_rect[7], create_vec(h * 5, h * 12), create_vec(w, w));
-	assign_sdlrect(&text_rect[8], create_vec(h * 5, h * 14), create_vec(w, w));
-	//assign_sdlrect(&text_rect[9], create_vec((h) * 7, (h) * 10), create_vec(w, w));
-	//assign_sdlrect(&text_rect[10], create_vec((h) * 7, (h) * 12), create_vec(w, w));
-	//assign_sdlrect(&text_rect[11], create_vec((h) * 7, (h) * 14), create_vec(w, w));
+	assign_sdlrect(&text_rect[1], create_vec(h, h * 13), create_vec(w, w));
+	assign_sdlrect(&text_rect[2], create_vec(h, h * 16), create_vec(w, w));
+	assign_sdlrect(&text_rect[3], create_vec(h * 4, h * 10), create_vec(w, w));
+	assign_sdlrect(&text_rect[4], create_vec(h * 4, h * 13), create_vec(w, w));
+	assign_sdlrect(&text_rect[5], create_vec(h * 4, h * 16), create_vec(w, w));
+	assign_sdlrect(&text_rect[6], create_vec(h * 7, h * 10), create_vec(w, w));
+	assign_sdlrect(&text_rect[7], create_vec(h * 7, h * 13), create_vec(w, w));
+	assign_sdlrect(&text_rect[8], create_vec(h * 7, h * 16), create_vec(w, w));
 }
 
 int		init_choose_opt_menu(t_editor *editor, int surf_h, int surf_w)

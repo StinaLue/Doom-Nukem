@@ -6,7 +6,7 @@
 #    By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/11 20:10:29 by sluetzen         ###   ########.fr        #
+#    Updated: 2020/02/11 21:02:31 by sluetzen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -84,6 +84,8 @@ SOURCES_LIST = main.c \
 			handle_keys.c \
 			movement.c \
 			menu.c \
+			menu_init.c \
+			menu_options.c \
 			text.c \
 			SDL_sub_functions.c \
 			ll_sector.c \
