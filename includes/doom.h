@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 20:04:13 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 20:16:55 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -405,8 +405,6 @@ int							blit(SDL_Surface *src, SDL_Rect *src_rect, \
 t_segment					rotate_wall_relative(const t_wall_node \
 								*current_wall, const t_player *player);
 
-int							is_in_map(t_vecdb *player);
-
 SDL_Surface					*load_opti_bmp(char *file, SDL_Surface *dst_surf, \
 											Uint32 colorkey);
 
@@ -687,9 +685,6 @@ SDL_Rect					create_sdlrect(int x, int y, int w, int h);
 
 void						assign_sdlrect(SDL_Rect *rect, \
 										t_vec origin, t_vec size);
-
-void						assign_sdlrect_invert(SDL_Rect *rect, \
-											t_vec origin, t_vec size);
 
 /*
 ** MOVEMENT
