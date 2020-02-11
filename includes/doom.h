@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 00:46:36 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/11 09:58:56 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # define NB_SOUND_BUFFERS 11
 # define PLAYER_HEIGHT 18
 # define KNEE_HEIGHT 8
+# define RUN 0.03
+# define WALK 0.01
 
 /*
 ** MAIN LOOP STATES

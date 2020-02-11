@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   poll_event.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:22:12 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/11 00:47:11 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/11 10:24:11 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
-
+#include "libft.h"
 void	check_quit(SDL_Event *event, int *state)
 {
 	if (event->type == SDL_QUIT || (event->type == SDL_KEYDOWN && \
@@ -29,17 +29,14 @@ void	check_menu(SDL_Event *event, int *state, \
 	}
 }
 
-void	check_anim(SDL_Event *event, t_game *game)
+void	check_anim(t_game *game)
 {
-	if (event->key.keysym.sym == SDLK_f)
+	if (game->surfs.current_frame == 0)
 	{
-		if (game->surfs.current_frame == 0)
-		{
-			if (game->player.anim == 1)
-				game->player.anim = 0;
-			else
-				game->player.anim = 1;
-		}
+		if (game->player.anim == 1)
+			game->player.anim = 0;
+		else
+			game->player.anim = 1;
 	}
 }
 
@@ -119,7 +116,8 @@ int		handle_events(t_doom *doom)
 	{
 		check_menu(&doom->sdlmain.event, &doom->state, \
 						&doom->menu.previous_state, GAME_STATE);
-		check_anim(&doom->sdlmain.event, &doom->game);
+		if (doom->sdlmain.event.key.keysym.sym == SDLK_f)
+			check_anim(&doom->game);
 		check_weapon(&doom->sdlmain.event, \
 						&doom->game, doom->map.weapon_choice);
 		handle_hud(&doom->sdlmain.event, &doom->game.data.hud_flags);
@@ -131,6 +129,9 @@ int		handle_events(t_doom *doom)
 	{
 		mouse_movement(doom->sdlmain.event.motion, doom);
 	}
+	if (doom->sdlmain.event.type == SDL_MOUSEBUTTONDOWN \
+		&& doom->sdlmain.event.button.button == SDL_BUTTON_LEFT)
+		check_anim(&doom->game);
 	if (doom->state != GAME_STATE)
 		return (1);
 	return (0);

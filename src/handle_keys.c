@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_keys.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/11 00:28:37 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 09:59:34 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,18 @@ void	basic_look(t_player *player, const Uint8 *keyboard_state)
 	if (keyboard_state[SDL_SCANCODE_RIGHT])
 		player->angle -= 0.01;
 	if (keyboard_state[SDL_SCANCODE_LSHIFT])
-		player->movespeed = 0.03;
+		player->movespeed = RUN;
 	else
-		player->movespeed = 0.01;
+		player->movespeed = WALK;
     if (keyboard_state[SDL_SCANCODE_LCTRL])
     {
         player->height = PLAYER_HEIGHT - 4;
-        player->movespeed = 0.01;
+        player->movespeed = WALK;
     }
     else
     {
         player->height = PLAYER_HEIGHT;
+		player->movespeed = RUN;
     }
     
 	if (keyboard_state[SDL_SCANCODE_PAGEUP] && player->true_fov > 1.06)//hardcoded 60deg

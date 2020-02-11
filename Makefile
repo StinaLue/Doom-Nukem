@@ -6,7 +6,7 @@
 #    By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/10 19:05:37 by sluetzen         ###   ########.fr        #
+#    Updated: 2020/02/11 09:57:11 by sluetzen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,7 +83,7 @@ SOURCES_LIST = main.c \
 			editor.c \
 			mouse.c \
 			editor_menu.c \
-			create_surfaces.c\
+			editor_create_main_surfaces.c\
 			editor_check.c \
 			editor_blit.c \
 			new_blit.c \
