@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/11 09:57:11 by sluetzen         ###   ########.fr        #
+#    Updated: 2020/02/11 11:30:10 by sluetzen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,7 +83,7 @@ SOURCES_LIST = main.c \
 			editor.c \
 			mouse.c \
 			editor_menu.c \
-			editor_create_main_surfaces.c\
+			editor_main_surfaces.c\
 			editor_check.c \
 			editor_blit.c \
 			new_blit.c \
@@ -97,6 +97,9 @@ SOURCES_LIST = main.c \
 			texture_mapping.c \
 			editor_events_mouse.c \
 			editor_events_keys.c \
+			editor_events_keys_a_to_l.c \
+			editor_events_keys_m_to_q.c \
+			editor_events_keys_r_to_u.c \
 			mouse_movement.c \
 			sound.c \
 			music.c \
@@ -107,8 +110,12 @@ SOURCES_LIST = main.c \
 			editor_create_surfaces.c \
 			editor_init_options.c \
 			editor_init_instructs.c \
+			editor_init.c \
 			editor_events_height_input.c \
-			editor_free.c
+			editor_free.c \
+			editor_blit_alerts.c \
+			editor_drawing.c \
+			editor_blit_options.c
 
 SOURCES = $(addprefix $(SOURCES_DIRECTORY), $(SOURCES_LIST))
 
