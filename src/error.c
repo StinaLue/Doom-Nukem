@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/08 20:02:31 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/08 20:12:43 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/11 16:12:11 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int		error_return(const char *error_msg, const char *sdl_error)
 	return (1);
 }
 
-int	error_return_wav(char *s1, char *s2, int fd)
+int		error_return_wav(char *s1, char *s2, int fd)
 {
 	if (fd != -1)
 	{
@@ -37,7 +37,7 @@ int	error_return_wav(char *s1, char *s2, int fd)
 	return (1);
 }
 
-int	error_return_map(const char *error_msg, const char *errstr, int fd)
+int		error_return_map(const char *error_msg, const char *errstr, int fd)
 {
 	if (fd != -1)
 	{

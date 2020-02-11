@@ -3,138 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   menu.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:27:36 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/10 20:05:06 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/11 21:06:32 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 #include "libft.h"
-
-int		init_menu_surfs(t_menu *menu, t_sdlmain *sdlmain, SDL_Surface *surf)
-{
-	if ((menu->menu_title = \
-		TTF_RenderText_Solid(sdlmain->font, "MENU", menu->text_color)) == NULL)
-		return (error_return("TTF_RenderText_Solid error = %s\n", \
-				TTF_GetError()));
-		if ((menu->options[0] = TTF_RenderText_Solid(sdlmain->font, \
-				"editor", menu->text_color)) == NULL)
-		return (error_return("TTF_RenderText_Solid error = %s\n", \
-				TTF_GetError()));
-		if ((menu->options[1] = TTF_RenderText_Solid(sdlmain->font, \
-				"return to game", menu->text_color)) == NULL)
-		return (error_return("TTF_RenderText_Solid error = %s\n", \
-				TTF_GetError()));
-		if ((menu->options[2] = TTF_RenderText_Solid(sdlmain->font, \
-				"resize window", menu->text_color)) == NULL)
-		return (error_return("TTF_RenderText_Solid error = %s\n", \
-				TTF_GetError()));
-		if ((menu->options[3] = TTF_RenderText_Solid(sdlmain->font, \
-				"quit game", menu->text_color)) == NULL)
-		return (error_return("TTF_RenderText_Solid error = %s\n", \
-				TTF_GetError()));
-		if ((menu->background = SDL_CreateRGBSurface(0, surf->w \
-		- (surf->w / 8), surf->h - (surf->h / 4), 32, 0, 0, 0, 0)) == NULL)
-		return (error_return("SDL_CreateRGBSurface error = %s\n", \
-			SDL_GetError()));
-		return (0);
-}
-
-int		init_menu(t_menu *menu, t_sdlmain *sdlmain)
-{
-	menu->current_option = 0;
-	menu->prev_option = 0;
-	menu->previous_state = QUIT_STATE;
-	menu->background = NULL;
-	assign_sdlcolor(&menu->text_color, 255, 0, 0);
-	assign_sdlrect(&menu->background_rect, create_vec((sdlmain->win_surf->w \
-				/ 8) / 2, (sdlmain->win_surf->h / 4) / 2), create_vec(0, 0));
-	if (init_menu_surfs(menu, sdlmain, sdlmain->win_surf) != 0)
-		return (1);
-	assign_sdlrect(&menu->menu_title_rect, \
-			create_vec((menu->background->w - menu->menu_title->w) / 2, \
-			(menu->background->h - menu->menu_title->h) / 8), create_vec(0, 0));
-	assign_sdlrect(&menu->options_rects[1], \
-			create_vec((menu->background->w - menu->options[1]->w) / 2, \
-			(menu->background->h - menu->options[1]->h) / 2), create_vec(0, 0));
-	assign_sdlrect(&menu->options_rects[0], \
-			create_vec((menu->background->w - menu->options[0]->w) / 2, \
-			menu->options_rects[1].y - menu->options[1]->h), create_vec(0, 0));
-	assign_sdlrect(&menu->options_rects[2], \
-			create_vec((menu->background->w - menu->options[2]->w) / 2, \
-			menu->options_rects[1].y + menu->options[1]->h), create_vec(0, 0));
-	assign_sdlrect(&menu->options_rects[3], \
-			create_vec((menu->background->w - menu->options[3]->w) / 2, \
-			menu->options_rects[2].y + menu->options[2]->h), create_vec(0, 0));
-	return (0);
-}
-
-void	browse_options(t_sdlmain *sdlmain, t_menu *menu, \
-						SDL_Rect *rects, int key_or_mouse)
-{
-	SDL_GetMouseState(&sdlmain->mouse_pos.x, \
-						&sdlmain->mouse_pos.y);
-	sdlmain->mouse_pos.x -= menu->background_rect.x;
-	sdlmain->mouse_pos.y -= menu->background_rect.y;
-	if (key_or_mouse == 1)
-	{
-		if (sdlmain->event.key.keysym.sym == SDLK_DOWN \
-					&& menu->current_option < 4)
-			menu->current_option += 1;
-		else if (sdlmain->event.key.keysym.sym == SDLK_UP \
-					&& menu->current_option > 1)
-			menu->current_option -= 1;
-	}
-	else if (key_or_mouse == 2)
-	{
-		if (is_mouse_collide(sdlmain->mouse_pos, rects[0]))
-			menu->current_option = FIRST_OPTION_SELECT;
-		else if (is_mouse_collide(sdlmain->mouse_pos, rects[1]))
-			menu->current_option = SECOND_OPTION_SELECT;
-		else if (is_mouse_collide(sdlmain->mouse_pos, rects[2]))
-			menu->current_option = THIRD_OPTION_SELECT;
-		else if (is_mouse_collide(sdlmain->mouse_pos, rects[3]))
-			menu->current_option = FOURTH_OPTION_SELECT;
-	}
-}
-
-void	change_win_dimensions(int *width, int *height)
-{
-	if (*width == HD_W && *height == HD_H)
-	{
-		*width = FHD_W;
-		*height = FHD_H;
-	}
-	else if (*width == FHD_W && *height == FHD_H)
-	{
-		*width = QHD_W;
-		*height = QHD_H;
-	}
-	else if (*width == QHD_W && *height == QHD_H)
-	{
-		*width = HD_W;
-		*height = HD_H;
-	}
-}
-
-void	launch_option(t_doom *doom)
-{
-	t_menu		*menu;
-	t_sdlmain	*sdlmain;
-
-	menu = &(doom->menu);
-	sdlmain = &(doom->sdlmain);
-	if (menu->current_option == FIRST_OPTION_SELECT)
-		doom->state = EDITOR_STATE;
-	else if (menu->current_option == SECOND_OPTION_SELECT)
-		doom->state = GAME_STATE;
-	else if (menu->current_option == THIRD_OPTION_SELECT)
-		change_win_dimensions(&sdlmain->win_w, &sdlmain->win_h);
-	else if (menu->current_option == FOURTH_OPTION_SELECT)
-		doom->state = QUIT_STATE;
-}
 
 int		menu_events(t_doom *doom)
 {
@@ -190,56 +67,6 @@ int		reset_menu_text(t_menu *menu, t_sdlmain *sdlmain, \
 					rect[1].y + surf[1]->h), create_vec(0, 0));
 	assign_sdlrect(&rect[3], create_vec((backgr->w - surf[3]->w) / 2, \
 					rect[2].y + surf[2]->h), create_vec(0, 0));
-	return (0);
-}
-
-int		highlight_first_and_second_option(t_menu *menu, TTF_Font *font)
-{
-	if (menu->current_option == FIRST_OPTION_SELECT)
-	{
-		if (highlight_text(&font, &menu->options[0], \
-			&menu->text_color, "/ editor \\") == -1)
-			return (1);
-		assign_sdlrect(&menu->options_rects[0], \
-			create_vec((menu->background->w - menu->options[0]->w) / 2, \
-			menu->options_rects[1].y - menu->options[1]->h), create_vec(0, 0));
-	}
-	else if (menu->current_option == SECOND_OPTION_SELECT)
-	{
-		if (highlight_text(&font, &menu->options[1], \
-				&menu->text_color, "/ return to game \\") == -1)
-			return (1);
-		assign_sdlrect(&menu->options_rects[1], \
-			create_vec((menu->background->w - menu->options[1]->w) / 2, \
-			(menu->background->h - menu->options[1]->h) / 2), create_vec(0, 0));
-	}
-	return (0);
-}
-
-int		highlight_select(t_menu *menu, TTF_Font *font)
-{
-	if (menu->prev_option == menu->current_option)
-		return (0);
-	if (highlight_first_and_second_option(menu, font) != 0)
-		return (1);
-	if (menu->current_option == THIRD_OPTION_SELECT)
-	{
-		if (highlight_text(&font, &menu->options[2], \
-			&menu->text_color, "/ resize window \\") == -1)
-			return (1);
-		assign_sdlrect(&menu->options_rects[2], \
-			create_vec((menu->background->w - menu->options[2]->w) / 2, \
-			menu->options_rects[1].y + menu->options[1]->h), create_vec(0, 0));
-	}
-	else if (menu->current_option == FOURTH_OPTION_SELECT)
-	{
-		if (highlight_text(&font, &menu->options[3], \
-				&menu->text_color, "/ quit game \\") == -1)
-			return (1);
-		assign_sdlrect(&menu->options_rects[3], \
-			create_vec((menu->background->w - menu->options[3]->w) / 2, \
-			menu->options_rects[2].y + menu->options[2]->h), create_vec(0, 0));
-	}
 	return (0);
 }
 

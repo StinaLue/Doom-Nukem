@@ -6,13 +6,14 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 16:38:33 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/09 21:24:13 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 20:02:34 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-int		copy_enemy_info(const t_enemy_info *src, t_enemy_info **dst, int num_enemies)
+int		copy_enemy_info(const t_enemy_info *src, \
+						t_enemy_info **dst, int num_enemies)
 {
 	int i;
 
@@ -38,7 +39,8 @@ int		copy_map(const t_map *srcmap, t_map *dstmap)
 	dstmap->num_enemies = srcmap->num_enemies;
 	if (srcmap->num_enemies > 0 && srcmap->enemy_info != NULL)
 	{
-		if (copy_enemy_info(srcmap->enemy_info, &dstmap->enemy_info, srcmap->num_enemies) != 0)
+		if (copy_enemy_info(srcmap->enemy_info, \
+					&dstmap->enemy_info, srcmap->num_enemies) != 0)
 			return (1);
 	}
 	if (srcmap->num_sectors > 0 && srcmap->sector_head != NULL)

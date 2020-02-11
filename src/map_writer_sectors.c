@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_writer_sectors.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/09 03:00:48 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/09 03:03:57 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/11 18:25:57 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int		write_walls(int fd, t_wall_node *wall_head, int nb_walls_file)
 	if (nb_walls != nb_walls_file)
 		return (error_return_map("nb walls in file different than nb walls\n", \
 				NULL, fd));
-	return (0);
+		return (0);
 }
 
 int		write_sector(int fd, t_sector_node *sector)

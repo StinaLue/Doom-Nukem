@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/11 10:40:43 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 11:54:23 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 20:25:40 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int		init_editor2(t_editor *editor, t_sdlmain *sdlmain)
 	editor->show_convex_alert = 0;
 	editor->show_loading_alert = 0;
 	editor->loading_success = 0;
+	editor->num_points = 0;
 	init_colors(editor);
 	return (0);
 }

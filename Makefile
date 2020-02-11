@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/11 21:29:41 by afonck           ###   ########.fr        #
+#    Updated: 2020/02/11 22:32:08 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,30 +62,46 @@ HEADERS = $(addprefix $(HEADERS_DIRECTORY), $(HEADERS_LIST))
 SOURCES_DIRECTORY = ./src/
 SOURCES_LIST = main.c \
 			game.c \
+			game_blit_hud.c \
+			game_create_surfaces.c \
 			init.c \
 			init_structs.c \
+			init_wall_textures.c \
 			null_pointers.c \
 			free.c \
+			free_sound_and_ttf.c \
 			drawing.c \
 			draw_line.c \
 			fixed_minimap.c \
 			rot_minimap.c \
 			perspective_view.c \
 			vector.c \
+			vector_mult_div.c \
+			vector_transform.c \
+			vector_multiplications.c \
+			vector_create_reset.c \
 			poll_event.c \
 			handle_keys.c \
 			movement.c \
+			movement_collisions.c \
+			movement_surroundings.c \
 			menu.c \
+			menu_init.c \
+			menu_options.c \
 			text.c \
 			SDL_sub_functions.c \
 			ll_sector.c \
+			ll_sector2.c \
+			ll_sector3.c \
 			ll_wall.c \
+			ll_wall2.c\
 			editor.c \
 			mouse.c \
 			editor_menu.c \
 			editor_main_surfaces.c\
 			editor_check.c \
 			editor_blit.c \
+			editor_create_walls.c \
 			new_blit.c \
 			map.c \
 			map_reader_main.c \
@@ -100,8 +116,11 @@ SOURCES_LIST = main.c \
 			editor_events_keys_a_to_l.c \
 			editor_events_keys_m_to_q.c \
 			editor_events_keys_r_to_u.c \
+			editor_mouse_collide1.c \
+			editor_mouse_collide2.c \
 			mouse_movement.c \
 			sound.c \
+			sound_init.c \
 			music.c \
 			openal_sub_functions.c \
 			end_level_loops.c \

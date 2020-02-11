@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   end_level_loops.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 15:36:13 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/10 18:01:13 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 16:10:55 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	win_loop(t_doom *doom)
 
 	sdlmain = &(doom->sdlmain);
 	game = &(doom->game);
-	//SDL_BlitScaled(game->surfs.game_over, NULL, game->surfs.perspective_view, NULL);
 	SDL_BlitScaled(game->surfs.victory, NULL, sdlmain->win_surf, NULL);
 	SDL_UpdateWindowSurface(sdlmain->win);
 	play_win_music(game, sdlmain, doom);

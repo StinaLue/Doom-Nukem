@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 21:33:07 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/11 22:31:55 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,14 @@
 # include "alc.h"
 # define TITLE "DOOM"
 
-# define SQRT2 1.4142135623730950488
-# define PLAYER_RADIUS 0.5
+# define PLAYER_RADIUS 1
 # define NB_WALL_TEXTURES 9
 # define NB_SOUND_SOURCES 3
 # define NB_SOUND_BUFFERS 11
 # define PLAYER_HEIGHT 18
 # define KNEE_HEIGHT 8
-# define RUN 0.03
-# define WALK 0.01
+# define RUN 0.025
+# define WALK 0.015
 
 /*
 ** MAIN LOOP STATES
@@ -57,7 +56,7 @@
 # define NBPOINTS 2501
 # define NBPOINTSROW 50
 # define NBTEXTURES	9
-# define NBOPTIONS 8
+# define NBOPTIONS 9
 # define NBHOVEROPTIONS 5
 # define NBINSTRUCTS 10
 # define SIZEMAP 20
@@ -155,6 +154,7 @@ typedef struct				s_display_wall
 	int						top_limit;
 	int						bot_limit;
 	double					fov_ratio;
+	double					texture_ratio;
 	SDL_Surface				*texture;
 }							t_display_wall;
 
@@ -356,6 +356,7 @@ typedef struct				s_editor
 	int						show_convex_alert;
 	int						show_loading_alert;
 	int						loading_success;
+	int						num_points;
 	t_vec					grid_values[NBPOINTS];
 	t_vec					start_sector;
 	t_wall_node				wall_tmp;
@@ -407,8 +408,6 @@ int							blit(SDL_Surface *src, SDL_Rect *src_rect, \
 t_segment					rotate_wall_relative(const t_wall_node \
 								*current_wall, const t_player *player);
 
-int							is_in_map(t_vecdb *player);
-
 SDL_Surface					*load_opti_bmp(char *file, SDL_Surface *dst_surf, \
 											Uint32 colorkey);
 
@@ -440,15 +439,12 @@ int							delete_enemy_info(t_map *map, t_vec delspawn);
 /*
 ** VECTOR FUNCTIONS
 */
-double						get_magnitude(t_vecdb a, t_vecdb b);
 
 t_vecdb						multvecdb(t_vecdb vecdb, double mult);
 
 t_vec						multvec(t_vec vec, int mult);
 
 t_vecdb						divvecdb(t_vecdb vecdb, double div);
-
-t_vec						divvec(t_vec vec, int div);
 
 t_vec						create_vec(int x, int y);
 
@@ -462,39 +458,23 @@ t_vecdb						vec_to_vecdb(t_vec vector);
 
 t_vecdb						rotate2d(t_vecdb vector, double angle);
 
-t_vecdb						rotate2dcc(t_vecdb vector, double angle);
-
 double						dot_product(t_vecdb a, t_vecdb b);
 
 double						cross_product(t_vecdb a, t_vecdb b);
 
 t_vecdb						create_vecdb(double x, double y);
 
-double						cross_product_len(t_vec a, t_vec b, t_vec c);
-
 double						get_point_distance(t_vecdb a, t_vecdb b);
-
-void						set_vec_values(t_vec *src, t_vec *dst);
 
 void						set_vecdb_values(t_vecdb *src, t_vecdb *dst);
 
 t_vecdb						vecdb_diff(t_vecdb a, t_vecdb b);
 
-t_vec						vec_diff(t_vec a, t_vec b);
-
-t_vecdb						vecdb_mult(t_vecdb a, t_vecdb b);
-
-t_vec						vec_mult(t_vec a, t_vec b);
-
 t_vecdb						vecdb_add(t_vecdb a, t_vecdb b);
-
-t_vec						vec_add(t_vec a, t_vec b);
 
 t_vec						reset_vec(t_vec *vector);
 
 t_vecdb						reset_vecdb(t_vecdb *vector);
-
-int							compare_vec(t_vec *vector1, t_vec *vector2);
 
 /*
 ** INIT FUNCTIONS
@@ -534,6 +514,8 @@ void						init_player_struct(t_player *player, t_map *map);
 
 int							init_enemies(t_game *game, t_map *map);
 
+int							init_sound(t_sound *sound);
+
 /*
 ** POLL EVENT FUNCTIONS
 */
@@ -554,6 +536,21 @@ int							editor_events(t_doom *doom, t_sdlmain *sdlmain);
 
 void						set_height(t_options_menu *menu, SDL_Surface *surf);
 
+/*
+**	GAME FUNCTIONS
+*/
+int							player_hurt_anim(int health, SDL_Rect *surf_rect);
+
+SDL_Rect					find_srcrect_enemy(t_enemy *enemy, \
+											t_enemy_info *enemy_info);
+
+SDL_Rect					find_dstrect_enemy(t_enemy *enemy, \
+									t_player *player, SDL_Surface *dest);
+
+int							create_game_surfaces(t_gamesurfs *gamesurfs, \
+									t_sdlmain *sdlmain);
+
+int							load_game_textures(t_gamesurfs *gamesurfs);
 /*
 ** PRINT MINIMAP FUNCTIONS
 */
@@ -618,8 +615,14 @@ int							blit_options(t_editor *editor);
 
 int							blit_height(t_editor *editor);
 
+int							game_blit_hud(t_map *map, t_game *game, \
+									int itt, Uint32 startclock);
+
 int							blit_enemies(t_game *game, SDL_Surface *dest, \
-									t_map *map);
+											t_map *map);
+
+int							blit_weapon(t_game *game, SDL_Surface *dest, \
+										int weapon, int available_weapons);
 /*
 ** TEXT FUNCTIONS
 */
@@ -686,9 +689,6 @@ SDL_Rect					create_sdlrect(int x, int y, int w, int h);
 void						assign_sdlrect(SDL_Rect *rect, \
 										t_vec origin, t_vec size);
 
-void						assign_sdlrect_invert(SDL_Rect *rect, \
-											t_vec origin, t_vec size);
-
 /*
 ** MOVEMENT
 */
@@ -700,10 +700,36 @@ void						mouse_movement(SDL_MouseMotionEvent event, \
 void						update_player(t_player *player);
 
 void						jump(t_player *player);
+
+t_wall_node					*get_collision_wall(t_player *player, \
+									t_sector_node *sector, double *min_dist);
+
+t_vecdb						collide(t_wall_node *wall, double distance, \
+										double *col_angle);
+
+t_vecdb						corner_collision(t_player *player, \
+											t_wall_node *wall);
+
+double						wall_distance(t_vecdb point, t_wall_node *wall);
+
+int							is_in_range(t_vecdb pos, t_wall_node *wall);
+
+int							is_in_direction(t_vecdb move, t_wall_node *wall);
+
+t_vecdb						move_hyp_length(t_wall_node *wall, \
+										double distance, double angle);
+
+void						update_sector(t_player *player, t_wall_node *wall);
 /*
 ** MENU FUNCTIONS
 */
 
+void						browse_options(t_sdlmain *sdlmain, t_menu *menu, \
+										SDL_Rect *rects, int key_or_mouse);
+
+void						launch_option(t_doom *doom);
+
+int							highlight_select(t_menu *menu, TTF_Font *font);
 /*
 ** CREATE SURFACES
 */
@@ -780,6 +806,16 @@ void						event_handle_input(t_editor *editor, Uint32 type, \
 
 void						key_event_height(t_editor *editor, SDL_Event ev, \
 										t_options_menu *menu);
+
+void						mouse_collide1(t_sdlmain *sdlmain, \
+										t_editor *editor, t_options_menu *menu);
+void						mouse_collide2(t_sdlmain *sdlmain, \
+						t_editor *editor, t_options_menu *menu, Uint8 button);
+
+void						create_walls_on_map(t_vec mouse, t_editor *editor, \
+													t_wall_node *wall);
+
+void						base_color_rect_options(t_options_menu *menu);
 /*
 ** LINKED LIST FUNCTIONS
 */
@@ -813,8 +849,6 @@ t_sector_node				*get_previous_sector(t_sector_node *list, \
 int							copy_sector_list(t_sector_node *sector_list, \
 												t_sector_node **new_list);
 
-int							count_sectors(t_sector_node *sector_list);
-
 void						itt_sector_wall_heads(t_sector_node *sector_node, \
 											void (*f)(t_wall_node *wall_node));
 
@@ -842,8 +876,6 @@ t_vecdb						point_average_position(t_wall_node *wall_head);
 
 t_wall_node					*delete_last_wall(t_wall_node **wall_list);
 
-t_wall_node					*get_last_wall_node(t_wall_node *wall_list);
-
 t_wall_node					*undo_wall(t_sector_node *node);
 
 t_wall_node					*insert_wall_node(t_wall_node **wall_list);
@@ -853,10 +885,6 @@ t_wall_node					*copy_wall_node(t_wall_node **wall_head, \
 
 int							copy_wall_list(t_wall_node *wall_list, \
 											t_wall_node **new_list);
-
-int							wall_loop(t_wall_node *node);
-
-int							count_walls(t_wall_node *wall_list);
 
 void						set_wall_length(t_wall_node *head);
 

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/11 21:25:48 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/11 22:25:35 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "doom.h"
 #include "libbmp.h"
 
-int	blit_uzi(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)
+int				blit_uzi(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)
 {
 	gamesurfs->weapons_rect.x = \
 			gamesurfs->current_frame * gamesurfs->weapons_rect.w;
@@ -43,7 +43,8 @@ int	blit_uzi(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)
 	return (0);
 }
 
-int	blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)
+int				blit_katana(t_gamesurfs *gamesurfs, \
+								SDL_Surface *dest, int *anim)
 {
 	gamesurfs->weapons_rect.x = gamesurfs->current_frame \
 					* gamesurfs->weapons_rect.w;
@@ -75,7 +76,7 @@ int	blit_katana(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)
 	return (0);
 }
 
-void	draw_crosshair(SDL_Surface *dest)
+void			draw_crosshair(SDL_Surface *dest)
 {
 	t_vec top_cross;
 	t_vec bottom_cross;
@@ -94,7 +95,7 @@ void	draw_crosshair(SDL_Surface *dest)
 	draw_line(left_cross, right_cross, dest, 0xff0000);
 }
 
-int	blit_weapon(t_game *game, SDL_Surface *dest, \
+int				blit_weapon(t_game *game, SDL_Surface *dest, \
 		int weapon, int available_weapons)
 {
 	int return_val;
@@ -107,7 +108,7 @@ int	blit_weapon(t_game *game, SDL_Surface *dest, \
 	return (return_val);
 }
 
-void	soft_reset_player(t_player *player, t_map *map)
+void			soft_reset_player(t_player *player, t_map *map)
 {
 	player->health = 100;
 	player->pos = vec_to_vecdb(map->player_spawn);
@@ -120,7 +121,7 @@ void	soft_reset_player(t_player *player, t_map *map)
 	}
 }
 
-int	player_hurt_anim(int health, SDL_Rect *surf_rect)
+int				player_hurt_anim(int health, SDL_Rect *surf_rect)
 {
 	int y_anim;
 
@@ -138,38 +139,7 @@ int	player_hurt_anim(int health, SDL_Rect *surf_rect)
 	return (y_anim);
 }
 
-int	blit_hud_faces(t_game *game)
-{
-	t_gamesurfs *surfs;
-	t_data		*data;
-	SDL_Rect	dst;
-
-	surfs = &game->surfs;
-	data = &game->data;
-	if ((data->hud_flags & HEALTH_STATUS))
-	{
-		surfs->hud_faces_rect.y = \
-				player_hurt_anim(game->player.health, &surfs->hud_faces_rect);
-		dst.y = 0;
-		dst.w = surfs->perspective_view->w / 8;
-		dst.x = surfs->perspective_view->w - dst.w;
-		dst.h = surfs->perspective_view->h / 6;
-		if ((SDL_GetTicks() - surfs->hud_timer) >= 1000)
-		{
-			surfs->hud_timer = SDL_GetTicks();
-			if (surfs->hud_faces_rect.x < surfs->hud_faces_rect.w * 2)
-				surfs->hud_faces_rect.x += surfs->hud_faces_rect.w;
-			else
-				surfs->hud_faces_rect.x = 0;
-		}
-		if ((SDL_BlitScaled(surfs->hud_faces_surf, \
-				&surfs->hud_faces_rect, surfs->perspective_view, &dst)) != 0)
-			return (1);
-	}
-	return (0);
-}
-
-void	set_listener_ori(double angle, t_vecdb player_pos)
+void			set_listener_ori(double angle, t_vecdb player_pos)
 {
 	ALfloat	orix;
 	ALfloat oriy;
@@ -190,7 +160,7 @@ void	set_listener_ori(double angle, t_vecdb player_pos)
 	//printf("vec direc x %f y %f\n", orix, oriy);
 }
 
-void	stop_enem_soundsources(t_enemy *enemies, int nb_enemies)
+void			stop_enem_soundsources(t_enemy *enemies, int nb_enemies)
 {
 	int i;
 
@@ -200,36 +170,6 @@ void	stop_enem_soundsources(t_enemy *enemies, int nb_enemies)
 		alSourceStop(enemies[i].sound_src);
 		i++;
 	}
-}
-
-int	update_fps(int *itt, t_gamesurfs *surfs, Uint32 *startclock)
-{
-	if ((surfs->fps_text = ft_itoa(*itt)) == NULL)
-		return (error_return("itoa malloc error\n", NULL));
-	if (reset_text(&surfs->fps_font, &surfs->fps, \
-				&surfs->fps_color, surfs->fps_text) != 0)
-		return (error_return("reset text error\n", NULL));
-	ft_memdel((void **)&surfs->fps_text);
-	*itt = 0;
-	*startclock = SDL_GetTicks();
-	return (0);
-}
-
-int	blit_fps(t_game *game, int *itt, Uint32 *startclock)
-{
-	if (game->data.hud_flags & FPS_SHOW)
-	{
-		if ((SDL_BlitSurface(game->surfs.fps, NULL, \
-				game->surfs.perspective_view, &game->surfs.dst_fps_rect)) < 0)
-			return (error_return("SDL_BlitScaled error = %{r}s\n", \
-									SDL_GetError()));
-	}
-	if (SDL_GetTicks() - *startclock >= 1000 && game->data.hud_flags & FPS_SHOW)
-	{
-		if (update_fps(itt, &game->surfs, startclock) != 0)
-			return (1);
-	}
-	return (0);
 }
 
 void	check_hit_uzi(int num_enemies, int *is_enemy_hit, t_vecdb dir_player, t_enemy *enemy)
@@ -248,7 +188,8 @@ void	check_hit_uzi(int num_enemies, int *is_enemy_hit, t_vecdb dir_player, t_ene
 	}
 }
 
-void	raycast_uzi(t_player *player, t_enemy *enemy, int num_enemies)
+void			raycast_uzi(t_player *player, \
+								t_enemy *enemy, int num_enemies)
 {
 	int		is_enemy_hit;
 	t_vecdb	dir_player;
@@ -281,49 +222,22 @@ void	katana_hit(t_player *player, t_enemy *enemy, int num_enemies)
 	}
 }
 
-int	player_attack(t_enemy *enemy, t_player *player, t_map *map, t_gamesurfs *surfs)
+int				player_attack(t_enemy *enemy, \
+					t_player *player, t_map *map, t_gamesurfs *surfs)
 {
 	if (player->current_weapon == 0 && player->anim == 1 && surfs->current_frame == 3)
 	{
 		katana_hit(player, enemy, map->num_enemies);
 	}
-	else if (player->current_weapon == 1 && player->anim == 1 && surfs->current_frame == 2)
+	else if (player->current_weapon == 1 \
+			&& player->anim == 1 && surfs->current_frame == 2)
 	{
 		raycast_uzi(player, enemy, map->num_enemies);
 	}
 	return (0);
 }
 
-int	blit_hud_weapons(t_game *game, t_map *map, t_gamesurfs *surfs)
-{
-	SDL_Rect	dst[2];
-	t_vec		vec[2];
-	int			i;
-
-	i = 0;
-	vec[0] = create_vec((surfs->perspective_view->w / 20) * 18.5, \
-		(surfs->perspective_view->h / 20) * 17.5);
-	vec[1] = create_vec((surfs->perspective_view->w / 20) * 17, \
-		(surfs->perspective_view->h / 20) * 17.5);
-	while (i < 2)
-	{
-		if (((map->weapon_choice == 1 || map->weapon_choice == 3) && i == 0) \
-		|| ((map->weapon_choice == 2 || map->weapon_choice == 3) && i == 1))
-		{
-			assign_sdlrect(&dst[i], vec[i], create_vec(40, 40));
-			if ((SDL_BlitScaled(game->surfs.weapons, \
-				&surfs->hud_weapons_rect[i], \
-				surfs->perspective_view, &dst[i])) != 0)
-				return (1);
-			draw_border_options(&dst[i], \
-						surfs->hud_weapons_color[i], surfs->perspective_view);
-		}
-		i++;
-	}
-	return (0);
-}
-
-int	game_loop(t_doom *doom)
+int				game_loop(t_doom *doom)
 {
 	t_game		*game;
 	t_sdlmain	*sdlmain;
@@ -374,19 +288,14 @@ int	game_loop(t_doom *doom)
 			return (error_return("Blit weapon error\n", NULL));
 		player_attack(game->enemy, &game->player, &doom->map, &game->surfs);
 		enemy_action(game->enemy, &game->player, doom->map.num_enemies);
-		if ((blit_hud_faces(game)) == 1)
-			return (error_return("error during blit_hud_faces\n", NULL));
-		if ((blit_fps(game, &itt, &startclock)) == 1)
-			return (error_return("error during blit_fps\n", NULL));
-
-		if ((blit_hud_weapons(game, &doom->map, &game->surfs) == 1))
-			return (error_return("error during blit_hud_weapons\n", NULL));
-
+		if (game_blit_hud(&doom->map, game, itt, startclock != 0))
+			return (1);
 		if ((SDL_BlitScaled(game->surfs.perspective_view, \
 							NULL, sdlmain->win_surf, NULL)) < 0)
 			return (error_return("SDL_BlitScaled error = %{r}s\n", \
 					SDL_GetError()));
-		if ((draw_map(sdlmain, game, &doom->map, &game->data.hud_flags)) == 1)
+		if ((draw_map(sdlmain, game, &doom->map, \
+						&game->data.hud_flags)) == 1)
 			return (error_return("error during map drawing\n", NULL));
 		if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)
 			return (error_return("SDL_UpdateWindowSurface error = %{r}s\n", \
@@ -394,5 +303,7 @@ int	game_loop(t_doom *doom)
 			itt++;
 	}
 	SDL_SetRelativeMouseMode(SDL_FALSE);
+	SDL_WarpMouseInWindow(sdlmain->win, sdlmain->win_surf->w / 2, \
+				sdlmain->win_surf->h / 2);
 	return (0);
 }

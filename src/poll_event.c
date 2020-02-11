@@ -6,12 +6,13 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:22:12 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/11 18:35:55 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/11 22:26:24 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 #include "libft.h"
+
 void	check_quit(SDL_Event *event, int *state)
 {
 	if (event->type == SDL_QUIT || (event->type == SDL_KEYDOWN && \
@@ -62,7 +63,7 @@ void	handle_hud(SDL_Event *event, char *hud_flags)
 {
 	if (event->key.keysym.sym == SDLK_m)
 		activate_map_flags(hud_flags);
-	if (event->key.keysym.sym == SDLK_c)
+	if (event->key.keysym.sym == SDLK_x)
 	{
 		if ((*hud_flags & TEXFLAG) == 0)
 			*hud_flags |= TEXFLAG;

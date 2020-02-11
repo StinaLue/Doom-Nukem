@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wav_parse.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 00:15:56 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/10 15:42:45 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 19:57:57 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,32 +21,6 @@ ALenum		get_format_from_info(short channels, short bits_per_sample)
 		return (AL_FORMAT_MONO16);
 	return (AL_FORMAT_STEREO16);
 }
-
-/*
-void	endian_swap_short(short *x)
-{
-	*x = (*x >> 8) | (*x << 8);
-}
-
-void	endian_swap_int(int *x)
-{
-	*x = (*x >> 24) |
-		((*x << 8) & 0x00FF0000) |
-		((*x >> 8) & 0x0000FF00) |
-		(*x << 24);
-}
-
-void	file_ignore_bytes(int fd, short extra_params)
-{
-	char buf[1];
-
-	while (extra_params > 0)
-	{
-		read(fd, buf, 1);
-		extra_params--;
-	}
-}
-*/
 
 static int	is_wav(char *file)
 {

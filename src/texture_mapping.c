@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_mapping.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 18:01:04 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/10 17:55:11 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/11 19:57:05 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,39 +31,45 @@ double	get_texture_y(double y, int top, int bot)
 	return (y);
 }
 
-int		get_tex_color(double x, double y, SDL_Surface *tex)
+int		get_tex_color(double x, double y, t_display_wall *dsp, SDL_Surface *tex)
 {
 	int	truex;
 	int	truey;
 	int	color;
 
+	if (dsp->texture_ratio > 1)
+		x = fmod(x * (int)dsp->texture_ratio, 1);
+	else
+		y = fmod(y * (int)(1 / dsp->texture_ratio), 1);
+	dsp = NULL;
 	truex = fmod(fabs(x * (tex->w - 1)), tex->w);
 	truey = fmod((tex->h - 1) - fabs(y * (tex->h - 1)), tex->h);
 	color = ((int *)tex->pixels)[truex + truey * tex->w];
 	return (color);
 }
 
-void	fill_ceiling(SDL_Surface *surf, t_vec win, int color, int type)
+void	fill_ceiling(SDL_Surface *surf, t_vec win, int top_limit, int type)
 {
 	if (type == 2)
 		return ;
-	while (win.y < surf->h)
+	while (win.y++ < top_limit)
 	{
-		fill_pix(surf, win.x, win.y++, color);
+		fill_pix(surf, win.x, win.y, 0x999999);
 	}
 }
 
-void	fill_floor(SDL_Surface *surf, t_vec win, int color, int type)
+void	fill_floor(SDL_Surface *surf, t_vec win, int bot_limit, int type)
 {
 	if (type == 1)
 		return ;
-	while (win.y >= 0)
+	while (win.y > bot_limit)
 	{
-		fill_pix(surf, win.x, win.y--, color);
+		fill_pix(surf, win.x, win.y--, 0x666666);
 	}
 }
 
-void	draw_texture(SDL_Surface *surf, SDL_Surface *tex, t_display_wall *dsp, int type)
+void	draw_texture(SDL_Surface *surf, SDL_Surface *tex, \
+							t_display_wall *dsp, int type)
 {
 	int		width;
 	double	delta_top;
@@ -85,16 +91,17 @@ void	draw_texture(SDL_Surface *surf, SDL_Surface *tex, t_display_wall *dsp, int 
 	{
 		pos.x = get_texture_x((double)(win.x - dsp->top_left.x) / width, dsp);
 		win.y = top > dsp->top_limit ? dsp->top_limit : top;
-		fill_ceiling(surf, win, 0x999999, type);
+		fill_ceiling(surf, win, dsp->top_limit, type);
 		if (top > bot)
 			while (win.y >= bot && win.y >= dsp->bot_limit)
 			{
 				pos.y = get_texture_y(win.y, top, bot);
-				fill_pix(surf, win.x, win.y, get_tex_color(pos.x, pos.y, tex));
+				fill_pix(surf, win.x, win.y, \
+							get_tex_color(pos.x, pos.y, dsp, tex));
 				win.y--;
 			}
 		win.y = bot;
-		fill_floor(surf, win, 0x666666, type);
+		fill_floor(surf, win, dsp->bot_limit, type);
 		top += delta_top;
 		bot += delta_bot;
 		win.x++;

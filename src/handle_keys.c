@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_keys.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/11 09:59:34 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 19:39:04 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,15 @@ void	basic_move(t_player *player, const Uint8 *keyboard_state)
 	if (keyboard_state[SDL_SCANCODE_D])
 		move.x += 1;
 	if (player->is_moving == 0 && (move.x != 0 || move.y != 0))
-	{
 		player->is_moving = 1;
-		//alSourcePlay(sound->source[2]);
-	}
 	else if (move.x == 0 && move.y == 0)
-	{
 		player->is_moving = 0;
-		//alSourcePause(sound->source[2]);
-	}
 	if (keyboard_state[SDL_SCANCODE_SPACE])
 		jump(player);
+	if (keyboard_state[SDL_SCANCODE_LSHIFT] && !keyboard_state[SDL_SCANCODE_C])
+		player->movespeed = RUN;
+	else
+		player->movespeed = WALK;
 	movement(player, move);
 	update_player(player);
 }
@@ -52,24 +50,16 @@ void	basic_look(t_player *player, const Uint8 *keyboard_state)
 		player->angle += 0.01;
 	if (keyboard_state[SDL_SCANCODE_RIGHT])
 		player->angle -= 0.01;
-	if (keyboard_state[SDL_SCANCODE_LSHIFT])
-		player->movespeed = RUN;
-	else
+	if (keyboard_state[SDL_SCANCODE_C])
+	{
+		player->height = PLAYER_HEIGHT - 8;
 		player->movespeed = WALK;
-    if (keyboard_state[SDL_SCANCODE_LCTRL])
-    {
-        player->height = PLAYER_HEIGHT - 4;
-        player->movespeed = WALK;
-    }
-    else
-    {
-        player->height = PLAYER_HEIGHT;
-		player->movespeed = RUN;
-    }
-    
-	if (keyboard_state[SDL_SCANCODE_PAGEUP] && player->true_fov > 1.06)//hardcoded 60deg
+	}
+	else
+		player->height = PLAYER_HEIGHT;
+	if (keyboard_state[SDL_SCANCODE_PAGEUP] && player->true_fov > 1.06)
 		player->true_fov -= 0.01;
-	if (keyboard_state[SDL_SCANCODE_PAGEDOWN] && player->true_fov < 2.27)//hardcoded 130deg
+	if (keyboard_state[SDL_SCANCODE_PAGEDOWN] && player->true_fov < 2.27)
 		player->true_fov += 0.01;
 	player->view.b.x = 100 * sin(player->true_fov / 2);
 	player->view.b.y = 100 * cos(player->true_fov / 2);
