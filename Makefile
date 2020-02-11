@@ -6,7 +6,7 @@
 #    By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/11 19:16:02 by sluetzen         ###   ########.fr        #
+#    Updated: 2020/02/11 19:33:31 by sluetzen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,6 +69,7 @@ SOURCES_LIST = main.c \
 			init_wall_textures.c \
 			null_pointers.c \
 			free.c \
+			free_sound_and_ttf.c \
 			drawing.c \
 			draw_line.c \
 			fixed_minimap.c \
@@ -82,7 +83,10 @@ SOURCES_LIST = main.c \
 			text.c \
 			SDL_sub_functions.c \
 			ll_sector.c \
+			ll_sector2.c \
+			ll_sector3.c \
 			ll_wall.c \
+			ll_wall2.c\
 			editor.c \
 			mouse.c \
 			editor_menu.c \

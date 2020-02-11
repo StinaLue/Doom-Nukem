@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 19:13:03 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 19:32:04 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -844,8 +844,6 @@ t_sector_node				*get_previous_sector(t_sector_node *list, \
 int							copy_sector_list(t_sector_node *sector_list, \
 												t_sector_node **new_list);
 
-int							count_sectors(t_sector_node *sector_list);
-
 void						itt_sector_wall_heads(t_sector_node *sector_node, \
 											void (*f)(t_wall_node *wall_node));
 
@@ -872,8 +870,6 @@ void						free_wall_list(t_wall_node **wall_list);
 t_vecdb						point_average_position(t_wall_node *wall_head);
 
 t_wall_node					*delete_last_wall(t_wall_node **wall_list);
-
-t_wall_node					*get_last_wall_node(t_wall_node *wall_list);
 
 t_wall_node					*undo_wall(t_sector_node *node);
 

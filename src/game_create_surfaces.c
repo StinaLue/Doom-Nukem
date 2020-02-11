@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/11 16:34:52 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 18:33:30 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 19:22:21 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ SDL_Surface	*load_opti_bmp(char *file, SDL_Surface *dst_surf, Uint32 colorkey)
 	return (opti_surf);
 }
 
-int	load_game_textures(t_gamesurfs *gamesurfs)
+int			load_game_textures(t_gamesurfs *gamesurfs)
 {
 	if ((gamesurfs->weapons = load_opti_bmp("assets/weapons/weapons.bmp", \
 			gamesurfs->perspective_view, 0xFFFFFF)) == NULL)
@@ -80,7 +80,7 @@ int	load_game_textures(t_gamesurfs *gamesurfs)
 	return (0);
 }
 
-int	create_game_surfaces(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain)
+int			create_game_surfaces(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain)
 {
 	if ((gamesurfs->rot_mmap = \
 			SDL_CreateRGBSurface(0, 128, 128, 32, 0, 0, 0, 0)) == NULL)
