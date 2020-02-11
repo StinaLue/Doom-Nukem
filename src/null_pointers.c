@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   null_pointers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 20:36:08 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/10 23:55:09 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/11 12:43:47 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	null_game_pointers(t_game *game)
 	game->surfs.perspective_view = NULL;
 	game->surfs.weapons = NULL;
 	game->surfs.hud_faces_surf = NULL;
+	game->surfs.hud_weapons_surf[0] = NULL;
+	game->surfs.hud_weapons_surf[1] = NULL;
 	game->surfs.enemy_texture[0] = NULL;
 	game->surfs.enemy_texture[1] = NULL;
 	game->surfs.game_over = NULL;

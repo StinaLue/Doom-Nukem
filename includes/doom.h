@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 16:22:43 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/11 16:34:48 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # define NB_SOUND_BUFFERS 11
 # define PLAYER_HEIGHT 18
 # define KNEE_HEIGHT 8
+# define RUN 0.03
+# define WALK 0.01
 
 /*
 ** MAIN LOOP STATES
@@ -61,8 +63,7 @@
 # define SIZEMAP 20
 # define COLOR_HOVER 0x6C1413
 # define COLOR_PRESSED 0x00cc00
-# define COLOR_NORMAL 0xff0000
-# define COLOR_CHOOSE 0xffff00
+# define COLOR_NORMAL 0xffff00
 
 /*
 ** HUD FLAGS
@@ -189,6 +190,7 @@ typedef struct				s_gamesurfs
 	SDL_Surface				*game_over;
 	SDL_Surface				*victory;
 	SDL_Surface				*fps;
+	SDL_Surface				*hud_weapons_surf[2];
 	TTF_Font				*fps_font;
 	char					*fps_text;
 	SDL_Color				fps_color;
@@ -196,6 +198,8 @@ typedef struct				s_gamesurfs
 	SDL_Rect				weapons_rect;
 	SDL_Rect				hud_faces_rect;
 	SDL_Rect				dst_fps_rect;
+	SDL_Rect				hud_weapons_rect[2];
+	int						hud_weapons_color[2];
 	int						current_frame;
 	int						anim_timer;
 	int						hud_timer;
@@ -422,6 +426,16 @@ int							read_sectors(int fd, \
 							t_sector_node **sector_head, int num_sectors_file);
 
 /*
+** MAP FUNCTIONS
+*/
+int							add_enemy_info(t_map *map, t_vec newspawn, \
+											int new_which_enem);
+
+int							is_sector_occupied(t_sector_node *sector, \
+												t_map *map);
+
+int							delete_enemy_info(t_map *map, t_vec delspawn);
+/*
 ** VECTOR FUNCTIONS
 */
 double						get_magnitude(t_vecdb a, t_vecdb b);
@@ -498,8 +512,6 @@ int							init_sdlmain(t_sdlmain *sdlmain);
 
 int							init_editor_menu(t_editor *editor);
 
-//int							init_map(t_map *map);
-
 int							init_wall_textures(SDL_Surface **wall_textures, \
 												SDL_Surface *winsurf);
 
@@ -540,6 +552,7 @@ int							editor_events(t_doom *doom, t_sdlmain *sdlmain);
 
 void						set_height(t_options_menu *menu, SDL_Surface *surf);
 
+
 /*
 ** PRINT MINIMAP FUNCTIONS
 */
@@ -574,6 +587,9 @@ void						draw_border(SDL_Surface *surf, int color);
 void						draw_border_options(SDL_Rect *rec, \
 									int color, SDL_Surface *surf);
 
+void						draw_lines_editor(t_editor *editor, \
+								SDL_Surface *editor_surf, t_vec mouse);
+
 /*
 **	BLIT FUNCTIONS
 */
@@ -587,7 +603,19 @@ int							blit_katana(t_gamesurfs *gamesurfs, \
 
 int							blit_uzi(t_gamesurfs *gamesurfs, \
 									SDL_Surface *dest, int *anim);
+int							blit_loading_alert(t_editor *editor);
 
+int							blit_alert(t_editor *editor);
+
+int							blit_editor_surf(t_editor *editor, \
+											t_sdlmain *sdlmain);
+
+int							editor_blit_weapons(t_editor *editor, \
+											t_options_menu *menu);
+
+int							blit_options(t_editor *editor);
+
+int							blit_height(t_editor *editor);
 /*
 ** TEXT FUNCTIONS
 */
@@ -707,6 +735,16 @@ void						event_mouse(t_editor *editor, t_sdlmain *sdlmain);
 void						event_keydown(t_editor *editor, \
 									t_doom *doom, t_sdlmain *sdlmain);
 
+void						event_keydown_a_to_l(t_doom *doom, \
+								t_editor *editor, SDL_Keycode key);
+
+void						event_keydown_m_to_q(t_doom *doom, \
+								t_editor *editor, SDL_Keycode key);
+
+void						event_keydown_r_to_u(t_doom *doom, \
+								t_editor *editor, SDL_Keycode key, \
+								Uint8 repeat);
+
 int							copy_enemy_info(const t_enemy_info *src, \
 									t_enemy_info **dst, int num_enemies);
 
@@ -730,7 +768,8 @@ int							create_instruct_str(t_editor *editor, \
 
 int							init_options_menu(t_editor *editor);
 
-int							init_instr_menu(t_editor *editor, SDL_Surface *surf);
+int							init_instr_menu(t_editor *editor, \
+												SDL_Surface *surf);
 
 void						event_handle_input(t_editor *editor, Uint32 type, \
 								SDL_Keycode key, char *text);
@@ -825,6 +864,7 @@ void						print_map_contents(const t_map *map);
 void						print_vec(const t_vec *vec, const char *name);
 
 void						print_vecdb(const t_vecdb *vecdb, const char *name);
+
 /*
 ** EDITOR CHECK FUNCTIONS
 */

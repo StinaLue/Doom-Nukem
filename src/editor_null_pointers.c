@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_null_pointers.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/10 15:11:47 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 15:16:16 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 11:52:18 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ void	null_editor_pointers(t_editor *editor)
 	editor->loading_success_surf = NULL;
 	editor->wall_tmp.wall_type = 0;
 	editor->wall_tmp.type_color = 0xFF0000;
-	editor->wall_textures = NULL; // do i need this?
+	editor->wall_textures = NULL;
 	editor->selected_sector = NULL;
-	editor->enemy_textures = NULL; // do i need this?
+	editor->enemy_textures = NULL;
 	null_option_pointers(editor);
 	null_instr_pointers(editor);
 	null_map_pointers(&editor->edit_map);

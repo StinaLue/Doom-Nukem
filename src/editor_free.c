@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_free.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/10 17:58:11 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 19:08:04 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 10:56:58 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int		free_editor(t_editor *editor)
 	return (EXIT_FAILURE);
 }
 
-int	free_height(t_editor *editor)
+int		free_height(t_editor *editor)
 {
 	const char *num_ceil;
 	const char *num_floor;

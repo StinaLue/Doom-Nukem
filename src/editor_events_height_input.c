@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events_height_input.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/10 16:54:15 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 16:56:46 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 11:54:23 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void			event_handle_input(t_editor *editor, Uint32 type, \
 		if (ft_strlen(editor->opt_menu.file_name) > 5)
 			ft_strncpy(editor->edit_map.name, editor->opt_menu.file_name, 15);
 		editor->opt_menu.typing_filename = 0;
-		editor->opt_menu.bord_hover_color_opt[0] = COLOR_CHOOSE;
+		editor->opt_menu.bord_hover_color_opt[0] = COLOR_NORMAL;
 	}
 	if (type == SDL_KEYDOWN && (key == SDLK_DELETE || key == SDLK_BACKSPACE))
 		del_last_char(editor->opt_menu.file_name, 5);
