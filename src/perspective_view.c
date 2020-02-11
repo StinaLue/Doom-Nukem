@@ -6,34 +6,19 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 19:40:14 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 19:54:49 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "doom.h"
 
-double		vxs(double xstart, double ystart, double xtwo, double ytwo)
+double			vxs(double xstart, double ystart, double xtwo, double ytwo)
 {
 	return (xstart * ytwo - ystart * xtwo);
 }
-/* 
-t_vecdb		intersect(t_vecdb start, t_vecdb end, t_vecdb origin, t_vecdb cross)
-{
-	t_vecdb intersection;
 
-	intersection.x = vxs(vxs(start.x, start.y, end.x, end.y), start.x - end.x, \
-		vxs(origin.x, origin.y, cross.x, cross.y), origin.x - cross.x) \
-		/ vxs(start.x - end.x, start.y - end.y, origin.x - cross.x, \
-		origin.y - cross.y);
-	intersection.y = vxs(vxs(start.x, start.y, end.x, end.y), \
-		start.y - end.y, vxs(origin.x, origin.y, cross.x, cross.y), \
-		origin.y - cross.y) / vxs(start.x \
-		- end.x, start.y - end.y, origin.x - cross.x, origin.y - cross.y);
-	return (intersection);
-} */
-
-t_vecdb		simple_intersect(t_vecdb start, t_vecdb end, t_vecdb cross)
+t_vecdb			simple_intersect(t_vecdb start, t_vecdb end, t_vecdb cross)
 {
 	t_vecdb	intersection;
 	double	tmp;
@@ -48,7 +33,7 @@ t_vecdb		simple_intersect(t_vecdb start, t_vecdb end, t_vecdb cross)
 	return (intersection);
 }
 
-int			intersect_view(t_segment *wall, t_segment *intersect, \
+int				intersect_view(t_segment *wall, t_segment *intersect, \
 									t_segment view)
 {
 	if (cross_product(wall->a, wall->b) > 0 \
@@ -77,7 +62,7 @@ int			intersect_view(t_segment *wall, t_segment *intersect, \
 	return (1);
 }
 
-void		create_perspective_wall(t_display_wall *dsp_wall, \
+void			create_perspective_wall(t_display_wall *dsp_wall, \
 				SDL_Surface *surf, t_player *player, t_sector_node *sector)
 {
 	double		distance_ratio;
@@ -88,16 +73,20 @@ void		create_perspective_wall(t_display_wall *dsp_wall, \
 	dsp_wall->fov_ratio = player->view.b.y / player->view.b.x;
 	distance_ratio = dsp_wall->fov_ratio / dsp_wall->intersect.a.y * surf->w;
 	x = dsp_wall->intersect.a.x * distance_ratio;
-	top = (sector->ceiling_height - (player->posz + player->height)) * distance_ratio;
-	bot = (sector->floor_height - (player->posz + player->height)) * distance_ratio;
+	top = (sector->ceiling_height - (player->posz + player->height)) \
+									* distance_ratio;
+	bot = (sector->floor_height - (player->posz + player->height)) \
+									* distance_ratio;
 	dsp_wall->top_left.x = (surf->w + x) / 2;
 	dsp_wall->top_left.y = (surf->h + top) / 2 - player->view_z;
 	dsp_wall->bottom_left.x = dsp_wall->top_left.x;
 	dsp_wall->bottom_left.y = (surf->h + bot) / 2 - player->view_z;
 	distance_ratio = dsp_wall->fov_ratio / dsp_wall->intersect.b.y * surf->w;
 	x = dsp_wall->intersect.b.x * distance_ratio;
-	top = (sector->ceiling_height - (player->posz + player->height)) * distance_ratio;
-	bot = (sector->floor_height - (player->posz + player->height)) * distance_ratio;
+	top = (sector->ceiling_height - (player->posz + player->height)) \
+									* distance_ratio;
+	bot = (sector->floor_height - (player->posz + player->height)) \
+									* distance_ratio;
 	dsp_wall->top_right.x = (surf->w + x) / 2;
 	dsp_wall->top_right.y = (surf->h + top) / 2 - player->view_z;
 	dsp_wall->bottom_right.x = dsp_wall->top_right.x;
@@ -118,7 +107,7 @@ void	draw_3dwall(t_display_wall *dsp_wall, SDL_Surface *surf)
 		draw_texture(surf, dsp_wall->texture, dsp_wall, 0);
 }
 
-void		init_display_wall(t_display_wall *display, \
+void			init_display_wall(t_display_wall *display, \
 		t_wall_node *current_wall, t_view old_view, SDL_Surface **wall_textures)
 {
 	double	len;
@@ -132,14 +121,18 @@ void		init_display_wall(t_display_wall *display, \
 	if (fabs(display->relative.a.x - display->relative.b.x) > 0.001)
 	{
 		len = display->relative.b.x - display->relative.a.x;
-		display->start_pos = (display->intersect.a.x - display->relative.a.x) / len;
-		display->end_pos = (display->intersect.b.x - display->relative.a.x) / len;
+		display->start_pos = \
+			(display->intersect.a.x - display->relative.a.x) / len;
+		display->end_pos = \
+			(display->intersect.b.x - display->relative.a.x) / len;
 	}
 	else if (fabs(display->relative.a.y - display->relative.b.y) > 0.001)
 	{
 		len = display->relative.b.y - display->relative.a.y;
-		display->start_pos = (display->intersect.a.y - display->relative.a.y) / len;
-		display->end_pos = (display->intersect.b.y - display->relative.a.y) / len;
+		display->start_pos = \
+				(display->intersect.a.y - display->relative.a.y) / len;
+		display->end_pos = \
+				(display->intersect.b.y - display->relative.a.y) / len;
 	}
 	else
 	{
@@ -148,7 +141,7 @@ void		init_display_wall(t_display_wall *display, \
 	}
 }
 
-int			min(int a, int b)
+int				min(int a, int b)
 {
 	return (a < b ? a : b);
 }
@@ -158,7 +151,7 @@ int			max(int a, int b)
 	return (a > b ? a : b);
 }
 
-t_view		create_view(t_display_wall *display, \
+t_view			create_view(t_display_wall *display, \
 					t_display_wall *window, t_view old_view)
 {
 	t_view	view;
@@ -205,13 +198,13 @@ t_display_wall	set_window_height(t_display_wall window, \
 	return (window);
 }
 
-void		draw_portal(t_display_wall *wall, t_display_wall *window, SDL_Surface *surf)
+void			draw_portal(t_display_wall *wall, \
+					t_display_wall *window, SDL_Surface *surf)
 {
 	t_vec	tmp_values;
 
 	tmp_values.x = window->bottom_left.y;
 	tmp_values.y = window->bottom_right.y;
-
 	window->bottom_left.y = window->top_left.y;
 	window->bottom_right.y = window->top_right.y;
 	window->top_left.y = wall->top_left.y;
@@ -240,7 +233,7 @@ void		draw_portal(t_display_wall *wall, t_display_wall *window, SDL_Surface *sur
 		draw_texture(surf, window->texture, window, 2);
 }
 
-void		draw_view_recursive(SDL_Surface *surf, \
+void			draw_view_recursive(SDL_Surface *surf, \
 				SDL_Surface **wall_textures, t_view view, \
 						t_sector_node *sector, t_player *player)
 {
@@ -257,9 +250,11 @@ void		draw_view_recursive(SDL_Surface *surf, \
 					&display_wall.intersect, view.fov))
 		{
 			create_perspective_wall(&display_wall, surf, player, sector);
-			init_display_wall(&display_wall, current_wall, view, wall_textures);//set cuts, set distance, set length;
-			display_wall.texture_ratio = display_wall.length / (sector->ceiling_height - sector->floor_height);
-			if (current_wall->neighbor_sector != NULL && current_wall->neighbor_sector != sector)
+			init_display_wall(&display_wall, current_wall, view, wall_textures);
+			display_wall.texture_ratio = display_wall.length \
+							/ (sector->ceiling_height - sector->floor_height);
+			if (current_wall->neighbor_sector != NULL \
+						&& current_wall->neighbor_sector != sector)
 			{
 				window = set_window_height(display_wall, player, \
 										current_wall->neighbor_sector, surf);

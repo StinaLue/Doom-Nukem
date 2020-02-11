@@ -6,12 +6,13 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:22:12 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/11 16:42:29 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 19:50:17 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 #include "libft.h"
+
 void	check_quit(SDL_Event *event, int *state)
 {
 	if (event->type == SDL_QUIT || (event->type == SDL_KEYDOWN && \
@@ -121,7 +122,6 @@ int		handle_events(t_doom *doom)
 		check_weapon(&doom->sdlmain.event, \
 						&doom->game, doom->map.weapon_choice);
 		handle_hud(&doom->sdlmain.event, &doom->game.data.hud_flags);
-		// ONLY TO TEST HEALTH
 		if (doom->sdlmain.event.key.keysym.sym == SDLK_z)
 			doom->game.player.health -= 10;
 	}

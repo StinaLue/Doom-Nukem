@@ -6,7 +6,7 @@
 #    By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/11 19:33:31 by sluetzen         ###   ########.fr        #
+#    Updated: 2020/02/11 20:10:29 by sluetzen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,6 +76,10 @@ SOURCES_LIST = main.c \
 			rot_minimap.c \
 			perspective_view.c \
 			vector.c \
+			vector_mult_div.c \
+			vector_transform.c \
+			vector_multiplications.c \
+			vector_create_reset.c \
 			poll_event.c \
 			handle_keys.c \
 			movement.c \

@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/11 19:39:27 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 19:46:47 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,12 @@ t_wall_node	*get_collision_wall(t_player *player, \
 			if (dist < *min_dist)
 			{
 				if (wall->neighbor_sector != NULL \
-					&& !portal_collide(player, wall->neighbor_sector) && wall->wall_type == 1)
+					&& !portal_collide(player, wall->neighbor_sector) \
+								&& wall->wall_type == 1)
 				{
 					tmp_deepest_wall = \
-						get_collision_wall(player, wall->neighbor_sector, min_dist);
+						get_collision_wall(player, wall->neighbor_sector, \
+											min_dist);
 					if (tmp_deepest_wall != NULL)
 						deepest_wall = tmp_deepest_wall;
 				}
@@ -101,14 +103,12 @@ t_wall_node	*get_collision_wall(t_player *player, \
 	return (deepest_wall);
 }
 
-t_vecdb		corner_collision(t_player *player, t_sector_node *sector)
+t_vecdb		corner_collision(t_player *player, t_wall_node *wall)
 {
-	t_wall_node	*wall;
 	double		dist;
 	t_vecdb		vec;
 	t_vecdb		move;
 
-	wall = sector->wall_head;
 	move.x = 0;
 	move.y = 0;
 	while (wall != NULL)
@@ -213,7 +213,7 @@ void		move_player(t_player *player)
 			player->move = multvecdb(move, 0);
 		}
 	}
-	move = corner_collision(player, player->sector);
+	move = corner_collision(player, player->sector->wall_head);
 	player->move.x += move.x;
 	player->move.y += move.y;
 }

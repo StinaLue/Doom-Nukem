@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_mapping.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 18:01:04 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/11 18:36:34 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/11 19:57:05 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ void	fill_floor(SDL_Surface *surf, t_vec win, int bot_limit, int type)
 	}
 }
 
-void	draw_texture(SDL_Surface *surf, SDL_Surface *tex, t_display_wall *dsp, int type)
+void	draw_texture(SDL_Surface *surf, SDL_Surface *tex, \
+							t_display_wall *dsp, int type)
 {
 	int		width;
 	double	delta_top;
@@ -95,7 +96,8 @@ void	draw_texture(SDL_Surface *surf, SDL_Surface *tex, t_display_wall *dsp, int 
 			while (win.y >= bot && win.y >= dsp->bot_limit)
 			{
 				pos.y = get_texture_y(win.y, top, bot);
-				fill_pix(surf, win.x, win.y, get_tex_color(pos.x, pos.y, dsp, tex));
+				fill_pix(surf, win.x, win.y, \
+							get_tex_color(pos.x, pos.y, dsp, tex));
 				win.y--;
 			}
 		win.y = bot;

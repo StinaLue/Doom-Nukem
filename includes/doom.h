@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 19:39:17 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 20:04:13 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -438,15 +438,12 @@ int							delete_enemy_info(t_map *map, t_vec delspawn);
 /*
 ** VECTOR FUNCTIONS
 */
-double						get_magnitude(t_vecdb a, t_vecdb b);
 
 t_vecdb						multvecdb(t_vecdb vecdb, double mult);
 
 t_vec						multvec(t_vec vec, int mult);
 
 t_vecdb						divvecdb(t_vecdb vecdb, double div);
-
-t_vec						divvec(t_vec vec, int div);
 
 t_vec						create_vec(int x, int y);
 
@@ -460,39 +457,23 @@ t_vecdb						vec_to_vecdb(t_vec vector);
 
 t_vecdb						rotate2d(t_vecdb vector, double angle);
 
-t_vecdb						rotate2dcc(t_vecdb vector, double angle);
-
 double						dot_product(t_vecdb a, t_vecdb b);
 
 double						cross_product(t_vecdb a, t_vecdb b);
 
 t_vecdb						create_vecdb(double x, double y);
 
-double						cross_product_len(t_vec a, t_vec b, t_vec c);
-
 double						get_point_distance(t_vecdb a, t_vecdb b);
-
-void						set_vec_values(t_vec *src, t_vec *dst);
 
 void						set_vecdb_values(t_vecdb *src, t_vecdb *dst);
 
 t_vecdb						vecdb_diff(t_vecdb a, t_vecdb b);
 
-t_vec						vec_diff(t_vec a, t_vec b);
-
-t_vecdb						vecdb_mult(t_vecdb a, t_vecdb b);
-
-t_vec						vec_mult(t_vec a, t_vec b);
-
 t_vecdb						vecdb_add(t_vecdb a, t_vecdb b);
-
-t_vec						vec_add(t_vec a, t_vec b);
 
 t_vec						reset_vec(t_vec *vector);
 
 t_vecdb						reset_vecdb(t_vecdb *vector);
-
-int							compare_vec(t_vec *vector1, t_vec *vector2);
 
 /*
 ** INIT FUNCTIONS
