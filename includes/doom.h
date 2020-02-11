@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 19:32:04 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 19:39:17 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@
 # include "alc.h"
 # define TITLE "DOOM"
 
-# define SQRT2 1.4142135623730950488
-# define PLAYER_RADIUS 0.5
+# define PLAYER_RADIUS 1
 # define NB_WALL_TEXTURES 9
 # define NB_SOUND_SOURCES 3
 # define NB_SOUND_BUFFERS 11
@@ -155,6 +154,7 @@ typedef struct				s_display_wall
 	int						top_limit;
 	int						bot_limit;
 	double					fov_ratio;
+	double					texture_ratio;
 	SDL_Surface				*texture;
 }							t_display_wall;
 

@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 17:27:42 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 19:40:14 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ double		vxs(double xstart, double ystart, double xtwo, double ytwo)
 {
 	return (xstart * ytwo - ystart * xtwo);
 }
-
+/* 
 t_vecdb		intersect(t_vecdb start, t_vecdb end, t_vecdb origin, t_vecdb cross)
 {
 	t_vecdb intersection;
@@ -31,7 +31,7 @@ t_vecdb		intersect(t_vecdb start, t_vecdb end, t_vecdb origin, t_vecdb cross)
 		origin.y - cross.y) / vxs(start.x \
 		- end.x, start.y - end.y, origin.x - cross.x, origin.y - cross.y);
 	return (intersection);
-}
+} */
 
 t_vecdb		simple_intersect(t_vecdb start, t_vecdb end, t_vecdb cross)
 {
@@ -201,6 +201,7 @@ t_display_wall	set_window_height(t_display_wall window, \
 			- (player->posz + player->height)) * distance_ratio;
 	window.top_right.y = (surf->h + top) / 2 - player->view_z;
 	window.bottom_right.y = (surf->h + bot) / 2 - player->view_z;
+	window.texture_ratio *= 10;
 	return (window);
 }
 
@@ -256,9 +257,9 @@ void		draw_view_recursive(SDL_Surface *surf, \
 					&display_wall.intersect, view.fov))
 		{
 			create_perspective_wall(&display_wall, surf, player, sector);
-			init_display_wall(&display_wall, current_wall, view, wall_textures);
-			if (current_wall->neighbor_sector != NULL \
-					&& current_wall->neighbor_sector != sector)
+			init_display_wall(&display_wall, current_wall, view, wall_textures);//set cuts, set distance, set length;
+			display_wall.texture_ratio = display_wall.length / (sector->ceiling_height - sector->floor_height);
+			if (current_wall->neighbor_sector != NULL && current_wall->neighbor_sector != sector)
 			{
 				window = set_window_height(display_wall, player, \
 										current_wall->neighbor_sector, surf);

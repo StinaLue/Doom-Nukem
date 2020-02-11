@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/11 17:44:54 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 19:39:04 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	basic_look(t_player *player, const Uint8 *keyboard_state)
 		player->angle -= 0.01;
 	if (keyboard_state[SDL_SCANCODE_C])
 	{
-		player->height = PLAYER_HEIGHT - 4;
+		player->height = PLAYER_HEIGHT - 8;
 		player->movespeed = WALK;
 	}
 	else
