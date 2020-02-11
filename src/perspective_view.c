@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:29:58 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 17:41:12 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/11 19:15:11 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,6 +189,7 @@ t_display_wall	set_window_height(t_display_wall window, t_player *player, t_sect
 	window.top_right.y = (surf->h + top) / 2 - player->view_z;
 	window.bottom_right.y = (surf->h + bot) / 2 - player->view_z;
 
+	window.texture_ratio *= 10;
 	return (window);
 }
 
@@ -243,6 +244,7 @@ void		draw_view_recursive(SDL_Surface *surf, SDL_Surface **wall_textures, t_view
 		{
 			create_perspective_wall(&display_wall, surf, player, sector);
 			init_display_wall(&display_wall, current_wall, view, wall_textures);//set cuts, set distance, set length;
+			display_wall.texture_ratio = display_wall.length / (sector->ceiling_height - sector->floor_height);
 			if (current_wall->neighbor_sector != NULL && current_wall->neighbor_sector != sector)
 			{
 				window = set_window_height(display_wall, player, current_wall->neighbor_sector, surf);

@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/11 13:49:49 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/11 16:59:47 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	basic_look(t_player *player, const Uint8 *keyboard_state)
 		player->movespeed = WALK;
     if (keyboard_state[SDL_SCANCODE_LCTRL])
     {
-        player->height = PLAYER_HEIGHT - 4;
+        player->height = PLAYER_HEIGHT - 8;
         player->movespeed = WALK;
     }
     else
