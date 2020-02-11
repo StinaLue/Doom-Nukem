@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 13:01:37 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 16:08:50 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -552,7 +552,14 @@ int							editor_events(t_doom *doom, t_sdlmain *sdlmain);
 
 void						set_height(t_options_menu *menu, SDL_Surface *surf);
 
+/*
+**	GAME FUNCTIONS
+*/
+int							player_hurt_anim(int health, SDL_Rect *surf_rect);
+SDL_Rect					find_srcrect_enemy(t_enemy *enemy);
 
+SDL_Rect					find_dstrect_enemy(t_enemy *enemy, \
+									t_player *player, SDL_Surface *dest);
 /*
 ** PRINT MINIMAP FUNCTIONS
 */
@@ -616,6 +623,15 @@ int							editor_blit_weapons(t_editor *editor, \
 int							blit_options(t_editor *editor);
 
 int							blit_height(t_editor *editor);
+
+int							game_blit_hud(t_map *map, t_game *game, \
+									int itt, Uint32 startclock);
+
+int							blit_enemies(t_game *game, SDL_Surface *dest, \
+											t_map *map);
+
+int							blit_weapon(t_game *game, SDL_Surface *dest, \
+										int weapon, int available_weapons);
 /*
 ** TEXT FUNCTIONS
 */
@@ -776,6 +792,16 @@ void						event_handle_input(t_editor *editor, Uint32 type, \
 
 void						key_event_height(t_editor *editor, SDL_Event ev, \
 										t_options_menu *menu);
+
+void						mouse_collide1(t_sdlmain *sdlmain, \
+										t_editor *editor, t_options_menu *menu);
+void						mouse_collide2(t_sdlmain *sdlmain, \
+							t_editor *editor,t_options_menu *menu, Uint8 button);
+
+void						create_walls_on_map(t_vec mouse, t_editor *editor, \
+													t_wall_node *wall);
+
+void						base_color_rect_options(t_options_menu *menu);
 /*
 ** LINKED LIST FUNCTIONS
 */
@@ -849,12 +875,6 @@ t_wall_node					*copy_wall_node(t_wall_node **wall_head, \
 
 int							copy_wall_list(t_wall_node *wall_list, \
 											t_wall_node **new_list);
-
-int							wall_loop(t_wall_node *node);
-
-int							count_walls(t_wall_node *wall_list);
-
-void						set_wall_length(t_wall_node *head);
 
 /*
 ** DEBUG FUNCTIONS

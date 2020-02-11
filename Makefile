@@ -6,7 +6,7 @@
 #    By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/11 11:30:10 by sluetzen         ###   ########.fr        #
+#    Updated: 2020/02/11 15:36:33 by sluetzen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,6 +62,7 @@ HEADERS = $(addprefix $(HEADERS_DIRECTORY), $(HEADERS_LIST))
 SOURCES_DIRECTORY = ./src/
 SOURCES_LIST = main.c \
 			game.c \
+			game_blit_hud.c \
 			init.c \
 			init_structs.c \
 			null_pointers.c \
@@ -86,6 +87,7 @@ SOURCES_LIST = main.c \
 			editor_main_surfaces.c\
 			editor_check.c \
 			editor_blit.c \
+			editor_create_walls.c \
 			new_blit.c \
 			map.c \
 			map_reader_main.c \
@@ -100,6 +102,8 @@ SOURCES_LIST = main.c \
 			editor_events_keys_a_to_l.c \
 			editor_events_keys_m_to_q.c \
 			editor_events_keys_r_to_u.c \
+			editor_mouse_collide1.c \
+			editor_mouse_collide2.c \
 			mouse_movement.c \
 			sound.c \
 			music.c \

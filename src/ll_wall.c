@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 14:25:24 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/09 21:29:36 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 16:05:15 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,20 +223,6 @@ int	copy_wall_list(t_wall_node *wall_list, t_wall_node **new_list)
 	if (ret == -1)
 		return (-1);
 	return (ret + 1);
-}
-
-//returns wall count
-int	count_walls(t_wall_node *wall_list)
-{
-	int i;
-
-	i = 0;
-	while (wall_list != NULL)
-	{
-		wall_list = wall_list->next;
-		i++;
-	}
-	return (i);
 }
 
 t_wall_node	*undo_wall(t_sector_node *node)

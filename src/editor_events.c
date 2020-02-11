@@ -3,15 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   editor_events.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 11:47:42 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 16:54:40 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 16:10:21 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 #include "libft.h"
+
+void			set_wall_length(t_wall_node *head)
+{
+	if (head == NULL)
+		return ;
+	head->length = get_point_distance(head->start, head->end);
+	set_wall_length(head->next);
+}
 
 int				compare_walls(t_wall_node *current_wall, t_wall_node *wall)
 {

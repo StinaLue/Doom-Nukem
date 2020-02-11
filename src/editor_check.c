@@ -3,23 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   editor_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:40:34 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/10 12:27:59 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 16:08:39 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
-
-int		get_sign(double num)
-{
-	if (num > 0)
-		return (1);
-	if (num < 0)
-		return (-1);
-	return (0);
-}
 
 int		is_same_sign(double a, double b)
 {
@@ -28,23 +19,6 @@ int		is_same_sign(double a, double b)
 	if (a < 0 && b > 0)
 		return (0);
 	return (1);
-}
-
-int		wall_loop(t_wall_node *node)
-{
-	int		loop;
-	t_vecdb	*start;
-
-	if (node == NULL)
-		return (-1);
-	loop = 0;
-	start = &node->start;
-	while (node->next != NULL)
-		node = node->next;
-	if (node->end.x == start->x \
-		&& node->end.y == start->y && &node->start != start)
-		loop = 1;
-	return (loop);
 }
 
 int		check_convex_sector(t_sector_node *sector)
@@ -72,14 +46,6 @@ int		check_convex_sector(t_sector_node *sector)
 		wall = wall->next;
 	}
 	return (1);
-}
-
-void	set_wall_length(t_wall_node *head)
-{
-	if (head == NULL)
-		return ;
-	head->length = get_point_distance(head->start, head->end);
-	set_wall_length(head->next);
 }
 
 int		check_clockwise_sector(t_sector_node *sector)
