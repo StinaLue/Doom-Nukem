@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_init_instructs.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/10 16:45:09 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/10 16:46:50 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 20:50:30 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int		init_left_instr_menu(t_editor *editor, int surf_h, SDL_Surface *surf)
 												1, "undo sector: s") != 0)
 		return (1);
 	if (create_instruct_str(editor, create_vec(surf->w / 18, surf_h * 11), \
-												2, "replace map: m") != 0)
+												2, "set goal: g") != 0)
 		return (1);
 	if (create_instruct_str(editor, create_vec(surf->w / 18, surf_h * 14), \
 											3, "load map into game: l") != 0)
