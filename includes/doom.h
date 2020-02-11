@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 16:08:50 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 16:47:10 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -560,6 +560,11 @@ SDL_Rect					find_srcrect_enemy(t_enemy *enemy);
 
 SDL_Rect					find_dstrect_enemy(t_enemy *enemy, \
 									t_player *player, SDL_Surface *dest);
+
+int							create_game_surfaces(t_gamesurfs *gamesurfs, \
+									t_sdlmain *sdlmain);
+
+int							load_game_textures(t_gamesurfs *gamesurfs);
 /*
 ** PRINT MINIMAP FUNCTIONS
 */

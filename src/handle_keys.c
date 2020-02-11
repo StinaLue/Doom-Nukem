@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_keys.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 15:51:05 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/11 09:59:34 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 16:43:10 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	basic_look(t_player *player, const Uint8 *keyboard_state)
 		player->movespeed = RUN;
 	else
 		player->movespeed = WALK;
-    if (keyboard_state[SDL_SCANCODE_LCTRL])
+    if (keyboard_state[SDL_SCANCODE_C])
     {
         player->height = PLAYER_HEIGHT - 4;
         player->movespeed = WALK;

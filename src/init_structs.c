@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 13:15:26 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 16:46:57 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,23 +43,12 @@ SDL_Surface	*load_opti_bmp(char *file, SDL_Surface *dst_surf, Uint32 colorkey)
 	return (opti_surf);
 }
 
-int	init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain)
+int			init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain)
 {
-	if ((gamesurfs->rot_mmap = SDL_CreateRGBSurface(0, 128, 128, 32, 0, 0, 0, 0)) == NULL) //--> should be a square that can handle the size of a sector
-		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
-	if ((gamesurfs->fixed_mmap = SDL_CreateRGBSurface(0, 102, 102, 32, 0, 0, 0, 0)) == NULL) //--> should be a square that can handle the size of the whole map
-		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
-	if ((gamesurfs->perspective_view = SDL_CreateRGBSurface(0, sdlmain->win_surf->w / 2, sdlmain->win_surf->h / 2, 32, 0, 0, 0, 0)) == NULL)
-		return (error_return("create surface error = %{r}s\n", SDL_GetError()));
-	//if ((gamesurfs->weapons = load_bmp("assets/shadow.bmp")) == NULL)
-	if ((gamesurfs->weapons = load_opti_bmp("assets/weapons/weapons.bmp", gamesurfs->perspective_view/*sdlmain->win_surf*/, 0xFFFFFF)) == NULL)
-		return (error_return("load weapon bmp surf error\n", NULL));
-	if ((gamesurfs->hud_faces_surf = load_opti_bmp("assets/hud/hud_faces.bmp", gamesurfs->perspective_view, 0x00FFFF)) == NULL)
-		return (error_return("load hud faces bmp surf error\n", NULL));
-	if ((gamesurfs->enemy_texture[0] = load_opti_bmp("assets/enemy_sprites/UndeadWarrior.bmp", gamesurfs->perspective_view, 0x00FFFF)) == NULL)
-		return (error_return("load UndeadWarrior surf error\n", NULL));
-	if ((gamesurfs->enemy_texture[1] = load_opti_bmp("assets/enemy_sprites/Ogre.bmp", gamesurfs->perspective_view, 0x00FFFF)) == NULL)
-		return (error_return("load Ogre surf error\n", NULL));
+	if (create_game_surfaces(gamesurfs, sdlmain) != 0)
+		return (1);
+	if (load_game_textures(gamesurfs) != 0)
+		return (1);
 	if ((gamesurfs->game_over = load_opti_bmp("assets/game_over.bmp", gamesurfs->perspective_view, 0)) == NULL)
 		return (error_return("load game over surf error\n", NULL));
 	if ((gamesurfs->victory = load_opti_bmp("assets/victory.bmp", gamesurfs->perspective_view, 0)) == NULL)
@@ -82,12 +71,12 @@ int	init_gamesurfs_struct(t_gamesurfs *gamesurfs, t_sdlmain *sdlmain)
 	return (0);
 }
 
-void	init_data_struct(t_data *data)
+void		init_data_struct(t_data *data)
 {
 	data->hud_flags = 0;
 }
 
-void	init_player_struct(t_player *player, t_map *map)
+void		init_player_struct(t_player *player, t_map *map)
 {
 	player->pos.x = map->player_spawn.x;
 	player->pos.y = map->player_spawn.y;
@@ -98,9 +87,7 @@ void	init_player_struct(t_player *player, t_map *map)
 	player->view_z = 0;
 	player->inertia.x = 0;
 	player->inertia.y = 0;
-	/*player->view.x = 100;
-	player->fov.y = 100;*/
-	player->true_fov = 1.5708; //hardcoded 90deg
+	player->true_fov = 1.5708;
 	player->health = 100;
 	player->is_moving = 0;
 	player->anim = 0;
@@ -108,7 +95,7 @@ void	init_player_struct(t_player *player, t_map *map)
 	player->movespeed = WALK;
 }
 
-void	get_enemysprite_rect(SDL_Rect *rect, int which_enemy, \
+void		get_enemysprite_rect(SDL_Rect *rect, int which_enemy, \
 									SDL_Surface *sprite_sheet)
 {
 	rect->x = 0;
@@ -120,12 +107,14 @@ void	get_enemysprite_rect(SDL_Rect *rect, int which_enemy, \
 		rect->h = sprite_sheet->h / 11;
 }
 
-void	init_enemy(t_enemy *enemy, t_enemy_info *enemy_info, t_game *game)
+void		init_enemy(t_enemy *enemy, t_enemy_info *enemy_info, t_game *game)
 {
-	enemy->pos = create_vecdb(enemy_info->enemy_spawn.x, enemy_info->enemy_spawn.y);
+	enemy->pos = create_vecdb(enemy_info->enemy_spawn.x, \
+							enemy_info->enemy_spawn.y);
 	enemy->texture = game->surfs.enemy_texture[enemy_info->which_enemy];
 	enemy->angle = 0;
-	get_enemysprite_rect(&enemy->clip_tex, enemy_info->which_enemy, enemy->texture);
+	get_enemysprite_rect(&enemy->clip_tex, \
+					enemy_info->which_enemy, enemy->texture);
 	enemy->state = 0;
 	enemy->health = 100;
 	enemy->anim_timer = 0;
@@ -134,7 +123,7 @@ void	init_enemy(t_enemy *enemy, t_enemy_info *enemy_info, t_game *game)
 	init_source(enemy->sound_src, 1, 5, 1);
 }
 
-int	init_enemies(t_game *game, t_map *map)
+int			init_enemies(t_game *game, t_map *map)
 {
 	int				current_enemy;
 	t_enemy_info	*enemy_info;

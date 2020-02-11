@@ -6,7 +6,7 @@
 #    By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/11 15:36:33 by sluetzen         ###   ########.fr        #
+#    Updated: 2020/02/11 16:38:23 by sluetzen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,6 +63,7 @@ SOURCES_DIRECTORY = ./src/
 SOURCES_LIST = main.c \
 			game.c \
 			game_blit_hud.c \
+			game_create_surfaces.c \
 			init.c \
 			init_structs.c \
 			null_pointers.c \

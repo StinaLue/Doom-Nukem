@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   poll_event.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:22:12 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/11 10:24:11 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/11 16:42:29 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	handle_hud(SDL_Event *event, char *hud_flags)
 {
 	if (event->key.keysym.sym == SDLK_m)
 		activate_map_flags(hud_flags);
-	if (event->key.keysym.sym == SDLK_c)
+	if (event->key.keysym.sym == SDLK_x)
 	{
 		if ((*hud_flags & TEXFLAG) == 0)
 			*hud_flags |= TEXFLAG;
