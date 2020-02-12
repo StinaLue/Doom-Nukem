@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/11 21:08:39 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/11 22:13:50 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/12 02:58:58 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,16 @@ int			blit_enemies(t_game *game, SDL_Surface *dest, t_map *map)
 			i++;
 	}
 	return (0);
+}
+
+void			stop_enem_soundsources(t_enemy *enemies, int nb_enemies)
+{
+	int i;
+
+	i = 0;
+	while (i < nb_enemies)
+	{
+		alSourceStop(enemies[i].sound_src);
+		i++;
+	}
 }

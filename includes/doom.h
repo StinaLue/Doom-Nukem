@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/12 02:52:58 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/12 03:55:10 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,6 +208,8 @@ typedef struct				s_gamesurfs
 typedef struct				s_data
 {
 	char					hud_flags;
+	int						itt;
+	Uint32					startclock;
 }							t_data;
 
 typedef struct				s_view
@@ -702,6 +704,8 @@ SDL_Rect					create_sdlrect(int x, int y, int w, int h);
 void						assign_sdlrect(SDL_Rect *rect, \
 										t_vec origin, t_vec size);
 
+void						clean_surf(SDL_Surface *surf);
+
 /*
 ** MOVEMENT
 */
@@ -963,6 +967,8 @@ int							is_source_playing(ALuint source);
 
 int							play_sound(t_game *game, t_sdlmain *sdlmain, \
 												t_map *map);
+
+void						set_listener_ori(double angle, t_vecdb player_pos);
 
 /*
 ** MUSIC FUNCTIONS

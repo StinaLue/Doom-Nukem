@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 02:38:54 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/12 02:53:50 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/12 03:28:45 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,6 @@ int     player_attack(t_enemy *enemy, \
 	{
 		raycast_uzi(player, enemy, map->num_enemies);
 	}
+	set_listener_ori(player->angle, player->pos);
 	return (0);
 }

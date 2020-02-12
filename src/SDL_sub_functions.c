@@ -1,17 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sdl_sub_functions.c                                :+:      :+:    :+:   */
+/*   SDL_sub_functions.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 16:02:39 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/11 20:16:48 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/12 03:53:22 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 #include "libft.h"
+
+void		clean_surf(SDL_Surface *surf)
+{
+	ft_bzero(surf->pixels, surf->h * surf->pitch);
+}
 
 void		free_and_null_surf(SDL_Surface *surf)
 {
