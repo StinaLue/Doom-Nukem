@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/12 11:12:22 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/12 11:36:35 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ void		init_player_struct(t_player *player, t_map *map)
 	player->movespeed = WALK;
 }
 
-void	init_enemy(t_enemy *enemy, t_enemy_info *enemy_info, t_game *game, t_map *map)
+void		init_enemy(t_enemy *enemy, \
+			t_enemy_info *enemy_info, t_game *game, t_map *map)
 {
 	enemy->pos = create_vecdb(enemy_info->enemy_spawn.x, \
 	enemy_info->enemy_spawn.y);
