@@ -1,32 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libwav.h                                           :+:      :+:    :+:   */
+/*   wav_parse_name.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/31 13:43:21 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/12 11:05:08 by afonck           ###   ########.fr       */
+/*   Created: 2020/02/12 10:58:08 by afonck            #+#    #+#             */
+/*   Updated: 2020/02/12 11:08:03 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBWAV_H
-# define LIBWAV_H
-
-typedef struct		s_wav
+int	is_wav(char *file)
 {
-	unsigned char	*buffer_data;
-	float			duration;
-	int				sample_rate;
-	int				byte_rate;
-	int				data_chunk_size;
-	short			bits_per_sample;
-	short			extra_params;
-	short			audio_format;
-	short			channels;
-}					t_wav;
+	int	len;
 
-int					error_return_wav(char *s1, char *s2, int fd);
-
-int					is_wav(char *file);
-#endif
+	len = 0;
+	while (file[len])
+		len++;
+	len -= 1;
+	if (len < 4)
+		return (0);
+	if (file[len--] != 'v')
+		return (0);
+	if (file[len--] != 'a')
+		return (0);
+	if (file[len--] != 'w')
+		return (0);
+	if (file[len] != '.')
+		return (0);
+	return (1);
+}

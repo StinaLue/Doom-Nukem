@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/12 03:55:10 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/12 11:05:14 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -402,10 +402,6 @@ typedef struct				s_doom
 	SDL_Surface				*wall_textures[10];
 	int						state;
 }							t_doom;
-
-void						soft_reset_player(t_player *player, t_map *map);
-
-int							load_wav(char *file, ALuint buffer);
 
 int							is_mouse_collide(t_vec mouse_pos, \
 												SDL_Rect collide_rect);
@@ -937,6 +933,8 @@ int							blit_uzi(t_gamesurfs *gamesurfs, \
 
 int							blit_weapon(t_game *game, SDL_Surface *dest, \
 							int weapon, int available_weapons);
+
+void						soft_reset_player(t_player *player, t_map *map);
 /*
 ** ENEMY FUNCTIONS
 */
@@ -970,6 +968,7 @@ int							play_sound(t_game *game, t_sdlmain *sdlmain, \
 
 void						set_listener_ori(double angle, t_vecdb player_pos);
 
+int							load_wav(char *file, ALuint buffer);
 /*
 ** MUSIC FUNCTIONS
 */

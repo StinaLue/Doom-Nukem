@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/12 04:01:12 by afonck           ###   ########.fr        #
+#    Updated: 2020/02/12 11:01:14 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -111,6 +111,7 @@ SOURCES_LIST = main.c \
 			map_writer_sectors.c \
 			editor_events.c \
 			wav_parse.c \
+			wav_parse_name.c \
 			texture_mapping.c \
 			editor_events_mouse.c \
 			editor_events_keys.c \

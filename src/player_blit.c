@@ -6,12 +6,11 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 02:37:29 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/12 02:48:25 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/12 10:50:10 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
-
 
 int				blit_uzi(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)
 {
@@ -42,7 +41,7 @@ int				blit_uzi(t_gamesurfs *gamesurfs, SDL_Surface *dest, int *anim)
 	return (0);
 }
 
-void            init_katana(t_gamesurfs *surfs, int anim)
+void			init_katana(t_gamesurfs *surfs, int anim)
 {
 	surfs->weapons_rect.x = surfs->current_frame \
 					* surfs->weapons_rect.w;
@@ -55,7 +54,7 @@ void            init_katana(t_gamesurfs *surfs, int anim)
 int				blit_katana(t_gamesurfs *gamesurfs, \
 								SDL_Surface *dest, int *anim)
 {
-    init_katana(gamesurfs, *anim);
+	init_katana(gamesurfs, *anim);
 	if (SDL_BlitScaled(gamesurfs->weapons, \
 				&gamesurfs->weapons_rect, dest, NULL) != 0)
 		return (error_return("SDL_BlitScaled error: %s\n", SDL_GetError()));
