@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   enemy.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/11 21:08:39 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/12 02:58:58 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/12 10:46:34 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int			blit_enemies(t_game *game, SDL_Surface *dest, t_map *map)
 	return (0);
 }
 
-void			stop_enem_soundsources(t_enemy *enemies, int nb_enemies)
+void		stop_enem_soundsources(t_enemy *enemies, int nb_enemies)
 {
 	int i;
 
