@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   movement_surroundings.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/11 22:05:27 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 22:06:11 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/12 12:09:35 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-t_vecdb		move_hyp_length(t_wall_node *wall, double distance, double angle)
+t_vecdb		acute(t_wall_node *wall, double distance, double angle)
 {
 	double	col_angle;
 	t_vecdb	move;
@@ -33,8 +33,8 @@ void		update_sector(t_player *player, t_wall_node *wall)
 	while (wall != NULL)
 	{
 		if (wall->neighbor_sector != NULL \
-			&& is_in_direction(player->move, wall) \
-			&& is_in_range(vecdb_add(player->pos, player->move), wall) \
+			&& in_dir(player->move, wall) \
+			&& in_r(vecdb_add(player->pos, player->move), wall) \
 			&& wall_distance(player->pos, wall) <= 0)
 		{
 			player->sector = wall->neighbor_sector;
@@ -54,7 +54,7 @@ double		wall_distance(t_vecdb point, t_wall_node *wall)
 	return (dist);
 }
 
-int			is_in_range(t_vecdb pos, t_wall_node *wall)
+int			in_r(t_vecdb pos, t_wall_node *wall)
 {
 	t_vecdb tmp_wall;
 	t_vecdb tmp_pos;
@@ -74,7 +74,7 @@ int			is_in_range(t_vecdb pos, t_wall_node *wall)
 	return (1);
 }
 
-int			is_in_direction(t_vecdb move, t_wall_node *wall)
+int			in_dir(t_vecdb move, t_wall_node *wall)
 {
 	t_vecdb wall_vec;
 

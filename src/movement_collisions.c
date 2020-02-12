@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement_collisions.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/11 21:50:01 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 21:50:26 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/12 12:53:30 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,35 +23,40 @@ int			portal_collide(t_player *player, t_sector_node *sector)
 	return (0);
 }
 
-t_wall_node	*get_collision_wall(t_player *player, \
+int			set_deepest(t_wall_node *wall, t_wall_node **deepest_wall, \
+				t_player *player, double *min_dist)
+{
+	t_wall_node	*tmp_deepest_wall;
+
+	if (wall->neighbor_sector != NULL && \
+		!portal_collide(player, wall->neighbor_sector) && wall->wall_type == 1)
+	{
+		tmp_deepest_wall = find_coll(player, wall->neighbor_sector, min_dist);
+		if (tmp_deepest_wall != NULL)
+			*deepest_wall = tmp_deepest_wall;
+		return (1);
+	}
+	return (0);
+}
+
+t_wall_node	*find_coll(t_player *player, \
 				t_sector_node *sector, double *min_dist)
 {
 	double		dist;
 	t_wall_node	*wall;
 	t_wall_node	*deepest_wall;
-	t_wall_node	*tmp_deepest_wall;
 
 	wall = sector->wall_head;
 	deepest_wall = NULL;
 	while (wall != NULL)
 	{
-		if (is_in_direction(player->move, wall) \
-					&& is_in_range(vecdb_add(player->pos, player->move), wall))
+		if (in_dir(player->move, wall) && \
+					in_r(vecdb_add(player->pos, player->move), wall))
 		{
 			dist = wall_distance(vecdb_add(player->pos, player->move), wall);
 			if (dist < *min_dist)
 			{
-				if (wall->neighbor_sector != NULL \
-					&& !portal_collide(player, wall->neighbor_sector) \
-								&& wall->wall_type == 1)
-				{
-					tmp_deepest_wall = \
-						get_collision_wall(player, wall->neighbor_sector, \
-											min_dist);
-					if (tmp_deepest_wall != NULL)
-						deepest_wall = tmp_deepest_wall;
-				}
-				else
+				if (!set_deepest(wall, &deepest_wall, player, min_dist))
 				{
 					deepest_wall = wall;
 					*min_dist = dist;
@@ -63,7 +68,7 @@ t_wall_node	*get_collision_wall(t_player *player, \
 	return (deepest_wall);
 }
 
-t_vecdb		corner_collision(t_player *player, t_wall_node *wall)
+t_vecdb		ccoll(t_player *player, t_wall_node *wall)
 {
 	double		dist;
 	t_vecdb		vec;
@@ -92,7 +97,7 @@ t_vecdb		corner_collision(t_player *player, t_wall_node *wall)
 	return (move);
 }
 
-t_vecdb		collide(t_wall_node *wall, double distance, double *col_angle)
+t_vecdb		coll(t_wall_node *wall, double distance, double *col_angle)
 {
 	t_vecdb	collision;
 

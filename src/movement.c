@@ -6,48 +6,44 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/12 11:14:12 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/12 12:13:35 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
+void		teleport(t_player *player)
+{
+	player->pos = vecdb_add(player->pos, player->move);
+	player->move = multvecdb(player->move, 0);
+}
+
 void		move_player(t_player *player)
 {
-	t_wall_node		*tmp_wall;
-	t_wall_node		*tmp_wall2;
+	t_wall_node		*tmp1;
+	t_wall_node		*tmp2;
 	double			tmp_dist;
-	double			col_angle;
-	t_vecdb			move;
+	double			cang;
 
-	tmp_wall = NULL;
+	tmp1 = NULL;
 	tmp_dist = PLAYER_RADIUS;
-	col_angle = 0;
-	if ((tmp_wall = get_collision_wall(player, player->sector, &tmp_dist)) \
-													!= NULL)
+	cang = 0;
+	if ((tmp1 = find_coll(player, player->sector, &tmp_dist)) != NULL)
 	{
-		move = collide(tmp_wall, tmp_dist, &col_angle);
-		player->move.x += move.x;
-		player->move.y += move.y;
+		player->move = vecdb_add(player->move, coll(tmp1, tmp_dist, &cang));
 		tmp_dist = PLAYER_RADIUS;
-		tmp_wall2 = tmp_wall;
-		if ((tmp_wall = get_collision_wall(player, player->sector, &tmp_dist)) \
-									!= NULL && tmp_wall != tmp_wall2)
+		tmp2 = tmp1;
+		if ((tmp1 = find_coll(player, player->sector, &tmp_dist)) \
+									!= NULL && tmp1 != tmp2)
 		{
-			move = move_hyp_length(tmp_wall, tmp_dist, col_angle);
-			player->move.x += move.x;
-			player->move.y += move.y;
+			player->move = vecdb_add(player->move, acute(tmp1, tmp_dist, cang));
 			update_sector(player, player->sector->wall_head);
 		}
-		if (tmp_wall2 && wall_distance(player->pos, tmp_wall2) < 0)
-		{
-			player->pos = vecdb_add(player->pos, player->move);
-			player->move = multvecdb(move, 0);
-		}
+		if (tmp2 && wall_distance(player->pos, tmp2) < 0)
+			teleport(player);
 	}
-	move = corner_collision(player, player->sector->wall_head);
-	player->move.x += move.x;
-	player->move.y += move.y;
+	player->move = vecdb_add(player->move, \
+				ccoll(player, player->sector->wall_head));
 }
 
 void		movement(t_player *player, t_vecdb move)
