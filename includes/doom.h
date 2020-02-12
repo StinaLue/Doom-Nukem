@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/12 02:29:19 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/12 02:52:58 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -919,6 +919,20 @@ int							check_convex_sector(t_sector_node *sector);
 
 int							check_clockwise_sector(t_sector_node *sector);
 
+/*
+** PLAYER FUNCTIONS
+*/
+int							player_attack(t_enemy *enemy, \
+							t_player *player, t_map *map, t_gamesurfs *surfs);
+
+int							blit_katana(t_gamesurfs *gamesurfs, \
+								SDL_Surface *dest, int *anim);
+
+int							blit_uzi(t_gamesurfs *gamesurfs, \
+							SDL_Surface *dest, int *anim);
+
+int							blit_weapon(t_game *game, SDL_Surface *dest, \
+							int weapon, int available_weapons);
 /*
 ** ENEMY FUNCTIONS
 */
