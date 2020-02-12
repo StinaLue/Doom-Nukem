@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/12 03:45:21 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/12 10:49:11 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int		verify_defines(void)
 	|| NBINSTRUCTS != 10 || SIZEMAP != 20 || COLOR_HOVER != 0x6C1413 \
 	|| COLOR_PRESSED != 0x00cc00 || COLOR_NORMAL != 0xffff00 \
 	|| ROT_MAP_SHOW != 1 || FIX_MAP_SHOW != 2 || TEXFLAG != 4 \
-	|| HEALTH_STATUS != 8  || FPS_SHOW != 16 || FIRST_OPTION_SELECT != 1 \
+	|| HEALTH_STATUS != 8 || FPS_SHOW != 16 || FIRST_OPTION_SELECT != 1 \
 	|| SECOND_OPTION_SELECT != 2 || THIRD_OPTION_SELECT != 3 \
 	|| FOURTH_OPTION_SELECT != 4)
 		return (1);
@@ -94,12 +94,12 @@ int		verify_defines(void)
 		return (0);
 }
 
-int		main(void/*int argc, char *argv[]*/)
+int		main(void)
 {
 	if (verify_defines() != 0)
 		return (error_return("Some defines should %{r}s be changed, \
 								please\n", "NOT"));
-	if (main_loop() == 1)
+		if (main_loop() == 1)
 		return (error_return("The program %{r}s 😢\n", "FAILED"));
 	return (EXIT_SUCCESS);
 }

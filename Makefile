@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/12 11:01:14 by afonck           ###   ########.fr        #
+#    Updated: 2020/02/12 11:18:34 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,6 +75,10 @@ SOURCES_LIST = main.c \
 			fixed_minimap.c \
 			rot_minimap.c \
 			perspective_view.c \
+			perspective_view_recursive.c \
+			perspective_view_portals.c \
+			perspective_view_calculs.c \
+			perspective_view_init.c \
 			vector.c \
 			vector_mult_div.c \
 			vector_transform.c \

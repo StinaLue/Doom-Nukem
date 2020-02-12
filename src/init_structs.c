@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 22:33:43 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/12 10:46:56 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ void		init_player_struct(t_player *player, t_map *map)
 	player->movespeed = WALK;
 }
 
-void	init_enemy(t_enemy *enemy, t_enemy_info *enemy_info, t_game *game, t_map *map)
+void		init_enemy(t_enemy *enemy, \
+			t_enemy_info *enemy_info, t_game *game, t_map *map)
 {
 	enemy->pos = create_vecdb(enemy_info->enemy_spawn.x, \
 	enemy_info->enemy_spawn.y);

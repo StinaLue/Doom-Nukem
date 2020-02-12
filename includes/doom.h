@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/12 11:05:14 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/12 11:12:56 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -419,6 +419,30 @@ SDL_Surface					*load_opti_bmp(char *file, SDL_Surface *dst_surf, \
 											Uint32 colorkey);
 
 int							copy_map(const t_map *srcmap, t_map *dstmap);
+
+t_vecdb						simple_intersect(t_vecdb start, t_vecdb end, \
+														t_vecdb cross);
+
+void						create_perspective_wall(t_display_wall *dsp_wall, \
+										SDL_Surface *surf, t_player *player, \
+												t_sector_node *sector);
+
+t_display_wall				set_window_height(t_display_wall window, \
+					t_player *player, t_sector_node *sector, SDL_Surface *surf);
+
+void						init_display_wall(t_display_wall *display, \
+								t_wall_node *current_wall, t_view old_view, \
+									SDL_Surface **wall_textures);
+
+void						draw_portal(t_display_wall *wall, \
+								t_display_wall *window, SDL_Surface *surf);
+
+t_view						create_view(t_display_wall *display, \
+									t_display_wall *window, t_view old_view);
+
+int							max(int a, int b);
+
+int							min(int a, int b);
 
 /*
 ** MAP PARSING FUNCTIONS

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/12 03:53:33 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/12 10:47:16 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,13 @@ int				blit_game(t_game *game, t_sdlmain *sdlmain, \
 						NULL, sdlmain->win_surf, NULL)) < 0)
 		return (error_return("SDL_BlitScaled error = %{r}s\n", \
 				SDL_GetError()));
-	if ((draw_map(sdlmain, game, &doom->map, \
+		if ((draw_map(sdlmain, game, &doom->map, \
 					&game->data.hud_flags)) == 1)
 		return (error_return("error during map drawing\n", NULL));
 	if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)
 		return (error_return("SDL_UpdateWindowSurface error = %{r}s\n", \
 					SDL_GetError()));
-	game->data.itt++;
+		game->data.itt++;
 	return (0);
 }
 
