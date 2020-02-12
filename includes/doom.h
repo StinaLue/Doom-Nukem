@@ -6,7 +6,7 @@
 /*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/12 11:36:36 by phaydont         ###   ########.fr       */
+/*   Updated: 2020/02/12 12:15:18 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -743,22 +743,22 @@ void						update_player(t_player *player);
 
 void						jump(t_player *player);
 
-t_wall_node					*get_collision_wall(t_player *player, \
+t_wall_node					*find_coll(t_player *player, \
 									t_sector_node *sector, double *min_dist);
 
-t_vecdb						collide(t_wall_node *wall, double distance, \
+t_vecdb						coll(t_wall_node *wall, double distance, \
 										double *col_angle);
 
-t_vecdb						corner_collision(t_player *player, \
+t_vecdb						ccoll(t_player *player, \
 											t_wall_node *wall);
 
 double						wall_distance(t_vecdb point, t_wall_node *wall);
 
-int							is_in_range(t_vecdb pos, t_wall_node *wall);
+int							in_r(t_vecdb pos, t_wall_node *wall);
 
-int							is_in_direction(t_vecdb move, t_wall_node *wall);
+int							in_dir(t_vecdb move, t_wall_node *wall);
 
-t_vecdb						move_hyp_length(t_wall_node *wall, \
+t_vecdb						acute(t_wall_node *wall, \
 										double distance, double angle);
 
 void						update_sector(t_player *player, t_wall_node *wall);
