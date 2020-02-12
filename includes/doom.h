@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doom.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 22:37:52 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/12 01:53:05 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -381,6 +381,15 @@ typedef struct				s_menu
 	int						previous_state;
 }							t_menu;
 
+typedef struct				s_view_rec
+{
+	t_display_wall			dspwall;
+	t_wall_node				*current_wall;
+	t_view					new_view;
+	t_display_wall			window;
+	t_view					view;
+}							t_view_rec;
+
 typedef struct				s_doom
 {
 	t_game					game;
@@ -572,9 +581,9 @@ int							draw_full_rotmap(SDL_Surface *surf, \
 void						draw_perspective_view(SDL_Surface *surf, \
 								t_player *player, SDL_Surface **wall_textures);
 
-void						draw_view_recursive(SDL_Surface *surf, \
+void						draw_view_recursive(t_game *game, \
 									SDL_Surface **wall_textures, t_view view, \
-									t_sector_node *sector, t_player *player);
+									t_sector_node *sector);
 /*
 ** DRAWING FUNCTIONS
 */

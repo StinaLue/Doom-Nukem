@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+         #
+#    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/11 22:37:39 by sluetzen         ###   ########.fr        #
+#    Updated: 2020/02/12 01:55:49 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -215,7 +215,7 @@ $(OBJECTS_DIRECTORY_DEBUG):
 
 $(OBJECTS_DIRECTORY)%.o : $(SOURCES_DIRECTORY)%.c $(HEADERS)
 	@$(CC) $(CFLAGS) -c $(INCLUDES) $< -o $@
-	@echo "$(GREEN).\n$(RESET)\c"
+	@echo "$(GREEN).$(RESET)\c"
 
 $(OBJECTS_DIRECTORY_DEBUG)%.o : $(SOURCES_DIRECTORY)%.c $(HEADERS)
 ifeq ($(HARD_DBG), 1)
@@ -224,7 +224,7 @@ ifeq ($(HARD_DBG), 1)
 endif
 
 	@$(CC) $(DEBUGFLAGS) -c $(INCLUDES) $< -o $@
-	@echo "$(GREEN).\n$(RESET)\c"
+	@echo "$(GREEN).$(RESET)\c"
 
 $(LIBFT):
 	@echo "$(NAME): $(GREEN)Creating $(LIBFT)...$(RESET)"
