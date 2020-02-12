@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:31:37 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 22:33:43 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/12 11:12:22 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void		init_data_struct(t_data *data)
 
 void		init_player_struct(t_player *player, t_map *map)
 {
+	player->fly = 0;
 	player->pos.x = map->player_spawn.x;
 	player->pos.y = map->player_spawn.y;
 	player->sector = get_sector_by_pos(map->sector_head, player->pos);

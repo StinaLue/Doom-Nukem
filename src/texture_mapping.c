@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   texture_mapping.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 18:01:04 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/11 19:57:05 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/12 11:06:19 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-double	get_texture_x(double x, t_display_wall *dsp)
+double	gettexx(double x, t_display_wall *dsp)
 {
 	double	top_div;
 	double	bot_div;
@@ -24,14 +24,14 @@ double	get_texture_x(double x, t_display_wall *dsp)
 	return (x);
 }
 
-double	get_texture_y(double y, int top, int bot)
+double	gettexy(double y, int top, int bot)
 {
 	y -= bot;
 	y /= top - bot;
 	return (y);
 }
 
-int		get_tex_color(double x, double y, t_display_wall *dsp, SDL_Surface *tex)
+int		gettexc(double x, double y, t_display_wall *dsp, SDL_Surface *tex)
 {
 	int	truex;
 	int	truey;
@@ -48,62 +48,41 @@ int		get_tex_color(double x, double y, t_display_wall *dsp, SDL_Surface *tex)
 	return (color);
 }
 
-void	fill_ceiling(SDL_Surface *surf, t_vec win, int top_limit, int type)
+t_vecdb	set_draw_limits(t_display_wall *dsp)
 {
-	if (type == 2)
-		return ;
-	while (win.y++ < top_limit)
-	{
-		fill_pix(surf, win.x, win.y, 0x999999);
-	}
-}
+	t_vecdb limit;
 
-void	fill_floor(SDL_Surface *surf, t_vec win, int bot_limit, int type)
-{
-	if (type == 1)
-		return ;
-	while (win.y > bot_limit)
-	{
-		fill_pix(surf, win.x, win.y--, 0x666666);
-	}
+	limit.x = dsp->top_left.y + 0.5;
+	limit.y = dsp->bottom_left.y + 0.5;
+	return (limit);
 }
 
 void	draw_texture(SDL_Surface *surf, SDL_Surface *tex, \
 							t_display_wall *dsp, int type)
 {
 	int		width;
-	double	delta_top;
-	double	delta_bot;
+	t_vecdb	delta;
 	t_vec	win;
 	t_vecdb	pos;
-	double	top;
-	double	bot;
+	t_vecdb	limit;
 
 	width = dsp->top_right.x - dsp->top_left.x;
-	if (width < 1)
-		return ;
-	delta_top = (double)(dsp->top_right.y - dsp->top_left.y) / width;
-	delta_bot = (double)(dsp->bottom_right.y - dsp->bottom_left.y) / width;
-	win.x = dsp->top_left.x;
-	top = dsp->top_left.y + 0.5;
-	bot = dsp->bottom_left.y + 0.5;
-	while (win.x < dsp->top_right.x)
+	delta.x = (double)(dsp->top_right.y - dsp->top_left.y) / width;
+	delta.y = (double)(dsp->bottom_right.y - dsp->bottom_left.y) / width;
+	win.x = dsp->top_left.x - 1;
+	limit = set_draw_limits(dsp);
+	while (++win.x < dsp->top_right.x)
 	{
-		pos.x = get_texture_x((double)(win.x - dsp->top_left.x) / width, dsp);
-		win.y = top > dsp->top_limit ? dsp->top_limit : top;
+		pos.x = gettexx((double)(win.x - dsp->top_left.x) / width, dsp);
+		win.y = limit.x > dsp->top_limit ? dsp->top_limit : limit.x;
 		fill_ceiling(surf, win, dsp->top_limit, type);
-		if (top > bot)
-			while (win.y >= bot && win.y >= dsp->bot_limit)
-			{
-				pos.y = get_texture_y(win.y, top, bot);
-				fill_pix(surf, win.x, win.y, \
-							get_tex_color(pos.x, pos.y, dsp, tex));
-				win.y--;
-			}
-		win.y = bot;
+		if (limit.x > limit.y)
+			while (win.y >= limit.y && win.y >= dsp->bot_limit)
+				fill_pix(surf, win.x, win.y--, gettexc(pos.x, \
+							gettexy(win.y, limit.x, limit.y), dsp, tex));
+		win.y = limit.y;
 		fill_floor(surf, win, dsp->bot_limit, type);
-		top += delta_top;
-		bot += delta_bot;
-		win.x++;
+		limit.x += delta.x;
+		limit.y += delta.y;
 	}
 }

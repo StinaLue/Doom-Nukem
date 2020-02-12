@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   poll_event.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/22 16:22:12 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/11 22:38:55 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/12 11:22:29 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,12 @@ void	handle_hud(SDL_Event *event, char *hud_flags)
 	}
 }
 
+void	toggle_fly(SDL_Event *event, t_player *player)
+{
+	if (event->key.keysym.sym == SDLK_l)
+		player->fly = !player->fly;
+}
+
 int		handle_events(t_doom *doom)
 {
 	check_quit(&doom->sdlmain.event, &doom->state);
@@ -71,6 +77,7 @@ int		handle_events(t_doom *doom)
 		check_weapon(&doom->sdlmain.event, \
 						&doom->game, doom->map.weapon_choice);
 		handle_hud(&doom->sdlmain.event, &doom->game.data.hud_flags);
+		toggle_fly(&doom->sdlmain.event, &doom->game.player);
 	}
 	if (doom->sdlmain.event.type == SDL_MOUSEMOTION)
 	{
