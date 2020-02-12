@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:46:18 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/12 01:13:14 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/12 02:30:15 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,7 +288,7 @@ int				game_loop(t_doom *doom)
 			return (error_return("Blit weapon error\n", NULL));
 		player_attack(game->enemy, &game->player, &doom->map, &game->surfs);
 		enemy_action(game->enemy, &game->player, doom->map.num_enemies);
-		if (game_blit_hud(&doom->map, game, itt, startclock != 0))
+		if (game_blit_hud(&doom->map, game, &itt, &startclock) != 0)
 			return (1);
 		if ((SDL_BlitScaled(game->surfs.perspective_view, \
 							NULL, sdlmain->win_surf, NULL)) < 0)
@@ -300,7 +300,7 @@ int				game_loop(t_doom *doom)
 		if ((SDL_UpdateWindowSurface(sdlmain->win)) < 0)
 			return (error_return("SDL_UpdateWindowSurface error = %{r}s\n", \
 						SDL_GetError()));
-			itt++;
+		itt++;
 	}
 	SDL_SetRelativeMouseMode(SDL_FALSE);
 	SDL_WarpMouseInWindow(sdlmain->win, sdlmain->win_surf->w / 2, \

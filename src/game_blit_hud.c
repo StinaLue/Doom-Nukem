@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_blit_hud.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/11 14:05:59 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 14:33:37 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/12 02:31:47 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,11 +99,11 @@ int	blit_hud_weapons(t_game *game, t_map *map, t_gamesurfs *surfs)
 	return (0);
 }
 
-int	game_blit_hud(t_map *map, t_game *game, int itt, Uint32 startclock)
+int	game_blit_hud(t_map *map, t_game *game, int *itt, Uint32 *startclock)
 {
 	if ((blit_hud_faces(game, &game->surfs, game->surfs.perspective_view)) == 1)
 		return (error_return("error during blit_hud_faces\n", NULL));
-	if ((blit_fps(game, &itt, &startclock)) == 1)
+	if ((blit_fps(game, itt, startclock)) == 1)
 		return (error_return("error during blit_fps\n", NULL));
 	if ((blit_hud_weapons(game, map, &game->surfs) == 1))
 		return (error_return("error during blit_hud_weapons\n", NULL));

@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/12 01:53:05 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/12 02:29:19 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -629,7 +629,7 @@ int							blit_options(t_editor *editor);
 int							blit_height(t_editor *editor);
 
 int							game_blit_hud(t_map *map, t_game *game, \
-									int itt, Uint32 startclock);
+									int *itt, Uint32 *startclock);
 
 int							blit_enemies(t_game *game, SDL_Surface *dest, \
 											t_map *map);
