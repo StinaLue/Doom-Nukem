@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wav_parse.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 00:15:56 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/11 19:57:57 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/12 11:03:07 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,27 +20,6 @@ ALenum		get_format_from_info(short channels, short bits_per_sample)
 	if (channels == 1)
 		return (AL_FORMAT_MONO16);
 	return (AL_FORMAT_STEREO16);
-}
-
-static int	is_wav(char *file)
-{
-	int	len;
-
-	len = 0;
-	while (file[len])
-		len++;
-	len -= 1;
-	if (len < 4)
-		return (0);
-	if (file[len--] != 'v')
-		return (0);
-	if (file[len--] != 'a')
-		return (0);
-	if (file[len--] != 'w')
-		return (0);
-	if (file[len] != '.')
-		return (0);
-	return (1);
 }
 
 int			read_riff_chunk(int fd, char *xbuffer, char *file, int *offset)

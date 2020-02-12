@@ -6,15 +6,14 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 02:38:54 by afonck            #+#    #+#             */
-/*   Updated: 2020/02/12 03:28:45 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/12 10:53:04 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "doom.h"
 
-
-void    check_hit_uzi(int num_enemies, int *is_enemy_hit, \
-        t_vecdb dir_player, t_enemy *enemy)
+void	check_hit_uzi(int num_enemies, int *is_enemy_hit, \
+		t_vecdb dir_player, t_enemy *enemy)
 {
 	int i;
 
@@ -30,7 +29,7 @@ void    check_hit_uzi(int num_enemies, int *is_enemy_hit, \
 	}
 }
 
-void    raycast_uzi(t_player *player, \
+void	raycast_uzi(t_player *player, \
 								t_enemy *enemy, int num_enemies)
 {
 	int		is_enemy_hit;
@@ -64,11 +63,11 @@ void	katana_hit(t_player *player, t_enemy *enemy, int num_enemies)
 	}
 }
 
-int     player_attack(t_enemy *enemy, \
+int		player_attack(t_enemy *enemy, \
 					t_player *player, t_map *map, t_gamesurfs *surfs)
 {
 	if (player->current_weapon == 0 && player->anim == 1 \
-        && surfs->current_frame == 3)
+		&& surfs->current_frame == 3)
 	{
 		katana_hit(player, enemy, map->num_enemies);
 	}

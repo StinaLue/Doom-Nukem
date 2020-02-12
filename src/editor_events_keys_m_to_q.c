@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   editor_events_key_m_to_q.c                         :+:      :+:    :+:   */
+/*   editor_events_keys_m_to_q.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/11 11:22:02 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 11:25:28 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/12 11:28:43 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,13 @@ void	key_event_m(t_editor *editor, t_doom *doom)
 {
 	if (editor->edit_map.sector_head != NULL)
 		free_map(&editor->edit_map);
+	editor->start_sector_reached = 1;
+	reset_vec(&editor->edit_map.player_spawn);
+	editor->edit_map.sector_head = NULL;
+	editor->current_sector = NULL;
+	editor->current_wall = NULL;
+	reset_vecdb(&editor->wall_tmp.start);
+	reset_vecdb(&editor->wall_tmp.end);
 	if (copy_map(&doom->map, &editor->edit_map) != 0)
 		doom->state = QUIT_STATE;
 	editor->selected_sector = NULL;
