@@ -6,7 +6,7 @@
 #    By: afonck <afonck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/03/27 13:47:31 by afonck            #+#    #+#              #
-#    Updated: 2020/02/12 02:55:38 by afonck           ###   ########.fr        #
+#    Updated: 2020/02/12 04:01:12 by afonck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -90,7 +90,7 @@ SOURCES_LIST = main.c \
 			menu_init.c \
 			menu_options.c \
 			text.c \
-			SDL_sub_functions.c \
+			sdl_subfunctions.c \
 			ll_sector.c \
 			ll_sector2.c \
 			ll_sector3.c \
