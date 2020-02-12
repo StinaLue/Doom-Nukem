@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/11 11:28:00 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/11 11:31:59 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/12 13:37:20 by sluetzen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void	key_event_u(t_editor *editor)
 			delete_sector_by_address(&editor->edit_map.sector_head, \
 									editor->current_sector);
 			editor->current_sector = NULL;
+			editor->num_points = 0;
 		}
 		editor->start_sector_reached = 1;
 	}
