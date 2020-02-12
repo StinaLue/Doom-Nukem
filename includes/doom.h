@@ -6,7 +6,7 @@
 /*   By: afonck <afonck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:46:54 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/12 11:12:56 by afonck           ###   ########.fr       */
+/*   Updated: 2020/02/12 11:47:13 by afonck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,6 +252,7 @@ typedef struct				s_player
 	int						is_moving;
 	int						anim;
 	int						current_weapon;
+	int						fly;
 }							t_player;
 
 typedef struct				s_game
@@ -1014,5 +1015,15 @@ void						play_editor_music(t_sdlmain *sdlmain, t_doom *doom);
 void						game_over_loop(t_doom *doom);
 
 void						win_loop(t_doom *doom);
+
+/*
+** FLOOR AND CEILING FUNCTIONS
+*/
+
+void						fill_ceiling(SDL_Surface *surf, \
+								t_vec win, int top_limit, int type);
+
+void						fill_floor(SDL_Surface *surf, \
+								t_vec win, int bot_limit, int type);
 
 #endif

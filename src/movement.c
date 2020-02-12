@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/28 14:30:58 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/11 22:11:25 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/12 11:14:12 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,6 @@ void		update_player(t_player *player)
 
 void		jump(t_player *player)
 {
-	if (player->posz <= player->sector->floor_height)
+	if (player->posz <= player->sector->floor_height || player->fly)
 		player->zinertia = 0.7;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rot_minimap.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluetzen <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: phaydont <phaydont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 16:22:14 by phaydont          #+#    #+#             */
-/*   Updated: 2020/02/07 17:52:34 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/02/12 11:32:36 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,29 @@ t_segment	rotate_wall_relative(const t_wall_node *current_wall, \
 	return (new_wall);
 }
 
-void		draw_rot_minimap(SDL_Surface *surf, \
-								t_player *player, const t_map *map)
+void		draw_wall(t_wall_node *node, t_player *player, SDL_Surface *surf)
 {
 	t_segment		wall;
 	t_vecdb			map_center;
+
+	while (node != NULL)
+	{
+		map_center.x = surf->w / 2 + 0.5;
+		map_center.y = surf->h / 2 + 0.5;
+		wall = rotate_wall_relative(node, player);
+		wall.a = vecdb_add(map_center, multvecdb(wall.a, 0.25));
+		wall.b = vecdb_add(map_center, multvecdb(wall.b, 0.25));
+		draw_line(vecdb_to_vec(wall.a), vecdb_to_vec(wall.b), surf, \
+			node->neighbor_sector == NULL ? 0xEEEEEE : 0x333333);
+		node = node->next;
+	}
+}
+
+void		draw_rot_minimap(SDL_Surface *surf, \
+								t_player *player, const t_map *map)
+{
+	t_vecdb			map_center;
 	t_vecdb			transfo_direc;
-	t_wall_node		*current_wall;
 	t_sector_node	*current_sector;
 
 	map_center.x = surf->w / 2 + 0.5;
@@ -42,16 +58,7 @@ void		draw_rot_minimap(SDL_Surface *surf, \
 	current_sector = map->sector_head;
 	while (current_sector != NULL)
 	{
-		current_wall = current_sector->wall_head;
-		while (current_wall != NULL)
-		{
-			wall = rotate_wall_relative(current_wall, player);
-			wall.a = vecdb_add(map_center, multvecdb(wall.a, 0.25));
-			wall.b = vecdb_add(map_center, multvecdb(wall.b, 0.25));
-			draw_line(vecdb_to_vec(wall.a), vecdb_to_vec(wall.b), surf, \
-				current_wall->neighbor_sector == NULL ? 0xEEEEEE : 0x333333);
-			current_wall = current_wall->next;
-		}
+		draw_wall(current_sector->wall_head, player, surf);
 		current_sector = current_sector->next;
 	}
 	draw_line(vecdb_to_vec(map_center), \
