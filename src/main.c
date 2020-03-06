@@ -6,7 +6,7 @@
 /*   By: sluetzen <sluetzen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 13:57:03 by sluetzen          #+#    #+#             */
-/*   Updated: 2020/02/12 10:49:11 by sluetzen         ###   ########.fr       */
+/*   Updated: 2020/03/06 15:12:28 by phaydont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int		main_loop(void)
 
 int		verify_defines(void)
 {
-	if (PLAYER_RADIUS != 1 || NB_WALL_TEXTURES != 9 \
+	/*if (PLAYER_RADIUS != 1 || NB_WALL_TEXTURES != 9 \
 	|| NB_SOUND_SOURCES != 3 || NB_SOUND_BUFFERS != 11 || QUIT_STATE != 0 \
 	|| GAME_STATE != 1 || MENU_STATE != 2 || EDITOR_STATE != 3 || HD_W != 1280 \
 	|| HD_H != 720 || FHD_W != 1920 || FHD_H != 1080 || QHD_W != 2560 \
@@ -90,8 +90,8 @@ int		verify_defines(void)
 	|| SECOND_OPTION_SELECT != 2 || THIRD_OPTION_SELECT != 3 \
 	|| FOURTH_OPTION_SELECT != 4)
 		return (1);
-	else
-		return (0);
+	else*/
+	return (0);
 }
 
 int		main(void)
